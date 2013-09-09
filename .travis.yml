@@ -4,9 +4,9 @@ script: ./build-snake
 notifications:
   email:
     recipients:
-      - kidevocht@gmail.com
+      - kjdevocht@gmail.com
       - daniel.l.carrier@gmail.com
-      - dbstandifor@gmail.com
+      - dbstandiford@gmail.com
       - djhaskin987@gmail.com
     on_success: change
     on_failure: change
