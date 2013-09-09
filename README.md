@@ -1,0 +1,4 @@
+snake
+=====
+
+For a class
