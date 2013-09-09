@@ -1,6 +1,15 @@
 language: java
 script: ./build-snake
 
+notifications:
+  email:
+    recipients:
+      - kidevocht@gmail.com
+      - daniel.l.carrier@gmail.com
+      - dbstandifor@gmail.com
+    on_success: change
+    on_failure: change
+
 jdk:
     - oraclejdk7
     - oraclejdk6
