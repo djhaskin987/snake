@@ -1,0 +1,4 @@
+#!/bin/sh
+POSIXLY_CORRECT=1
+
+ant
