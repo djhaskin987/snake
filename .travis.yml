@@ -7,6 +7,7 @@ notifications:
       - kidevocht@gmail.com
       - daniel.l.carrier@gmail.com
       - dbstandifor@gmail.com
+      - djhaskin987@gmail.com
     on_success: change
     on_failure: change
 
