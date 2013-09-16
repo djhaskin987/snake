@@ -1,4 +1,8 @@
 #!/bin/sh
 POSIXLY_CORRECT=1
+set -x
+set -e
 
-ant
+ant compile-test
+ant test
+ant compile
