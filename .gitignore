@@ -1,6 +1,8 @@
 *.class
 build
 dist
+# cobertura
+*.ser
 
 # Package Files #
 *.jar
