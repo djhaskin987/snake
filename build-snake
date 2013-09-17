@@ -3,6 +3,5 @@ POSIXLY_CORRECT=1
 set -x
 set -e
 
-ant compile-test
-ant test
 ant compile
+ant test
