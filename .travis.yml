@@ -11,10 +11,12 @@ notifications:
     on_success: change
     on_failure: change
 
-after_success:
-    - printf 'Host schizo.cs.byu.edu\n\tStrictHostKeyChecking no\n' >> ~/.ssh/config
-    - scp -r coverage-reports dhaskin@schizo.cs.byu.edu:public_html/
-    - scp -r doc dhaskin@schizo.cs.byu.edu:public_html/
+# giving up on this for now
+#after_success:
+#    - printf 'Host schizo.cs.byu.edu\n\tStrictHostKeyChecking no\n' >> ~/.ssh/config
+#    - scp -r coverage-reports dhaskin@schizo.cs.byu.edu:public_html/
+#    - scp -r doc dhaskin@schizo.cs.byu.edu:public_html/
+
 jdk:
     - oraclejdk7
     - oraclejdk6
