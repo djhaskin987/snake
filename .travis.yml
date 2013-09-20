@@ -12,8 +12,8 @@ notifications:
     on_failure: change
 
 after_success:
-    "scp -r coverage-reports dhaskin@schizo.cs.byu.edu:public_html/"
-    "scp -r doc dhaskin@schizo.cs.byu.edu:public_html/"
+    - "scp -r coverage-reports dhaskin@schizo.cs.byu.edu:public_html/"
+    - "scp -r doc dhaskin@schizo.cs.byu.edu:public_html/"
 jdk:
     - oraclejdk7
     - oraclejdk6
