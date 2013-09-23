@@ -10,3 +10,4 @@ ant test
 
 # Then, generate docs and coverage
 ant coverage
+ant doc
