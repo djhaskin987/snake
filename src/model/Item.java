@@ -1,10 +1,11 @@
 package model;
 
 import java.util.Date;
+
 /**
- * A physical instance of a particular Product. An Item corresponds to a physical container
- * with a barcode on it. For example, a case of soda might contain 24 cans of Diet Coke. In
- * this case, the Product is “Diet Coke, 12 fl oz”, while each physical can is a distinct Item.
+ * A physical instance of a particular Product.  An Item corresponds to a physical container
+ * with a barcode on it.
+ * 
  * @author Kevin
  *
  */
