@@ -18,7 +18,7 @@ public class StorageUnits {
    
     /**
      * Singleton creation
-     * @return
+     * @return instance of StorageUnits
      */
     public static StorageUnits getInstance() {
       if(instance == null) {

@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 
 /**
- * A bar‐coded product that can be stored in a Storage Unit.
+ * A bar-coded product that can be stored in a Storage Unit.
  * @author Kevin
  *
  */
@@ -46,6 +46,5 @@ public class Product implements IProduct{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
+	
 }
