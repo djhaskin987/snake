@@ -15,14 +15,30 @@ public class NonEmptyString implements Serializable {
 	 * @param value
 	 */
 	public NonEmptyString(String value){
-		
+		if (value.equals(""))
+		{
+			throw new IllegalArgumentException("NonEmptyString must receive a non-empty string!");
+		}
+		this.value = value;
 	}
 	
 	public String getValue(){
-		return null;
+		return value;
+	}
+	
+	public String toString(){
+		return value;
+	}
+	
+	public int hashCode(){
+		return value.hashCode();
 	}
 
 	public void setValue(String value){
-		
+		if (value == "")
+		{
+			throw new IllegalArgumentException("NonEmptyString must receive a non-empty string!");
+		}
+		this.value = value;
 	}
 }

@@ -3,7 +3,6 @@ POSIXLY_CORRECT=1
 set -x
 set -e
 
-
 # compile and test the program
 ant compile
 ant test
