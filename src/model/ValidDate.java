@@ -1,10 +1,14 @@
+package model;
+
+import java.io.Serializable;
+import java.util.Date;
 import java.util.zip.DataFormatException;
 
 /**
  * @author Daniel Carrier
  *
  */
-public class ValidDate extends Date {
+public class ValidDate extends Date implements Serializable{
 
 	/**
 	 * @param day		Day of the month
