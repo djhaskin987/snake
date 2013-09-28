@@ -19,7 +19,7 @@ public interface IContextPanelNode {
 	 * 
 	 * @return Numerical value and unit of measurement of a Three Month Supply
 	 */
-	public Quantity getThreeMonthSupply();
+	public String getThreeMonthSupply();
 	
 	/**
 	 * 
