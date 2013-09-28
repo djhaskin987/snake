@@ -1,5 +1,6 @@
 package model;
 
+
 public class Model {
 	private static Model instance;
 	
@@ -10,8 +11,9 @@ public class Model {
 	private ProductContainerFactory productContainerFactory;
 	
     /**
-     * Singleton creation
-     * @return instance of StorageUnits
+     * Singleton creation: Model, your one-stop shop
+     *   for all your singleton needs
+     * @return instance of Model
      */
 	public static Model getInstance()
 	{
@@ -21,6 +23,7 @@ public class Model {
 		}
 		return instance;
 	}
+
 	
 	public Model()
 	{
@@ -31,26 +34,46 @@ public class Model {
 		itemFactory = new ItemFactory();
 	}
 	
+	/**
+	 * 
+	 * @return the StorageUnits instance in this Model.
+	 */
 	public StorageUnits getStorageUnits()
 	{
 		return storageUnits;
 	}
 	
+	/**
+	 * 
+	 * @return the ProductCollection instance in this Model.
+	 */
 	public ProductCollection getProductCollection()
 	{
 		return productCollection;
 	}
 	
+	/**
+	 * 
+	 * @return the ProductContainerFactory instance in this Model.
+	 */
 	public ProductContainerFactory getProductContainerFactory()
 	{
 		return productContainerFactory;
 	}
 	
+	/**
+	 * 
+	 * @return the ProductFactory instance in this Model.
+	 */
 	public ProductFactory getProductFactory()
 	{
 		return productFactory;
 	}
 	
+	/**
+	 * 
+	 * @return the ProductFactory instance in this Model.
+	 */
 	public ItemFactory getItemFactory()
 	{
 		return itemFactory;
