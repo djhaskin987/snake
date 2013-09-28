@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package common;
 
 import java.nio.charset.Charset;
@@ -6,7 +7,6 @@ import java.nio.charset.Charset;
  * Utility class providing String operations.
  */
 public final class StringOps {
-
 	/**
 	 * Private Constructor.
 	 */
