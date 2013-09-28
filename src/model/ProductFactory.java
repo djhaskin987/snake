@@ -39,8 +39,10 @@ public class ProductFactory {
 	 * @param containers
 	 * @return
 	 */
-	public IProduct createInstance(ValidDate creationDate, Barcode barcode, NonEmptyString description, Quantity itemSize, Integer shelfLife, Integer threeMonthSupply, List<ProductContainer> containers){
-		return null;
+	public IProduct createInstance(Barcode barcode, NonEmptyString description, Quantity itemSize, 
+			Integer shelfLife, Integer threeMonthSupply, List<ProductContainer> containers){
+		
+		return new Product(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
 	}
 
 }
