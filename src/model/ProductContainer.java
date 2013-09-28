@@ -40,4 +40,6 @@ public abstract class ProductContainer {
 		productItems.addItem(item);
 		return;
 	}
+	
+	public abstract boolean contains(Product product);
 }

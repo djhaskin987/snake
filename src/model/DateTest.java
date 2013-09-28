@@ -1,5 +1,6 @@
-import static org.junit.Assert.*;
+package model;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 

@@ -1,3 +1,4 @@
+package model;
 
 /**
  * @author Daniel Carrier

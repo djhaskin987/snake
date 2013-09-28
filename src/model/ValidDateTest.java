@@ -1,7 +1,7 @@
+package model;
+
 import static org.junit.Assert.*;
-
 import java.util.Calendar;
-
 import org.junit.Test;
 
 
