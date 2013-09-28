@@ -19,14 +19,16 @@ public interface IProduct extends Serializable {
 	/**
 	 * Must be a positive Integer
 	 * @param months
+	 * @throws InvalidIntegerException 
 	 */
-	public void setShelfLife(Integer months);
+	public void setShelfLife(Integer months) throws InvalidIntegerException;
 
 	/**
 	 * Must be a non-negative Integer
 	 * @param count
+	 * @throws InvalidIntegerException 
 	 */
-	public void setThreeMonthSupply(Integer count);
+	public void setThreeMonthSupply(Integer count) throws InvalidIntegerException;
 
 	/**
 	 * This is the first time this Product was added to the ProductCollection
@@ -45,5 +47,40 @@ public interface IProduct extends Serializable {
 	 * @return List of all Product Containers that contain this Product
 	 */
 	public List<ProductContainer> getContainers();
+	
+	/**
+	 * 
+	 * @return A ValidDate of when the product was first created
+	 */
+	public ValidDate getCreation();
+
+	/**
+	 * 
+	 * @return A Barcode that is unique to this product
+	 */
+	public Barcode getBarcode();
+
+	/**
+	 * 
+	 * @return A ValidDate of when the product was first created
+	 */
+	public NonEmptyString getDescription();
+	
+	/**
+	 * 
+	 * @return A Quantity object that tells us the size an unit
+	 * of measure for this particular product
+	 */
+	public Quantity getItemSize();
+	
+	/**
+	 * 
+	 * @return A ValidDate of when the product was first created
+	 */
+	public Integer getShelfLife();
+	
+	@SuppressWarnings("serial")
+	public class InvalidIntegerException extends Exception{
+	}
 
 }
