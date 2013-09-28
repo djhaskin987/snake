@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -9,6 +10,10 @@ import java.util.Map;
  */
 public class ProductItems {
 	private Map<Product, Collection<Item>> map;
+	
+	public ProductItems() {
+		map = new HashMap<Product, Collection<Item>>();
+	}
 	
 	/**
 	 * @return	A collection of all the products

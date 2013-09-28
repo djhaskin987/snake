@@ -14,9 +14,18 @@ public class Item implements IItem{
 	private Product product;
 	private Barcode barcode;
 	private ValidDate entryDate;
-	private Date exitTime;
+	private Date exitTime;	//This is supposed to be DateTime.
 	private ValidDate expireDate;
 	private ProductContainer container;
+	
+	public Item(Product product, Barcode barcode, ValidDate expireDate, ProductContainer container) {
+		this.product = product;
+		this.barcode = barcode;
+		this.entryDate = new ValidDate();
+		this.exitTime = null;
+		this.expireDate = expireDate;
+		this.container = container;
+	}
 	
 	@Override
 	public void setProductContainer(IProductContainer container) {
@@ -35,13 +44,11 @@ public class Item implements IItem{
 	}
 	@Override
 	public Product getProduct() {
-		// TODO Auto-generated method stub
-		return null;
+		return product;
 	}
 	@Override
 	public Barcode getBarcode() {
-		// TODO Auto-generated method stub
-		return null;
+		return barcode;
 	}
 	@Override
 	public ValidDate getEntryDate() {

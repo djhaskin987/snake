@@ -1,26 +1,38 @@
 package model;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * @author Daniel Carrier
  *
  */
 
-public class Date implements Comparable<Date> {
-	private int day;
-	private int month;
-	private int year;
+public class Date extends AbstractDateTime {
+	private GregorianCalendar calendar;
+
+	@Override
+	public Calendar getCalendar() {
+		return calendar;
+	}
 		
 	public int getDay() {
-		return day;
+		return calendar.get(Calendar.DAY_OF_MONTH);
 	}
 
 	public int getMonth() {
-		return month;
+		return calendar.get(Calendar.MONTH);
 	}
 
 	public int getYear() {
-		return year;
+		return calendar.get(Calendar.YEAR);
+	}
+	
+	public Date() {
+		calendar = new GregorianCalendar();
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 	}
 
 	/**
@@ -66,45 +78,15 @@ public class Date implements Comparable<Date> {
 			throw new DateDoesNotExistException();
 		}
 		
-		this.day = day;
-		this.month = month;
-		this.year = year;
+		calendar = new GregorianCalendar(year, month, day);
 	}
 	
-	/**
-	 * Returns today.
-	 */
-	public Date() {
-		day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		month = Calendar.getInstance().get(Calendar.MONTH);
-		year = Calendar.getInstance().get(Calendar.YEAR);
-	}
-
-	/**
-	 * Returns the date in mm/dd/yyyy
-	 */
-	@Override
 	public String toString() {
-		return month + "/" + day + "/" + year;
+		return getMonth() + "/" + getDay() + "/" + getYear();
 	}
-
-	@Override
-	public int compareTo(Date arg0) {
-		if(year > arg0.getYear()) {
-			return 1;
-		} else if(year < arg0.getYear()) {
-			return -1;
-		} else if(month > arg0.getMonth()) {
-			return 1;
-		} else if(month < arg0.getMonth()) {
-			return -1;
-		} else if(day > arg0.getDay()) {
-			return 1;
-		} else if(day < arg0.getDay()) {
-			return -1;
-		} else {
-			return 0;
-		}
+	
+	public static void main() {
+		System.out.println("Hello, world.");
 	}
 	
 }
