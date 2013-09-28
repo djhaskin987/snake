@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package common;
 
 import java.nio.charset.Charset;
