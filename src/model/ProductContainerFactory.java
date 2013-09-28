@@ -13,7 +13,7 @@ public class ProductContainerFactory {
 	 * @return
 	 */
 	public IProductContainer createStorageUnit(String name){
-		return null;
+		return (IProductContainer) new StorageUnit();
 	}
 	
 	/**
@@ -22,7 +22,6 @@ public class ProductContainerFactory {
 	 * @return
 	 */
 	public IProductContainer createProductGroup(String name){
-		return null;
+		return (IProductContainer) new ProductGroup();
 	}
-
 }
