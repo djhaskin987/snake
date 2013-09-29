@@ -67,7 +67,7 @@ public class StorageUnits implements IContextPanelNode {
 	}
 
 	@Override
-	public Quantity getThreeMonthSupply() {
+	public String getThreeMonthSupply() {
 		// TODO Auto-generated method stub
 		return null;
 	}
