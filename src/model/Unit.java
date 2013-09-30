@@ -7,14 +7,24 @@ package model;
  *
  */
 public enum Unit {
-	COUNT,
-	LBS,
-	OZ,
-	G,
-	KG,
-	GAL,
-	QUART,
-	PINT,
-	FLOZ,
-	LITER;
+	COUNT ("count"),
+	LBS ("lbs"),
+	OZ ("oz"),
+	G ("grams"),
+	KG ("kilograms"),
+	GAL ("gallons"),
+	QUART ("quart"),
+	PINT ("pint"),
+	FLOZ ("fluid oz"),
+	LITER ("liter");
+	
+	private String statusCode;
+	 
+	private Unit(String s) {
+		statusCode = s;
+	}
+ 
+	public String getStatusCode() {
+		return statusCode;
+	}
 }
