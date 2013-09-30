@@ -3,7 +3,16 @@ package model;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * @author Daniel Carrier
+ *
+ */
 public class DateTime extends AbstractDateTime {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4159531343246193042L;
+	
 	private GregorianCalendar calendar;
 
 	@Override
@@ -11,10 +20,18 @@ public class DateTime extends AbstractDateTime {
 		return calendar;
 	}
 	
+	/**
+	 * @pre		None
+	 * @post	DateTime is set to the current date and time
+	 */
 	public DateTime() {
 		calendar = new GregorianCalendar();
 	}
 	
+	/**
+	 * @pre		DateTime is not null
+	 * @post	Returns the date and time in dd/mm/yyyy hh:mm:ss AM/PM format
+	 */
 	public String toString() {
 		int month = calendar.get(Calendar.MONTH);
 		int day = calendar.get(Calendar.DAY_OF_MONTH);

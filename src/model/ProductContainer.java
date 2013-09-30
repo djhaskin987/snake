@@ -6,6 +6,11 @@ import java.util.Collection;
  *
  */
 public abstract class ProductContainer implements IProductContainer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7498283844315351927L;
+	
 	private NonEmptyString name;
 	private ProductItems productItems;
 	private Collection<ProductGroup> productGroups;

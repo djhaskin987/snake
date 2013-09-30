@@ -10,6 +10,11 @@ import java.util.zip.DataFormatException;
 public class ValidDate extends Date implements Serializable{
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -676496083906678513L;
+
+	/**
 	 * @param day		Day of the month
 	 * @param month		Month of the year
 	 * @param year		Year AD

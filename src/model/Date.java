@@ -8,21 +8,44 @@ import java.util.GregorianCalendar;
  */
 
 public class Date extends AbstractDateTime {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1147204010429436435L;
+	
 	private GregorianCalendar calendar;
 
-	@Override
+	/**
+	 * @pre		this is not null
+	 * 
+	 */
 	public Calendar getCalendar() {
 		return calendar;
 	}
 		
+	/**
+	 * @pre		Date is not null
+	 * @post	Returns the day of the month
+	 * @return	The day of the month
+	 */
 	public int getDay() {
 		return calendar.get(Calendar.DAY_OF_MONTH);
 	}
 
+	/**
+	 * @pre		Date is not null
+	 * @post	Returns the month as an int
+	 * @return	The month as an int
+	 */
 	public int getMonth() {
 		return calendar.get(Calendar.MONTH);
 	}
 
+	/**
+	 * @pre		Date is not null
+	 * @post	Returns the year
+	 * @return	The year
+	 */
 	public int getYear() {
 		return calendar.get(Calendar.YEAR);
 	}

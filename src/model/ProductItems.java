@@ -1,4 +1,5 @@
 package model;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +9,12 @@ import java.util.Map;
  * @author Daniel Carrier
  *
  */
-public class ProductItems {
+public class ProductItems implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1120419510043040681L;
+	
 	private Map<Product, Collection<Item>> map;
 	
 	public ProductItems() {
