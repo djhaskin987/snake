@@ -8,14 +8,18 @@ import java.io.Serializable;
  *
  */
 public class NonEmptyString implements Serializable {
-	private String value;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4693405565781696366L;
+	private final String value;
 	
 	/**
 	 * The constructor ensures that the String is non-empty
 	 * @param value
 	 */
 	public NonEmptyString(String value){
-		if (value.equals(""))
+		if (value == null || value.equals(""))
 		{
 			throw new IllegalArgumentException("NonEmptyString must receive a non-empty string!");
 		}
@@ -30,15 +34,18 @@ public class NonEmptyString implements Serializable {
 		return value;
 	}
 	
+	@Override
 	public int hashCode(){
-		return value.hashCode();
+		return getValue().hashCode();
 	}
-
-	public void setValue(String value){
-		if (value == "")
-		{
-			throw new IllegalArgumentException("NonEmptyString must receive a non-empty string!");
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if (other instanceof NonEmptyString){
+			return ((NonEmptyString)other).getValue() ==
+					getValue();
 		}
-		this.value = value;
+		return false;
 	}
 }
