@@ -35,8 +35,8 @@ public class ItemFactory {
 	 * @param container
 	 * @return
 	 */
-	public IItem createInstance(Product product, Barcode barcode, ValidDate entryDate, ValidDate expireDate, ProductContainer container){
-		return null;
+	public IItem createInstance(Product product, Barcode barcode, Date expireDate, IProductContainer container){
+		return new Item(product, barcode, expireDate, container);
 	}
 
 }
