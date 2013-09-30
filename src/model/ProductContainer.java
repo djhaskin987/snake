@@ -5,12 +5,12 @@ import java.util.Collection;
  * @author Daniel Carrier
  *
  */
-public abstract class ProductContainer {
-	private String name;
+public abstract class ProductContainer implements IProductContainer {
+	private NonEmptyString name;
 	private ProductItems productItems;
 	private Collection<ProductGroup> productGroups;
 
-	public String getName() {
+	public NonEmptyString getName() {
 		return name;
 	}
 	

@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Interface of Item to increase modularity of the Item Object
@@ -50,13 +49,13 @@ public interface IItem extends Serializable{
 	 * This will be null if the Item is still in the system
 	 * @return Date when the item left the ProductContainer
 	 */
-	public Date getExitTime();
+	public DateTime getExitTime();
 	
 	/**
 	 * This will be null if the ProductGroup this IItem is in has not been set
 	 * @return ValidDate of when the IItem will expire
 	 */
-	public ValidDate getExpireDate();
+	public Date getExpireDate();
 	
 	
 	/**
