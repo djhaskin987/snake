@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collection;
 import java.util.List;
 /**
  * This interface allows the data structures to communicate with the gui.  some of the methods are pointless for
@@ -25,7 +26,7 @@ public interface IContextPanelNode {
 	 * 
 	 * @return List of Products
 	 */
-	public List<Product> getProducts();
+	public Collection<Product> getProducts();
 	
 	/**
 	 * Gets the name of ProductGroup
