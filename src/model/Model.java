@@ -43,6 +43,10 @@ public class Model {
 		return storageUnits;
 	}
 	
+	public void setStorageUnits(StorageUnits units){
+		this.storageUnits = units;
+	}
+	
 	/**
 	 * 
 	 * @return the ProductCollection instance in this Model.
@@ -50,6 +54,11 @@ public class Model {
 	public ProductCollection getProductCollection()
 	{
 		return productCollection;
+	}
+	
+	
+	public void setProductCollection(ProductCollection products){
+		this.productCollection = products;
 	}
 	
 	/**

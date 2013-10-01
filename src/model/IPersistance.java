@@ -4,7 +4,7 @@ public interface IPersistance {
 	
 	public void store();
 	
-	public void update(Object newObject);
+	public void update();
 	
 	public void load();
 	

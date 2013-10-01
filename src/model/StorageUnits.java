@@ -4,10 +4,13 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
+import java.io.Serializable;
 import java.util.List;
 import java.util.TreeMap;
 
-public class StorageUnits implements IContextPanelNode {
+public class StorageUnits implements IContextPanelNode, Serializable{
+
+	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
 	
 	
