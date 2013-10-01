@@ -16,15 +16,15 @@ public class Date extends AbstractDateTime {
 	private GregorianCalendar calendar;
 
 	/**
-	 * @pre		this is not null
-	 * 
+	 * @pre		None
+	 * @post	Returns midnight at the beginning of that day as a java.util.Calendar
 	 */
 	public Calendar getCalendar() {
 		return calendar;
 	}
 		
 	/**
-	 * @pre		Date is not null
+	 * @pre		None
 	 * @post	Returns the day of the month
 	 * @return	The day of the month
 	 */
@@ -33,7 +33,7 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
-	 * @pre		Date is not null
+	 * @pre		None
 	 * @post	Returns the month as an int
 	 * @return	The month as an int
 	 */
@@ -42,7 +42,7 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
-	 * @pre		Date is not null
+	 * @pre		None
 	 * @post	Returns the year
 	 * @return	The year
 	 */
@@ -59,6 +59,9 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
+	 * @pre			That month, day, and year correspond to an actual day AD.
+	 * 			For example, there is no January 50th, or year zero.
+	 * @post		Returns a Date corresponding to that month, day, and year
 	 * @param day	Day of the month
 	 * @param month	Month of the year
 	 * @param year	Year AD

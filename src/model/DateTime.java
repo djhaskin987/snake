@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 /**
  * @author Daniel Carrier
+ * DateTime gives the date and the time that it was constructed.
  *
  */
 public class DateTime extends AbstractDateTime {
@@ -29,7 +30,7 @@ public class DateTime extends AbstractDateTime {
 	}
 	
 	/**
-	 * @pre		DateTime is not null
+	 * @pre		None
 	 * @post	Returns the date and time in dd/mm/yyyy hh:mm:ss AM/PM format
 	 */
 	public String toString() {

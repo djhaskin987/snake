@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Facotry Design Pattern that will allow program to not be dependent on Item constructors if Item changes
+ * Factory Design Pattern that will allow program to not be dependent on Item constructors if Item changes
  * @author Kevin
  *
  */
@@ -15,7 +15,7 @@ public class ItemFactory {
     }
    
     /**
-     * Singalton Design Pattern that allows any Class to construct an Item
+     * Singleton Design Pattern that allows any Class to construct an Item
      * @return
      */
     public static ItemFactory getInstance() {
