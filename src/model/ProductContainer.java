@@ -15,6 +15,15 @@ public abstract class ProductContainer implements IProductContainer {
 	private ProductItems productItems;
 	private Collection<ProductGroup> productGroups;
 
+	public ProductContainer(NonEmptyString name) {
+		this.name = name;
+	}
+	
+	public ProductContainer()
+	{
+		this.name = new NonEmptyString("test");
+	}
+	
 	public NonEmptyString getName() {
 		return name;
 	}

@@ -7,6 +7,15 @@ import java.nio.charset.Charset;
  */
 public final class StringOps {
 	/**
+	 * Max numeric bound for US-ASCII
+	 */
+	public static final byte ASCII_NUMERIC_MIN = 0x30;
+	/**
+	 * Min numeric bound for US-ASCII
+	 */
+	public static final byte ASCII_NUMERIC_MAX = 0x39;
+	
+	/**
 	 * Private Constructor.
 	 */
 	private StringOps() {

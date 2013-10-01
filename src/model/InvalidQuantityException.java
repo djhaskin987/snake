@@ -11,6 +11,11 @@ package model;
 public class InvalidQuantityException extends IllegalArgumentException {
 
 	/**
+	 * serial version uid
+	 */
+	private static final long serialVersionUID = -3892023010991204740L;
+
+	/**
 	 * Creates a new InvalidQuantityException instance
 	 * 
 	 * @param message the message to display

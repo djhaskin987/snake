@@ -17,6 +17,18 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	private static final long serialVersionUID = -3590780103998287913L;
 	private ProductContainer parentContainer;
 	private Quantity threeMonthSupply;
+	
+	public ProductGroup(NonEmptyString name)
+	{
+		super(name);
+	}
+	
+	// for testing only
+	ProductGroup()
+	{
+		super();
+	}
+	
 	@Override
 	public Collection<Product> getProducts() {
 		// TODO Auto-generated method stub

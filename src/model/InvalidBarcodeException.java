@@ -2,13 +2,14 @@ package model;
 
 /**
  * Exception for class Barcode. Thrown when barcode is invalid.
+ * 
  * @see Barcode
  */
 public class InvalidBarcodeException extends IllegalArgumentException {
 	/**
-	 * 
+	 * serial version uid
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1213L;
 
 	/**
 	 * initializes exception

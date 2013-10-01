@@ -16,7 +16,14 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * serial version unique identifier
 	 */
 	private static final long serialVersionUID = 8776735239406467878L;
-
+	public StorageUnit(NonEmptyString name) {
+		super(name);
+	}
+	
+	StorageUnit()
+	{
+		super();
+	}
 	@Override
 	public Collection<Product> getProducts() {
 		// TODO Auto-generated method stub

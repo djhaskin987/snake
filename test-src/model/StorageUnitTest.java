@@ -2,13 +2,24 @@ package model;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
 public class StorageUnitTest {
-
+	StorageUnit storageUnit;
+	Product product;
+	Item item;
+	
 	@Before
 	public void setUp() throws Exception {
+		storageUnit = new StorageUnit();
+		product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
+		Barcode barcode = new Barcode("123456789012");
+		Date expireDate = new Date();
+		IProductContainer container = (IProductContainer) new StorageUnit();
+		Item item = new Item(product, barcode, expireDate, container);
+		storageUnit.add(item);
 	}
 
 	@Test
