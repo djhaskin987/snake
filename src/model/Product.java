@@ -8,6 +8,7 @@ import java.util.List;
  *
  */
 public class Product implements IProduct{
+	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
 	private Barcode barcode;
 	private NonEmptyString description;

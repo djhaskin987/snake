@@ -9,6 +9,12 @@ import java.io.Serializable;
  */
 public interface IProductContainer extends Serializable, IContextPanelNode{
 	
+	/** Retrieve the name of this product container.
+	 * @pre The product container is initialized and not null.
+	 * @post No change is made to the state of the object.
+	 * @return the name of the product container.
+	 */
+	NonEmptyString getName();
 	/**
 	 * Adds an Item to just one ProductContainer
 	 * @param item

@@ -39,6 +39,8 @@ public class ValidDateTest {
                     } catch (DateDoesNotExistException e1) {
                 tomorrow = new Date(1, 1, today.getYear()+1);
             }
+			Date date = new Date(1,2,2000);
+			assertEquals(date.toString(), "1/2/2000");
         }
         try {
             new ValidDate(tomorrow.getMonth(), tomorrow.getDay(), tomorrow.getYear());

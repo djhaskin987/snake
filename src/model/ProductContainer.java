@@ -5,12 +5,17 @@ import java.util.Collection;
  * @author Daniel Carrier
  *
  */
-public abstract class ProductContainer {
-	private String name;
+public abstract class ProductContainer implements IProductContainer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7498283844315351927L;
+	
+	private NonEmptyString name;
 	private ProductItems productItems;
 	private Collection<ProductGroup> productGroups;
 
-	public String getName() {
+	public NonEmptyString getName() {
 		return name;
 	}
 	

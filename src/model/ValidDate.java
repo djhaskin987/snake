@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.zip.DataFormatException;
 
 /**
@@ -9,6 +8,11 @@ import java.util.zip.DataFormatException;
  *
  */
 public class ValidDate extends Date implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -676496083906678513L;
 
 	/**
 	 * @param day		Day of the month
