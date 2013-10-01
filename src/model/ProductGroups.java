@@ -8,7 +8,11 @@ import java.util.Map;
  * @author Kevin
  *
  */
-public class ProductGroups implements Serializable{
+public class ProductGroups implements Serializable {
+	/**
+	 * serial version uid
+	 */
+	private static final long serialVersionUID = -3554355105443939099L;
 	private Map<NonEmptyString, ProductGroup> productGroups;
 	
 	public ProductGroups(){

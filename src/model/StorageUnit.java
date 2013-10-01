@@ -2,6 +2,7 @@ package model;
 
 import java.util.Collection;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  * A Storage Unit is a room, closet, pantry, cupboard, or some other enclosed area where
@@ -9,7 +10,12 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class StorageUnit extends ProductContainer{
+public class StorageUnit extends ProductContainer implements Serializable {
+
+	/**
+	 * serial version unique identifier
+	 */
+	private static final long serialVersionUID = 8776735239406467878L;
 
 	@Override
 	public Collection<Product> getProducts() {

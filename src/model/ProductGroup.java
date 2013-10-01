@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,7 +10,11 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class ProductGroup extends ProductContainer {
+public class ProductGroup extends ProductContainer implements Serializable {
+	/**
+	 * serial version UID
+	 */
+	private static final long serialVersionUID = -3590780103998287913L;
 	private ProductContainer parentContainer;
 	private Quantity threeMonthSupply;
 	@Override
