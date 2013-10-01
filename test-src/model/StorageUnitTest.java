@@ -2,6 +2,8 @@ package model;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Collection;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,88 +15,114 @@ public class StorageUnitTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		storageUnit = new StorageUnit();
-		product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
-		Barcode barcode = new Barcode("123456789012");
+		storageUnit = new StorageUnit(new NonEmptyString("testSR"));
+		product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
+		Barcode barcode = new Barcode();
 		Date expireDate = new Date();
-		IProductContainer container = (IProductContainer) new StorageUnit();
-		Item item = new Item(product, barcode, expireDate, container);
+		Item item = new Item(product, barcode, expireDate, storageUnit);
 		storageUnit.add(item);
 	}
 
 	@Test
 	public void testGetProducts() {
-		fail("Not yet implemented");
+		Collection<Product> pc = storageUnit.getProducts();
+		assertTrue("should contain product", pc.contains(product));
 	}
 
 	@Test
 	public void testContains() {
-		fail("Not yet implemented");
+		assertTrue("should contain product", storageUnit.contains(product));
 	}
 
 	@Test
 	public void testAddItem() {
-		fail("Not yet implemented");
+		Barcode barcode = new Barcode();
+		Date expireDate = new Date();
+		Item item = new Item(product, barcode, expireDate, storageUnit);
+		storageUnit.add(item);
+		Collection<Item> items = storageUnit.getItems();
+		assertTrue("should contain item", items.contains(item));
 	}
 
 	@Test
 	public void testAddProductGroup() {
-		fail("Not yet implemented");
+		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
+		storageUnit.addProductGroup(pg);
+		Collection<ProductGroup> pgCollection = storageUnit.getProductGroups();
+		assertTrue("should contain a product group", pgCollection.contains(pg));
 	}
 
 	@Test
 	public void testDeleteProductContainer() {
-		fail("Not yet implemented");
+		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
+		storageUnit.addProductGroup(pg);
+		storageUnit.deleteProductContainer("testPG");
+		Collection<ProductGroup> pgCollection = storageUnit.getProductGroups();
+		assertTrue("should not contain a product group", !pgCollection.contains(pg));
 	}
 
 	@Test
 	public void testSetProductContainer() {
-		fail("Not yet implemented");
+		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
+		storageUnit.addProductGroup(pg);
+		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
+		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
+		pg2.add(new Item(product, new Barcode(), new Date(), pg2));
+		storageUnit.setProductContainer("testPG", pg2);
+		Collection<ProductGroup> pgCollection = storageUnit.getProductGroups();
+		assertTrue("must contain the last item", pgCollection.contains(pg2));
 	}
 
 	@Test
 	public void testTransferItem() {
-		fail("Not yet implemented");
+		StorageUnit su = new StorageUnit(new NonEmptyString("test"));
+		storageUnit.transferItem(item, su);
+		assertTrue("item not transferred", !su.getItems().isEmpty() && storageUnit.getItems().isEmpty());
 	}
 
 	@Test
 	public void testTransferProduct() {
-		fail("Not yet implemented");
+		StorageUnit su = new StorageUnit(new NonEmptyString("test"));
+		storageUnit.transferProduct(product, su);
+		assertTrue("product not transferred", !su.getProducts().isEmpty() && storageUnit.getProducts().isEmpty());
 	}
 
 	@Test
 	public void testWhoHasProduct() {
-		fail("Not yet implemented");
+		IProductContainer pc = storageUnit.whoHasProduct("bagel");
+		assertTrue("storage unit has this product", pc == storageUnit);
 	}
 
 	@Test
 	public void testGetParent() {
-		fail("Not yet implemented");
+		assertTrue(storageUnit.getParent() == null);
 	}
 
 	@Test
 	public void testGetUnit() {
-		fail("Not yet implemented");
+		assertTrue(storageUnit.getParent() == null);
 	}
 
 	@Test
 	public void testGetThreeMonthSupply() {
-		fail("Not yet implemented");
+		assertTrue(storageUnit.getThreeMonthSupply() == null);
 	}
 
 	@Test
 	public void testGetProductGroupName() {
-		fail("Not yet implemented");
+		assertTrue(storageUnit.getProductGroupName() == null);
 	}
 
 	@Test
 	public void testGetItemsString() {
-		fail("Not yet implemented");
+		List<Item> items = storageUnit.getItems("bagel");
+		assertTrue("must contain item", items.contains(item));
 	}
 
 	@Test
 	public void testRemoveItem() {
-		fail("Not yet implemented");
+		storageUnit.removeItem(item.getBarcode());
+		assertTrue("must not have any items", storageUnit.getItems().isEmpty());
 	}
 
 }

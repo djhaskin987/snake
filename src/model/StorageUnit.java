@@ -7,7 +7,8 @@ import java.io.Serializable;
 /**
  * A Storage Unit is a room, closet, pantry, cupboard, or some other enclosed area where
  * items can be stored.
- * @author Kevin
+ * 
+ * @author Nathan Standiford
  *
  */
 public class StorageUnit extends ProductContainer implements Serializable {
@@ -24,6 +25,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	{
 		super();
 	}
+	
 	@Override
 	public Collection<Product> getProducts() {
 		// TODO Auto-generated method stub

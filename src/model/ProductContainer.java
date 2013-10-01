@@ -12,16 +12,22 @@ public abstract class ProductContainer implements IProductContainer {
 	private static final long serialVersionUID = -7498283844315351927L;
 	
 	private NonEmptyString name;
-	private ProductItems productItems;
-	private Collection<ProductGroup> productGroups;
+	protected ProductItems productItems;
+	protected ProductGroups productGroups;
 
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
+		productGroups = new ProductGroups();
+		productItems = new ProductItems();
 	}
 	
 	public ProductContainer()
 	{
 		this.name = new NonEmptyString("test");
+	}
+
+	public Collection<ProductGroup> getProductGroups() {
+		return productGroups.getProductGroups().values();
 	}
 	
 	public NonEmptyString getName() {
@@ -45,7 +51,8 @@ public abstract class ProductContainer implements IProductContainer {
 	
 	public void add(Item item) {
 		Product product = item.getProduct();
-		for(ProductGroup productGroup : productGroups) {
+		Collection<ProductGroup> pgCollection = getProductGroups();
+		for(ProductGroup productGroup : pgCollection) {
 			if(productGroup.contains(product)) {
 				productGroup.add(item);
 				return;

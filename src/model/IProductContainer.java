@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Kevin
  *
  */
-public interface IProductContainer extends Serializable, IContextPanelNode{
+public interface IProductContainer extends Serializable, IContextPanelNode {
 	
 	/** Retrieve the name of this product container.
 	 * @pre The product container is initialized and not null.

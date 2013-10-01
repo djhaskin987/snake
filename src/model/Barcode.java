@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.Random;
 
 import common.StringOps;
 
@@ -37,6 +38,20 @@ public class Barcode implements Serializable {
 	public Barcode(String barcode) {
 		checkBarcode(barcode);
 		this.barcode = barcode;
+	}
+	
+	// generates a random barcode for testing
+	Barcode()
+	{
+		final int TEN = 10;
+		final int MAX_DIGITS = 12;
+		Random rand = new Random();
+		String sBarcode = "";
+		for (int i = 0; i < MAX_DIGITS; i++)
+			sBarcode += (rand.nextInt() % TEN);
+		int checkBit = getExpectedCheckDigit(sBarcode);
+		sBarcode = sBarcode.substring(0, MAX_DIGITS - 1) + checkBit;
+		this.barcode = sBarcode;
 	}
 	
 	/**

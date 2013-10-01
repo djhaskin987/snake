@@ -6,7 +6,9 @@ package model;
  * Needs a better name
  */
 public class InvalidHITDateException extends Exception {
-	/**
+
+       private static final long serialVersionUID = -5196755021811211427L;
+       /**
 	 * @param s
 	 */
 	InvalidHITDateException(String s) {
