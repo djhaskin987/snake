@@ -81,6 +81,8 @@ public class JavaSerialTest {
 		java.load();
 		//assertTrue(Model.getInstance().getStorageUnits().getProducts().size() == 1);
 		assertTrue(Model.getInstance().getProductCollection().getSize() == 1);
+		StorageUnit test = Model.getInstance().getStorageUnits().getStorageUnit("Closet");
+		test
 	}
 
 }
