@@ -13,15 +13,15 @@ import java.util.TreeMap;
  */
 public class ProductCollection implements Serializable{
 
-	private static final long serialVersionUID = 414358389788920747L;
+    private static final long serialVersionUID = 414358389788920747L;
 
-	private TreeMap<String, Product> products;
-	
-	private static ProductCollection instance = null;
-	
-	
+    private TreeMap<String, Product> products;
+    
+    private static ProductCollection instance = null;
+    
+    
     public ProductCollection() {
-    	products = new TreeMap<String, Product>();
+        products = new TreeMap<String, Product>();
     }
    
     /**
@@ -36,35 +36,36 @@ public class ProductCollection implements Serializable{
       }
       return instance;
     }
-	
+    
     /**
      * Permanently add a product to the Collection
      * @pre the ProductCollection singleton instance is initialized.
      * @post the specified product is added to this ProductCollection.
      * @param product to be added to collection
      */
-	public void add(Product product){
-		this.products.put(product.getBarcode().getBarcode(), product);
-	}
-	
-	/**
-	 * 
-	 * @param barcode
+    public void add(Product product){
+        this.products.put(product.getBarcode().getBarcode(), product);
+    }
+    
+    /**
+     * 
+     * @param barcode
      * @pre the ProductCollection singleton instance is initialized.
      * @post the ProductCollection is unchanged.
-	 * @return Product by Barcode
-	 */
-	public Product getProduct(Barcode barcode){
-		return products.get(barcode);
-	}
-	
-	/**
-	 * 
+     * @return Product by Barcode
+     */
+    public Product getProduct(Barcode barcode){
+        return products.get(barcode.getBarcode());
+    }
+    
+    /**
+     * 
      * @pre the ProductCollection singleton instance is initialized.
      * @post the ProductCollection is unchanged.
      * @return the size of this ProductCollection.
-	 */
-	public int getSize(){
-		return this.products.size();
-	}
+     */
+    public int getSize(){
+        return this.products.size();
+    }
 }
+
