@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @invariant internal string value is immutable and can only be set
  *   at construction time.
  */
-public class NonEmptyString implements Serializable {
+public class NonEmptyString implements Serializable, Comparable<NonEmptyString> {
 	/**
 	 * 
 	 */
@@ -75,5 +75,10 @@ public class NonEmptyString implements Serializable {
 					getValue();
 		}
 		return false;
+	}
+	
+	public int compareTo(NonEmptyString other)
+	{
+		return value.compareTo(other.value);
 	}
 }

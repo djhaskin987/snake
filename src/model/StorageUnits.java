@@ -5,6 +5,7 @@ package model;
  * all StorageUnits
  */
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -25,7 +26,13 @@ public class StorageUnits implements IContextPanelNode, Serializable{
      * @param storageUnit
      */
 	public void setStorageUnit(String name, StorageUnit storageUnit){
-		
+		if (name == null || storageUnit == null)
+		{
+			throw new IllegalArgumentException("Arguments cannot be null.");
+		}
+		NonEmptyString realName = new NonEmptyString(name);
+		storageUnits.remove(realName);
+		storageUnits.put(realName, storageUnit);
 	}
 	
 	/** Adds a storage unit to the internal storage units collection.
@@ -34,15 +41,21 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	 * @param storageUnit
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
-		
+		storageUnits.put(storageUnit.getName(), storageUnit);
 	}
 	
 	public List<String> getStorageUnitNames(){
-		return null;
+		
+		List<String> returned = new LinkedList<String>();
+		for (NonEmptyString name : storageUnits.keySet())
+		{
+			returned.add(name.getValue());
+		}
+		return returned;
 	}
 	
 	public StorageUnit getStorageUnit(String name){
-		return null;
+		return storageUnits.get(new NonEmptyString(name));
 	}
 	
 	/**
@@ -50,7 +63,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	 * @param name
 	 */
 	public void deleteStorageUnit(String name){
-		
+		storageUnits.remove(new NonEmptyString(name));
 	}
 	
 	/**
@@ -60,19 +73,17 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	 * @return
 	 */
 	public boolean canDelete(String name){
-		return false;
+		return storageUnits.containsKey(new NonEmptyString(name));
 	}
 
 	@Override
 	public String getUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		return "All";
 	}
 
 	@Override
 	public String getThreeMonthSupply() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
@@ -83,8 +94,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 
 	@Override
 	public String getProductGroupName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
@@ -99,5 +109,4 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 		
 	}
 	
-
 }
