@@ -7,7 +7,8 @@ import java.util.TreeMap;
  * Singelton Design Pattern because there is only one
  * Collection of Products that the whole program uses
  * It contains all known Products in a map
- * @author Kevin
+ * @author Daniel Haskin
+ * @invariant all the Products are added both to StorageUnits and this class.
  *
  */
 public class ProductCollection implements Serializable{
@@ -25,6 +26,8 @@ public class ProductCollection implements Serializable{
    
     /**
      * Singelton Creation
+     * @pre no guarantees.
+     * @post the ProductCollection singleton instance is initialized. The instance is returned.
      * @return Instance of ProductCollection
      */
     public static ProductCollection getInstance() {
@@ -36,6 +39,8 @@ public class ProductCollection implements Serializable{
 	
     /**
      * Permanently add a product to the Collection
+     * @pre the ProductCollection singleton instance is initialized.
+     * @post the specified product is added to this ProductCollection.
      * @param product to be added to collection
      */
 	public void add(Product product){
@@ -45,12 +50,20 @@ public class ProductCollection implements Serializable{
 	/**
 	 * 
 	 * @param barcode
+     * @pre the ProductCollection singleton instance is initialized.
+     * @post the ProductCollection is unchanged.
 	 * @return Product by Barcode
 	 */
 	public Product getProduct(Barcode barcode){
-		return null;
+		return products.get(barcode);
 	}
 	
+	/**
+	 * 
+     * @pre the ProductCollection singleton instance is initialized.
+     * @post the ProductCollection is unchanged.
+     * @return the size of this ProductCollection.
+	 */
 	public int getSize(){
 		return this.products.size();
 	}
