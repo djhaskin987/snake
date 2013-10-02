@@ -16,7 +16,16 @@ public class Product implements IProduct{
 	private Integer shelfLife;
 	private Integer threeMonthSupply;
 	private List<ProductContainer> containers;
-	
+	/**
+	 * 
+	 * @param aBarcode
+	 * @param aDescription
+	 * @param aItemSize
+	 * @param aShelfLife
+	 * @param aThreeMonthSupply
+	 * @param aContainers
+	 * @post a Product is created
+	 */
 	public Product(Barcode aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
 			Integer aShelfLife, Integer aThreeMonthSupply, List<ProductContainer> aContainers){
 		this.creation = new ValidDate();
@@ -72,6 +81,7 @@ public class Product implements IProduct{
 	}
 	
 	/**
+	 * @return A ValidDate of when this product was first Created
 	 * @post Must be a non-null ValidDate
 	 */
 	@Override
@@ -80,6 +90,8 @@ public class Product implements IProduct{
 	}
 	
 	/**
+	 * If the the integer is zero then no three month supply has been set
+	 * @return The three month supply for this product
 	 * @post Must be a non-null, non-negative integer
 	 */
 	@Override
@@ -88,7 +100,8 @@ public class Product implements IProduct{
 	}
 	
 	/**
-	 * {@post Must be a non-null List of ProductContainers}
+	 * @return A list of all containers that have this product inside
+	 * @post Must be a non-null List of ProductContainers
 	 */
 	@Override
 	public List<ProductContainer> getContainers() {
@@ -98,12 +111,14 @@ public class Product implements IProduct{
 	/**
 	 * @post Must be a non-null ValidDate
 	 */
+	//Do we really need this we already have getCreateDate
 	@Override
 	public ValidDate getCreation() {
 		return creation;
 	}
 	
 	/**
+	 * @return Barcode associated with this product
 	 * @post Must be a non-null Barcode
 	 */
 	@Override
@@ -112,6 +127,7 @@ public class Product implements IProduct{
 	}
 	
 	/**
+	 * @return NonEmptyString containing the full description of this product
 	 * @post Must be a non-null NonEmptyString
 	 */
 	@Override
@@ -120,6 +136,7 @@ public class Product implements IProduct{
 	}
 	
 	/**
+	 * @return Integer of the size and unit of measure of this product
 	 * @post Must be a non-null Quantity
 	 */
 	@Override
@@ -128,6 +145,8 @@ public class Product implements IProduct{
 	}
 	
 	/**
+	 * If shelfLife is 0 then no shelf life has been set
+	 * @return Integer of how long a Product is good for in months
 	 * @post Must be a non-null, non-negative integer
 	 */
 	@Override
