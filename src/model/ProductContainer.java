@@ -11,7 +11,7 @@ public abstract class ProductContainer implements IProductContainer {
 	 */
 	private static final long serialVersionUID = -7498283844315351927L;
 	
-	private NonEmptyString name;
+	protected NonEmptyString name;
 	protected ProductItems productItems;
 	protected ProductGroups productGroups;
 
@@ -51,8 +51,7 @@ public abstract class ProductContainer implements IProductContainer {
 	
 	public void add(Item item) {
 		Product product = item.getProduct();
-		Collection<ProductGroup> pgCollection = getProductGroups();
-		for(ProductGroup productGroup : pgCollection) {
+		for (ProductGroup productGroup : productGroups) {
 			if(productGroup.contains(product)) {
 				productGroup.add(item);
 				return;

@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.io.Serializable;
 
@@ -17,105 +19,240 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * serial version unique identifier
 	 */
 	private static final long serialVersionUID = 8776735239406467878L;
+	/**
+	 * Creates a new StorageUnit object
+	 * 
+	 * @param name the name of the storage unit
+	 * 
+	 * {@pre name != null}
+	 * 
+	 * {@post a StorageUnit object}
+	 */
 	public StorageUnit(NonEmptyString name) {
 		super(name);
 	}
 	
-	StorageUnit()
-	{
+	// for testing only
+	StorageUnit() {
 		super();
 	}
 	
+	/**
+	 * Retrieves a collection of products
+	 * 
+	 * @return an unmodifiable Collection of Products
+	 * 
+	 * {@pre productItems != null}
+	 * 
+	 * {@post unmodifiable Collection of Products}
+	 */
 	@Override
-	public Collection<Product> getProducts() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Product> getProducts() {		 
+		return Collections.unmodifiableCollection(productItems.getProducts());
 	}
 
+	/**
+	 * Checks to see if a product is in this StorageUnit
+	 * 
+	 * @param product the product to search for
+	 * 
+	 * @return true if product is contained in the StorageUnit. false otherwise 
+	 * 
+	 * {@pre productItems != null}
+	 * 
+	 * {@post true if product is contained in the StorageUnit. False otherwise. }
+	 */
 	@Override
 	public boolean contains(Product product) {
-		// TODO Auto-generated method stub
-		return false;
+		return productItems.getProducts().contains(product);
 	}
 
+	/**
+	 * Adds an Item to the StorageUnit
+	 * 
+	 * @param item the Item to add
+	 * 
+	 * {@pre item != null && productItems != null}
+	 * 
+	 * {@post item added}
+	 */
 	@Override
 	public void addItem(Item item) {
-		// TODO Auto-generated method stub
-		
+		productItems.addItem(item);		
 	}
 
+	/**
+	 * Add ProductGroup to StorageUnit
+	 *
+	 * @param productGroup the ProductGroup to add
+	 * 
+	 * {@pre productGroups != null && productGroup != null}
+	 * 
+	 * {@post productGroup added}
+	 */
 	@Override
 	public void addProductGroup(ProductGroup productGroup) {
-		// TODO Auto-generated method stub
+		productGroups.add(productGroup);
 		
 	}
 
+	/**
+	 * remove ProductContainer from StorageUnit
+	 * 
+	 * @param name the name of the productContainer
+	 * 
+	 * {@pre name != null && name != ""}
+	 * 
+	 * {@post productContainer deleted if it exists}
+	 */
 	@Override
 	public void deleteProductContainer(String name) {
-		// TODO Auto-generated method stub
-		
+		productGroups.remove(name);
 	}
 
+	/**
+	 * Sets the productContainer by the specified name in the StorageUnit
+	 * with a new object
+	 * 
+	 * @param name the name of the productContainer
+	 * 
+	 * @param productContainer the new productContainer
+	 * 
+	 * 
+	 */
 	@Override
 	public void setProductContainer(String name,
 			ProductContainer productContainer) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void transferItem(Item item, ProductContainer newProductContainer) {
-		// TODO Auto-generated method stub
-		
+		productItems.removeItem(item);
+		newProductContainer.add(item);
 	}
 
 	@Override
 	public void transferProduct(Product product,
 			ProductContainer newProductContainer) {
-		// TODO Auto-generated method stub
-		
+		List<Item> itemsToTransfer = new ArrayList<Item>();
+		for (Item i : productItems.getItems()) {
+			if (i.getProduct() == product)
+				itemsToTransfer.add(i);
+		}
+		for (Item i : itemsToTransfer) {
+			productItems.removeItem(i);
+			i.setProductContainer(newProductContainer);
+		}
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param name 	the name of the product
+	 * 
+	 * @return 		IProductContainer object containing Product with description of 'name'.
+	 * 				Null if there nothing is there.
+	 *
+	 * {@pre name is not null}
+	 * {@post ProductContainer object}
+	 */
 	@Override
 	public IProductContainer whoHasProduct(String name) {
-		// TODO Auto-generated method stub
+		if (hasProduct(this, name))
+			return this;
+		
+		for (ProductGroup pg : productGroups.getProductGroups().values()) {
+			if (hasProduct(pg, name))
+				return pg;
+		}
 		return null;
 	}
+	
+	private static boolean hasProduct(ProductContainer pc, String name)
+	{
+		for (Product p : pc.getProducts()) {
+			if (p.getDescription().getValue() == name)
+				return true;
+		}
+		return false;
+	}
 
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
 	@Override
 	public IProductContainer getParent() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
 	@Override
 	public String getUnit() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
 	@Override
 	public String getThreeMonthSupply() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
 	@Override
 	public String getProductGroupName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Item> getItems(String productName) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Item> items = new ArrayList<Item>();
+		for (Item i : productItems.getItems()) {
+			Product p = i.getProduct();
+			String pName = p.getDescription().getValue();
+			if (pName == productName)
+				items.add(i);
+		}
+		return items;
 	}
 
 	@Override
 	public void removeItem(Barcode barcode) {
-		// TODO Auto-generated method stub
-		
+		for (Item i : productItems.getItems()) {
+			Barcode bc = i.getBarcode();
+			if (bc == barcode) {
+				productItems.removeItem(i);
+				break;
+			}
+		}
 	}
-
 }

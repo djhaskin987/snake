@@ -10,7 +10,7 @@ import common.StringOps;
  * The 	Barcode class represents a physical barcode that can be found on most purchased items.
  * Barcode conforms to UPC-A standard (see http://en.wikipedia.org/wiki/Universal_Product_Code)
  * 
- * @author Nathan
+ * @author Nathan Standiford
  */
 
 public class Barcode implements Serializable {

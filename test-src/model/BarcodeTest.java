@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * BarcodeTest tests Barcode class
  * 
- * @author Nathan
+ * @author Nathan Standiford
  *
  */
 public class BarcodeTest {
