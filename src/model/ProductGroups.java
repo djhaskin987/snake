@@ -63,9 +63,15 @@ public class ProductGroups implements Serializable, Collection<ProductGroup> {
 
 	@Override
 	public boolean remove(Object arg0) {
-		if (arg0.getClass() == NonEmptyString.class || arg0.getClass() == ProductGroup.class)
-		{
+		if (arg0.getClass() == String.class) {
+			NonEmptyString nes = new NonEmptyString((String)arg0);
+			productGroups.remove(nes);
+		} else if (arg0.getClass() == NonEmptyString.class) {
 			productGroups.remove(arg0);
+			return true;
+		} else if (arg0.getClass() == ProductGroup.class) {
+			NonEmptyString name = ((ProductGroup)arg0).getName();
+			productGroups.remove(name);
 			return true;
 		}
 		return false;
