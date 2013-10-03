@@ -40,7 +40,7 @@ public class StorageUnitTest {
 		Date expireDate = new Date();
 		Item item = new Item(product, barcode, expireDate, storageUnit);
 		storageUnit.add(item);
-		Collection<IItem> items = storageUnit.getItems();
+		Collection<IItem> items = storageUnit.getItems("bagel");
 		assertTrue("should contain item", items.contains(item));
 	}
 
@@ -77,7 +77,7 @@ public class StorageUnitTest {
 	public void testTransferItem() {
 		StorageUnit su = new StorageUnit(new NonEmptyString("test"));
 		storageUnit.transferItem(item, su);
-		assertTrue("item not transferred", !su.getItems().isEmpty() && storageUnit.getItems().isEmpty());
+		assertTrue("item not transferred", !su.getItems("bagel").isEmpty() && storageUnit.getItems("bagel").isEmpty());
 	}
 
 	@Test
@@ -115,14 +115,14 @@ public class StorageUnitTest {
 
 	@Test
 	public void testGetItemsString() {
-		List<IItem> items = storageUnit.getItems("bagel");
+		Collection<IItem> items = storageUnit.getItems("bagel");
 		assertTrue("must contain item", items.contains(item));
 	}
 
 	@Test
 	public void testRemoveItem() {
 		storageUnit.removeItem(item.getBarcode());
-		assertTrue("must not have any items", storageUnit.getItems().isEmpty());
+		assertTrue("must not have any items", storageUnit.getItems("bagel").isEmpty());
 	}
 
 }

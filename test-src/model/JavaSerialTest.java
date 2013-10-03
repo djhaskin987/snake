@@ -75,7 +75,7 @@ public class JavaSerialTest {
 	
 	@Test
 	public void testLoad(){
-		//System.out.println("Size: "+Model.getInstance().getStorageUnits().getProducts().size());
+		System.out.println("Size: "+Model.getInstance().getStorageUnits().getProducts().size());
 		assertNull(Model.getInstance().getStorageUnits().getProducts());
 		
 		IPersistance java = new JavaSerial();
