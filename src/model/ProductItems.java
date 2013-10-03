@@ -15,14 +15,14 @@ public class ProductItems implements Serializable {
 	 */
 	private static final long serialVersionUID = 1120419510043040681L;
 	
-	private Map<Product, Collection<Item>> map;
+	private Map<IProduct, Collection<IItem>> map;
 	
 	/**
 	 * @pre		None
 	 * @post	Constructs an empty ProductItmes
 	 */
 	public ProductItems() {
-		map = new HashMap<Product, Collection<Item>>();
+		map = new HashMap<IProduct, Collection<IItem>>();
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class ProductItems implements Serializable {
 	 * @post	Returns a collection of all the products. Empty if this is empty.
 	 * @return	A collection of all the products
 	 */
-	public Collection<Product> getProducts() {
+	public Collection<IProduct> getProducts() {
 		return map.keySet();
 	}
 	
@@ -39,9 +39,9 @@ public class ProductItems implements Serializable {
 	 * @post	Returns a collection of all the items. Empty if this is empty.
 	 * @return	A collection of all the items. Empty if this is empty.
 	 */
-	public Collection<Item> getItems() {
-		ArrayList<Item> out = new ArrayList<Item>();
-		for(Collection<Item> itemList : map.values()) {
+	public Collection<IItem> getItems() {
+		ArrayList<IItem> out = new ArrayList<IItem>();
+		for(Collection<IItem> itemList : map.values()) {
 			out.addAll(itemList);
 		}
 		return out;
@@ -52,11 +52,11 @@ public class ProductItems implements Serializable {
 	 * @post		item is added
 	 * @param item	Item to be added
 	 */
-	public void addItem(Item item) {	//TODO: Should I check if the item is already in the list?
-		Product product = item.getProduct();
-		Collection<Item> itemList = map.get(product);
+	public void addItem(IItem item) {	//TODO: Should I check if the item is already in the list?
+		IProduct product = item.getProduct();
+		Collection<IItem> itemList = map.get(product);
 		if(itemList == null) {
-			itemList = new ArrayList<Item>();
+			itemList = new ArrayList<IItem>();
 			itemList.add(item);
 			map.put(product, itemList);
 		} else {
@@ -70,9 +70,9 @@ public class ProductItems implements Serializable {
 	 * 		that product is also removed.
 	 * @param item	Item to be removed. Automatically removes the product if that's the last item.
 	 */
-	public void removeItem(Item item) {
-		Product product = item.getProduct();
-		Collection<Item> itemList = map.get(product);
+	public void removeItem(IItem item) {
+		IProduct product = item.getProduct();
+		Collection<IItem> itemList = map.get(product);
 		if(itemList.size() == 1) {
 			map.remove(product);
 		} else {
@@ -86,7 +86,7 @@ public class ProductItems implements Serializable {
 	 * @param product	The product to check if this ProductItem contains.
 	 * @return			True if this ProductItems contains a member of this product. False otherwise.
 	 */
-	public boolean contains(Product product) {
+	public boolean contains(IProduct product) {
 		return map.containsKey(product);
 	}
 	
@@ -96,9 +96,9 @@ public class ProductItems implements Serializable {
 	 * @param item		The item to check if this ProductItem contains.
 	 * @return			True if this contains item. False otherwise.
 	 */
-	public boolean contains(Item item) {
-		Product product = item.getProduct();
-		Collection<Item> itemList = map.get(product);
+	public boolean contains(IItem item) {
+		IProduct product = item.getProduct();
+		Collection<IItem> itemList = map.get(product);
 		if(itemList == null) {
 			return false;
 		} else {

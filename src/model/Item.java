@@ -9,9 +9,7 @@ package model;
  */
 
 public class Item implements IItem{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 8752461391777156867L;
 	
 	private Product product;

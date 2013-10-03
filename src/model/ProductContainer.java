@@ -35,7 +35,7 @@ public abstract class ProductContainer implements IProductContainer {
 		return name;
 	}
 	
-	public Collection<Product> getProducts()
+	public Collection<IProduct> getProducts()
 	{
 		return productItems.getProducts();
 	}
@@ -53,11 +53,11 @@ public abstract class ProductContainer implements IProductContainer {
     // To remove this todo, determine whether the @Override tag is needed,
     // or indeed if the method need be overridden at all.
     // @Override.
-	public Collection<Item> getItems() {
+	public Collection<IItem> getItems() {
 		return productItems.getItems();
 	}
 	
-	public void add(Item item) {
+	public void add(IItem item) {
 		Product product = item.getProduct();
 		for (ProductGroup productGroup : productGroups) {
 			if(productGroup.contains(product)) {
@@ -81,7 +81,7 @@ public abstract class ProductContainer implements IProductContainer {
 	}
 
 	@Override
-	public void addItem(Item item) {
+	public void addItem(IItem item) {
 		productItems.addItem(item);
 	}
 
@@ -103,13 +103,13 @@ public abstract class ProductContainer implements IProductContainer {
 	}
 
 	@Override
-	public void transferItem(Item item, ProductContainer newProductContainer) {
+	public void transferItem(IItem item, ProductContainer newProductContainer) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void transferProduct(Product product,
+	public void transferProduct(IProduct product,
 			ProductContainer newProductContainer) {
 		// TODO Auto-generated method stub
 		

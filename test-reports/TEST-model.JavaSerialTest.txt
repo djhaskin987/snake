@@ -1,8 +1,13 @@
 Testsuite: model.JavaSerialTest
-Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.111 sec
+Tests run: 2, Failures: 0, Errors: 1, Time elapsed: 0.109 sec
 ------------- Standard Output ---------------
 Size: 1
 ------------- ---------------- ---------------
 
-Testcase: testSerialize took 0.088 sec
-Testcase: testLoad took 0.009 sec
+Testcase: testLoad took 0.018 sec
+	Caused an ERROR
+model.StorageUnits.getProducts()Ljava/util/List;
+java.lang.NoSuchMethodError: model.StorageUnits.getProducts()Ljava/util/List;
+	at model.JavaSerialTest.testLoad(JavaSerialTest.java:79)
+
+Testcase: testSerialize took 0.073 sec

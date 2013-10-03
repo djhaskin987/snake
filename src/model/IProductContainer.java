@@ -21,7 +21,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * @pre the IProductContainer is initialized
 	 * @post the specified item is added to the container
 	 */
-	public void addItem(Item item);
+	public void addItem(IItem item);
 	
 	/**
 	 * Allows program to add a ProductGroup to either a StorageUnit or a ProductGroup
@@ -59,7 +59,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * 		and newProductContainer is a member of this IProductContainer.
 	 * @post item is transferred to newProductContainer.
 	 */
-	public void transferItem(Item item, ProductContainer newProductContainer);
+	public void transferItem(IItem item, ProductContainer newProductContainer);
 	
 	
 	/**
@@ -69,7 +69,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * @pre product is non-null, and contained by some ProductContainer in this IProductContainer; newProductContainer is a member of this IProductContainer
 	 * @post product is transferred to newProductContainer.
 	 */
-	public void transferProduct(Product product, ProductContainer newProductContainer);
+	public void transferProduct(IProduct product, ProductContainer newProductContainer);
 	
 	/**
 	 * Searchs ProductContainer to see who has a specific Product.  

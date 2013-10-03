@@ -1,5 +1,10 @@
 Testsuite: model.ProductCollectionTest
-Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.047 sec
+Tests run: 2, Failures: 0, Errors: 1, Time elapsed: 0.048 sec
 
-Testcase: testGetInstance took 0.029 sec
-Testcase: testAddSizeGet took 0.002 sec
+Testcase: testAddSizeGet took 0.028 sec
+	Caused an ERROR
+model.ProductCollection.getProduct(Lmodel/Barcode;)Lmodel/Product;
+java.lang.NoSuchMethodError: model.ProductCollection.getProduct(Lmodel/Barcode;)Lmodel/Product;
+	at model.ProductCollectionTest.testAddSizeGet(ProductCollectionTest.java:71)
+
+Testcase: testGetInstance took 0.002 sec

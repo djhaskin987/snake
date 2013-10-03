@@ -47,7 +47,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * {@post unmodifiable Collection of Products}
 	 */
 	@Override
-	public Collection<Product> getProducts() {
+	public Collection<IProduct> getProducts() {
 		return productItems.getProducts();
 	}
 	
@@ -77,7 +77,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * {@post item added}
 	 */
 	@Override
-	public void addItem(Item item) {
+	public void addItem(IItem item) {
 		productItems.addItem(item);		
 	}
 	
@@ -138,7 +138,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * {@post transfers the item}
 	 */
 	@Override
-	public void transferItem(Item item, ProductContainer newProductContainer) {
+	public void transferItem(IItem item, ProductContainer newProductContainer) {
 		productItems.removeItem(item);
 		newProductContainer.add(item);		
 	}
@@ -155,18 +155,18 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * {@post product is transfers}
 	 */
 	@Override
-	public void transferProduct(Product product,
+	public void transferProduct(IProduct product,
 			ProductContainer newProductContainer) {
-		List<Item> itemsToTransfer = new ArrayList<Item>();
-		for (Item i : productItems.getItems()) {
+		List<IItem> itemsToTransfer = new ArrayList<IItem>();
+		for (IItem i : productItems.getItems()) {
 			if (i.getProduct() == product)
 				itemsToTransfer.add(i);
 		}
-		for (Item i : itemsToTransfer) {
+		for (IItem i : itemsToTransfer) {
 			productItems.removeItem(i);
 			i.setProductContainer(newProductContainer);
 		}		
-		for (Item i: itemsToTransfer) {
+		for (IItem i: itemsToTransfer) {
 			newProductContainer.add(i);
 		}
 	}
@@ -195,7 +195,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	
 	private static boolean hasProduct(ProductContainer pc, String name)
 	{
-		for (Product p : pc.getProducts()) {
+		for (IProduct p : pc.getProducts()) {
 			if (p.getDescription().getValue() == name)
 				return true;
 		}
@@ -261,9 +261,9 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * {@post a list of items}
 	 */
 	@Override
-	public List<Item> getItems(String productName) {
-		List<Item> items = new ArrayList<Item>();
-		for (Item i : productItems.getItems()) {
+	public List<IItem> getItems(String productName) {
+		List<IItem> items = new ArrayList<IItem>();
+		for (IItem i : productItems.getItems()) {
 			Product p = i.getProduct();
 			String pName = p.getDescription().getValue();
 			if (pName == productName)
@@ -283,7 +283,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public void removeItem(Barcode barcode) {
-		for (Item i : productItems.getItems()) {
+		for (IItem i : productItems.getItems()) {
 			Barcode bc = i.getBarcode();
 			if (bc == barcode) {
 				productItems.removeItem(i);
