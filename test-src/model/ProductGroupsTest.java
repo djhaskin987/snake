@@ -16,14 +16,5 @@ public class ProductGroupsTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testGetProductGroups() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetProductGroups() {
-		fail("Not yet implemented");
-	}
 
 }
