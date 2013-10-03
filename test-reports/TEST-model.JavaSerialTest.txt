@@ -1,0 +1,8 @@
+Testsuite: model.JavaSerialTest
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.111 sec
+------------- Standard Output ---------------
+Size: 1
+------------- ---------------- ---------------
+
+Testcase: testSerialize took 0.088 sec
+Testcase: testLoad took 0.009 sec

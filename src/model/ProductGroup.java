@@ -232,7 +232,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	
 	@Override
 	public String getThreeMonthSupply() {
-		return threeMonthSupply.getString();
+		return threeMonthSupply.toString();
 	}
 	
 	/**

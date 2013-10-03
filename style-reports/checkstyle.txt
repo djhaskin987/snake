@@ -1,0 +1,35 @@
+Starting audit...
+/home/kjdevocht/git/snake/src/model/Barcode.java:34: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Barcode.java:62: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Barcode.java:82: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Barcode.java:86: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Date.java:68: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Date.java:70:5: Cyclomatic Complexity is 22 (max allowed is 10).
+/home/kjdevocht/git/snake/src/model/Date.java:88: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/DateDoesNotExistException.java:5: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/DateTime.java:52: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IContextPanelNode.java:6: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IContextPanelNode.java:7: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IContextPanelNode.java:45: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IPersistance.java:12: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IProductContainer.java:29: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IProductContainer.java:37: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/IProductContainer.java:69: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Item.java:26: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Item.java:28: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Item.java:30: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ItemFactory.java:4: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ItemFactory.java:38: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/JavaSerial.java:16: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ProductFactory.java:6: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ProductItems.java:85: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ProductItems.java:87: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Quantity.java:37: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Quantity.java:62: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Quantity.java:69: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Quantity.java:86: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/Quantity.java:112: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/StorageUnit.java:126: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ValidDate.java:25: Line is longer than 100 characters.
+/home/kjdevocht/git/snake/src/model/ValidDate.java:28: Line is longer than 100 characters.
+Audit done.

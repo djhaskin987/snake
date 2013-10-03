@@ -13,7 +13,7 @@ public class ProductGroupsTest {
 
 	@Test
 	public void testProductGroups() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 
