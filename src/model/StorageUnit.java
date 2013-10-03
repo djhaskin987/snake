@@ -150,6 +150,9 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		for (Item i : itemsToTransfer) {
 			productItems.removeItem(i);
 			i.setProductContainer(newProductContainer);
+		}		
+		for (Item i: itemsToTransfer) {
+			newProductContainer.add(i);
 		}
 	}
 
