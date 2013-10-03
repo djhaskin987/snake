@@ -5,6 +5,7 @@ package model;
  * all StorageUnits
  */
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -87,7 +88,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	}
 
 	@Override
-	public List<Product> getProducts() {
+	public Collection<IProduct> getProducts() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -98,7 +99,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	}
 
 	@Override
-	public List<Item> getItems(String productName) {
+	public Collection<IItem> getItems(String productName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

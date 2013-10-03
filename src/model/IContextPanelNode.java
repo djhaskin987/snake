@@ -39,7 +39,7 @@ public interface IContextPanelNode {
 	 * @param String Name of a Product 
 	 * @return ProductGroup name
 	 */
-	public List<Item> getItems(String productName);
+	public Collection<Item> getItems(String productName);
 	
 	/**
 	 * Takes in a barcode and removes an Item from a ProductContainer and sets the exitDate of that Item
