@@ -31,7 +31,8 @@ public class Barcode implements Serializable {
 	 * 
 	 * @throws model.InvalidBarcodeException if barcode is not valid.
 	 * 
-	 * {@pre barcode is valid. A valid Barcode string must be numeric and be 12 digits and have a valid check digit.}
+	 * {@pre barcode is valid. A valid Barcode string must be numeric and be 12
+     * digits and have a valid check digit.}
 	 * 
 	 * {@post barcode != null}
 	 */
@@ -59,13 +60,15 @@ public class Barcode implements Serializable {
 	 * 
 	 * @param barcode the bar code
 	 * 
-	 * {@pre barcode is valid. A valid Barcode string must be numeric and be 12 digits and have a valid check digit.}
+	 * {@pre barcode is valid. A valid Barcode string must be numeric and be 12
+     * digits and have a valid check digit.}
 	 *
 	 * {@post throws InvalidBarcodeException if preconditions not met} 
 	 */
 	private static void checkBarcode(String barcode) {
 		if (!Barcode.isValidBarcode(barcode))
-			throw new InvalidBarcodeException("barcode '" + barcode + "' is not a valid barcode.");
+			throw new InvalidBarcodeException(
+                    "barcode '" + barcode + "' is not a valid barcode.");
 	}
 	
 	/**
@@ -79,11 +82,14 @@ public class Barcode implements Serializable {
 	 * 
 	 * {@pre barcode != null}
 	 * 
-	 * {@post barcode is valid. A valid Barcode string must be numeric and be 12 digits. Also, barcode must have a valid check digit}
+	 * {@post barcode is valid. A valid Barcode string must be numeric and be 12
+     * digits. Also, barcode must have a valid check digit}
 	 * 
 	 */
 	public static boolean isValidBarcode(String barcode) {
-		return (barcode != null && barcode.length() == 12 && StringOps.isNumeric(barcode) && hasValidCheckDigit(barcode));
+		return (barcode != null && barcode.length() == 12 &&
+                StringOps.isNumeric(barcode) &&
+                hasValidCheckDigit(barcode));
 	}
 	
 	

@@ -82,9 +82,11 @@ public class ProductItems implements Serializable {
 
 	/**
 	 * @pre				None
-	 * @post			Returns true if this ProductItems contains a member of this product. False otherwise.
+	 * @post			Returns true if this ProductItems contains a member of this
+     * product. False otherwise.
 	 * @param product	The product to check if this ProductItem contains.
-	 * @return			True if this ProductItems contains a member of this product. False otherwise.
+	 * @return			True if this ProductItems contains a member of this product.
+     * False otherwise.
 	 */
 	public boolean contains(IProduct product) {
 		return map.containsKey(product);

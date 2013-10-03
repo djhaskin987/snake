@@ -1,7 +1,8 @@
 package model;
 
 /**
- * Factory Design Pattern that will allow program to not be dependent on Item constructors if Item changes
+ * Factory Design Pattern that will allow program to not be dependent on Item
+ * constructors if Item changes
  * @author Kevin
  *
  */
@@ -35,7 +36,8 @@ public class ItemFactory {
 	 * @param container
 	 * @return
 	 */
-	public IItem createInstance(Product product, Barcode barcode, Date expireDate, IProductContainer container){
+	public IItem createInstance(Product product, Barcode barcode,
+            Date expireDate, IProductContainer container) {
 		return new Item(product, barcode, expireDate, container);
 	}
 

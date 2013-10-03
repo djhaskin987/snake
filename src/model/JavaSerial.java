@@ -13,7 +13,8 @@ import java.io.ObjectOutputStream;
 public class JavaSerial implements IPersistance{
 	/**
 	 * @pre There must be a StorageUnits and a ProductCollection
-	 * @post There are two files stored on the local machine.  StorageUnits.ser and ProductCollection.ser
+	 * @post There are two files stored on the local machine.  StorageUnits.ser
+     * and ProductCollection.ser
 	 */
 	@Override
 	public void store() {

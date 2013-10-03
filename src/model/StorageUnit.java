@@ -123,8 +123,9 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * 
 	 * @param productContainer the new productContainer
 	 * 
-	 * {@pre name != null && name != "" && productContainer != null && productContainer.getClass() == ProductGroup.class}
-	 * 
+	 * {@pre name != null && name != "" && productContainer != null &&
+     * productContainer.getClass() == ProductGroup.class}
+     * 
 	 * {@post productContainer is set, if name exists}
 	 */
 	@Override

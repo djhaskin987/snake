@@ -65,7 +65,8 @@ public class Date extends AbstractDateTime {
 	 * @param day	Day of the month
 	 * @param month	Month of the year
 	 * @param year	Year AD
-	 * @throws DateDoesNotExistException If the day and month do not occur during that year, or the year is before 1.
+	 * @throws DateDoesNotExistException If the day and month do not occur during
+     * that year, or the year is before 1.
 	 */
 	public Date(int month, int day, int year) throws DateDoesNotExistException {
 		if(year < 1)
@@ -85,7 +86,8 @@ public class Date extends AbstractDateTime {
 			break;
 		case 2:
 			if((year%4 == 0 && year%100 != 0) || year%400 == 0) {
-				//Every four years is a leap year, except one is skipped every century, except they do it anyway every four centuries.
+				// Every four years is a leap year, except one is skipped every
+                // century, except they do it anyway every four centuries.
 				if(day > 29)
 					throw new DateDoesNotExistException();
 			} else {
@@ -103,7 +105,6 @@ public class Date extends AbstractDateTime {
 		default:
 			throw new DateDoesNotExistException();
 		}
-		
 		calendar = new GregorianCalendar(year, month, day);
 	}
 	
