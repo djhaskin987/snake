@@ -6,7 +6,7 @@ import java.util.List;
  * @author Daniel Carrier
  *
  */
-public class ProductContainer implements IProductContainer {
+public abstract class ProductContainer implements IProductContainer {
 	/**
 	 * 
 	 */
@@ -48,7 +48,11 @@ public class ProductContainer implements IProductContainer {
 		}
 		return products;
 	}*/
-	@Override
+	
+    // TODO: This method had an @Override tag, but ant didn't like it.
+    // To remove this todo, determine whether the @Override tag is needed,
+    // or indeed if the method need be overridden at all.
+    // @Override.
 	public Collection<Item> getItems() {
 		return productItems.getItems();
 	}

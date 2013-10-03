@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-public class StorageUnits implements IContextPanelNode, Serializable{
+public abstract class StorageUnits implements IContextPanelNode, Serializable{
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
@@ -87,8 +87,8 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 		return "";
 	}
 
-	@Override
-	public Collection<IProduct> getProducts() {
+    @Override
+    public Collection<Product> getProducts() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -99,7 +99,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	}
 
 	@Override
-	public Collection<IItem> getItems(String productName) {
+	public Collection<Item> getItems(String productName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -107,7 +107,5 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	@Override
 	public void removeItem(Barcode barcode) {
 		// TODO Auto-generated method stub
-		
 	}
-	
 }
