@@ -133,12 +133,34 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		productGroups.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
 	}
 
+	/**
+	 * Transfers an item to another product container.
+	 * 
+	 * @param item the item to transfer
+	 * 
+	 * @param newProductContainer the ProductContainer to transfer the item to
+	 * 
+	 * {@pre item != null && newProductContainer != null && productItems.contains(items)}
+	 * 
+	 * {@post item is transferred}
+	 */
 	@Override
 	public void transferItem(Item item, ProductContainer newProductContainer) {
 		productItems.removeItem(item);
 		newProductContainer.add(item);
 	}
 
+	/**
+	 * Transfers a product to another product container.
+	 * 
+	 * @param product the product to transfer
+	 * 
+	 * @param newProductContainer the ProductContainer to transfer the item to
+	 * 
+	 * {@pre product != null && newProductContainer != null && productItems.contains(product)}
+	 * 
+	 * {@post product is transferred}
+	 */
 	@Override
 	public void transferProduct(Product product,
 			ProductContainer newProductContainer) {
