@@ -5,9 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+/*
+ * This takes all data and serializes it into two files to be stored on the local machine
+ * It also loads the .ser files and all the data back into the program.
+ * This class's update function does nothing but is merely here to fulfill the interface contract
+ */
 public class JavaSerial implements IPersistance{
-
+	/**
+	 * @pre There must be a StorageUnits and a ProductCollection
+	 * @post There are two files stored on the local machine.  StorageUnits.ser and ProductCollection.ser
+	 */
 	@Override
 	public void store() {
 	     try
@@ -29,12 +36,18 @@ public class JavaSerial implements IPersistance{
 	      }
 		
 	}
-
+	
+	/**
+	 * This function does nothing
+	 */
 	@Override
 	public void update() {
 		
 	}
-
+	/**
+	 * @pre There is no need for anything to be in the data model
+	 * @post All data stored in the .ser files are now loaded back into the data model
+	 */
 	@Override
 	public void load() {
 	      StorageUnits stu = null;

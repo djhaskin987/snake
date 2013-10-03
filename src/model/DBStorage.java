@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * This class is not functional at this time but has merely been stubbed out
+ * @author kjdevocht
+ *
+ */
 public class DBStorage implements IPersistance{
 
 	@Override

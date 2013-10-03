@@ -18,7 +18,7 @@ public class ProductFactory {
    
     /**
      * Singelton creation
-     * @return
+     * @return The instance of this class
      */
     public static ProductFactory getInstance() {
       if(instance == null) {
@@ -37,7 +37,8 @@ public class ProductFactory {
 	 * @param shelfLife
 	 * @param threeMonthSupply
 	 * @param containers
-	 * @return
+	 * @return A Product
+	 * @post a Product has been created
 	 */
 	public IProduct createInstance(Barcode barcode, NonEmptyString description, Quantity itemSize, 
 			Integer shelfLife, Integer threeMonthSupply, List<ProductContainer> containers){

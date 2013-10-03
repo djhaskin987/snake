@@ -23,7 +23,11 @@ public enum Unit {
 	private Unit(String s) {
 		statusCode = s;
 	}
- 
+	
+	/**
+	 * 
+	 * @return The string version of the enum
+	 */
 	public String getStatusCode() {
 		return statusCode;
 	}
