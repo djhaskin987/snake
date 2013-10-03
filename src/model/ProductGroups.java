@@ -17,7 +17,7 @@ public class ProductGroups implements Serializable, Collection<ProductGroup> {
 	private static final long serialVersionUID = -3554355105443939099L;
 	private Map<NonEmptyString, ProductGroup> productGroups;
 	
-	public ProductGroups(){
+	public ProductGroups() {
 		productGroups = new HashMap<NonEmptyString, ProductGroup>();
 	}
 	
@@ -26,10 +26,11 @@ public class ProductGroups implements Serializable, Collection<ProductGroup> {
 		return productGroups;
 	}
 
-	public void setProductGroups(Map<NonEmptyString, ProductGroup> productGroups) {
-		this.productGroups = productGroups;
+	public void setProductGroup(NonEmptyString key, ProductGroup value)
+	{
+		productGroups.put(key, value);
 	}
-
+	
 	@Override
 	public boolean addAll(Collection<? extends ProductGroup> arg0) {
 		throw new UnsupportedOperationException();
@@ -62,13 +63,10 @@ public class ProductGroups implements Serializable, Collection<ProductGroup> {
 
 	@Override
 	public boolean remove(Object arg0) {
-		if (arg0.getClass() == NonEmptyString.class)
+		if (arg0.getClass() == NonEmptyString.class || arg0.getClass() == ProductGroup.class)
 		{
-			
-		}
-		else if (arg0.getClass() == ProductGroup.class)
-		{
-			
+			productGroups.remove(arg0);
+			return true;
 		}
 		return false;
 	}

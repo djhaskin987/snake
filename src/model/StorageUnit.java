@@ -19,6 +19,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * serial version unique identifier
 	 */
 	private static final long serialVersionUID = 8776735239406467878L;
+	
 	/**
 	 * Creates a new StorageUnit object
 	 * 
@@ -38,7 +39,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	}
 	
 	/**
-	 * Retrieves a collection of products
+	 * Retrieves a collection of products in the storage unit
 	 * 
 	 * @return an unmodifiable Collection of Products
 	 * 
@@ -48,7 +49,11 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public Collection<Product> getProducts() {		 
-		return Collections.unmodifiableCollection(productItems.getProducts());
+		ArrayList<Product> products = new ArrayList<Product>(productItems.getProducts());
+		for(ProductGroup productGroup : productGroups) {
+			products.addAll(productGroup.getProducts());
+		}
+		return Collections.unmodifiableCollection(products);
 	}
 
 	/**
@@ -118,11 +123,14 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * 
 	 * @param productContainer the new productContainer
 	 * 
+	 * {@pre name != null && name != "" && productContainer != null && productContainer.getClass() == ProductGroup.class}
 	 * 
+	 * {@post productContainer is set, if name exists}
 	 */
 	@Override
 	public void setProductContainer(String name,
 			ProductContainer productContainer) {
+		productGroups.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
 	}
 
 	@Override
@@ -233,6 +241,17 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		return null;
 	}
 
+	/**
+	 * retrieve a list of items based on the product name.
+	 * 
+	 * @param productName the name of the product
+	 * 
+	 * @return list of items found 
+	 * 
+	 * {@pre productName != null && productName != "" && productItems != null}
+	 * 
+	 * {@post a list of items}
+	 */
 	@Override
 	public List<Item> getItems(String productName) {
 		List<Item> items = new ArrayList<Item>();
@@ -245,6 +264,15 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		return items;
 	}
 
+	/**
+	 * remove item from StorageUnit by barcode
+	 * 
+	 * @param barcode the barcode of item
+	 * 
+	 * {@pre barcode != null && productItems != null}
+	 * 
+	 * {@post item is removed from StorageUnit if Barcode exists}
+	 */
 	@Override
 	public void removeItem(Barcode barcode) {
 		for (Item i : productItems.getItems()) {
