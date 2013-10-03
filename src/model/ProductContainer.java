@@ -73,11 +73,25 @@ public abstract class ProductContainer implements IProductContainer {
 	{
 		return productItems.contains(product);
 	}
-
+	
+	/**
+	 * remove item from ProductContainer by barcode
+	 * 
+	 * @param barcode the barcode of item
+	 * 
+	 * {@pre barcode != null && productItems != null}
+	 * 
+	 * {@post item is removed from StorageUnit if Barcode exists}
+	 */
 	@Override
 	public void removeItem(Barcode barcode) {
-		
-		
+		for (IItem i : productItems.getItems()) {
+			Barcode bc = i.getBarcode();
+			if (bc == barcode) {
+				productItems.removeItem(i);
+				break;
+			}
+		}
 	}
 
 	@Override

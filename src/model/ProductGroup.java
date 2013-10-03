@@ -271,25 +271,4 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		}
 		return items;
 	}
-	
-	/**
-	 * remove item from ProductGroup by barcode
-	 * 
-	 * @param barcode the barcode of item
-	 * 
-	 * {@pre barcode != null && productItems != null}
-	 * 
-	 * {@post item is removed from StorageUnit if Barcode exists}
-	 */
-	@Override
-	public void removeItem(Barcode barcode) {
-		for (IItem i : productItems.getItems()) {
-			Barcode bc = i.getBarcode();
-			if (bc == barcode) {
-				productItems.removeItem(i);
-				break;
-			}
-		}		
-	}
-
 }

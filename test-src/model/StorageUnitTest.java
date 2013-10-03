@@ -25,7 +25,7 @@ public class StorageUnitTest {
 
 	@Test
 	public void testGetProducts() {
-		Collection<Product> pc = storageUnit.getProducts();
+		Collection<IProduct> pc = storageUnit.getProducts();
 		assertTrue("should contain product", pc.contains(product));
 	}
 
@@ -40,7 +40,7 @@ public class StorageUnitTest {
 		Date expireDate = new Date();
 		Item item = new Item(product, barcode, expireDate, storageUnit);
 		storageUnit.add(item);
-		Collection<Item> items = storageUnit.getItems();
+		Collection<IItem> items = storageUnit.getItems();
 		assertTrue("should contain item", items.contains(item));
 	}
 
@@ -115,7 +115,7 @@ public class StorageUnitTest {
 
 	@Test
 	public void testGetItemsString() {
-		List<Item> items = storageUnit.getItems("bagel");
+		List<IItem> items = storageUnit.getItems("bagel");
 		assertTrue("must contain item", items.contains(item));
 	}
 
