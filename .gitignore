@@ -8,3 +8,5 @@ dist
 *.jar
 *.war
 *.ear
+test-reports/TEST*
+style-reports/*.txt
