@@ -312,6 +312,7 @@
 			<classpath refid="itext-classpath" />
 			<packageset dir="${src}">
 				<include name="common/**"/>
+				<include name="model/**"/>
 				<include name="gui/**"/>
 			</packageset>
 			<taglet name="tools.PreTaglet" path="${build}"/>
