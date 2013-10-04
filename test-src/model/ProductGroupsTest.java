@@ -2,124 +2,98 @@ package model;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class ProductGroupsTest {
-
-	ProductGroup productGroup;
-	Product product;
-	Item item;
+	ProductGroups pg;
 	
 	@Before
 	public void setUp() throws Exception {
-		productGroup = new ProductGroup(new NonEmptyString("testPG"));
-		product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
-		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		item = new Item(product, barcode, expireDate, productGroup);
-		productGroup.add(item);
+		pg = new ProductGroups();
 	}
 
 	@Test
-	public void testGetProducts() {
-		Collection<Product> pc = productGroup.getProducts();
-		assertTrue("should contain product", pc.contains(product));
+	public void testGetProductGroups() {
+		Map<NonEmptyString, ProductGroup> map = pg.getProductGroups();
+		assertTrue("must not be null", map != null);
+	}
+
+	@Test
+	public void testSetProductGroup() {
+		ProductGroup instance = new ProductGroup();
+		pg.setProductGroup(instance.getName(), instance);
+		Map<NonEmptyString, ProductGroup> map = pg.getProductGroups();
+		assertTrue(map.containsKey(instance.getName()));
+		assertTrue(map.containsValue(instance));
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testAddAll() {
+		pg.addAll(null);
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testClear() {
+		pg.clear();
 	}
 
 	@Test
 	public void testContains() {
-		assertTrue("should contain product", productGroup.contains(product));
+		ProductGroup instance = new ProductGroup();
+		pg.setProductGroup(instance.getName(), instance);
+		assertTrue("must contain this", pg.contains(instance));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testContainsAll() {
+		pg.containsAll(null);
 	}
 
 	@Test
-	public void testAddItem() {
-		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		Item item = new Item(product, barcode, expireDate, productGroup);
-		productGroup.add(item);
-		Collection<Item> items = productGroup.getItems();
-		assertTrue("should contain item", items.contains(item));
+	public void testIsEmpty() {
+		assertTrue("must be empty", pg.isEmpty());
 	}
 
 	@Test
-	public void testAddProductGroup() {
-		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
-		assertTrue("should contain a product group", pgCollection.contains(pg));
+	public void testIterator() {
+		Iterator<ProductGroup> itr = pg.iterator();
+		assertTrue("must not be null", itr != null);
 	}
 
 	@Test
-	public void testDeleteProductContainer() {
-		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
-		productGroup.deleteProductContainer("testPG");
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
-		assertTrue("should not contain a product group", !pgCollection.contains(pg));
+	public void testRemove() {
+		ProductGroup instance = new ProductGroup();
+		pg.add(instance);
+		pg.remove(instance);
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testRemoveAll() {
+		pg.removeAll(null);
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testRetainAll() {
+		pg.retainAll(null);
 	}
 
 	@Test
-	public void testSetProductContainer() {
-		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
-		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
-		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
-		pg2.add(new Item(product, new Barcode(), new Date(), pg2));
-		productGroup.setProductContainer("testPG", pg2);
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
-		assertTrue("must contain the last item", pgCollection.contains(pg2));
+	public void testSize() {
+		assertEquals("must be 0", 0, pg.size());
 	}
 
 	@Test
-	public void testTransferItem() {
-		ProductGroup su = new ProductGroup(new NonEmptyString("test"));
-		productGroup.transferItem(item, su);
-		assertTrue("item not transferred", !su.getItems().isEmpty() && productGroup.getItems().isEmpty());
+	public void testToArray() {
+		assertTrue("must not be null", pg.toArray() != null);
 	}
 
-	@Test
-	public void testTransferProduct() {
-		ProductGroup su = new ProductGroup(new NonEmptyString("test"));
-		productGroup.transferProduct(product, su);
-		assertTrue("product not transferred", !su.getProducts().isEmpty());
-	}
-
-	@Test
-	public void testWhoHasProduct() {
-		IProductContainer pc = productGroup.whoHasProduct("bagel");
-		assertTrue("storage unit has this product", pc == productGroup);
-	}
-
-	@Test
-	public void testGetParent() {
-		assertTrue(productGroup.getParent() == null);
-	}
-
-	@Test
-	public void testGetUnit() {
-		assertTrue(productGroup.getParent() == null);
-	}
-
-
-	@Test
-	public void testGetProductGroupName() {
-		assertTrue(productGroup.getProductGroupName() == "testPG");
-	}
-
-	@Test
-	public void testGetItemsString() {
-		List<Item> items = productGroup.getItems("bagel");
-		assertTrue("must contain item", items.contains(item));
-	}
-
-	@Test
-	public void testRemoveItem() {
-		productGroup.removeItem(item.getBarcode());
-		assertTrue("must not have any items", productGroup.getItems().isEmpty());
+	@Test(expected = NullPointerException.class)
+	public void testToArrayTArray() {
+		pg.toArray(null);
 	}
 }

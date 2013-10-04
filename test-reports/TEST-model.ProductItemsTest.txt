@@ -1,0 +1,9 @@
+Testsuite: model.ProductItemsTest
+Tests run: 1, Failures: 0, Errors: 1, Time elapsed: 0.041 sec
+
+Testcase: test took 0.026 sec
+	Caused an ERROR
+model.ProductItems.contains(Lmodel/Product;)Z
+java.lang.NoSuchMethodError: model.ProductItems.contains(Lmodel/Product;)Z
+	at model.ProductItemsTest.test(ProductItemsTest.java:19)
+

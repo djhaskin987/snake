@@ -49,6 +49,7 @@ public class DateTime extends AbstractDateTime {
 		}
 		int minute = calendar.get(Calendar.MINUTE);
 		int second = calendar.get(Calendar.SECOND);
-		return month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + second + " " + ampm;
+		return month + "/" + day + "/" + year + " " + hour + ":" + minute +
+            ":" + second + " " + ampm;
 	}
 }

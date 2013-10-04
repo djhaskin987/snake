@@ -22,10 +22,12 @@ public class ValidDate extends Date implements Serializable{
 	 * @throws DataFormatException	If it's before January 1st, 2000, or it's in the future
 	 * @throws InvalidDateException 
 	 */
-	public ValidDate(int month, int day, int year) throws InvalidHITDateException, DateDoesNotExistException {
+	public ValidDate(int month, int day, int year) throws InvalidHITDateException,
+           DateDoesNotExistException {
 		super(month, day, year);
 		if(this.compareTo(new Date(1,1,2000)) == -1) {
-			throw new InvalidHITDateException("Error: Date should not be before January 1st, 2000.");
+			throw new InvalidHITDateException("Error: Date should not be before January" +
+                    "1st, 2000.");
 		}
 		if(this.compareTo(new Date()) == 1) {
 			throw new InvalidHITDateException("Error: Date should not be in the future.");

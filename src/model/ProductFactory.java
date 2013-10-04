@@ -3,7 +3,8 @@ package model;
 import java.util.List;
 
 /**
- * Factory Design Pattern that will allow program to not be dependent on ProductFactory constructors if ProductFactory changes
+ * Factory Design Pattern that will allow program to not be dependent on
+ * ProductFactory constructors if ProductFactory changes
  * @author Kevin
  *
  */

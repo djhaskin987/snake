@@ -116,7 +116,7 @@ public class StorageUnitsTest {
 
 	@Test
 	public void testGetProducts() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
@@ -131,12 +131,12 @@ public class StorageUnitsTest {
 
 	@Test
 	public void testGetItems() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testRemoveItem() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }

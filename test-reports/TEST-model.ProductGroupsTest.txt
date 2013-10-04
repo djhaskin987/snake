@@ -1,0 +1,4 @@
+Testsuite: model.ProductGroupsTest
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.018 sec
+
+Testcase: testProductGroups took 0.003 sec

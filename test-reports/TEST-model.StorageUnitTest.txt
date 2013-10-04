@@ -1,0 +1,93 @@
+Testsuite: model.StorageUnitTest
+Tests run: 15, Failures: 0, Errors: 15, Time elapsed: 0.093 sec
+
+Testcase: testContains took 0.03 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testAddItem took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testAddProductGroup took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testDeleteProductContainer took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testSetProductContainer took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testTransferItem took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testTransferProduct took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testWhoHasProduct took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetParent took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetUnit took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetThreeMonthSupply took 0.003 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetProductGroupName took 0.002 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetItemsString took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testGetProducts took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+
+Testcase: testRemoveItem took 0.001 sec
+	Caused an ERROR
+model.StorageUnit.add(Lmodel/Item;)V
+java.lang.NoSuchMethodError: model.StorageUnit.add(Lmodel/Item;)V
+	at model.StorageUnitTest.setUp(StorageUnitTest.java:23)
+

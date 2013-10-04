@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.TreeMap;
 
 /**
@@ -15,13 +16,13 @@ public class ProductCollection implements Serializable{
 
     private static final long serialVersionUID = 414358389788920747L;
 
-    private TreeMap<String, Product> products;
+    private TreeMap<String, IProduct> products;
     
     private static ProductCollection instance = null;
     
     
     public ProductCollection() {
-        products = new TreeMap<String, Product>();
+        products = new TreeMap<String, IProduct>();
     }
    
     /**
@@ -54,7 +55,7 @@ public class ProductCollection implements Serializable{
      * @post the ProductCollection is unchanged.
      * @return Product by Barcode
      */
-    public Product getProduct(Barcode barcode){
+    public IProduct getProduct(Barcode barcode){
         return products.get(barcode.getBarcode());
     }
     
@@ -66,6 +67,11 @@ public class ProductCollection implements Serializable{
      */
     public int getSize(){
         return this.products.size();
+    }
+    
+    public Collection<IProduct> getProducts(){
+    	return products.values();
+    	
     }
 }
 

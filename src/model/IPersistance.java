@@ -9,7 +9,8 @@ public interface IPersistance {
 	
 	/**
 	 * Actually writes to where ever the data is stored
-	 * @pre the data model must contain everything that is wanted to be stored and any updates made that are needed
+	 * @pre the data model must contain everything that is wanted to be stored
+     * and any updates made that are needed
 	 * @post a persistent copy of the data model is stored
 	 */
 	public void store();

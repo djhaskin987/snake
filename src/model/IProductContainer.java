@@ -21,12 +21,13 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * @pre the IProductContainer is initialized
 	 * @post the specified item is added to the container
 	 */
-	public void addItem(Item item);
+	public void addItem(IItem item);
 	
 	/**
 	 * Allows program to add a ProductGroup to either a StorageUnit or a ProductGroup
 	 * @param productGroup
-	 * @pre the specified ProductGroup is non-null and unique relative to the already-present product groups
+	 * @pre the specified ProductGroup is non-null and unique relative to the
+     * already-present product groups
 	 * @post the specified ProductGroup is added to the IProductContainer
 	 */
 	public void addProductGroup(ProductGroup productGroup);
@@ -34,7 +35,8 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	/**
 	 * If this is a StorageUnit must be empty
 	 * @param name
-	 * @pre the specified name is actually associated with a product container within this IProductContainer.
+	 * @pre the specified name is actually associated with a product container
+     * within this IProductContainer.
 	 * @post the ProductContainer corresponding to the name is removed from this IProductContainer.
 	 */
 	public void deleteProductContainer(String name);
@@ -59,17 +61,19 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * 		and newProductContainer is a member of this IProductContainer.
 	 * @post item is transferred to newProductContainer.
 	 */
-	public void transferItem(Item item, ProductContainer newProductContainer);
+	public void transferItem(IItem item, ProductContainer newProductContainer);
 	
 	
 	/**
 	 * Allows program to move a unique Product to a unique ProductContainer
 	 * @param product
 	 * @param newProductContainer
-	 * @pre product is non-null, and contained by some ProductContainer in this IProductContainer; newProductContainer is a member of this IProductContainer
+	 * @pre product is non-null, and contained by some ProductContainer in this
+     * IProductContainer; newProductContainer is a member of this
+     * IProductContainer
 	 * @post product is transferred to newProductContainer.
 	 */
-	public void transferProduct(Product product, ProductContainer newProductContainer);
+	public void transferProduct(IProduct product, ProductContainer newProductContainer);
 	
 	/**
 	 * Searchs ProductContainer to see who has a specific Product.  

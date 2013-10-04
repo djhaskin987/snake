@@ -34,7 +34,8 @@ public class Quantity implements Serializable {
 	 * and unit is not Unit.COUNT or value is not 1.0 and unit is Unit.COUNT
 	 * 
 	 * 
-	 * {@pre unit != null && value != null && value > 0 && (unit == Unit.COUNT && value == 1.0 || unit != Unit.COUNT)}
+	 * {@pre unit != null && value != null && value > 0 && (unit == Unit.COUNT &&
+     * value == 1.0 || unit != Unit.COUNT)}
 	 * 
 	 * {@post a Quantity object}
 	 */
@@ -59,14 +60,16 @@ public class Quantity implements Serializable {
 	 */
 	public static boolean isValidQuantity(Double value, Unit unit)
 	{
-		return value != null && unit != null && (unit == Unit.COUNT && value == 1.0 || unit != Unit.COUNT && value > 0);
+		return value != null && unit != null && (unit == Unit.COUNT && value == 1.0
+                || unit != Unit.COUNT && value > 0);
 		//return false;
 	}
 	
 	private static void checkQuantity(Double value, Unit unit)
 	{
 		if (!isValidQuantity(value, unit)) {
-			throw new InvalidQuantityException("Quantity '" + value + "' not valid for '" + unit.toString() + "' unit");
+			throw new InvalidQuantityException("Quantity '" + value + "' not valid for '"
+                    + unit.toString() + "' unit");
 		}
 	}
 	
@@ -83,7 +86,8 @@ public class Quantity implements Serializable {
 	 * 
 	 * @param value the value (quantity) of the unit
 	 * 
-	 * {@pre value != null && value > 0 && unit != null && (this.unit == unit.COUNT && value == 1.0 || unit != Unit.COUNT)}
+	 * {@pre value != null && value > 0 && unit != null && (this.unit ==
+     * unit.COUNT && value == 1.0 || unit != Unit.COUNT)}
 	 * 
 	 * {@post this.value = value}
 	 */
@@ -109,7 +113,8 @@ public class Quantity implements Serializable {
 	 * 
 	 * @param unit the unit
 	 * 
-	 * {@pre unit != null && value != null && value > 0 && (this.unit == unit.COUNT && value == 1.0 || unit != Unit.COUNT)}
+	 * {@pre unit != null && value != null && value > 0 && (this.unit ==
+     * unit.COUNT && value == 1.0 || unit != Unit.COUNT)}
 	 * 
 	 * {@post this.unit = unit}
 	 */
@@ -118,6 +123,15 @@ public class Quantity implements Serializable {
 		this.unit = unit;
 	}
 	
+	/**
+	 * Gets a string representation of the quantity
+	 * 
+	 * @return the string representation of the quantity
+	 * 
+	 * {@pre unit != null && value != null}
+	 * 
+	 * {@post string of quantity}
+	 */	
 	public String getString() {
 		return value + " " + unit.name();
 	}
