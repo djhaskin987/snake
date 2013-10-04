@@ -16,14 +16,14 @@ public interface IPersistance {
 	public void store();
 	
 	/**
-	 * @pre all data that needs to be updated must be in the data model.
-	 * @post all data is ready to be stored
+	 * {@pre all data that needs to be updated must be in the data model.}
+	 * {@post all data is ready to be stored}
 	 */
 	public void update();
 	
 	/**
-	 * @pre There must be a persistent copy of the data stored
-	 * @post The data that was stored has now been loaded back into the data model
+	 * {@pre There must be a persistent copy of the data stored}
+	 * {@post The data that was stored has now been loaded back into the data model}
 	 */
 	public void load();
 	

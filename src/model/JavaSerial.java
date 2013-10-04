@@ -12,9 +12,9 @@ import java.io.ObjectOutputStream;
  */
 public class JavaSerial implements IPersistance{
 	/**
-	 * @pre There must be a StorageUnits and a ProductCollection
-	 * @post There are two files stored on the local machine.  StorageUnits.ser
-     * and ProductCollection.ser
+	 * {@pre There must be a StorageUnits and a ProductCollection}
+	 * {@post There are two files stored on the local machine.  StorageUnits.ser
+     * and ProductCollection.ser}
 	 */
 	@Override
 	public void store() {
@@ -46,8 +46,8 @@ public class JavaSerial implements IPersistance{
 		
 	}
 	/**
-	 * @pre There is no need for anything to be in the data model
-	 * @post All data stored in the .ser files are now loaded back into the data model
+	 * {@pre There is no need for anything to be in the data model}
+	 * {@post All data stored in the .ser files are now loaded back into the data model}
 	 */
 	@Override
 	public void load() {

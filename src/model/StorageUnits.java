@@ -21,8 +21,8 @@ public class StorageUnits implements IContextPanelNode, Serializable{
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
-     * @pre 'name' is non-null and non-empty; storageUnit is nonNull
-     * @post 'name' is now associated with 'storageUnit' in the StorageUnits class.
+     * {@pre 'name' is non-null and non-empty; storageUnit is nonNull}
+     * {@post 'name' is now associated with 'storageUnit' in the StorageUnits class.}
      * @param name
      * @param storageUnit
      */
@@ -37,8 +37,8 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	}
 	
 	/** Adds a storage unit to the internal storage units collection.
-	 * @pre 'storageUnit' is properly intialized.
-	 * @post 'storageUnit' is associated by its name ('storageUnit.getName()') in this class.
+	 * {@pre 'storageUnit' is properly intialized.}
+	 * {@post 'storageUnit' is associated by its name ('storageUnit.getName()') in this class.}
 	 * @param storageUnit
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){

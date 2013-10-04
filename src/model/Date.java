@@ -16,16 +16,16 @@ public class Date extends AbstractDateTime {
 	private GregorianCalendar calendar;
 
 	/**
-	 * @pre		None
-	 * @post	Returns midnight at the beginning of that day as a java.util.Calendar
+	 * {@pre	None}
+	 * {@post	Returns midnight at the beginning of that day as a java.util.Calendar}
 	 */
 	public Calendar getCalendar() {
 		return calendar;
 	}
 		
 	/**
-	 * @pre		None
-	 * @post	Returns the day of the month
+	 * {@pre	None}
+	 * {@post	Returns the day of the month}
 	 * @return	The day of the month
 	 */
 	public int getDay() {
@@ -33,8 +33,8 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
-	 * @pre		None
-	 * @post	Returns the month as an int
+	 * {@pre	None}
+	 * {@post	Returns the month as an int}
 	 * @return	The month as an int
 	 */
 	public int getMonth() {
@@ -42,14 +42,19 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
-	 * @pre		None
-	 * @post	Returns the year
+	 * {@pre	None}
+	 * {@post	Returns the year}
 	 * @return	The year
 	 */
 	public int getYear() {
 		return calendar.get(Calendar.YEAR);
 	}
 	
+	/**
+	 * Creates a Date set to the current date
+	 * {@pre	None}
+	 * {@post	this is set to the current date}
+	 */
 	public Date() {
 		calendar = new GregorianCalendar();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -59,9 +64,9 @@ public class Date extends AbstractDateTime {
 	}
 
 	/**
-	 * @pre			That month, day, and year correspond to an actual day AD.
-	 * 			For example, there is no January 50th, or year zero.
-	 * @post		Returns a Date corresponding to that month, day, and year
+	 * {@pre		That month, day, and year correspond to an actual day AD.
+	 * 			For example, there is no January 50th, or year zero.}
+	 * {@post		Returns a Date corresponding to that month, day, and year}
 	 * @param day	Day of the month
 	 * @param month	Month of the year
 	 * @param year	Year AD
@@ -108,12 +113,11 @@ public class Date extends AbstractDateTime {
 		calendar = new GregorianCalendar(year, month, day);
 	}
 	
+	/**
+	 * Gives the date in mm/dd/yyyy format.
+	 */
 	public String toString() {
 		return getMonth() + "/" + getDay() + "/" + getYear();
-	}
-	
-	public static void main() {
-		System.out.println("Hello, world.");
 	}
 	
 }

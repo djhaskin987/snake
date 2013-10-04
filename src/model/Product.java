@@ -24,7 +24,7 @@ public class Product implements IProduct{
 	 * @param aShelfLife
 	 * @param aThreeMonthSupply
 	 * @param aContainers
-	 * @post a Product is created
+	 * {@post a Product is created}
 	 */
 	public Product(Barcode aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
 			Integer aShelfLife, Integer aThreeMonthSupply, List<ProductContainer> aContainers){
@@ -39,8 +39,8 @@ public class Product implements IProduct{
 	
 	/**
 	 * Gives a detailed textual description of the  product
-	 * @pre NonEmptyString
-	 * @post this.description is now the NonEmptyString that was passed in
+	 * {@pre NonEmptyString}
+	 * {@post this.description is now the NonEmptyString that was passed in}
 	 */
 	@Override
 	public void setDescription(NonEmptyString description) {
@@ -51,9 +51,9 @@ public class Product implements IProduct{
 	/**
 	 * The products shelf life measured in months
 	 * 0 means unspecified
-	 * @pre Non-Negative Integer
+	 * {@pre Non-Negative Integer}
 	 * @throws InvalidIntegerException
-	 * @post this.shelfLife is now the Integer that was passed in
+	 * {@post this.shelfLife is now the Integer that was passed in}
 	 */
 	@Override
 	public void setShelfLife(Integer months) throws InvalidIntegerException {
@@ -67,9 +67,9 @@ public class Product implements IProduct{
 	/**
 	 * The number of this product needed for a three month supply
 	 * 0 means not specified
-	 * @pre Non-Negative Integer
+	 * {@pre Non-Negative Integer}
 	 * @throws InvalidIntegerException 
-	 * @post this.threeMonthSupply is now the Integer that was passed in
+	 * {@post this.threeMonthSupply is now the Integer that was passed in}
 	 */
 	@Override
 	public void setThreeMonthSupply(Integer count) throws InvalidIntegerException {
@@ -82,7 +82,7 @@ public class Product implements IProduct{
 	
 	/**
 	 * @return A ValidDate of when this product was first Created
-	 * @post Must be a non-null ValidDate
+	 * {@post Must be a non-null ValidDate}
 	 */
 	@Override
 	public ValidDate getCreateDate() {
@@ -92,7 +92,7 @@ public class Product implements IProduct{
 	/**
 	 * If the the integer is zero then no three month supply has been set
 	 * @return The three month supply for this product
-	 * @post Must be a non-null, non-negative integer
+	 * {@post Must be a non-null, non-negative integer}
 	 */
 	@Override
 	public Integer getThreeMonthSupply() {
@@ -101,7 +101,7 @@ public class Product implements IProduct{
 	
 	/**
 	 * @return A list of all containers that have this product inside
-	 * @post Must be a non-null List of ProductContainers
+	 * {@post Must be a non-null List of ProductContainers}
 	 */
 	@Override
 	public List<ProductContainer> getContainers() {
@@ -109,7 +109,7 @@ public class Product implements IProduct{
 	}
 	
 	/**
-	 * @post Must be a non-null ValidDate
+	 * {@post Must be a non-null ValidDate}
 	 */
 	//Do we really need this we already have getCreateDate
 	@Override
@@ -119,7 +119,7 @@ public class Product implements IProduct{
 	
 	/**
 	 * @return Barcode associated with this product
-	 * @post Must be a non-null Barcode
+	 * {@post Must be a non-null Barcode}
 	 */
 	@Override
 	public Barcode getBarcode() {
@@ -128,7 +128,7 @@ public class Product implements IProduct{
 	
 	/**
 	 * @return NonEmptyString containing the full description of this product
-	 * @post Must be a non-null NonEmptyString
+	 * {@post Must be a non-null NonEmptyString}
 	 */
 	@Override
 	public NonEmptyString getDescription() {
@@ -137,7 +137,7 @@ public class Product implements IProduct{
 	
 	/**
 	 * @return Integer of the size and unit of measure of this product
-	 * @post Must be a non-null Quantity
+	 * {@post Must be a non-null Quantity}
 	 */
 	@Override
 	public Quantity getItemSize() {
@@ -147,7 +147,7 @@ public class Product implements IProduct{
 	/**
 	 * If shelfLife is 0 then no shelf life has been set
 	 * @return Integer of how long a Product is good for in months
-	 * @post Must be a non-null, non-negative integer
+	 * {@post Must be a non-null, non-negative integer}
 	 */
 	@Override
 	public Integer getShelfLife() {
