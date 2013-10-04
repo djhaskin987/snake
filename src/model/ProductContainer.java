@@ -147,6 +147,7 @@ public abstract class ProductContainer implements IProductContainer {
 	 */
 	@Override
 	public void addProductGroup(ProductGroup productGroup) {
+		productGroup.setParent(this);
 		productGroups.add(productGroup);
 	}
 

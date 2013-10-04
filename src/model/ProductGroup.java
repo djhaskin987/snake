@@ -48,6 +48,11 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		return parentContainer;
 	}
 	
+	// internal
+	void setParent(ProductContainer container) {
+		parentContainer = container;
+	}
+	
 	/**
 	 * Nothing. Always returns null
 	 * 
