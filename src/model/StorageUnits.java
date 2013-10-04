@@ -15,8 +15,8 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
 	
-	
-    public StorageUnits() {
+
+	StorageUnits() {
 	   storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
     }
 	
@@ -55,6 +55,17 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 		return returned;
 	}
 	
+	/**
+	 * Gets a storage unit
+	 * 
+	 * @param name the storage unit name
+	 * 
+	 * @return a storage unit
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post a stroage unit}
+	 */
 	public StorageUnit getStorageUnit(String name){
 		return storageUnits.get(new NonEmptyString(name));
 	}
@@ -62,6 +73,10 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	/**
 	 * Deletes a Storage Unit only if it is empty
 	 * @param name
+	 * 
+	 * {@pre name != null && name != ""}
+	 * 
+	 * {@post storage unit is removed}
 	 */
 	public void deleteStorageUnit(String name){
 		storageUnits.remove(new NonEmptyString(name));
@@ -71,37 +86,65 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	 * Checks to make sure a StorageUnit can be deleted
 	 * before actually trying to delete a StorageUnit
 	 * @param name
-	 * @return
+	 * @return true if it is delete-able
+	 * 
+	 * {@pre name != null && name != ""}
+	 * 
+	 * {@post boolean value}
 	 */
 	public boolean canDelete(String name){
 		return storageUnits.containsKey(new NonEmptyString(name));
 	}
 
+	/**
+	 * Always returns "All"
+	 */
 	@Override
 	public String getUnit() {
 		return "All";
 	}
 
+	/**
+	 * Does nothing.
+	 */
 	@Override
 	public String getThreeMonthSupply() {
 		return "";
 	}
-
+	
+	/**
+	 * Gets all of the products
+	 * 
+	 * @return a collection of products
+	 *
+	 * {@pre none}
+	 * 
+	 * {@post a collection of products}
+	 */	
     @Override
     public Collection<IProduct> getProducts() {
 		return Model.getInstance().getProductCollection().getProducts();
 	}
 
+    /**
+     * Does nothing.
+     */
 	@Override
 	public String getProductGroupName() {
 		return "";
 	}
 
+	/**
+	 * Does nothing.
+	 */
 	@Override
 	public Collection<IItem> getItems(String productName) {
 		return null;
 	}
 
+	/**
+	 * Does nothing.
+	 */
 	@Override
 	public void removeItem(Barcode barcode) {
 		

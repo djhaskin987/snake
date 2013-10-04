@@ -171,7 +171,7 @@ public abstract class ProductContainer implements IProductContainer {
 	 * 
 	 * @param name the product container name
 	 * 
-	 * @param productcontainer the product container
+	 * @param productContainer the product container
 	 * 
 	 * {@pre name != null && productContainer != null && productContainer is a ProductGroup}
 	 * 

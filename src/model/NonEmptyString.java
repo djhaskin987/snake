@@ -20,7 +20,6 @@ public class NonEmptyString implements Serializable, Comparable<NonEmptyString> 
 	 * @pre value is non-empty and non-null.
 	 * @post the NonEmptyString's value is set to the string given by the 'value' parameter.
 	 * @param value
-	 * @return void
 	 */
 	public NonEmptyString(String value){
 		if (value == null || value.equals(""))

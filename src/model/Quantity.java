@@ -74,8 +74,13 @@ public class Quantity implements Serializable {
 	}
 	
 	/**
+	 * Gets the value
 	 * 
-	 * @return
+	 * @return the Quantity value
+	 * 
+	 * {@pre none }
+	 * 
+	 * {@post the value}
 	 */
 	public Double getValue() {
 		return value;

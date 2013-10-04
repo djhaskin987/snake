@@ -25,7 +25,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 * 
 	 * {@post a StorageUnit object}
 	 */
-	public StorageUnit(NonEmptyString name) {
+	StorageUnit(NonEmptyString name) {
 		super(name);
 	}
 	

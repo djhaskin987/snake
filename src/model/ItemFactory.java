@@ -10,14 +10,17 @@ public class ItemFactory {
 	
 	private static ItemFactory instance = null;
 	
-	
-    public ItemFactory() {
-    	
+	ItemFactory() {  	
     }
    
     /**
      * Singleton Design Pattern that allows any Class to construct an Item
-     * @return
+     * 
+     * @return an ItemFactory instance
+     * 
+     * {@pre none}
+     * 
+     * {@post an ItemFactory instance}
      */
     public static ItemFactory getInstance() {
       if(instance == null) {
@@ -29,12 +32,20 @@ public class ItemFactory {
 	
 	/**
 	 * Acts as the constructor for the Item class
-	 * @param product
-	 * @param barcode
-	 * @param entryDate
-	 * @param expireDate
-	 * @param container
-	 * @return
+	 * 
+	 * @param product the product
+	 * 
+	 * @param barcode the barcode
+	 * 
+	 * @param expireDate the expire date
+	 * 
+	 * @param container the container
+	 * 
+	 * @return an item
+	 * 
+	 * {@pre See Item}
+	 * 
+	 * {@post an Item instance}
 	 */
 	public IItem createInstance(Product product, Barcode barcode,
             Date expireDate, IProductContainer container) {

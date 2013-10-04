@@ -184,7 +184,7 @@ public class Barcode implements Serializable {
 	/**
 	 * Checks to see if Barcode is equal to an Object
 	 * 
-	 * @param object an object to compare
+	 * @param other an object to compare
 	 * 
 	 * @return true if object is equal to current barcode
 	 *

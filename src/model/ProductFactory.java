@@ -31,7 +31,6 @@ public class ProductFactory {
 	
 	/**
 	 * Acting constructor for Product
-	 * @param creationDate
 	 * @param barcode
 	 * @param description
 	 * @param itemSize
