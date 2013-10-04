@@ -12,24 +12,33 @@ public interface IProduct extends Serializable {
 
 	/**
 	 * This must be a NonEmptyString
+	 * 
+	 * @param description the description
+	 * 
 	 * {@pre NonEmptyString giving details about this product}
-	 * {@param description of the Product}
+	 * {@post description of the Product}
 	 */
 	public void setDescription(NonEmptyString description);
 
 	/**
-	 * {@pre Integer must be non-negative}
-	 * @param months
+	 * 
+	 * @param months the shelf life in months
+	 * 
 	 * @throws InvalidIntegerException 
+	 * {@pre Integer must be non-negative}
 	 * {@post this.shelfLife is now equal to months}
 	 */
 	public void setShelfLife(Integer months) throws InvalidIntegerException;
 
 	/**
-	 * @pre {Integer must be a non-negative}
-	 * @param count
+	 * 
+	 * @param count the three month supply count
+	 *  
 	 * @throws InvalidIntegerException 
-	 * @post {this.threeMonthSupply is now equal to count}
+	 * 
+	 * {@pre Integer must be a non-negative}
+	 * 
+	 * {@post this.threeMonthSupply is now equal to count}
 	 */
 	public void setThreeMonthSupply(Integer count) throws InvalidIntegerException;
 

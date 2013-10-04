@@ -25,7 +25,7 @@ public class Model {
 	}
 
 	
-	public Model()
+	Model()
 	{
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
