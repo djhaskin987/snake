@@ -1,4 +1,4 @@
 Testsuite: model.ItemFactoryTest
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.049 sec
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.051 sec
 
-Testcase: test took 0.035 sec
+Testcase: test took 0.038 sec

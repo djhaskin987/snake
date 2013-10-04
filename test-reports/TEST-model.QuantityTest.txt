@@ -1,8 +1,8 @@
 Testsuite: model.QuantityTest
-Tests run: 5, Failures: 0, Errors: 0, Time elapsed: 0.031 sec
+Tests run: 5, Failures: 0, Errors: 0, Time elapsed: 0.03 sec
 
-Testcase: testGetValue took 0.012 sec
+Testcase: testGetValue took 0.013 sec
 Testcase: testSetValue took 0 sec
 Testcase: testGetUnit took 0 sec
-Testcase: testSetUnit took 0 sec
+Testcase: testSetUnit took 0.001 sec
 Testcase: testQuantity took 0 sec
