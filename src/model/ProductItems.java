@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Tracks the products and items in a ProductContainer.
+ * Allows you to just worry about the items, and it takes
+ * care of the products automatically.
+ * 
  * @author Daniel Carrier
  *
  */

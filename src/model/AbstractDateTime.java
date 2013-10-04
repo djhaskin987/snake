@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 /**
+ * An abstract class used to allow Dates, ValidDates, and DateTimes to be compared
  * @author Daniel Carrier
  *
  */

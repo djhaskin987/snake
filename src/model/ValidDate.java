@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.zip.DataFormatException;
 
 /**
+ * Special case of Date that must be past 2000 and not in the future
+ * 
  * @author Daniel Carrier
  *
  */
