@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Abstract superclass of StorageUnit and ProductGroup.
+ * Basically, it's for the classes that contain products, items, and ProductGroups.
+ * 
  * @author Daniel Carrier
  *
  */

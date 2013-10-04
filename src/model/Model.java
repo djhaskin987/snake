@@ -1,6 +1,11 @@
 package model;
 
 
+/**
+ * One true singleton.
+ * When you serialize, this is the only singleton you need to worry about.
+ *
+ */
 public class Model {
 	private static Model instance;
 	

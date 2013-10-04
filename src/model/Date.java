@@ -3,6 +3,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
+ * Contains a date, but not the time.
+ * It must be an actual day AD.
+ * Beyond that, any day is allowed.
+ * 
  * @author Daniel Carrier
  *
  */

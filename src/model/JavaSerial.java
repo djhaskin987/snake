@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-/*
+/**
  * This takes all data and serializes it into two files to be stored on the local machine
  * It also loads the .ser files and all the data back into the program.
  * This class's update function does nothing but is merely here to fulfill the interface contract
