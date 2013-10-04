@@ -1,4 +1,0 @@
-Testsuite: common.StringOpsTest
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.026 sec
-
-Testcase: testIsNumeric took 0.013 sec

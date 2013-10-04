@@ -1,4 +1,0 @@
-Testsuite: model.ItemTest
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.05 sec
-
-Testcase: test took 0.036 sec
