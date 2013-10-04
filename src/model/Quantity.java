@@ -117,4 +117,8 @@ public class Quantity implements Serializable {
 		checkQuantity(this.value, unit);
 		this.unit = unit;
 	}
+	
+	public String getString() {
+		return value + " " + unit.name();
+	}
 }
