@@ -293,7 +293,7 @@
 
 	<target name="checkstyle" depends="compile"
 		description="analyze design and coding style">
-		<checkstyle config="checkstyle.xml">
+		<checkstyle config="checkstyle.xml" maxErrors="5">
 			<fileset dir="src" includes="**/*.java">
 				<exclude name="gui/inventory/InventoryView.java"/>
 				<exclude name="tools/Exporter.java"/>
