@@ -22,16 +22,16 @@ public class DateTime extends AbstractDateTime {
 	}
 	
 	/**
-	 * @pre		None
-	 * @post	DateTime is set to the current date and time
+	 * {@pre	None}
+	 * {@post	DateTime is set to the current date and time}
 	 */
 	public DateTime() {
 		calendar = new GregorianCalendar();
 	}
 	
 	/**
-	 * @pre		None
-	 * @post	Returns the date and time in dd/mm/yyyy hh:mm:ss AM/PM format
+	 * {@pre	None}
+	 * {@post	Returns the date and time in dd/mm/yyyy hh:mm:ss AM/PM format}
 	 */
 	public String toString() {
 		int month = calendar.get(Calendar.MONTH);

@@ -8,8 +8,8 @@ package model;
  */
 public class DateDoesNotExistException extends Exception {
 	/**
-	 * @pre		None
-	 * @post	None
+	 * {@pre	None}
+	 * {@post	None}
 	 */
 	public DateDoesNotExistException() {
 		super();

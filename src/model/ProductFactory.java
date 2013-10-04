@@ -39,7 +39,7 @@ public class ProductFactory {
 	 * @param threeMonthSupply
 	 * @param containers
 	 * @return A Product
-	 * @post a Product has been created
+	 * {@post a Product has been created}
 	 */
 	public IProduct createInstance(Barcode barcode, NonEmptyString description, Quantity itemSize, 
 			Integer shelfLife, Integer threeMonthSupply, List<ProductContainer> containers){

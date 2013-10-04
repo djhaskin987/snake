@@ -18,16 +18,16 @@ public class ProductItems implements Serializable {
 	private Map<IProduct, Collection<IItem>> map;
 	
 	/**
-	 * @pre		None
-	 * @post	Constructs an empty ProductItmes
+	 * {@pre	None}
+	 * {@post	Constructs an empty ProductItems}
 	 */
 	public ProductItems() {
 		map = new HashMap<IProduct, Collection<IItem>>();
 	}
 	
 	/**
-	 * @pre		None
-	 * @post	Returns a collection of all the products. Empty if this is empty.
+	 * {@pre	None}
+	 * {@post	Returns a collection of all the products. Empty if this is empty.}
 	 * @return	A collection of all the products
 	 */
 	public Collection<IProduct> getProducts() {
@@ -35,8 +35,8 @@ public class ProductItems implements Serializable {
 	}
 	
 	/**
-	 * @pre		None
-	 * @post	Returns a collection of all the items. Empty if this is empty.
+	 * {@pre	None}
+	 * {@post	Returns a collection of all the items. Empty if this is empty.}
 	 * @return	A collection of all the items. Empty if this is empty.
 	 */
 	public Collection<IItem> getItems() {
@@ -48,8 +48,8 @@ public class ProductItems implements Serializable {
 	}
 	
 	/**
-	 * @pre			item is not already in this
-	 * @post		item is added
+	 * @pre			{item is not already in this}
+	 * @post		{item is added}
 	 * @param item	Item to be added
 	 */
 	public void addItem(IItem item) {	//TODO: Should I check if the item is already in the list?
@@ -65,9 +65,9 @@ public class ProductItems implements Serializable {
 	}
 	
 	/**
-	 * @pre			item is in this
-	 * @post		item is removed. If item was the last Item of its Product,
-	 * 		that product is also removed.
+	 * {@pre		item is in this}
+	 * {@post		item is removed. If item was the last Item of its Product,
+	 * 		that product is also removed.}
 	 * @param item	Item to be removed. Automatically removes the product if that's the last item.
 	 */
 	public void removeItem(IItem item) {
@@ -81,9 +81,9 @@ public class ProductItems implements Serializable {
 	}
 
 	/**
-	 * @pre				None
-	 * @post			Returns true if this ProductItems contains a member of this
-     * product. False otherwise.
+	 * {@pre			None}
+	 * {@post			Returns true if this ProductItems contains a member of this
+     * product. False otherwise.}
 	 * @param product	The product to check if this ProductItem contains.
 	 * @return			True if this ProductItems contains a member of this product.
      * False otherwise.
@@ -93,8 +93,8 @@ public class ProductItems implements Serializable {
 	}
 	
 	/**
-	 * @pre				None
-	 * @post			Returns true if this contains item. False otherwise.
+	 * {@pre			None}
+	 * {@post			Returns true if this contains item. False otherwise.}
 	 * @param item		The item to check if this ProductItem contains.
 	 * @return			True if this contains item. False otherwise.
 	 */

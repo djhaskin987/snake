@@ -26,11 +26,11 @@ public class Item implements IItem{
 	 * @param expireDate	The expiration date
 	 * @param container		The product group this item is to be placed in, or
      * the storage unit if it has no product group
-	 * @pre					None
-	 * @post				An Item is created with that product, barcode,
+	 * {@pre				None}
+	 * {@post				An Item is created with that product, barcode,
      * expiration date, and container.
 	 *			It is also automatically given the current date as an entry date,
-	 *			and null as the exit time.
+	 *			and null as the exit time.}
 	 */
 	public Item(Product product, Barcode barcode, Date expireDate, IProductContainer container) {
 		this.product = product;
