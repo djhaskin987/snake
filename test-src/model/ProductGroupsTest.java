@@ -72,6 +72,20 @@ public class ProductGroupsTest {
 		pg.remove(instance);
 	}
 
+	@Test
+	public void testRemove2() {
+		ProductGroup instance = new ProductGroup();
+		pg.add(instance);
+		pg.remove(instance.getName());
+	}
+
+	@Test
+	public void testRemove3() {
+		ProductGroup instance = new ProductGroup();
+		pg.add(instance);
+		pg.remove(instance.getName().toString());
+	}
+
 	@Test(expected = UnsupportedOperationException.class)
 	public void testRemoveAll() {
 		pg.removeAll(null);
