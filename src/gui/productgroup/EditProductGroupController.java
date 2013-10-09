@@ -69,6 +69,13 @@ public class EditProductGroupController extends Controller
 	/**
 	 * This method is called when any of the fields in the
 	 * edit product group view is changed by the user.
+	 * 
+	 * This will set the activity of the "OK" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "OK" button altered}
 	 */
 	@Override
 	public void valuesChanged() {
@@ -77,6 +84,12 @@ public class EditProductGroupController extends Controller
 	/**
 	 * This method is called when the user clicks the "OK"
 	 * button in the edit product group view.
+	 * 
+	 * Alters the desired product group and refreshes view.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post product grou is altered and view is refreshed}
 	 */
 	@Override
 	public void editProductGroup() {

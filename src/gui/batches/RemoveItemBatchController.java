@@ -56,6 +56,13 @@ public class RemoveItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Item Barcode" field is changed
 	 * in the remove item batch view by the user.
+	 * 
+	 * This will set the activity of the "Remove Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Remove Item" button altered}
 	 */
 	@Override
 	public void barcodeChanged() {
@@ -64,6 +71,13 @@ public class RemoveItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting is changed
 	 * in the remove item batch view by the user.
+	 * 
+	 * This will set the activity of the "Remove Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Remove Item" button altered}
 	 */
 	@Override
 	public void useScannerChanged() {
@@ -72,6 +86,13 @@ public class RemoveItemBatchController extends Controller implements
 	/**
 	 * This method is called when the selected product changes
 	 * in the remove item batch view.
+	 * 
+	 * This will set the activity of the "Remove Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Remove Item" button altered}
 	 */
 	@Override
 	public void selectedProductChanged() {
@@ -80,6 +101,12 @@ public class RemoveItemBatchController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "Remove Item" button
 	 * in the remove item batch view.
+	 * 
+	 * Removes item from batch.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post item is removed from batch}
 	 */
 	@Override
 	public void removeItem() {

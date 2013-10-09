@@ -67,6 +67,13 @@ public class AddStorageUnitController extends Controller implements
 	/**
 	 * This method is called when any of the fields in the
 	 * add storage unit view is changed by the user.
+	 * 
+	 * This will set the activity of the "OK" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "OK" button altered}
 	 */
 	@Override
 	public void valuesChanged() {
@@ -75,6 +82,13 @@ public class AddStorageUnitController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "OK"
 	 * button in the add storage unit view.
+	 * 
+	 * Storage Unit is added to the root node of the tree.
+	 * View refreshes.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post storage unit added and list refreshed}
 	 */
 	@Override
 	public void addStorageUnit() {

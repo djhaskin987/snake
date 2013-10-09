@@ -69,6 +69,13 @@ public class AddProductGroupController extends Controller implements
 	/**
 	 * This method is called when any of the fields in the
 	 * add product group view is changed by the user.
+	 * 
+	 * This will set the activity of the "OK" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "OK" button altered}
 	 */
 	@Override
 	public void valuesChanged() {
@@ -77,6 +84,12 @@ public class AddProductGroupController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "OK"
 	 * button in the add product group view.
+	 * 
+	 * Adds product group to existing storage unit and refreshes view
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post ProductGroup is added. view refreshed.}
 	 */
 	@Override
 	public void addProductGroup() {

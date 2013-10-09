@@ -58,6 +58,13 @@ public class TransferItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Item Barcode" field in the
 	 * transfer item batch view is changed by the user.
+	 * 
+	 * This will set the activity of the "Transfer Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Transfer Item" button altered}
 	 */
 	@Override
 	public void barcodeChanged() {
@@ -66,6 +73,13 @@ public class TransferItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
 	 * transfer item batch view is changed by the user.
+	 * 
+	 * This will set the activity of the "Transfer Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Transfer Item" button altered}
 	 */
 	@Override
 	public void useScannerChanged() {
@@ -74,6 +88,13 @@ public class TransferItemBatchController extends Controller implements
 	/**
 	 * This method is called when the selected product changes
 	 * in the transfer item batch view.
+	 * 
+	 * This will set the activity of the "Transfer Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Transfer Item" button altered}
 	 */
 	@Override
 	public void selectedProductChanged() {
@@ -82,6 +103,13 @@ public class TransferItemBatchController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "Transfer Item" button
 	 * in the transfer item batch view.
+	 * 
+	 * this will transfer the item to another storage unit or product group.
+	 * view is refreshed
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post item is transferred and view is refreshed}
 	 */
 	@Override
 	public void transferItem() {

@@ -58,6 +58,13 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Entry Date" field in the
 	 * add item batch view is changed by the user.
+	 * 
+	 * This will set the activity of the "Add Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Add Item" button altered}
 	 */
 	@Override
 	public void entryDateChanged() {
@@ -66,6 +73,13 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Count" field in the
 	 * add item batch view is changed by the user.
+	 * 
+	 * This will set the activity of the "Add Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Add Item" button altered}
 	 */
 	@Override
 	public void countChanged() {
@@ -74,6 +88,13 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Product Barcode" field in the
 	 * add item batch view is changed by the user.
+	 * 
+	 * This will set the activity of the "Add Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Add Item" button altered}
 	 */
 	@Override
 	public void barcodeChanged() {
@@ -82,6 +103,13 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
 	 * add item batch view is changed by the user.
+	 *
+	 * This will set the activity of the "Add Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Add Item" button altered}
 	 */
 	@Override
 	public void useScannerChanged() {
@@ -90,6 +118,13 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the selected product changes
 	 * in the add item batch view.
+	 * 
+	 * This will set the activity of the "Add Item" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "Add Item" button altered}
 	 */
 	@Override
 	public void selectedProductChanged() {
@@ -98,6 +133,12 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "Add Item" button
 	 * in the add item batch view.
+	 * 
+	 * items in batch are added
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post items in batch added}
 	 */
 	@Override
 	public void addItem() {
@@ -122,6 +163,12 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "Done" button
 	 * in the add item batch view.
+	 * 
+	 * Closes view
+	 * 
+	 * {@pre view is not closed}
+	 * 
+	 * {@post closes view}
 	 */
 	@Override
 	public void done() {

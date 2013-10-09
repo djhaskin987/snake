@@ -6,6 +6,7 @@ package model;
  * 50th, or something in year zero.
  * 
  */
+@SuppressWarnings("serial")
 public class DateDoesNotExistException extends Exception {
 	/**
 	 * {@pre	None}

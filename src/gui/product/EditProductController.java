@@ -68,6 +68,13 @@ public class EditProductController extends Controller
 	/**
 	 * This method is called when any of the fields in the
 	 * edit product view is changed by the user.
+	 * 
+	 * This will set the activity of the "OK" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "OK" button altered}
 	 */
 	@Override
 	public void valuesChanged() {
@@ -76,6 +83,12 @@ public class EditProductController extends Controller
 	/**
 	 * This method is called when the user clicks the "OK"
 	 * button in the edit product view.
+	 * 
+	 * product is edited. view is updated.
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post product is altered}
 	 */
 	@Override
 	public void editProduct() {

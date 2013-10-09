@@ -84,7 +84,7 @@ public class InventoryController extends Controller
 	//
 
 	/**
-	 * Returns true if and only if the "Add Storage Unit" menu item should be enabled.
+	 * Returns true iff the "Add Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
@@ -92,7 +92,7 @@ public class InventoryController extends Controller
 	}
 	
 	/**
-	 * Returns true if and only if the "Add Items" menu item should be enabled.
+	 * Returns true iff the "Add Items" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddItems() {
@@ -100,7 +100,7 @@ public class InventoryController extends Controller
 	}
 	
 	/**
-	 * Returns true if and only if the "Transfer Items" menu item should be enabled.
+	 * Returns true iff the "Transfer Items" menu item should be enabled.
 	 */
 	@Override
 	public boolean canTransferItems() {
@@ -108,7 +108,7 @@ public class InventoryController extends Controller
 	}
 	
 	/**
-	 * Returns true if and only if the "Remove Items" menu item should be enabled.
+	 * Returns true iff the "Remove Items" menu item should be enabled.
 	 */
 	@Override
 	public boolean canRemoveItems() {
@@ -116,7 +116,7 @@ public class InventoryController extends Controller
 	}
 
 	/**
-	 * Returns true if and only if the "Delete Storage Unit" menu item should be enabled.
+	 * Returns true iff the "Delete Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canDeleteStorageUnit() {
@@ -131,7 +131,7 @@ public class InventoryController extends Controller
 	}
 
 	/**
-	 * Returns true if and only if the "Edit Storage Unit" menu item should be enabled.
+	 * Returns true iff the "Edit Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canEditStorageUnit() {
@@ -139,7 +139,7 @@ public class InventoryController extends Controller
 	}
 
 	/**
-	 * Returns true if and only if the "Add Product Group" menu item should be enabled.
+	 * Returns true iff the "Add Product Group" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddProductGroup() {
@@ -147,7 +147,7 @@ public class InventoryController extends Controller
 	}
 
 	/**
-	 * Returns true if and only if the "Delete Product Group" menu item should be enabled.
+	 * Returns true iff the "Delete Product Group" menu item should be enabled.
 	 */
 	@Override
 	public boolean canDeleteProductGroup() {
@@ -155,7 +155,7 @@ public class InventoryController extends Controller
 	}
 
 	/**
-	 * Returns true if and only if the "Edit Product Group" menu item should be enabled.
+	 * Returns true iff the "Edit Product Group" menu item should be enabled.
 	 */
 	@Override
 	public boolean canEditProductGroup() {
@@ -164,6 +164,12 @@ public class InventoryController extends Controller
 	
 	/**
 	 * This method is called when the user selects the "Delete Product Group" menu item.
+	 * 
+	 * product group is deleted
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post product group is deleted}
 	 */
 	@Override
 	public void deleteProductGroup() {

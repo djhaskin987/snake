@@ -68,6 +68,13 @@ public class AddProductController extends Controller implements
 	/**
 	 * This method is called when any of the fields in the
 	 * add product view is changed by the user.
+	 * 
+	 * This will set the activity of the "OK" button, depending
+	 * on whether the field is valid or not.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post activity of "OK" button altered}
 	 */
 	@Override
 	public void valuesChanged() {
@@ -76,6 +83,12 @@ public class AddProductController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "OK"
 	 * button in the add product view.
+	 * 
+	 * Adds Product to products and refreshes list.
+	 * 
+	 * {@pre None}
+	 * 
+	 * {@post Product is added}
 	 */
 	@Override
 	public void addProduct() {
