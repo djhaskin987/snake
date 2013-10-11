@@ -1,5 +1,7 @@
 package model;
 
+import gui.common.ITagable;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * @author Daniel Jay Haskin
  *
  */
-public interface IProductContainer extends Serializable, IContextPanelNode {
+public interface IProductContainer extends Serializable, IContextPanelNode, ITagable {
 	
 	/** Retrieve the name of this product container.
 	 * {@pre The product container is initialized and not null.}

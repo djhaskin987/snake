@@ -2,6 +2,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import gui.common.*;
 
 /**
  * Abstract superclass of StorageUnit and ProductGroup.
@@ -20,11 +21,13 @@ public abstract class ProductContainer implements IProductContainer {
 	protected ProductItems productItems;
 	protected ProductGroups productGroups;
 	private boolean enabled = false;
+	private Tagable tagable;
 
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
 		productGroups = new ProductGroups();
 		productItems = new ProductItems();
+		tagable = new Tagable();
 	}
 	
 	public ProductContainer()
@@ -280,4 +283,18 @@ public abstract class ProductContainer implements IProductContainer {
 		return false;
 	}
 	
+	public Object getTag()
+	{
+		return tagable.getTag();
+	}
+	
+	public void setTag(Object o)
+	{
+		tagable.setTag(o);
+	}
+	
+	public boolean hasTag()
+	{
+		return tagable.hasTag();
+	}
 }
