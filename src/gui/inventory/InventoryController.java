@@ -11,6 +11,18 @@ import java.util.*;
  */
 public class InventoryController extends Controller 
 									implements IInventoryController {
+	
+	private static InventoryController inventoryController;
+	private ProductContainerData root;
+	
+	/**
+	 * A hack. I need some way to to ask this questions.
+	 * 
+	 * @return	The inventory controller. There should only be the one defined by the GUI at the beginning of the program.
+	 */
+	public static IInventoryController getInventoryController() {
+		return inventoryController;
+	}
 
 	/**
 	 * Constructor.
@@ -21,6 +33,7 @@ public class InventoryController extends Controller
 		super(view);
 
 		construct();
+		inventoryController = this;
 	}
 
 	/**
@@ -40,7 +53,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		ProductContainerData root = new ProductContainerData();
+		root = new ProductContainerData();
 		
 		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
 		
@@ -389,6 +402,20 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+	}
+
+	/**
+	 * Returns the selected product container, or null if no product
+	 * container is selected.
+	 */
+	@Override
+	public ProductContainerData getSelectedProductContainer() {
+		return getView().getSelectedProductContainer();
+	}
+
+	@Override
+	public void reloadValues() {
+		getView().setProductContainers(root);
 	}
 
 }

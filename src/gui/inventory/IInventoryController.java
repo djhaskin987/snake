@@ -1,7 +1,6 @@
 package gui.inventory;
 
 import gui.common.*;
-
 import gui.item.*;
 import gui.product.*;
 
@@ -172,6 +171,17 @@ public interface IInventoryController extends IController {
 	 * @param container Target product container
 	 */
 	void moveItemToContainer(ItemData item, ProductContainerData container);
+	
+	/**
+	 * Returns the selected product container, or null if no product
+	 * container is selected.
+	 */
+	ProductContainerData getSelectedProductContainer();
+
+	/**
+	 * Updates the InventoryController. We may think of a better way to do it, but until then, I'm using this hack.
+	 */
+	void reloadValues();
 	
 }
 

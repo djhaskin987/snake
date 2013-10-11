@@ -25,7 +25,12 @@ public class ProductContainerFactory {
 	 * {@post no state is changed.}
 	 * @return an IProductContainer instance representing a ProductGroup.
 	 */
-	public IProductContainer createProductGroup(String name){
+	public IProductContainer createProductGroup(String name, ProductContainer parentContainer, Quantity threeMonthSupply){
+		NonEmptyString nesName = new NonEmptyString(name);
+		return (IProductContainer) new ProductGroup(nesName, parentContainer, threeMonthSupply);
+	}
+
+	public IProductContainer createProductGroup(String name) {
 		NonEmptyString nesName = new NonEmptyString(name);
 		return (IProductContainer) new ProductGroup(nesName);
 	}

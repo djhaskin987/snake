@@ -92,4 +92,10 @@ public class Model {
 	{
 		return itemFactory;
 	}
+	
+	public IProductContainer createProductGroup(String name, ProductContainer parentContainer, Quantity threeMonthSupply)
+	{
+		IProductContainer productGroup = productContainerFactory.createProductGroup(name, parentContainer, threeMonthSupply);
+		return productGroup;
+	}
 }
