@@ -1,6 +1,8 @@
 package gui.storageunit;
 
 import gui.common.*;
+import model.*;
+import gui.inventory.*;
 
 /**
  * Controller class for the add storage unit view.
@@ -58,6 +60,8 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		IAddStorageUnitView v = getView();
+		v.setStorageUnitName("");
 	}
 
 	//
@@ -77,6 +81,10 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		IAddStorageUnitView v = getView();
+		String name = v.getStorageUnitName();
+		boolean isEnabled = name != null && !name.isEmpty();
+		v.enableOK(isEnabled);
 	}
 	
 	/**
@@ -92,6 +100,14 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void addStorageUnit() {
+		IAddStorageUnitView v = getView();
+		String name = v.getStorageUnitName();
+		Model m = Model.getInstance();
+		IProductContainer s = m.createStorageUnit(name);
+		ProductContainerData pcd = new ProductContainerData(name);
+		pcd.setTag(s);
+		((ITagable)s).setTag((Object)pcd);
+		m.addStorageUnit(s);
 	}
 
 }
