@@ -8,6 +8,7 @@ import java.util.*;
 
 import model.IProductContainer;
 import model.Model;
+import model.StorageUnits;
 
 /**
  * Controller class for inventory view.
@@ -34,11 +35,18 @@ public class InventoryController extends Controller
 	 */
 	public InventoryController(IInventoryView view) {
 		super(view);
-
+		initObserver();
 		construct();
 		inventoryController = this;
 	}
 
+	private void initObserver()
+	{
+		Model m = Model.getInstance();
+		StorageUnits s = m.getStorageUnits();
+		s.addObserver(this);
+	}
+	
 	/**
 	 * Returns a reference to the view for this controller.
 	 */
@@ -432,6 +440,18 @@ public class InventoryController extends Controller
 	@Override
 	public void reloadValues() {
 		getView().setProductContainers(root);
+	}
+
+	@Override
+	public void update(Observable sender, Object arg) {
+		if (sender.getClass() == StorageUnits.class)
+		{
+			StorageUnits ss = (StorageUnits)sender;
+			IInventoryView v = getView();
+			ProductContainerData root = ss.getTree();
+			v.setProductContainers(root);
+		}
+		
 	}
 
 }

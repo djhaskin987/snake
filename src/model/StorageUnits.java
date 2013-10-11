@@ -4,17 +4,19 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
+import gui.inventory.ProductContainerData;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 import java.util.TreeMap;
 
-public class StorageUnits implements IContextPanelNode, Serializable{
+public class StorageUnits extends Observable implements IContextPanelNode, Serializable{
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
-	
 
 	StorageUnits() {
 	   storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
@@ -43,6 +45,7 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
 		storageUnits.put(storageUnit.getName(), storageUnit);
+		super.notifyObservers(storageUnit);
 	}
 	
 	public List<String> getStorageUnitNames(){
@@ -190,5 +193,19 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 			}
 		}
 		return null;
+	}
+	
+	public ProductContainerData getTree()
+	{
+		
+		ProductContainerData root = new ProductContainerData("root");
+		Collection<StorageUnit> ss = storageUnits.values();
+		for (StorageUnit s : ss)
+		{
+			ProductContainerData data = s.getTree();
+			root.addChild(data);
+		}
+		
+		return root;
 	}
 }
