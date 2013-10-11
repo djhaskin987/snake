@@ -198,6 +198,10 @@ public abstract class ProductContainer implements IProductContainer {
 			ProductContainer productContainer) {
 		productGroups.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
 	}
+	
+	public void setProductContainerName(String name){
+		this.name = new NonEmptyString(name);
+	}
 
 	/**
 	 * Transfers an item to another product container.

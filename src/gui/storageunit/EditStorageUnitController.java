@@ -1,5 +1,6 @@
 package gui.storageunit;
 
+import model.Model;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -60,7 +61,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		
+		String name = Model.getInstance().getStorageUnits().whoIsEnabled();
+		getView().setStorageUnitName(name);
 	}
 
 	//
@@ -95,6 +97,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void editStorageUnit() {
+		String name = Model.getInstance().getStorageUnits().whoIsEnabled();
+		Model.getInstance().getStorageUnits().getStorageUnit(name).setProductContainerName(name);
 	}
 
 }

@@ -56,26 +56,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		root = new ProductContainerData();
-		
-		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
-		
-		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
-		toothpaste.addChild(new ProductContainerData("Kids"));
-		toothpaste.addChild(new ProductContainerData("Parents"));
-		basementCloset.addChild(toothpaste);
-		
-		root.addChild(basementCloset);
-		
-		ProductContainerData foodStorage = new ProductContainerData("Food Storage Room");
-		
-		ProductContainerData soup = new ProductContainerData("Soup");
-		soup.addChild(new ProductContainerData("Chicken Noodle"));
-		soup.addChild(new ProductContainerData("Split Pea"));
-		soup.addChild(new ProductContainerData("Tomato"));
-		foodStorage.addChild(soup);
-		
-		root.addChild(foodStorage);
+
 		
 		getView().setProductContainers(root);
 	}
@@ -92,16 +73,17 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		String enable = getView().getSelectedProductContainer().getName();
-		if(!(Model.getInstance().getStorageUnits().whoIsEnabled() == null)){
-			String disable = Model.getInstance().getStorageUnits().whoIsEnabled();
-			IProductContainer currentEnable = Model.getInstance().getStorageUnits().getProductContainer(disable);
-			currentEnable.disable();
+		if(getView().getSelectedProductContainer() != null){
+			String enable = getView().getSelectedProductContainer().getName();
+			if(!(Model.getInstance().getStorageUnits().whoIsEnabled() == null)){
+				String disable = Model.getInstance().getStorageUnits().whoIsEnabled();
+				IProductContainer currentEnable = Model.getInstance().getStorageUnits().getProductContainer(disable);
+				currentEnable.disable();
+			}
+			
+			IProductContainer newEnable = Model.getInstance().getStorageUnits().getProductContainer(enable);
+			newEnable.enable();
 		}
-		
-		IProductContainer newEnable = Model.getInstance().getStorageUnits().getProductContainer(enable);
-		newEnable.enable();
-		return;
 	}
 	
 	//
