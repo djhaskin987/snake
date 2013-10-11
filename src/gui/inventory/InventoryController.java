@@ -188,6 +188,12 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item container changes.
+	 * 
+	 * product container selection is altered on view.
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post selection altered}
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
@@ -215,6 +221,12 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item changes.
+	 * 
+	 * Item is altered. view refreshes.
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post item altered. view refreshes.}
 	 */
 	@Override
 	public void productSelectionChanged() {
@@ -243,6 +255,12 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item changes.
+	 * 
+	 * item selection altered on view.
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post item selectin altered on view}
 	 */
 	@Override
 	public void itemSelectionChanged() {

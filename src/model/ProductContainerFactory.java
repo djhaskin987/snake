@@ -6,6 +6,14 @@ package model;
  * @author Daniel Haskin
  */
 public class ProductContainerFactory {
+	private static ProductContainerFactory instance;
+	
+	public static ProductContainerFactory getInstance()
+	{
+		if (instance == null)
+			instance = new ProductContainerFactory();
+		return instance;
+	}
 	
 	/**
 	 * Creates a specific StorageUnit implementation of the ProductContainer

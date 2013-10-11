@@ -92,4 +92,17 @@ public class Model {
 	{
 		return itemFactory;
 	}
+	
+	public IProductContainer createStorageUnit(String name)
+	{
+		// TODO: add unit tests and javadocs
+		ProductContainerFactory f = ProductContainerFactory.getInstance();
+		IProductContainer s = f.createStorageUnit(name);
+		return s;
+	}
+	
+	public void addStorageUnit(IProductContainer s)
+	{
+		storageUnits.addStorageUnit((StorageUnit)s); 
+	}
 }
