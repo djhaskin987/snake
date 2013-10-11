@@ -94,5 +94,11 @@ public interface IProductContainer extends Serializable, IContextPanelNode {
 	 * @return IproductContainer that contains ProductContainer
 	 */
 	public IProductContainer getParent();
+	
+	public boolean isEnabled();
+	
+	public void enable();
+	
+	public void disable();
 
 }

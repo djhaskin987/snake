@@ -6,6 +6,9 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.IProductContainer;
+import model.Model;
+
 /**
  * Controller class for inventory view.
  */
@@ -89,6 +92,15 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
+		String enable = getView().getSelectedProductContainer().getName();
+		if(!(Model.getInstance().getStorageUnits().whoIsEnabled() == null)){
+			String disable = Model.getInstance().getStorageUnits().whoIsEnabled();
+			IProductContainer currentEnable = Model.getInstance().getStorageUnits().getProductContainer(disable);
+			currentEnable.disable();
+		}
+		
+		IProductContainer newEnable = Model.getInstance().getStorageUnits().getProductContainer(enable);
+		newEnable.enable();
 		return;
 	}
 	
@@ -224,6 +236,10 @@ public class InventoryController extends Controller
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
+		
+		//I think all of the code above can be removed as it is just there to make
+		//the gui work out of the box
+		enableComponents();
 	}
 
 	/**

@@ -52,6 +52,10 @@ public class Model {
 		this.storageUnits = units;
 	}
 	
+	public void enableProductContainer(String name){
+		
+	}
+	
 	/**
 	 * 
 	 * @return the ProductCollection instance in this Model.

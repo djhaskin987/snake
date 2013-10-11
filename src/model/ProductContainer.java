@@ -19,6 +19,7 @@ public abstract class ProductContainer implements IProductContainer {
 	protected NonEmptyString name;
 	protected ProductItems productItems;
 	protected ProductGroups productGroups;
+	private boolean enabled = false;
 
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
@@ -29,6 +30,18 @@ public abstract class ProductContainer implements IProductContainer {
 	public ProductContainer()
 	{
 		this.name = new NonEmptyString("test");
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
+	public void enable(){
+		this.enabled = true;
+	}
+	
+	public void disable(){
+		this.enabled = false;
 	}
 
 	public Collection<ProductGroup> getProductGroups() {
