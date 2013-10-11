@@ -25,8 +25,10 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * 
 	 * {@post a ProductGroup object}
 	 */
-	public ProductGroup(NonEmptyString name) {
+	public ProductGroup(NonEmptyString name, ProductContainer parentContainer, Quantity threeMonthSupply) {
 		super(name);
+		this.parentContainer = parentContainer;
+		this.threeMonthSupply = threeMonthSupply;
 	}
 	
 	// for testing only
@@ -34,6 +36,11 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		super();
 	}
 	
+	// for testing only
+	public ProductGroup(NonEmptyString nonEmptyString) {
+		super(nonEmptyString);
+	}
+
 	/** 
 	 * Gets the parent ProductContainer
 	 * 

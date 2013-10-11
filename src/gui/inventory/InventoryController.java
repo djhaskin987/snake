@@ -6,11 +6,26 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.IProductContainer;
+import model.Model;
+
 /**
  * Controller class for inventory view.
  */
 public class InventoryController extends Controller 
 									implements IInventoryController {
+	
+	private static InventoryController inventoryController;
+	private ProductContainerData root;
+	
+	/**
+	 * A hack. I need some way to to ask this questions.
+	 * 
+	 * @return	The inventory controller. There should only be the one defined by the GUI at the beginning of the program.
+	 */
+	public static IInventoryController getInventoryController() {
+		return inventoryController;
+	}
 
 	/**
 	 * Constructor.
@@ -21,6 +36,7 @@ public class InventoryController extends Controller
 		super(view);
 
 		construct();
+		inventoryController = this;
 	}
 
 	/**
@@ -40,26 +56,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		ProductContainerData root = new ProductContainerData();
-		
-		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
-		
-		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
-		toothpaste.addChild(new ProductContainerData("Kids"));
-		toothpaste.addChild(new ProductContainerData("Parents"));
-		basementCloset.addChild(toothpaste);
-		
-		root.addChild(basementCloset);
-		
-		ProductContainerData foodStorage = new ProductContainerData("Food Storage Room");
-		
-		ProductContainerData soup = new ProductContainerData("Soup");
-		soup.addChild(new ProductContainerData("Chicken Noodle"));
-		soup.addChild(new ProductContainerData("Split Pea"));
-		soup.addChild(new ProductContainerData("Tomato"));
-		foodStorage.addChild(soup);
-		
-		root.addChild(foodStorage);
+
 		
 		getView().setProductContainers(root);
 	}
@@ -76,7 +73,17 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		return;
+		if(getView().getSelectedProductContainer() != null){
+			String enable = getView().getSelectedProductContainer().getName();
+			if(!(Model.getInstance().getStorageUnits().whoIsEnabled() == null)){
+				String disable = Model.getInstance().getStorageUnits().whoIsEnabled();
+				IProductContainer currentEnable = Model.getInstance().getStorageUnits().getProductContainer(disable);
+				currentEnable.disable();
+			}
+			
+			IProductContainer newEnable = Model.getInstance().getStorageUnits().getProductContainer(enable);
+			newEnable.enable();
+		}
 	}
 	
 	//
@@ -217,6 +224,10 @@ public class InventoryController extends Controller
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
+		
+		//I think all of the code above can be removed as it is just there to make
+		//the gui work out of the box
+		enableComponents();
 	}
 
 	/**
@@ -407,6 +418,20 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+	}
+
+	/**
+	 * Returns the selected product container, or null if no product
+	 * container is selected.
+	 */
+	@Override
+	public ProductContainerData getSelectedProductContainer() {
+		return getView().getSelectedProductContainer();
+	}
+
+	@Override
+	public void reloadValues() {
+		getView().setProductContainers(root);
 	}
 
 }

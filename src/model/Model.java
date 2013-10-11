@@ -52,6 +52,10 @@ public class Model {
 		this.storageUnits = units;
 	}
 	
+	public void enableProductContainer(String name){
+		
+	}
+	
 	/**
 	 * 
 	 * @return the ProductCollection instance in this Model.
@@ -104,5 +108,11 @@ public class Model {
 	public void addStorageUnit(IProductContainer s)
 	{
 		storageUnits.addStorageUnit((StorageUnit)s); 
+	}
+	
+	public IProductContainer createProductGroup(String name, ProductContainer parentContainer, Quantity threeMonthSupply)
+	{
+		IProductContainer productGroup = productContainerFactory.createProductGroup(name, parentContainer, threeMonthSupply);
+		return productGroup;
 	}
 }

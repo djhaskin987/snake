@@ -1,5 +1,8 @@
 package gui.productgroup;
 
+import model.ProductGroup;
+import model.Quantity;
+import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -93,6 +96,54 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	public void addProductGroup() {
+		String name = getView().getProductGroupName();
+		String supplyValue = getView().getSupplyValue();
+		SizeUnits supplyUnit = getView().getSupplyUnit();
+		IInventoryController inventoryController = InventoryController.getInventoryController();
+		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().getProductContainerFactory().createProductGroup(name);
+		ProductContainerData parent = inventoryController.getSelectedProductContainer();
+		model.Unit unit;
+		switch(supplyUnit) {	//TODO: We need to put this somewhere else.
+		case Count:
+			unit = Unit.COUNT;
+			break;
+		case FluidOunces:
+			unit = Unit.FLOZ;
+			break;
+		case Gallons:
+			unit = Unit.GAL;
+			break;
+		case Grams:
+			unit = Unit.G;
+			break;
+		case Kilograms:
+			unit = Unit.KG;
+			break;
+		case Liters:
+			unit = Unit.LITER;
+			break;
+		case Ounces:
+			unit = Unit.OZ;
+			break;
+		case Pints:
+			unit = Unit.PINT;
+			break;
+		case Pounds:
+			unit = Unit.LBS;
+			break;
+		case Quarts:
+			unit = Unit.QUART;
+			break;
+		default:
+			unit = null;
+			break;
+		}
+		Quantity quantity = new Quantity(Double.parseDouble(supplyValue), unit);
+		model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
+		gui.inventory.ProductContainerData child = new gui.inventory.ProductContainerData(name);
+		child.setTag(productGroup);
+		parent.addChild(child);
+		inventoryController.reloadValues();
 	}
 
 }

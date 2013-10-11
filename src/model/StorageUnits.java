@@ -149,4 +149,46 @@ public class StorageUnits implements IContextPanelNode, Serializable{
 	public void removeItem(Barcode barcode) {
 		
 	}
+	/**
+	 * Searchs throw all StorageUnits and their sub productgroups
+	 * looking to see who is currently enabled(Selected) on the GUI
+	 * if non are selected it will return null
+	 * @return
+	 * @throws Exception
+	 */
+	public String whoIsEnabled(){
+		Collection<StorageUnit> StorageUnits= storageUnits.values();
+		
+		for(StorageUnit unit:StorageUnits){
+			if (unit.isEnabled()){
+				return unit.getName().toString();
+			}
+			else{
+				for(ProductGroup group:unit.getProductGroups()){
+					if(group.isEnabled()){
+						return group.getName().toString();
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public IProductContainer getProductContainer(String name){
+		Collection<StorageUnit> StorageUnits= storageUnits.values();
+		
+		for(StorageUnit unit:StorageUnits){
+			if (unit.getName().toString().equals(name)){
+				return unit;
+			}
+			else{
+				for(ProductGroup group:unit.getProductGroups()){
+					if(group.isEnabled()){
+						return group;
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

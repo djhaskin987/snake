@@ -63,7 +63,7 @@ package gui.common;
 	 */
 	protected void construct() {
 		loadValues();
-		enableComponents();
+		//enableComponents();
 	}
 	
 	/**
