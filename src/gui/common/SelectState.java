@@ -8,7 +8,7 @@ public class SelectState
     {
         if (instance != null)
         {
-            instance = new SelectState(null);
+            instance = new SelectState();
         }
         return instance;
     }
@@ -30,7 +30,7 @@ public class SelectState
         return selected;
     }
 
-    public void setSelected(Object & selected)
+    public void setSelected(Object selected)
     {
         this.selected = selected;
     }
