@@ -297,4 +297,9 @@ public abstract class ProductContainer implements IProductContainer {
 	{
 		return tagable.hasTag();
 	}
+	
+	public ProductContainerData getTree()
+	{
+		return (ProductContainerData)getTag();
+	}
 }

@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.TreeMap;
 
-public class StorageUnits extends Observable implements IContextPanelNode, Serializable{
+
+public class StorageUnits extends Observable implements IContextPanelNode, Serializable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
@@ -151,30 +152,6 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	@Override
 	public void removeItem(Barcode barcode) {
 		
-	}
-	/**
-	 * Searchs throw all StorageUnits and their sub productgroups
-	 * looking to see who is currently enabled(Selected) on the GUI
-	 * if non are selected it will return null
-	 * @return
-	 * @throws Exception
-	 */
-	public String whoIsEnabled(){
-		Collection<StorageUnit> StorageUnits= storageUnits.values();
-		
-		for(StorageUnit unit:StorageUnits){
-			if (unit.isEnabled()){
-				return unit.getName().toString();
-			}
-			else{
-				for(ProductGroup group:unit.getProductGroups()){
-					if(group.isEnabled()){
-						return group.getName().toString();
-					}
-				}
-			}
-		}
-		return null;
 	}
 	
 	public IProductContainer getProductContainer(String name){

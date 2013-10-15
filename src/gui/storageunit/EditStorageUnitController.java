@@ -61,8 +61,7 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		String name = Model.getInstance().getStorageUnits().whoIsEnabled();
-		getView().setStorageUnitName(name);
+		//Needs work
 	}
 
 	//
@@ -97,8 +96,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void editStorageUnit() {
-		String name = Model.getInstance().getStorageUnits().whoIsEnabled();
-		Model.getInstance().getStorageUnits().getStorageUnit(name).setProductContainerName(name);
+
+		//Needs work
 	}
 
 }

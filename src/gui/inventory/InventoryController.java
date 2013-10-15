@@ -14,19 +14,11 @@ import model.StorageUnits;
  * Controller class for inventory view.
  */
 public class InventoryController extends Controller 
-									implements IInventoryController {
+									implements IInventoryController, Observer {
 	
-	private static InventoryController inventoryController;
 	private ProductContainerData root;
 	
-	/**
-	 * A hack. I need some way to to ask this questions.
-	 * 
-	 * @return	The inventory controller. There should only be the one defined by the GUI at the beginning of the program.
-	 */
-	public static IInventoryController getInventoryController() {
-		return inventoryController;
-	}
+
 
 	/**
 	 * Constructor.
@@ -36,8 +28,8 @@ public class InventoryController extends Controller
 	public InventoryController(IInventoryView view) {
 		super(view);
 		initObserver();
+		Model.getInstance().getStorageUnits().addObserver(this);
 		construct();
-		inventoryController = this;
 	}
 
 	private void initObserver()
@@ -82,17 +74,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		if(getView().getSelectedProductContainer() != null){
-			String enable = getView().getSelectedProductContainer().getName();
-			if(!(Model.getInstance().getStorageUnits().whoIsEnabled() == null)){
-				String disable = Model.getInstance().getStorageUnits().whoIsEnabled();
-				IProductContainer currentEnable = Model.getInstance().getStorageUnits().getProductContainer(disable);
-				currentEnable.disable();
-			}
-			
-			IProductContainer newEnable = Model.getInstance().getStorageUnits().getProductContainer(enable);
-			newEnable.enable();
-		}
+		
+
 	}
 	
 	//
@@ -100,11 +83,13 @@ public class InventoryController extends Controller
 	//
 
 	/**
+	 * 
 	 * Returns true iff the "Add Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
 		return true;
+		
 	}
 	
 	/**
@@ -438,10 +423,22 @@ public class InventoryController extends Controller
 		return getView().getSelectedProductContainer();
 	}
 
+/*
 	@Override
-	public void reloadValues() {
+	public void update(Observable o, Object arg) {
+		Model m = Model.getInstance();
+		List<String> names = m.getStorageUnits().getStorageUnitNames();
+		ProductContainerData temproot = new ProductContainerData();
+		for(String name: names){
+			ProductContainerData temp = (ProductContainerData) m.getStorageUnits().getStorageUnit(name).getTag();
+			temproot.addChild(temp);
+		}
+		root = temproot;
 		getView().setProductContainers(root);
+		enableComponents();
+		
 	}
+	*/
 
 	@Override
 	public void update(Observable sender, Object arg) {

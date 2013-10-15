@@ -99,9 +99,9 @@ public class AddProductGroupController extends Controller implements
 		String name = getView().getProductGroupName();
 		String supplyValue = getView().getSupplyValue();
 		SizeUnits supplyUnit = getView().getSupplyUnit();
-		IInventoryController inventoryController = InventoryController.getInventoryController();
+		//IInventoryController inventoryController = InventoryController.getInventoryController();
 		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().getProductContainerFactory().createProductGroup(name);
-		ProductContainerData parent = inventoryController.getSelectedProductContainer();
+		//ProductContainerData parent = inventoryController.getSelectedProductContainer();
 		model.Unit unit;
 		switch(supplyUnit) {	//TODO: We need to put this somewhere else.
 		case Count:
@@ -139,11 +139,11 @@ public class AddProductGroupController extends Controller implements
 			break;
 		}
 		Quantity quantity = new Quantity(Double.parseDouble(supplyValue), unit);
-		model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
+		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
 		gui.inventory.ProductContainerData child = new gui.inventory.ProductContainerData(name);
-		child.setTag(productGroup);
-		parent.addChild(child);
-		inventoryController.reloadValues();
+		//child.setTag(productGroup);
+		//parent.addChild(child);
+		//inventoryController.reloadValues();
 	}
 
 }
