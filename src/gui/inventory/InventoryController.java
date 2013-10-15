@@ -6,19 +6,11 @@ import gui.product.*;
 
 import java.util.*;
 
-import model.IProductContainer;
-import model.Model;
-import model.StorageUnits;
-
 /**
  * Controller class for inventory view.
  */
 public class InventoryController extends Controller 
-									implements IInventoryController, Observer {
-	
-	private ProductContainerData root;
-	
-
+									implements IInventoryController {
 
 	/**
 	 * Constructor.
@@ -27,19 +19,10 @@ public class InventoryController extends Controller
 	 */
 	public InventoryController(IInventoryView view) {
 		super(view);
-		initObserver();
-		Model.getInstance().getStorageUnits().addObserver(this);
+
 		construct();
 	}
 
-	private void initObserver()
-	{
-		Model m = Model.getInstance();
-		StorageUnits s = m.getStorageUnits();
-		s.addObserver(this);
-		System.out.println("initObserver");
-	}
-	
 	/**
 	 * Returns a reference to the view for this controller.
 	 */
@@ -57,7 +40,26 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-
+		ProductContainerData root = new ProductContainerData();
+		
+		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
+		
+		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
+		toothpaste.addChild(new ProductContainerData("Kids"));
+		toothpaste.addChild(new ProductContainerData("Parents"));
+		basementCloset.addChild(toothpaste);
+		
+		root.addChild(basementCloset);
+		
+		ProductContainerData foodStorage = new ProductContainerData("Food Storage Room");
+		
+		ProductContainerData soup = new ProductContainerData("Soup");
+		soup.addChild(new ProductContainerData("Chicken Noodle"));
+		soup.addChild(new ProductContainerData("Split Pea"));
+		soup.addChild(new ProductContainerData("Tomato"));
+		foodStorage.addChild(soup);
+		
+		root.addChild(foodStorage);
 		
 		getView().setProductContainers(root);
 	}
@@ -74,8 +76,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		
-
+		return;
 	}
 	
 	//
@@ -83,13 +84,11 @@ public class InventoryController extends Controller
 	//
 
 	/**
-	 * 
 	 * Returns true iff the "Add Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
 		return true;
-		
 	}
 	
 	/**
@@ -189,12 +188,6 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item container changes.
-	 * 
-	 * product container selection is altered on view.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post selection altered}
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
@@ -218,20 +211,10 @@ public class InventoryController extends Controller
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
-		
-		//I think all of the code above can be removed as it is just there to make
-		//the gui work out of the box
-		enableComponents();
 	}
 
 	/**
 	 * This method is called when the selected item changes.
-	 * 
-	 * Item is altered. view refreshes.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post item altered. view refreshes.}
 	 */
 	@Override
 	public void productSelectionChanged() {
@@ -260,12 +243,6 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item changes.
-	 * 
-	 * item selection altered on view.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post item selectin altered on view}
 	 */
 	@Override
 	public void itemSelectionChanged() {
@@ -412,45 +389,6 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
-	}
-
-	/**
-	 * Returns the selected product container, or null if no product
-	 * container is selected.
-	 */
-	@Override
-	public ProductContainerData getSelectedProductContainer() {
-		return getView().getSelectedProductContainer();
-	}
-
-/*
-	@Override
-	public void update(Observable o, Object arg) {
-		Model m = Model.getInstance();
-		List<String> names = m.getStorageUnits().getStorageUnitNames();
-		ProductContainerData temproot = new ProductContainerData();
-		for(String name: names){
-			ProductContainerData temp = (ProductContainerData) m.getStorageUnits().getStorageUnit(name).getTag();
-			temproot.addChild(temp);
-		}
-		root = temproot;
-		getView().setProductContainers(root);
-		enableComponents();
-		
-	}
-	*/
-
-	@Override
-	public void update(Observable sender, Object arg) {
-		System.out.println("update");
-		if (sender.getClass() == StorageUnits.class)
-		{
-			StorageUnits ss = (StorageUnits)sender;
-			IInventoryView v = getView();
-			ProductContainerData root = ss.getTree();
-			v.setProductContainers(root);
-		}
-		
 	}
 
 }
