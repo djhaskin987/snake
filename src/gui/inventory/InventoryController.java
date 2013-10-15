@@ -45,6 +45,7 @@ public class InventoryController extends Controller
 		Model m = Model.getInstance();
 		StorageUnits s = m.getStorageUnits();
 		s.addObserver(this);
+		System.out.println("initObserver");
 	}
 	
 	/**
@@ -444,6 +445,7 @@ public class InventoryController extends Controller
 
 	@Override
 	public void update(Observable sender, Object arg) {
+		System.out.println("update");
 		if (sender.getClass() == StorageUnits.class)
 		{
 			StorageUnits ss = (StorageUnits)sender;
