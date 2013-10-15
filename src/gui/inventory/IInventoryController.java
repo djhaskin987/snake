@@ -177,11 +177,5 @@ public interface IInventoryController extends IController {
 	 * container is selected.
 	 */
 	ProductContainerData getSelectedProductContainer();
-
-	/**
-	 * Updates the InventoryController. We may think of a better way to do it, but until then, I'm using this hack.
-	 */
-	void reloadValues();
-	
 }
 
