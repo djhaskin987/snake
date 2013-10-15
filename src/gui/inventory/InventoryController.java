@@ -74,7 +74,7 @@ public class InventoryController extends Controller
 	//
 
 	/**
-	 * Modified by Kevin Please Code Review
+	 * 
 	 * Returns true iff the "Add Storage Unit" menu item should be enabled.
 	 */
 	@Override
