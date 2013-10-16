@@ -3,6 +3,7 @@ package gui.inventory;
 import java.util.Observer;
 
 import gui.common.*;
+
 import gui.item.*;
 import gui.product.*;
 
@@ -174,10 +175,5 @@ public interface IInventoryController extends IController, Observer {
 	 */
 	void moveItemToContainer(ItemData item, ProductContainerData container);
 	
-	/**
-	 * Returns the selected product container, or null if no product
-	 * container is selected.
-	 */
-	ProductContainerData getSelectedProductContainer();
 }
 
