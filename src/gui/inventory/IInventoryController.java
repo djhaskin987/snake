@@ -1,5 +1,7 @@
 package gui.inventory;
 
+import java.util.Observer;
+
 import gui.common.*;
 
 import gui.item.*;
@@ -8,7 +10,7 @@ import gui.product.*;
 /**
  * Controller interface for inventory view.
  */
-public interface IInventoryController extends IController {
+public interface IInventoryController extends IController, Observer {
 
 	/**
 	 * Returns true if and only if the "Add Storage Unit" menu item should be enabled.

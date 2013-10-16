@@ -6,6 +6,12 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.Model;
+import model.ModelActions;
+import model.StorageUnits;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 /**
  * Controller class for inventory view.
  */
@@ -19,8 +25,17 @@ public class InventoryController extends Controller
 	 */
 	public InventoryController(IInventoryView view) {
 		super(view);
-
 		construct();
+		initObservers();
+		
+	}
+
+	
+	
+	private void initObservers() {
+		Model model = Model.getInstance();
+		StorageUnits storageUnitsManager = model.getStorageUnits();
+		storageUnitsManager.addObserver(this);
 	}
 
 	/**
@@ -41,26 +56,8 @@ public class InventoryController extends Controller
 	@Override
 	protected void loadValues() {
 		ProductContainerData root = new ProductContainerData();
-		
-		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
-		
-		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
-		toothpaste.addChild(new ProductContainerData("Kids"));
-		toothpaste.addChild(new ProductContainerData("Parents"));
-		basementCloset.addChild(toothpaste);
-		
-		root.addChild(basementCloset);
-		
-		ProductContainerData foodStorage = new ProductContainerData("Food Storage Room");
-		
-		ProductContainerData soup = new ProductContainerData("Soup");
-		soup.addChild(new ProductContainerData("Chicken Noodle"));
-		soup.addChild(new ProductContainerData("Split Pea"));
-		soup.addChild(new ProductContainerData("Tomato"));
-		foodStorage.addChild(soup);
-		
-		root.addChild(foodStorage);
-		
+		StorageUnits su = Model.getInstance().getStorageUnits();
+		su.setTag(root);
 		getView().setProductContainers(root);
 	}
 
@@ -389,6 +386,41 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+	}
+
+
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// This method assumes that the only thing that InventoryController is observing is the StorageUnits instance
+		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
+		ModelActions action = pair.getLeft();
+		ITagable payload = pair.getRight();
+		switch(action)
+		{
+		case INSERT_STORAGE_UNIT:
+			ProductContainerData pcd = (ProductContainerData) payload.getTag();
+			Model m = Model.getInstance();
+			StorageUnits su = m.getStorageUnits();
+			// get the root ProductContainerData object
+			ProductContainerData root = (ProductContainerData) su.getTag();
+			IInventoryView v = getView();
+			// insert product container in sorted order
+			int next;
+			for (next = 0; next < root.getChildCount(); next++) {
+				ProductContainerData existing = root.getChild(next);
+				String existingName = existing.getName();
+				String pcdName = pcd.getName();
+				if (existingName.compareTo(pcdName) > 0)
+					break;
+			}
+			v.insertProductContainer(root, pcd, next);
+			// select product container
+			v.selectProductContainer(pcd);
+		break;
+		default:
+			throw new IllegalStateException("Uh oh");
+		}
 	}
 
 }
