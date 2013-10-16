@@ -4,6 +4,8 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
+import gui.common.ITagable;
+import gui.common.Tagable;
 import gui.inventory.ProductContainerData;
 
 import java.io.Serializable;
@@ -13,14 +15,18 @@ import java.util.List;
 import java.util.Observable;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.tuple.Pair;
 
-public class StorageUnits extends Observable implements IContextPanelNode, Serializable {
+
+public class StorageUnits extends Observable implements IContextPanelNode, Serializable, ITagable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
-
+	private Tagable tagable;
+	
 	StorageUnits() {
 	   storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
+	   tagable = new Tagable();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -46,7 +52,10 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
 		storageUnits.put(storageUnit.getName(), storageUnit);
-		super.notifyObservers(storageUnit);
+		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_STORAGE_UNIT, (ITagable)storageUnit);
+		System.out.println("Number of Observers: " + countObservers());
+		setChanged();
+		notifyObservers(pair);
 	}
 	
 	public List<String> getStorageUnitNames(){
@@ -171,18 +180,20 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 		}
 		return null;
 	}
-	
-	public ProductContainerData getTree()
-	{
+
+	@Override
+	public Object getTag() {
+		return tagable.getTag();
+	}
+
+	@Override
+	public void setTag(Object o) {
+		tagable.setTag(o);
 		
-		ProductContainerData root = new ProductContainerData("root");
-		Collection<StorageUnit> ss = storageUnits.values();
-		for (StorageUnit s : ss)
-		{
-			ProductContainerData data = s.getTree();
-			root.addChild(data);
-		}
-		
-		return root;
+	}
+
+	@Override
+	public boolean hasTag() {
+		return tagable.hasTag();
 	}
 }

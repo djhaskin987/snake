@@ -6,19 +6,17 @@ import gui.product.*;
 
 import java.util.*;
 
-import model.IProductContainer;
 import model.Model;
+import model.ModelActions;
 import model.StorageUnits;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Controller class for inventory view.
  */
 public class InventoryController extends Controller 
-									implements IInventoryController, Observer {
-	
-	private ProductContainerData root;
-	
-
+									implements IInventoryController {
 
 	/**
 	 * Constructor.
@@ -27,19 +25,19 @@ public class InventoryController extends Controller
 	 */
 	public InventoryController(IInventoryView view) {
 		super(view);
-		initObserver();
-		Model.getInstance().getStorageUnits().addObserver(this);
 		construct();
+		initObservers();
+		
 	}
 
-	private void initObserver()
-	{
-		Model m = Model.getInstance();
-		StorageUnits s = m.getStorageUnits();
-		s.addObserver(this);
-		System.out.println("initObserver");
-	}
 	
+	
+	private void initObservers() {
+		Model model = Model.getInstance();
+		StorageUnits storageUnitsManager = model.getStorageUnits();
+		storageUnitsManager.addObserver(this);
+	}
+
 	/**
 	 * Returns a reference to the view for this controller.
 	 */
@@ -57,8 +55,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-
-		
+		ProductContainerData root = new ProductContainerData();
+		StorageUnits su = Model.getInstance().getStorageUnits();
+		su.setTag(root);
 		getView().setProductContainers(root);
 	}
 
@@ -74,8 +73,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		
-
+		return;
 	}
 	
 	//
@@ -83,13 +81,11 @@ public class InventoryController extends Controller
 	//
 
 	/**
-	 * 
 	 * Returns true iff the "Add Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
 		return true;
-		
 	}
 	
 	/**
@@ -189,12 +185,6 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item container changes.
-	 * 
-	 * product container selection is altered on view.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post selection altered}
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
@@ -218,20 +208,10 @@ public class InventoryController extends Controller
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
-		
-		//I think all of the code above can be removed as it is just there to make
-		//the gui work out of the box
-		enableComponents();
 	}
 
 	/**
 	 * This method is called when the selected item changes.
-	 * 
-	 * Item is altered. view refreshes.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post item altered. view refreshes.}
 	 */
 	@Override
 	public void productSelectionChanged() {
@@ -260,12 +240,6 @@ public class InventoryController extends Controller
 
 	/**
 	 * This method is called when the selected item changes.
-	 * 
-	 * item selection altered on view.
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post item selectin altered on view}
 	 */
 	@Override
 	public void itemSelectionChanged() {
@@ -414,43 +388,39 @@ public class InventoryController extends Controller
 									ProductContainerData containerData) {
 	}
 
-	/**
-	 * Returns the selected product container, or null if no product
-	 * container is selected.
-	 */
-	@Override
-	public ProductContainerData getSelectedProductContainer() {
-		return getView().getSelectedProductContainer();
-	}
 
-/*
-	@Override
-	public void update(Observable o, Object arg) {
-		Model m = Model.getInstance();
-		List<String> names = m.getStorageUnits().getStorageUnitNames();
-		ProductContainerData temproot = new ProductContainerData();
-		for(String name: names){
-			ProductContainerData temp = (ProductContainerData) m.getStorageUnits().getStorageUnit(name).getTag();
-			temproot.addChild(temp);
-		}
-		root = temproot;
-		getView().setProductContainers(root);
-		enableComponents();
-		
-	}
-	*/
 
 	@Override
-	public void update(Observable sender, Object arg) {
-		System.out.println("update");
-		if (sender.getClass() == StorageUnits.class)
+	public void update(Observable arg0, Object arg1) {
+		// This method assumes that the only thing that InventoryController is observing is the StorageUnits instance
+		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
+		ModelActions action = pair.getLeft();
+		ITagable payload = pair.getRight();
+		switch(action)
 		{
-			StorageUnits ss = (StorageUnits)sender;
+		case INSERT_STORAGE_UNIT:
+			ProductContainerData pcd = (ProductContainerData) payload.getTag();
+			Model m = Model.getInstance();
+			StorageUnits su = m.getStorageUnits();
+			// get the root ProductContainerData object
+			ProductContainerData root = (ProductContainerData) su.getTag();
 			IInventoryView v = getView();
-			ProductContainerData root = ss.getTree();
-			v.setProductContainers(root);
+			// insert product container in sorted order
+			int next;
+			for (next = 0; next < root.getChildCount(); next++) {
+				ProductContainerData existing = root.getChild(next);
+				String existingName = existing.getName();
+				String pcdName = pcd.getName();
+				if (existingName.compareTo(pcdName) > 0)
+					break;
+			}
+			v.insertProductContainer(root, pcd, next);
+			// select product container
+			v.selectProductContainer(pcd);
+		break;
+		default:
+			throw new IllegalStateException("Uh oh");
 		}
-		
 	}
 
 }
