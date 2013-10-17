@@ -1,5 +1,6 @@
 package gui.productgroup;
 
+import model.Model;
 import model.ProductGroup;
 import model.Quantity;
 import model.Unit;
@@ -11,6 +12,8 @@ import gui.inventory.*;
  */
 public class AddProductGroupController extends Controller implements
 		IAddProductGroupController {
+
+	private ProductContainerData parent;
 	
 	/**
 	 * Constructor.
@@ -22,6 +25,8 @@ public class AddProductGroupController extends Controller implements
 		super(view);
 		
 		construct();
+		
+		parent = container;
 	}
 
 	//
@@ -139,11 +144,11 @@ public class AddProductGroupController extends Controller implements
 			break;
 		}
 		Quantity quantity = new Quantity(Double.parseDouble(supplyValue), unit);
-		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
+		model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
 		gui.inventory.ProductContainerData child = new gui.inventory.ProductContainerData(name);
-		//child.setTag(productGroup);
-		//parent.addChild(child);
-		//inventoryController.reloadValues();
+		child.setTag(productGroup);
+		productGroup.setTag(child);
+		Model.getInstance().addProductGroup(productGroup);
 	}
 
 }

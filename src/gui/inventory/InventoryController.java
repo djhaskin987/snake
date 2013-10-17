@@ -396,8 +396,7 @@ public class InventoryController extends Controller
 		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();
-		switch(action)
-		{
+		switch(action) {
 		case INSERT_STORAGE_UNIT:
 			ProductContainerData pcd = (ProductContainerData) payload.getTag();
 			Model m = Model.getInstance();
@@ -417,6 +416,27 @@ public class InventoryController extends Controller
 			v.insertProductContainer(root, pcd, next);
 			// select product container
 			v.selectProductContainer(pcd);
+		break;
+		case INSERT_PRODUCT_GROUP:
+			ProductContainerData pcd1 = (ProductContainerData) payload.getTag();
+			Model m1 = Model.getInstance();
+			ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
+			IInventoryView v1 = getView();
+			// insert product container in sorted order
+			int next1;
+			for (next1 = 0; next1 < parent.getChildCount(); next1++) {
+				System.out.println("test");
+				ProductContainerData existing = parent.getChild(next1);
+				String existingName = existing.getName();
+				String pcdName = pcd1.getName();
+				if (existingName.compareTo(pcdName) > 0)
+					break;
+			}
+			System.out.println("parent.getChildCount():\t" + parent.getChildCount());
+			System.out.println("next1:\t" + next1);
+			v1.insertProductContainer(parent, pcd1, next1);
+			// select product container
+			v1.selectProductContainer(pcd1);
 		break;
 		default:
 			throw new IllegalStateException("Uh oh");

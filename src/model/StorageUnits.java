@@ -196,4 +196,11 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	public boolean hasTag() {
 		return tagable.hasTag();
 	}
+
+	public void addProductGroup(ProductGroup p) {
+		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_PRODUCT_GROUP, (ITagable)p);
+		System.out.println("Number of Observers: " + countObservers());
+		setChanged();
+		notifyObservers(pair);
+	}
 }
