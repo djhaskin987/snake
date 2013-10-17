@@ -44,6 +44,10 @@ public class AddProductGroupController extends Controller implements
 	protected IAddProductGroupView getView() {
 		return (IAddProductGroupView)super.getView();
 	}
+	
+	private boolean isValid(String str) {
+	  return str.matches("\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -57,6 +61,23 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		if(
+				getView().getProductGroupName().equals("")
+				|| !isValid(getView().getSupplyValue())
+				|| Double.parseDouble(getView().getSupplyValue()) <= 0
+				|| getView().getSupplyUnit() == SizeUnits.Count && Double.parseDouble(getView().getSupplyValue()) != 1
+				) {
+			getView().enableOK(false);
+			return;
+		}
+		for(int i=0; i<parent.getChildCount(); ++i) {
+			if(getView().getProductGroupName().equals(parent.getChild(i).getName())) {
+				getView().enableOK(false);
+				return;
+			}
+		}
+		getView().enableOK(true);
+		return;
 	}
 
 	/**
@@ -68,6 +89,7 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		enableComponents();
 	}
 
 	//
@@ -87,6 +109,7 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
