@@ -6,6 +6,7 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.IContextPanelNode;
 import model.Model;
 import model.ModelActions;
 import model.StorageUnits;
@@ -58,7 +59,9 @@ public class InventoryController extends Controller
 		ProductContainerData root = new ProductContainerData();
 		StorageUnits su = Model.getInstance().getStorageUnits();
 		su.setTag(root);
+		root.setTag(su);
 		getView().setProductContainers(root);
+		System.out.println("Inventory Controller values loaded");
 	}
 
 	/**
@@ -188,6 +191,14 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
+		ProductContainerData pcd = getView().getSelectedProductContainer();
+		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		getView().setContextGroup(node.getProductGroupName());
+		getView().setContextUnit(node.getUnit());
+		getView().setContextSupply(node.getThreeMonthSupply());
+		// The rest of this is filler code.
+		
+		
 		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
 		if (selectedContainer != null) {
@@ -430,26 +441,24 @@ public class InventoryController extends Controller
 	}
 
 	private void insertProductGroup(ITagable payload) {
-        ProductContainerData pcd1 = (ProductContainerData) payload.getTag();
-        Model m1 = Model.getInstance();
+        ProductContainerData pcd = (ProductContainerData) payload.getTag();
         ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
-        IInventoryView v1 = getView();
+        IInventoryView v = getView();
         // insert product container in sorted order
-        int next1;
-        for (next1 = 0; next1 < parent.getChildCount(); next1++) {
+        int next;
+        for (next = 0; next < parent.getChildCount(); next++) {
             System.out.println("test");
-            ProductContainerData existing = parent.getChild(next1);
+            ProductContainerData existing = parent.getChild(next);
             String existingName = existing.getName();
-            String pcdName = pcd1.getName();
+            String pcdName = pcd.getName();
             if (existingName.compareTo(pcdName) > 0)
                 break;
         }
         System.out.println("parent.getChildCount():\t" + parent.getChildCount());
-        System.out.println("next1:\t" + next1);
-        v1.insertProductContainer(parent, pcd1, next1);
+        System.out.println("next:\t" + next);
+        v.insertProductContainer(parent, pcd, next);
         // select product container
-        v1.selectProductContainer(pcd1);
-
+        v.selectProductContainer(pcd);
 	}
 
 	private void editProductGroup(ITagable payload) {

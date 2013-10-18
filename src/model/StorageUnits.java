@@ -203,4 +203,10 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 		setChanged();
 		notifyObservers(pair);
 	}
+
+	public boolean canAddStorageUnit(String name) {
+		return name != null &&
+				!name.isEmpty() &&
+				!getStorageUnitNames().contains(name);
+	}
 }
