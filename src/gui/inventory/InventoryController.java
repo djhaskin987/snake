@@ -15,23 +15,23 @@ import org.apache.commons.lang3.tuple.Pair;
 /**
  * Controller class for inventory view.
  */
-public class InventoryController extends Controller 
+public class InventoryController extends Controller
 									implements IInventoryController {
 
 	/**
 	 * Constructor.
-	 *  
+	 *
 	 * @param view Reference to the inventory view
 	 */
 	public InventoryController(IInventoryView view) {
 		super(view);
 		construct();
 		initObservers();
-		
+
 	}
 
-	
-	
+
+
 	private void initObservers() {
 		Model model = Model.getInstance();
 		StorageUnits storageUnitsManager = model.getStorageUnits();
@@ -48,9 +48,9 @@ public class InventoryController extends Controller
 
 	/**
 	 * Loads data into the controller's view.
-	 * 
+	 *
 	 *  {@pre None}
-	 *  
+	 *
 	 *  {@post The controller has loaded data into its view}
 	 */
 	@Override
@@ -65,9 +65,9 @@ public class InventoryController extends Controller
 	 * Sets the enable/disable state of all components in the controller's view.
 	 * A component should be enabled only if the user is currently
 	 * allowed to interact with that component.
-	 * 
+	 *
 	 * {@pre None}
-	 * 
+	 *
 	 * {@post The enable/disable state of all components in the controller's view
 	 * have been set appropriately.}
 	 */
@@ -75,7 +75,7 @@ public class InventoryController extends Controller
 	protected void enableComponents() {
 		return;
 	}
-	
+
 	//
 	// IInventoryController overrides
 	//
@@ -87,7 +87,7 @@ public class InventoryController extends Controller
 	public boolean canAddStorageUnit() {
 		return true;
 	}
-	
+
 	/**
 	 * Returns true iff the "Add Items" menu item should be enabled.
 	 */
@@ -95,7 +95,7 @@ public class InventoryController extends Controller
 	public boolean canAddItems() {
 		return true;
 	}
-	
+
 	/**
 	 * Returns true iff the "Transfer Items" menu item should be enabled.
 	 */
@@ -103,7 +103,7 @@ public class InventoryController extends Controller
 	public boolean canTransferItems() {
 		return true;
 	}
-	
+
 	/**
 	 * Returns true iff the "Remove Items" menu item should be enabled.
 	 */
@@ -119,7 +119,7 @@ public class InventoryController extends Controller
 	public boolean canDeleteStorageUnit() {
 		return true;
 	}
-	
+
 	/**
 	 * This method is called when the user selects the "Delete Storage Unit" menu item.
 	 */
@@ -158,14 +158,14 @@ public class InventoryController extends Controller
 	public boolean canEditProductGroup() {
 		return true;
 	}
-	
+
 	/**
 	 * This method is called when the user selects the "Delete Product Group" menu item.
-	 * 
+	 *
 	 * product group is deleted
-	 * 
+	 *
 	 * {@pre none}
-	 * 
+	 *
 	 * {@post product group is deleted}
 	 */
 	@Override
@@ -173,7 +173,7 @@ public class InventoryController extends Controller
 	}
 
 	private Random rand = new Random();
-	
+
 	private String getRandomBarcode() {
 		Random rand = new Random();
 		StringBuilder barcode = new StringBuilder();
@@ -188,12 +188,12 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
-		List<ProductData> productDataList = new ArrayList<ProductData>();		
+		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
 		if (selectedContainer != null) {
 			int productCount = rand.nextInt(20) + 1;
 			for (int i = 1; i <= productCount; ++i) {
-				ProductData productData = new ProductData();			
+				ProductData productData = new ProductData();
 				productData.setBarcode(getRandomBarcode());
 				int itemCount = rand.nextInt(25) + 1;
 				productData.setCount(Integer.toString(itemCount));
@@ -201,12 +201,12 @@ public class InventoryController extends Controller
 				productData.setShelfLife("3 months");
 				productData.setSize("1 pounds");
 				productData.setSupply("10 count");
-				
+
 				productDataList.add(productData);
 			}
 		}
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
-		
+
 		getView().setItems(new ItemData[0]);
 	}
 
@@ -215,7 +215,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productSelectionChanged() {
-		List<ItemData> itemDataList = new ArrayList<ItemData>();		
+		List<ItemData> itemDataList = new ArrayList<ItemData>();
 		ProductData selectedProduct = getView().getSelectedProduct();
 		if (selectedProduct != null) {
 			Date now = new Date();
@@ -231,7 +231,7 @@ public class InventoryController extends Controller
 				itemData.setExpirationDate(cal.getTime());
 				itemData.setProductGroup("Some Group");
 				itemData.setStorageUnit("Some Unit");
-				
+
 				itemDataList.add(itemData);
 			}
 		}
@@ -307,7 +307,7 @@ public class InventoryController extends Controller
 	public void addProductGroup() {
 		getView().displayAddProductGroupView();
 	}
-	
+
 	/**
 	 * This method is called when the user selects the "Add Items" menu item.
 	 */
@@ -315,7 +315,7 @@ public class InventoryController extends Controller
 	public void addItems() {
 		getView().displayAddItemBatchView();
 	}
-	
+
 	/**
 	 * This method is called when the user selects the "Transfer Items" menu item.
 	 */
@@ -323,7 +323,7 @@ public class InventoryController extends Controller
 	public void transferItems() {
 		getView().displayTransferItemBatchView();
 	}
-	
+
 	/**
 	 * This method is called when the user selects the "Remove Items" menu item.
 	 */
@@ -363,23 +363,23 @@ public class InventoryController extends Controller
 	public void editProduct() {
 		getView().displayEditProductView();
 	}
-	
+
 	/**
 	 * This method is called when the user drags a product into a
 	 * product container.
-	 * 
+	 *
 	 * @param productData Product dragged into the target product container
 	 * @param containerData Target product container
 	 */
 	@Override
-	public void addProductToContainer(ProductData productData, 
-										ProductContainerData containerData) {		
+	public void addProductToContainer(ProductData productData,
+										ProductContainerData containerData) {
 	}
 
 	/**
 	 * This method is called when the user drags an item into
 	 * a product container.
-	 * 
+	 *
 	 * @param itemData Item dragged into the target product container
 	 * @param containerData Target product container
 	 */
@@ -392,56 +392,101 @@ public class InventoryController extends Controller
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// This method assumes that the only thing that InventoryController is observing is the StorageUnits instance
+		// This method assumes that the only thing that InventoryController is
+        // observing is the StorageUnits instance
 		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();
-		switch(action) {
-		case INSERT_STORAGE_UNIT:
-			ProductContainerData pcd = (ProductContainerData) payload.getTag();
-			Model m = Model.getInstance();
-			StorageUnits su = m.getStorageUnits();
-			// get the root ProductContainerData object
-			ProductContainerData root = (ProductContainerData) su.getTag();
-			IInventoryView v = getView();
-			// insert product container in sorted order
-			int next;
-			for (next = 0; next < root.getChildCount(); next++) {
-				ProductContainerData existing = root.getChild(next);
-				String existingName = existing.getName();
-				String pcdName = pcd.getName();
-				if (existingName.compareTo(pcdName) > 0)
-					break;
-			}
-			v.insertProductContainer(root, pcd, next);
-			// select product container
-			v.selectProductContainer(pcd);
-		break;
-		case INSERT_PRODUCT_GROUP:
-			ProductContainerData pcd1 = (ProductContainerData) payload.getTag();
-			Model m1 = Model.getInstance();
-			ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
-			IInventoryView v1 = getView();
-			// insert product container in sorted order
-			int next1;
-			for (next1 = 0; next1 < parent.getChildCount(); next1++) {
-				System.out.println("test");
-				ProductContainerData existing = parent.getChild(next1);
-				String existingName = existing.getName();
-				String pcdName = pcd1.getName();
-				if (existingName.compareTo(pcdName) > 0)
-					break;
-			}
-			System.out.println("parent.getChildCount():\t" + parent.getChildCount());
-			System.out.println("next1:\t" + next1);
-			v1.insertProductContainer(parent, pcd1, next1);
-			// select product container
-			v1.selectProductContainer(pcd1);
-		break;
-		default:
-			throw new IllegalStateException("Uh oh");
+		switch(action)
+		{
+			case INSERT_STORAGE_UNIT:
+				insertStorageUnit(payload);
+				break;
+			case EDIT_STORAGE_UNIT:
+				editStorageUnit(payload);
+				break;
+			case INSERT_PRODUCT_GROUP:
+				insertProductGroup(payload);
+				break;
+			case EDIT_PRODUCT_GROUP:
+				editProductGroup(payload);
+				break;
+			case INSERT_ITEM:
+				insertItem(payload);
+				break;
+			case INSERT_PRODUCT:
+				insertProduct(payload);
+				break;
+			case EDIT_ITEM:
+				editItem(payload);
+				break;
+			default:
+				throw new IllegalStateException("Uh oh");
 		}
 	}
 
+	private void editStorageUnit(ITagable payload) {
+
+	}
+
+	private void insertProductGroup(ITagable payload) {
+        ProductContainerData pcd1 = (ProductContainerData) payload.getTag();
+        Model m1 = Model.getInstance();
+        ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
+        IInventoryView v1 = getView();
+        // insert product container in sorted order
+        int next1;
+        for (next1 = 0; next1 < parent.getChildCount(); next1++) {
+            System.out.println("test");
+            ProductContainerData existing = parent.getChild(next1);
+            String existingName = existing.getName();
+            String pcdName = pcd1.getName();
+            if (existingName.compareTo(pcdName) > 0)
+                break;
+        }
+        System.out.println("parent.getChildCount():\t" + parent.getChildCount());
+        System.out.println("next1:\t" + next1);
+        v1.insertProductContainer(parent, pcd1, next1);
+        // select product container
+        v1.selectProductContainer(pcd1);
+
+	}
+
+	private void editProductGroup(ITagable payload) {
+
+	}
+
+	private void insertProduct(ITagable payload) {
+
+	}
+
+	private void insertItem(ITagable payload) {
+
+	}
+
+	private void editItem(ITagable payload) {
+
+	}
+
+	private void insertStorageUnit(ITagable payload) {
+		ProductContainerData pcd = (ProductContainerData) payload.getTag();
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		// get the root ProductContainerData object
+		ProductContainerData root = (ProductContainerData) su.getTag();
+		IInventoryView v = getView();
+		// insert product container in sorted order
+		int next;
+		for (next = 0; next < root.getChildCount(); next++) {
+			ProductContainerData existing = root.getChild(next);
+			String existingName = existing.getName();
+			String pcdName = pcd.getName();
+			if (existingName.compareTo(pcdName) > 0)
+				break;
+		}
+		v.insertProductContainer(root, pcd, next);
+		// select product container
+		v.selectProductContainer(pcd);
+	}
 }
 
