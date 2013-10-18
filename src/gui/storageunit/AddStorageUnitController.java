@@ -49,6 +49,7 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		
 	}
 
 	/**
@@ -83,7 +84,9 @@ public class AddStorageUnitController extends Controller implements
 	public void valuesChanged() {
 		IAddStorageUnitView v = getView();
 		String name = v.getStorageUnitName();
-		boolean isEnabled = name != null && !name.isEmpty();
+		Model m = Model.getInstance();
+		StorageUnits s = m.getStorageUnits();
+		boolean isEnabled = s.canAddStorageUnit(name);
 		v.enableOK(isEnabled);
 	}
 	
