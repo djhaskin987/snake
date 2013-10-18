@@ -422,22 +422,57 @@ public class InventoryController extends Controller
 			case EDIT_PRODUCT_GROUP:
 				editProductGroup(payload);
 				break;
-			case INSERT_ITEM:
-				insertItem(payload);
+			case INSERT_ITEMS:
+				insertItems(payload);
 				break;
-			case INSERT_PRODUCT:
-				insertProduct(payload);
+			case REMOVE_ITEMS:
+				removeItems(payload);
+				break;
+			case TRANSFER_ITEMS:
+				transferItems(payload);
 				break;
 			case EDIT_ITEM:
 				editItem(payload);
 				break;
+			case INSERT_PRODUCT:
+				insertProduct(payload);
+				break;
+			case EDIT_PRODUCT:
+				editProduct(payload);
+				break;
 			default:
-				throw new IllegalStateException("Uh oh");
+				throw new IllegalStateException("Could not detect what changed");
 		}
 	}
 
-	private void editStorageUnit(ITagable payload) {
+	private void insertItems(ITagable payload) {
+		// TODO Auto-generated method stub
+		
+	}
 
+
+
+	private void removeItems(ITagable payload) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	private void transferItems(ITagable payload) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	private void editProduct(ITagable payload) {
+		
+	}
+
+
+
+	private void editStorageUnit(ITagable payload) {
 	}
 
 	private void insertProductGroup(ITagable payload) {
