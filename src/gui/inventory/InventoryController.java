@@ -6,6 +6,7 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.IContextPanelNode;
 import model.Model;
 import model.ModelActions;
 import model.StorageUnits;
@@ -58,7 +59,9 @@ public class InventoryController extends Controller
 		ProductContainerData root = new ProductContainerData();
 		StorageUnits su = Model.getInstance().getStorageUnits();
 		su.setTag(root);
+		root.setTag(su);
 		getView().setProductContainers(root);
+		System.out.println("Inventory Controller values loaded");
 	}
 
 	/**
@@ -188,6 +191,14 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
+		ProductContainerData pcd = getView().getSelectedProductContainer();
+		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		getView().setContextGroup(node.getProductGroupName());
+		getView().setContextUnit(node.getUnit());
+		getView().setContextSupply(node.getThreeMonthSupply());
+		// The rest of this is filler code.
+		
+		
 		List<ProductData> productDataList = new ArrayList<ProductData>();
 		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
 		if (selectedContainer != null) {
