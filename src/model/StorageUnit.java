@@ -60,7 +60,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public String getUnit() {
-		return null;
+		return getName().getValue();
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public String getThreeMonthSupply() {
-		return null;
+		return "";
 	}
 
 	/**
@@ -88,34 +88,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public String getProductGroupName() {
-		return null;
+		return "";
 	}
 
-	/**
-	 * Not used. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public Unit getThreeMonthSupplyUnit() {
-		return null;
-	}
-
-	/**
-	 * Not used. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public String getThreeMonthSupplyValueString() {
-		return null;
-	}
 }

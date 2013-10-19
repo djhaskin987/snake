@@ -36,8 +36,7 @@ public class InventoryController extends Controller
 
 
 	private void initObservers() {
-		Model model = Model.getInstance();
-		StorageUnits storageUnitsManager = model.getStorageUnits();
+		StorageUnits storageUnitsManager = getStorageUnitsManager();
 		storageUnitsManager.addObserver(this);
 	}
 
@@ -188,14 +187,11 @@ public class InventoryController extends Controller
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
 
-		Collection<IProduct> products = node.getProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		int i=0;
-		for(IProduct product : products) {
-			productDatas[i] = (ProductData) product.getTag();
-			++i;
+				productDataList.add(productData);
+			}
 		}
-		getView().setProducts(productDatas);
+		getView().setProducts(productDataList.toArray(new ProductData[0]));
+
 		getView().setItems(new ItemData[0]);
 	}
 
@@ -204,18 +200,27 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productSelectionChanged() {
-		ProductContainerData pcd = getView().getSelectedProductContainer();
-		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
-		ProductData productData = getView().getSelectedProduct();
-		Collection<IItem> items = node.getItems(productData.getDescription());
+		List<ItemData> itemDataList = new ArrayList<ItemData>();
+		ProductData selectedProduct = getView().getSelectedProduct();
+		if (selectedProduct != null) {
+			Date now = new Date();
+			GregorianCalendar cal = new GregorianCalendar();
+			int itemCount = Integer.parseInt(selectedProduct.getCount());
+			for (int i = 1; i <= itemCount; ++i) {
+				cal.setTime(now);
+				ItemData itemData = new ItemData();
+				itemData.setBarcode(getRandomBarcode());
+				cal.add(Calendar.MONTH, -rand.nextInt(12));
+				itemData.setEntryDate(cal.getTime());
+				cal.add(Calendar.MONTH, 3);
+				itemData.setExpirationDate(cal.getTime());
+				itemData.setProductGroup("Some Group");
+				itemData.setStorageUnit("Some Unit");
 
-		ItemData[] itemDatas = new ItemData[items.size()];
-		int i=0;
-		for(IItem item : items) {
-			itemDatas[i] = (ItemData) item.getTag();
-			++i;
+				itemDataList.add(itemData);
+			}
 		}
-		getView().setItems(itemDatas);
+		getView().setItems(itemDataList.toArray(new ItemData[0]));
 	}
 
 	/**
@@ -246,7 +251,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditItem() {
-		return true;
+		return getStorageUnitsManager().canEditItem(
+				getView().getSelectedItem().getBarcode());
 	}
 
 	/**
@@ -262,7 +268,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return true;
+		return getStorageUnitsManager().canRemoveItem();
 	}
 
 	/**
@@ -277,7 +283,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditProduct() {
-		return true;
+		return getStorageUnitsManager().canEditProduct(
+				getView().getSelectedProduct().getBarcode());
 	}
 
 	/**
@@ -442,27 +449,69 @@ public class InventoryController extends Controller
 
 
 	private void editStorageUnit(ITagable payload) {
+		IProductContainer StU = (IProductContainer) payload;
+		ProductContainerData pcd = (ProductContainerData)
+				payload.getTag();
+		renameProductContainerSorted(getRoot(), pcd, StU.getName().getValue());
+		// the following line is a hack because renameProductContainer doesn't 
+		// work properly
+		getView().setProductContainers(getRoot());
+		getView().selectProductContainer(pcd);
+		productContainerSelectionChanged();
 	}
 
+	private ProductContainerData getRoot()
+	{
+		return (ProductContainerData) getStorageUnitsManager().getTag();
+	}
+	
 	private void insertProductGroup(ITagable payload) {
         ProductContainerData pcd = (ProductContainerData) payload.getTag();
         ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
         IInventoryView v = getView();
+        insertProductContainerSorted(parent,pcd);
+        v.selectProductContainer(pcd);
+        productContainerSelectionChanged();
+	}
+
+	private void insertProductContainerSorted(
+			ProductContainerData parent, ProductContainerData pcd) {
+		IInventoryView v = getView();
         // insert product container in sorted order
-        int next;
-        for (next = 0; next < parent.getChildCount(); next++) {
-            System.out.println("test");
-            ProductContainerData existing = parent.getChild(next);
+        int next = getNewProductContainerIndex(parent,pcd);
+        v.insertProductContainer(parent, pcd, next);
+        // select product container
+	}
+	
+	private int getNewProductContainerIndex(
+			ProductContainerData parent,
+			ProductContainerData pcd)
+	{
+		int next;
+		// populating this list is for the case where we're renaming
+		List<ProductContainerData> lst = new ArrayList<ProductContainerData>
+			(parent.getChildCount());
+		for (next = 0; next < parent.getChildCount(); next++) {
+			if (!parent.getChild(next).equals(pcd))
+			{
+				lst.add(parent.getChild(next));
+			}
+		}
+		for (next = 0; next < lst.size(); next++) {
+            ProductContainerData existing = lst.get(next);
             String existingName = existing.getName();
             String pcdName = pcd.getName();
             if (existingName.compareTo(pcdName) > 0)
-                break;
+            	return next;
         }
-        System.out.println("parent.getChildCount():\t" + parent.getChildCount());
-        System.out.println("next:\t" + next);
-        v.insertProductContainer(parent, pcd, next);
-        // select product container
-        v.selectProductContainer(pcd);
+        return next;
+	}
+	
+	private void renameProductContainerSorted(
+			ProductContainerData parent,
+			ProductContainerData pcd, String newName) {
+		getView().renameProductContainer(pcd, newName,
+        		getNewProductContainerIndex(parent, pcd));
 	}
 
 	private void renameProductGroup(ITagable payload) {
@@ -502,23 +551,19 @@ public class InventoryController extends Controller
 
 	private void insertStorageUnit(ITagable payload) {
 		ProductContainerData pcd = (ProductContainerData) payload.getTag();
-		Model m = Model.getInstance();
-		StorageUnits su = m.getStorageUnits();
+		StorageUnits su = getStorageUnitsManager();
 		// get the root ProductContainerData object
 		ProductContainerData root = (ProductContainerData) su.getTag();
 		IInventoryView v = getView();
-		// insert product container in sorted order
-		int next;
-		for (next = 0; next < root.getChildCount(); next++) {
-			ProductContainerData existing = root.getChild(next);
-			String existingName = existing.getName();
-			String pcdName = pcd.getName();
-			if (existingName.compareTo(pcdName) > 0)
-				break;
-		}
-		v.insertProductContainer(root, pcd, next);
-		// select product container
+		insertProductContainerSorted(root, pcd);
 		v.selectProductContainer(pcd);
+		productContainerSelectionChanged();
+	}
+
+	private StorageUnits getStorageUnitsManager() {
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		return su;
 	}
 }
 
