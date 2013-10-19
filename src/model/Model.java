@@ -123,7 +123,7 @@ public class Model {
 
 	public void renameProductGroup(IProductContainer p)
 	{
-		storageUnits.renameProductGroup((ProductGroup)p);
+		storageUnits.changeStorageUnitName((ProductGroup)p, p.getName().toString());
 	}
 	
 	public IProduct createProduct(String barcode, String description, Quantity itemSize, Integer shelfLife, Integer threeMonthSupply)

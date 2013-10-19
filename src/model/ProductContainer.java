@@ -86,7 +86,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	public Collection<IItem> getItems(String productName) {
 		List<IItem> items = new ArrayList<IItem>();
 		for (IItem i : productItems.getItems()) {
-			Product p = i.getProduct();
+			IProduct p = i.getProduct();
 			String pName = p.getDescription().getValue();
 			if (pName == productName)
 				items.add(i);
@@ -95,7 +95,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	}
 	
 	public void add(IItem item) {
-		Product product = item.getProduct();
+		IProduct product = item.getProduct();
 		for (IProductContainer productContainer : productContainers) {
 			if(productContainer.contains(product)) {
 				productContainer.add(item);
@@ -138,7 +138,7 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	 * 
 	 * {@post true if product is contained in the ProductContainer. False otherwise. }
 	 */
-	public boolean contains(Product product)
+	public boolean contains(IProduct product)
 	{
 		return productItems.contains(product);
 	}

@@ -22,7 +22,7 @@ import gui.batches.*;
 import gui.common.*;
 
 
-@SuppressWarnings("serial")
+@SuppressWarnings("serial") 
 public class InventoryView extends View implements IInventoryView {
 
 	//-------------------------------

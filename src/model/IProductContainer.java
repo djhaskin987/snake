@@ -118,7 +118,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	boolean canAddItems();
 	boolean canRemoveItems();
 	boolean canDelete();
-	boolean contains(Product product);
+	boolean contains(IProduct product);
 	void add(IItem item);
 
 }

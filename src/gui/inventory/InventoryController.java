@@ -78,7 +78,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		return;
+		
 	}
 
 	//
@@ -90,6 +90,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
+		// As long as you're root, you can always do this
 		return true;
 	}
 
@@ -98,7 +99,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canAddItems() {
-		return true;
+		return getSelectedModelProductContainer().canAddItems();
 	}
 
 	/**
@@ -106,7 +107,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canTransferItems() {
-		return true;
+		return getStorageUnitsManager().canTransferItems();
 	}
 
 	/**
@@ -114,15 +115,23 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItems() {
-		return true;
+		System.out.println("Can remove items");
+		return getSelectedModelProductContainer().canRemoveItems();
 	}
-
+	
+	public IProductContainer getSelectedModelProductContainer()
+	{
+		ProductContainerData pcd = getView().getSelectedProductContainer();
+		IProductContainer pc = (IProductContainer) pcd.getTag();
+		return pc;
+	}
 	/**
 	 * Returns true iff the "Delete Storage Unit" menu item should be enabled.
 	 */
 	@Override
 	public boolean canDeleteStorageUnit() {
-		return true;
+		return getStorageUnitsManager().canDelete(
+				getView().getSelectedProductContainer().getName());
 	}
 
 	/**
@@ -130,6 +139,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteStorageUnit() {
+		getStorageUnitsManager().deleteStorageUnit(
+				getView().getSelectedProductContainer().getName());
 	}
 
 	/**
@@ -153,7 +164,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProductGroup() {
-		return true;
+		return getSelectedModelProductContainer().canDelete();
 	}
 
 	/**
@@ -175,6 +186,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteProductGroup() {
+		getSelectedModelProductContainer().getParent().deleteProductContainer(
+				getView().getSelectedProductContainer().getName());
 	}
 
 	/**
@@ -214,10 +227,8 @@ public class InventoryController extends Controller
 		for(IItem item : items) {
 			itemDatas[i] = (ItemData) item.getTag();
 			++i;
-
-			getView().setItems(itemDatas);
 		}
-	}
+		getView().setItems(itemDatas);	}
 
 	/**
 	 * This method is called when the selected item changes.
@@ -376,7 +387,7 @@ public class InventoryController extends Controller
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is
-        // observing is the StorageUnits instance
+		// observing is the StorageUnits instance
 		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();

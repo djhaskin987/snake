@@ -13,7 +13,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * serial version UID
 	 */
 	private static final long serialVersionUID = -3590780103998287913L;
-	private ProductContainer parentContainer;
+	private IProductContainer parentContainer;
 	private Quantity threeMonthSupply;
 	
 	/**
@@ -56,7 +56,7 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	}
 	
 	// internal
-	void setParent(ProductContainer container) {
+	void setParent(IProductContainer container) {
 		parentContainer = container;
 	}
 	
