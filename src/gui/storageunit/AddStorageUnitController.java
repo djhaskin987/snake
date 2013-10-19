@@ -85,8 +85,7 @@ public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitView v = getView();
 		String name = v.getStorageUnitName();
 		Model m = Model.getInstance();
-		StorageUnits s = m.getStorageUnits();
-		boolean isEnabled = s.canAddStorageUnit(name);
+		boolean isEnabled = m.canAddStorageUnit(name);
 		v.enableOK(isEnabled);
 	}
 	

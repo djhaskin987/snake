@@ -110,7 +110,7 @@ public class EditStorageUnitController extends Controller
 		Model m = Model.getInstance();
 		StorageUnits s = m.getStorageUnits();
 		IProductContainer StU = (IProductContainer) target.getTag();
-		s.changeStorageUnitName(StU,name);
+		m.changeStorageUnitName(StU,name);
 		
 		// no need for tagging, they're already tagged
 	}

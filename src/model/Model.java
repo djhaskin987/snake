@@ -1,12 +1,15 @@
 package model;
 
+import java.util.Observable;
+import java.util.Observer;
+
 
 /**
  * One true singleton.
  * When you serialize, this is the only singleton you need to worry about.
  *
  */
-public class Model {
+public class Model extends Observable implements Observer {
 	private static Model instance;
 	
 	private StorageUnits storageUnits;
@@ -40,6 +43,9 @@ public class Model {
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
+		storageUnits.addObserver(this);
+		productCollection.addObserver(this);
+		itemCollection.addObserver(this);
 	}
 	
 	/**
@@ -177,5 +183,51 @@ public class Model {
 		item.setProductContainer(productContainer);
 		productContainer.addItem(item);
 		itemCollection.add(item);
+	}
+
+
+	public boolean canAddStorageUnit(String name) {
+		return storageUnits.canAddStorageUnit(name);
+	}
+
+
+	public void changeStorageUnitName(IProductContainer StU, String name) {
+		storageUnits.changeStorageUnitName(StU, name);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		setChanged();
+		notifyObservers(arg);
+	}
+
+	public boolean canTransferItems() {
+		return storageUnits.canTransferItems();
+	}
+
+	public boolean canDeleteStorageUnit(String name) {
+		return storageUnits.canDelete(name);
+	}
+
+	public void deleteStorageUnit(String name) {
+		storageUnits.deleteStorageUnit(name);
+	}
+
+
+	public boolean canEditItem(String barcode) {
+		return true;
+		// FIXME
+	}
+
+
+	public boolean canEditProduct(String barcode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public boolean canRemoveItem() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

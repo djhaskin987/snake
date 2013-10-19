@@ -22,11 +22,10 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
-	private Tagable tagable;
 	
 	StorageUnits() {
-	   storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
-	   tagable = new Tagable();
+		super(new NonEmptyString("Storage Units"));
+		storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -161,6 +160,7 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		
 	}
 	
+
 	public IProductContainer getProductContainer(String name){
 		Collection<StorageUnit> StorageUnits= storageUnits.values();
 		
@@ -178,22 +178,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		}
 		return null;
 	}
-
-	@Override
-	public Object getTag() {
-		return tagable.getTag();
-	}
-
-	@Override
-	public void setTag(Object o) {
-		tagable.setTag(o);
-		
-	}
-
-	@Override
-	public boolean hasTag() {
-		return tagable.hasTag();
-	}
 	
 	private void notifyObservers(ModelActions action,
 			ITagable payload)
@@ -205,12 +189,11 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	}
 
 	public void addProductGroup(IProductContainer p) {
+		
 		notifyObservers(ModelActions.INSERT_PRODUCT_GROUP,
 				p);
 	}
 
-
-	
 	public boolean canAddStorageUnit(String name) {
 		return name != null &&
 				!name.isEmpty() &&
@@ -236,13 +219,8 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		notifyObservers(ModelActions.EDIT_STORAGE_UNIT,
 				stU);
 	}
-
-	public boolean canRemoveItem() {
-		
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
+	@Override
 	public boolean hasItems()
 	{
 		for (StorageUnit s : storageUnits.values())
@@ -255,6 +233,7 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		return false;
 	}
 	
+	@Override
 	public boolean hasItemsRecursive()
 	{
 		for (StorageUnit s : storageUnits.values())
@@ -264,16 +243,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 				return true;
 			}
 		}
-		return false;
-	}
-
-	public boolean canEditItem(String barcode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean canEditProduct(String barcode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

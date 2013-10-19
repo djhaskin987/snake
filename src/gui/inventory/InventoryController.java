@@ -37,8 +37,7 @@ public class InventoryController extends Controller
 
 
 	private void initObservers() {
-		StorageUnits storageUnitsManager = getStorageUnitsManager();
-		storageUnitsManager.addObserver(this);
+		Model.getInstance().addObserver(this);
 	}
 
 	/**
@@ -107,7 +106,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canTransferItems() {
-		return getStorageUnitsManager().canTransferItems();
+		return Model.getInstance().canTransferItems();
 	}
 
 	/**
@@ -130,7 +129,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteStorageUnit() {
-		return getStorageUnitsManager().canDelete(
+		return Model.getInstance().canDeleteStorageUnit(
 				getView().getSelectedProductContainer().getName());
 	}
 
@@ -139,7 +138,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteStorageUnit() {
-		getStorageUnitsManager().deleteStorageUnit(
+		Model.getInstance().deleteStorageUnit(
 				getView().getSelectedProductContainer().getName());
 	}
 
@@ -228,7 +227,8 @@ public class InventoryController extends Controller
 			itemDatas[i] = (ItemData) item.getTag();
 			++i;
 		}
-		getView().setItems(itemDatas);	}
+		getView().setItems(itemDatas);
+	}
 
 	/**
 	 * This method is called when the selected item changes.
@@ -258,7 +258,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditItem() {
-		return getStorageUnitsManager().canEditItem(
+		return Model.getInstance().canEditItem(
 				getView().getSelectedItem().getBarcode());
 	}
 
@@ -275,7 +275,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return getStorageUnitsManager().canRemoveItem();
+		return Model.getInstance().canRemoveItem();
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditProduct() {
-		return getStorageUnitsManager().canEditProduct(
+		return Model.getInstance().canEditProduct(
 				getView().getSelectedProduct().getBarcode());
 	}
 
@@ -517,8 +517,8 @@ public class InventoryController extends Controller
 	private void renameProductContainerSorted(
 			ProductContainerData parent,
 			ProductContainerData pcd, String newName) {
-		getView().renameProductContainer(pcd, newName,
-        		getNewProductContainerIndex(parent, pcd));
+			getView().renameProductContainer(pcd, newName,
+			getNewProductContainerIndex(parent, pcd));
 	}
 
 	private void renameProductGroup(ITagable payload) {
