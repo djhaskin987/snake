@@ -57,12 +57,18 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		if(getView().getSizeUnit() == SizeUnits.Count) {
+			getView().setSizeValue("1");
+			getView().enableSizeValue(false);
+		} else {
+			getView().enableSizeValue(true);
+		}
 		if(
 				Barcode.isValidBarcode(getView().getBarcode())
 				&& !getView().getDescription().isEmpty()
 				&& NumberUtils.isNumber(getView().getSizeValue())
-				&& Quantity.isValidQuantity(Double.parseDouble(getView().getSizeValue()), SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSizeUnit()))
-				&& (getView().getSizeUnit() != SizeUnits.Count || Double.parseDouble(getView().getSizeValue()) == 1)
+				//&& Quantity.isValidQuantity(Double.parseDouble(getView().getSizeValue()), SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSizeUnit()))
+				//&& (getView().getSizeUnit() != SizeUnits.Count || Double.parseDouble(getView().getSizeValue()) == 1)
 				&& NumberUtils.isDigits(getView().getShelfLife())
 				&& Integer.parseInt(getView().getShelfLife()) >= 0
 				&& NumberUtils.isDigits(getView().getSupply())
@@ -83,6 +89,7 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		enableComponents();
 		getView().enableBarcode(false);
 		getView().enableDescription(false);
 		getView().enableOK(false);

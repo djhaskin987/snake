@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import model.Barcode;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
 import model.InvalidHITDateException;
 import model.Model;
+import model.StorageUnit;
 import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
@@ -68,6 +72,18 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		if(
+				!getView().getUseScanner()
+				&& Barcode.isValidBarcode(getView().getBarcode())
+				&& NumberUtils.isDigits(getView().getCount())
+				&& Integer.parseInt(getView().getCount()) > 0
+				) {
+			getView().enableItemAction(true);
+		} else {
+			getView().enableItemAction(false);
+		}
+		getView().enableUndo(false);
+		getView().enableRedo(false);
 	}
 
 	/**
@@ -98,6 +114,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void countChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -113,6 +130,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -128,6 +146,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -166,6 +185,11 @@ public class AddItemBatchController extends Controller implements
 				return;
 			}
 		}
+		IProductContainer current = (IProductContainer) productContainerData.getTag();
+		while(!(current instanceof StorageUnit)) {
+			current = current.getParent();
+		}
+		String storageUnitName = current.getName().toString();
 		IItem item;
 		try {
 			item = Model.getInstance().createItem(product, getView().getEntryDate());
@@ -184,6 +208,7 @@ public class AddItemBatchController extends Controller implements
 				itemData.setExpirationDate(item.getExpireDate().toJavaUtilDate());
 			}
 			itemData.setProductGroup(productContainerData.getName());
+			itemData.setStorageUnit(storageUnitName);
 			itemData.setTag(item);
 			item.setTag(itemData);
 			//It might be best to wait until the window is closed.
@@ -205,6 +230,10 @@ public class AddItemBatchController extends Controller implements
 		products.add(productData);
 		getView().setProducts(products.toArray(new ProductData[0]));
 		getView().setItems(items);
+		
+		getView().setCount("1");
+		getView().setEntryDate(new java.util.Date());
+		
 	}
 	
 	/**

@@ -32,7 +32,7 @@ public class NonEmptyString implements Serializable, Comparable<NonEmptyString> 
 	/** Returns the value of the NonEmptyString.
 	 * {@pre The NonEmptyString is properly constructed.}
 	 * {@post The NonEmptyString remains unchanged.}
-	 * @return the value fo the NonEmptyString.
+	 * @return the value of the NonEmptyString.
 	 */
 	public final String getValue(){
 		return value;
@@ -41,13 +41,13 @@ public class NonEmptyString implements Serializable, Comparable<NonEmptyString> 
 	/** Returns the value of the NonEmptyString.
 	 * {@pre The NonEmptyString is properly constructed.}
 	 * {@post The NonEmptyString remains unchanged.}
-	 * @return the value fo the NonEmptyString.
+	 * @return the value of the NonEmptyString.
 	 */
 	public final String toString(){
 		return value;
 	}
 	
-	/** Returns the hash code fo the underlying string.
+	/** Returns the hash code of the underlying string.
 	 * {@pre The NonEmptyString is properly constructed.}
 	 * {@post The NonEmptyString remains unchanged.}
 	 * @return The hash code of the non-empty string's value.
