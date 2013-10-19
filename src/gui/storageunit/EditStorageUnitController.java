@@ -1,6 +1,8 @@
 package gui.storageunit;
 
+import model.IProductContainer;
 import model.Model;
+import model.StorageUnits;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -9,7 +11,7 @@ import gui.inventory.*;
  */
 public class EditStorageUnitController extends Controller 
 										implements IEditStorageUnitController {
-	
+	private ProductContainerData target;
 	/**
 	 * Constructor.
 	 * 
@@ -18,7 +20,7 @@ public class EditStorageUnitController extends Controller
 	 */
 	public EditStorageUnitController(IView view, ProductContainerData target) {
 		super(view);
-
+		this.target = target;
 		construct();
 	}
 
@@ -50,6 +52,7 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableOK(false);
 	}
 
 	/**
@@ -61,7 +64,7 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		//Needs work
+		getView().setStorageUnitName(target.getName());
 	}
 
 	//
@@ -81,6 +84,11 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
+		Model m = Model.getInstance();
+		StorageUnits s = m.getStorageUnits();
+		boolean isEnabled = s.canEditStorageUnit(getView().getStorageUnitName(),
+				(IProductContainer)target.getTag());
+		getView().enableOK(isEnabled);
 	}
 
 	/**
@@ -96,8 +104,13 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void editStorageUnit() {
-
-		//Needs work
+		IEditStorageUnitView v = getView();
+		String name = v.getStorageUnitName();
+		Model m = Model.getInstance();
+		StorageUnits s = m.getStorageUnits();
+		IProductContainer StU = (IProductContainer) target.getTag();
+		s.changeStorageUnitName(StU,name);
+		// no need for tagging, they're already tagged
 	}
 
 }

@@ -102,5 +102,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	public void enable();
 	
 	public void disable();
+	
+	public void setName(String name);
 
 }

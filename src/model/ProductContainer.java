@@ -2,6 +2,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import gui.common.*;
 
 /**
@@ -202,7 +203,7 @@ public abstract class ProductContainer implements IProductContainer {
 		productGroups.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
 	}
 	
-	public void setProductContainerName(String name){
+	public void setName(String name){
 		this.name = new NonEmptyString(name);
 	}
 
@@ -292,6 +293,7 @@ public abstract class ProductContainer implements IProductContainer {
 	{
 		tagable.setTag(o);
 	}
+	
 	
 	public boolean hasTag()
 	{
