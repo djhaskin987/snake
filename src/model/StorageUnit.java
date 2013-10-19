@@ -90,5 +90,4 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	public String getProductGroupName() {
 		return "";
 	}
-
 }
