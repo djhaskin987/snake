@@ -42,7 +42,7 @@ public class Barcode implements Serializable {
 	}
 	
 	// generates a random barcode for testing
-	Barcode()
+	public Barcode()
 	{
 		final int TEN = 10;
 		final int MAX_DIGITS = 12;

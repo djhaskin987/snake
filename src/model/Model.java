@@ -11,9 +11,11 @@ public class Model {
 	
 	private StorageUnits storageUnits;
 	private ProductCollection productCollection;
+	private ItemCollection itemCollection;
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
+	
 	
     /**
      * Singleton creation: Model, your one-stop shop
@@ -34,6 +36,7 @@ public class Model {
 	{
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
+		itemCollection = new ItemCollection();
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
@@ -70,6 +73,19 @@ public class Model {
 		this.productCollection = products;
 	}
 	
+	/**
+	 * 
+	 * @return the ProductCollection instance in this Model.
+	 */
+	public ItemCollection getItemCollection()
+	{
+		return itemCollection;
+	}
+	
+	
+	public void setItemCollection(ItemCollection items){
+		this.itemCollection = items;
+	}
 	/**
 	 * 
 	 * @return the ProductContainerFactory instance in this Model.
@@ -134,9 +150,17 @@ public class Model {
 	public void addProduct(IProduct product) {
 		productCollection.add(product);
 	}
+	
+	public void addItem(IItem item) {
+		itemCollection.add(item);
+	}
 
 	public IProduct getProduct(String barcode) {
 		return productCollection.getProduct(new Barcode(barcode));
+	}
+	
+	public IItem getItem(String barcode) {
+		return itemCollection.getItem(barcode);
 	}
 	
 	public IItem createItem(IProduct product, java.util.Date date) throws InvalidHITDateException {
@@ -145,12 +169,13 @@ public class Model {
 		if(product.getShelfLife() != 0) {
 			expireDate = entryDate.plusMonths(product.getShelfLife());
 		}
-		Barcode barcode = new Barcode();	//TODO: Is this right, or are there rules on making these?
+		Barcode barcode = new Barcode();
 		return itemFactory.createInstance(product, barcode, expireDate, null);
 	}
 
 	public void addItem(IItem item, IProductContainer productContainer) {
 		item.setProductContainer(productContainer);
 		productContainer.addItem(item);
+		itemCollection.add(item);
 	}
 }

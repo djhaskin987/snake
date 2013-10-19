@@ -1,5 +1,7 @@
 package gui.item;
 
+import model.Barcode;
+import model.IItem;
 import gui.common.*;
 
 /**
@@ -7,7 +9,7 @@ import gui.common.*;
  */
 public class EditItemController extends Controller 
 										implements IEditItemController {
-	
+		private ItemData target;
 	/**
 	 * Constructor.
 	 * 
@@ -16,6 +18,7 @@ public class EditItemController extends Controller
 	 */
 	public EditItemController(IView view, ItemData target) {
 		super(view);
+		this.target = target;
 
 		construct();
 	}
@@ -49,6 +52,11 @@ public class EditItemController extends Controller
 	@Override
 	protected void enableComponents() {
 	}
+	
+	private IItem getModelItem()
+	{
+		return (IItem) target.getTag();
+	}
 
 	/**
 	 * Loads data into the controller's view.
@@ -59,6 +67,9 @@ public class EditItemController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setBarcode(target.getBarcode());
+		getView().setDescription(getModelItem().getProduct().getDescription().getValue());
+		enableComponents();
 	}
 
 	//
@@ -78,6 +89,7 @@ public class EditItemController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**

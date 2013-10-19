@@ -58,6 +58,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setBarcode(new Barcode().getBarcode());
 	}
 
 	/**
