@@ -65,6 +65,7 @@ public class EditStorageUnitController extends Controller
 	@Override
 	protected void loadValues() {
 		getView().setStorageUnitName(target.getName());
+		valuesChanged();
 	}
 
 	//
@@ -110,6 +111,7 @@ public class EditStorageUnitController extends Controller
 		StorageUnits s = m.getStorageUnits();
 		IProductContainer StU = (IProductContainer) target.getTag();
 		s.changeStorageUnitName(StU,name);
+		
 		// no need for tagging, they're already tagged
 	}
 
