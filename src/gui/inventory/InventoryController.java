@@ -9,6 +9,7 @@ import java.util.*;
 import model.IContextPanelNode;
 import model.IItem;
 import model.IProduct;
+import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
 import model.StorageUnits;
@@ -186,11 +187,14 @@ public class InventoryController extends Controller
 		getView().setContextGroup(node.getProductGroupName());
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
-
-				productDataList.add(productData);
-			}
+		Collection<IProduct> products = node.getProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		int i=0;
+		for(IProduct product : products) {
+			productDatas[i] = (ProductData) product.getTag();
+			++i;
 		}
-		getView().setProducts(productDataList.toArray(new ProductData[0]));
+		getView().setProducts(productDatas);
 
 		getView().setItems(new ItemData[0]);
 	}
@@ -200,27 +204,19 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productSelectionChanged() {
-		List<ItemData> itemDataList = new ArrayList<ItemData>();
-		ProductData selectedProduct = getView().getSelectedProduct();
-		if (selectedProduct != null) {
-			Date now = new Date();
-			GregorianCalendar cal = new GregorianCalendar();
-			int itemCount = Integer.parseInt(selectedProduct.getCount());
-			for (int i = 1; i <= itemCount; ++i) {
-				cal.setTime(now);
-				ItemData itemData = new ItemData();
-				itemData.setBarcode(getRandomBarcode());
-				cal.add(Calendar.MONTH, -rand.nextInt(12));
-				itemData.setEntryDate(cal.getTime());
-				cal.add(Calendar.MONTH, 3);
-				itemData.setExpirationDate(cal.getTime());
-				itemData.setProductGroup("Some Group");
-				itemData.setStorageUnit("Some Unit");
+		ProductContainerData pcd = getView().getSelectedProductContainer();
+		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		ProductData productData = getView().getSelectedProduct();
+		Collection<IItem> items = node.getItems(productData.getDescription());
 
-				itemDataList.add(itemData);
-			}
+		ItemData[] itemDatas = new ItemData[items.size()];
+		int i=0;
+		for(IItem item : items) {
+			itemDatas[i] = (ItemData) item.getTag();
+			++i;
+
+			getView().setItems(itemDatas);
 		}
-		getView().setItems(itemDataList.toArray(new ItemData[0]));
 	}
 
 	/**

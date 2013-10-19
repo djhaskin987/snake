@@ -135,7 +135,7 @@ public class EditProductGroupController extends Controller
 		ProductGroup productGroup = (ProductGroup)productContainerData.getTag();
 		if(!productContainerData.getName().equals(getView().getProductGroupName())) {
 			productContainerData.setName(getView().getProductGroupName());
-			productGroup.setProductContainerName(getView().getProductGroupName());
+			productGroup.setName(getView().getProductGroupName());
 			//Resort
 		}
 		double value = Double.parseDouble(getView().getSupplyValue());

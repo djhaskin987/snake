@@ -91,4 +91,20 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		return "";
 	}
 
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public Unit getThreeMonthSupplyUnit() {
+		return null;
+	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public String getThreeMonthSupplyValueString() {
+		return "";
+	}
+
 }

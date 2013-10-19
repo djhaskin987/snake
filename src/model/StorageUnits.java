@@ -283,7 +283,22 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 
 	@Override
 	public IProductContainer getParent() {
-		// TODO Auto-generated method stub
 		return (IProductContainer) this;
+	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public Unit getThreeMonthSupplyUnit() {
+		return null;
+	}
+
+	/**
+	 * Does nothing.
+	 */
+	@Override
+	public String getThreeMonthSupplyValueString() {
+		return "";
 	}
 }
