@@ -25,6 +25,13 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	 */
 	public void addItem(IItem item);
 	
+	public boolean hasItems();
+	
+	/** 
+	 * Returns if there are any items in the entire recursive tree.
+	 */
+	public boolean hasItemsRecursive();
+	
 	/**
 	 * Allows program to add a ProductGroup to either a StorageUnit or a ProductGroup
 	 * @param productGroup
@@ -104,5 +111,10 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	public void disable();
 	
 	public void setName(String name);
+	boolean canAddItems();
+	boolean canRemoveItems();
+	boolean canDelete();
+	boolean contains(Product product);
+	void add(IItem item);
 
 }

@@ -2,6 +2,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Observable;
 
 import gui.common.*;
 
@@ -12,7 +13,7 @@ import gui.common.*;
  * @author Daniel Carrier
  *
  */
-public abstract class ProductContainer implements IProductContainer {
+public abstract class ProductContainer extends Observable implements IProductContainer {
 	/**
 	 * 
 	 */
@@ -20,13 +21,13 @@ public abstract class ProductContainer implements IProductContainer {
 	
 	protected NonEmptyString name;
 	protected ProductItems productItems;
-	protected ProductGroups productGroups;
+	protected ProductContainers productContainers;
 	private boolean enabled = false;
 	private Tagable tagable;
 
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
-		productGroups = new ProductGroups();
+		productContainers = new ProductContainers();
 		productItems = new ProductItems();
 		tagable = new Tagable();
 	}
@@ -48,8 +49,8 @@ public abstract class ProductContainer implements IProductContainer {
 		this.enabled = false;
 	}
 
-	public Collection<ProductGroup> getProductGroups() {
-		return productGroups.getProductGroups().values();
+	public Collection<IProductContainer> getProductContainers() {
+		return productContainers.getProductContainers().values();
 	}
 	
 	public NonEmptyString getName() {
@@ -95,14 +96,35 @@ public abstract class ProductContainer implements IProductContainer {
 	
 	public void add(IItem item) {
 		Product product = item.getProduct();
-		for (ProductGroup productGroup : productGroups) {
-			if(productGroup.contains(product)) {
-				productGroup.add(item);
+		for (IProductContainer productContainer : productContainers) {
+			if(productContainer.contains(product)) {
+				productContainer.add(item);
 				return;
 			}
 		}
 		productItems.addItem(item);
 		return;
+	}
+	
+	@Override
+	public boolean hasItems()
+	{
+		return productItems.getItems().size() > 0;
+	}
+	
+	@Override
+	public boolean hasItemsRecursive()
+	{
+		if (hasItems())
+			return true;
+		for (IProductContainer productContainer : productContainers)
+		{
+			if (productContainer.hasItemsRecursive())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -168,7 +190,7 @@ public abstract class ProductContainer implements IProductContainer {
 	@Override
 	public void addProductGroup(ProductGroup productGroup) {
 		productGroup.setParent(this);
-		productGroups.add(productGroup);
+		productContainers.add(productGroup);
 	}
 
 	
@@ -183,7 +205,7 @@ public abstract class ProductContainer implements IProductContainer {
 	 */
 	@Override
 	public void deleteProductContainer(String name) {
-		productGroups.remove(name);
+		productContainers.remove(name);
 	}
 
 	/**
@@ -200,7 +222,7 @@ public abstract class ProductContainer implements IProductContainer {
 	@Override
 	public void setProductContainer(String name,
 			ProductContainer productContainer) {
-		productGroups.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
+		productContainers.setProductGroup(new NonEmptyString(name), (ProductGroup)productContainer);
 	}
 	
 	public void setName(String name){
@@ -268,14 +290,14 @@ public abstract class ProductContainer implements IProductContainer {
 		if (hasProduct(this, name))
 			return this;
 		
-		for (ProductGroup pg : productGroups.getProductGroups().values()) {
-			if (hasProduct(pg, name))
-				return pg;
+		for (IProductContainer pc : productContainers.getProductContainers().values()) {
+			if (hasProduct(pc, name))
+				return pc;
 		}
 		return null;
 	}
 	
-	private static boolean hasProduct(ProductContainer pc, String name)
+	private static boolean hasProduct(IProductContainer pc, String name)
 	{
 		for (IProduct p : pc.getProducts()) {
 			if (p.getDescription().getValue() == name)
@@ -298,5 +320,23 @@ public abstract class ProductContainer implements IProductContainer {
 	public boolean hasTag()
 	{
 		return tagable.hasTag();
+	}
+	
+	@Override
+	public boolean canAddItems()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean canRemoveItems()
+	{
+		return hasItemsRecursive();
+	}
+	
+	@Override
+	public boolean canDelete()
+	{
+		return !hasItemsRecursive();
 	}
 }
