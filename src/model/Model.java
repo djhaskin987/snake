@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Observable;
+import gui.common.ITagable;
+import org.apache.commons.lang3.tuple.*;
 import java.util.Observer;
 
 
@@ -184,19 +186,14 @@ public class Model extends Observable implements Observer {
 		productContainer.addItem(item);
 		itemCollection.add(item);
 	}
-
-
-	public boolean canAddStorageUnit(String name) {
-		return storageUnits.canAddStorageUnit(name);
-	}
-
-
-	public void changeStorageUnitName(IProductContainer StU, String name) {
-		storageUnits.changeStorageUnitName(StU, name);
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
+	
+	public void transferItem(IItem item, IProductContainer target) {
+		IProductContainer current = item.getProductContainer();
+		current.transferItem(item, (ProductContainer)target);
+		ObservableArgs args = new ObservableArgs();
+		args.add(current);
+		args.add(target);
+		args.add(item);
 		setChanged();
 		notifyObservers(arg);
 	}

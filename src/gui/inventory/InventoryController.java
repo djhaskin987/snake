@@ -12,6 +12,9 @@ import model.IProduct;
 import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
+import model.NonEmptyString;
+import model.ObservableArgs;
+import model.ProductContainer;
 import model.StorageUnits;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -443,8 +446,10 @@ public class InventoryController extends Controller
 
 
 	private void transferItems(ITagable payload) {
-		// TODO Auto-generated method stub
-		
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		iData.setProductGroup(item.getProductGroupName());
+		iData.setStorageUnit(item.getStorageUnitName());
 	}
 
 

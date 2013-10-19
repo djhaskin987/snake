@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 /**
  * Tracks the products and items in a ProductContainer.
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author Daniel Carrier
  *
  */
-public class ProductItems implements Serializable {
+public class ProductItems extends Observable implements Serializable {
 	/**
 	 * 
 	 */
@@ -81,6 +82,7 @@ public class ProductItems implements Serializable {
 			map.remove(product);
 		} else {
 			itemList.remove(item);
+			
 		}
 	}
 

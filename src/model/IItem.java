@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author Kevin
  *
  */
-public interface IItem extends ITagable, Serializable{
+public interface IItem extends ITagable, Serializable {
 	
 	/**
 	 * Connects the IItem with a specific IProductContainer
@@ -65,5 +65,9 @@ public interface IItem extends ITagable, Serializable{
 	 * @return The unique ProductContainer that the IItem is inside
 	 */
 	public IProductContainer getProductContainer();
+	
+	public String getProductGroupName();
+	
+	public String getStorageUnitName();
 
 }

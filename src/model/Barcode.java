@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Random;
 
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
+
 import common.StringOps;
 
 /**
@@ -13,7 +16,7 @@ import common.StringOps;
  * @author Nathan Standiford
  */
 
-public class Barcode implements Serializable {
+public class Barcode extends VerticalPositionMark implements Serializable {
 	/**
 	 * 
 	 */
@@ -215,5 +218,9 @@ public class Barcode implements Serializable {
 	public int hashCode() {
 		final String uuid = "7247bc6f-6b5b-4833-ba21-a1af972da4af";
 		return uuid.hashCode() ^ this.barcode.hashCode();
+	}
+	
+	public void draw(PdfContentByte canvas, float llx, float lly, float urx, float ury, float y) {
+		
 	}
 }

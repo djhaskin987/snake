@@ -10,7 +10,7 @@ import gui.common.Tagable;
  *
  */
 
-public class Item extends Tagable implements IItem{
+public class Item extends Tagable implements IItem {
 
 	private static final long serialVersionUID = 8752461391777156867L;
 	
@@ -99,5 +99,29 @@ public class Item extends Tagable implements IItem{
 	@Override
 	public IProductContainer getProductContainer() {
 		return container;
+	}
+	@Override
+	public String getProductGroupName() {
+		if (container == null || container.getParent() == null) {
+			return null;
+		} else {
+			NonEmptyString nes = container.getName();
+			String val = nes.getValue();
+			return val;
+		}
+	}
+	@Override
+	public String getStorageUnitName() {
+		if (container == null) {
+			return null;
+		} else {
+			IProductContainer cur = container;
+			while (cur.getParent() != null) {
+				cur = cur.getParent();
+			}
+			NonEmptyString nes = cur.getName();
+			String val = nes.getValue();
+			return val;
+		}
 	}
 }

@@ -1,7 +1,9 @@
 package gui.batches;
 
+import model.*;
 import gui.common.*;
 import gui.inventory.*;
+import gui.item.ItemData;
 import gui.product.*;
 
 /**
@@ -9,6 +11,7 @@ import gui.product.*;
  */
 public class TransferItemBatchController extends Controller implements
 		ITransferItemBatchController {
+		private IProductContainer target;
 	
 	/**
 	 * Constructor.
@@ -18,7 +21,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	public TransferItemBatchController(IView view, ProductContainerData target) {
 		super(view);
-
+		this.target = (IProductContainer) target.getTag();
 		construct();
 	}
 	
@@ -113,6 +116,11 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void transferItem() {
+		ITransferItemBatchView v = getView();
+		ItemData iData = v.getSelectedItem();
+		IItem item = (IItem) iData.getTag();
+		Model m = Model.getInstance();
+		m.transferItem(item, target);
 	}
 	
 	/**
