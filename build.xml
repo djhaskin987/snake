@@ -28,6 +28,7 @@
 
 	<property name="checkstyle-home" location="${lib}/checkstyle-5.3"/>
 	<property name="apache-commons-lang-home" location="${lib}/commons-lang3-3.1"/>
+	<property name="functionaljava-home" location="${lib}/functionaljava"/>
 	<property name="style-reports" location="style-reports"/>
 	<property name="style-report-file" location="${style-reports}/checkstyle.txt"/>
 
@@ -90,6 +91,11 @@
 			<include name="commons-lang3-3.1.jar" />
 		</fileset>
 	</path>
+	<path id="functionaljava-classpath">
+		<fileset dir="${functionaljava-home}">
+			<include name="functionaljava.jar" />
+		</fileset>
+	</path>
 
 	<!-- ***************** -->
 	<!-- task definintions -->
@@ -134,12 +140,14 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="apache-commons-lang-classpath" />
+			<classpath refid="functionaljava-classpath" />
 		</javac>
 	</target>
 
 	<property name="itext.jar" value="lib/itext-5.1.0/itextpdf-5.1.0.jar"/>
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar" />
+    <property name="functionaljava.jar" value="lib/functionaljava/functionaljava/functionaljava.jar" />
 
 	<target name="package" depends="compile"
         description="package the jar file" >
@@ -158,7 +166,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="gui.main.GUI"/>
 				<attribute name="Class-Path"
-					value="${sqlite.jar} ${itext.jar} ${commons-lang.jar}" />
+                    value="${sqlite.jar} ${itext.jar} ${commons-lang.jar} ${functionaljava.jar}" />
 			</manifest>
 		</jar>
 	</target>
@@ -280,6 +288,7 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="apache-commons-lang-classpath" />
+			<classpath refid="functionaljava-classpath" />
 
 			<sysproperty key="net.sourceforge.cobertura.datafile"
 				value="${coverage-data-file}"/>
@@ -320,6 +329,7 @@
 		<javadoc destdir="${doc}" Package="true">
 			<classpath refid="itext-classpath" />
 			<classpath refid="apache-commons-lang-classpath" />
+            <classpath refid="functionaljava-classpath" />
 			<packageset dir="${src}">
 				<include name="common/**"/>
 				<include name="gui/**"/>
