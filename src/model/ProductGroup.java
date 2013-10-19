@@ -92,6 +92,17 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	}
 	
 	/**
+	 * @param threeMonthSupply
+	 * 
+	 * {@pre	n/a}
+	 * 
+	 * {@post	threMonthSupply is set to the given value}
+	 */
+	public void setThreeMonthSupply(Quantity threeMonthSupply) {
+		this.threeMonthSupply = threeMonthSupply;
+	}
+	
+	/**
 	 * Gets the product group name
 	 * 
 	 * @return the product group name
@@ -103,5 +114,15 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	@Override
 	public String getProductGroupName() {
 		return name.getValue();
+	}
+
+	@Override
+	public Unit getThreeMonthSupplyUnit() {
+		return threeMonthSupply.getUnit();
+	}
+
+	@Override
+	public String getThreeMonthSupplyValueString() {
+		return threeMonthSupply.getValueString();
 	}
 }

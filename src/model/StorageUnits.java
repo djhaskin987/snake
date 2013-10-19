@@ -53,7 +53,7 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	public void addStorageUnit(StorageUnit storageUnit){
 		storageUnits.put(storageUnit.getName(), storageUnit);
 		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_STORAGE_UNIT, (ITagable)storageUnit);
-		System.out.println("Number of Observers: " + countObservers());
+		//System.out.println("Number of Observers: " + countObservers());
 		setChanged();
 		notifyObservers(pair);
 	}
@@ -199,7 +199,14 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 
 	public void addProductGroup(ProductGroup p) {
 		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_PRODUCT_GROUP, (ITagable)p);
-		System.out.println("Number of Observers: " + countObservers());
+		//System.out.println("Number of Observers: " + countObservers());
+		setChanged();
+		notifyObservers(pair);
+	}
+	
+	public void renameProductGroup(ProductGroup p) {
+		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.RENAME_PRODUCT_GROUP, (ITagable)p);
+		//System.out.println("Number of Observers: " + countObservers());
 		setChanged();
 		notifyObservers(pair);
 	}

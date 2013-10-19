@@ -1,5 +1,7 @@
 package gui.productgroup;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import model.Model;
 import model.ProductGroup;
 import model.Quantity;
@@ -23,10 +25,8 @@ public class AddProductGroupController extends Controller implements
 	 */
 	public AddProductGroupController(IView view, ProductContainerData container) {
 		super(view);
-		
-		construct();
-		
 		parent = container;
+		construct();
 	}
 
 	//
@@ -44,10 +44,6 @@ public class AddProductGroupController extends Controller implements
 	protected IAddProductGroupView getView() {
 		return (IAddProductGroupView)super.getView();
 	}
-	
-	private boolean isValid(String str) {
-	  return str.matches("\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-	}
 
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
@@ -63,9 +59,10 @@ public class AddProductGroupController extends Controller implements
 	protected void enableComponents() {
 		if(
 				getView().getProductGroupName().equals("")
-				|| !isValid(getView().getSupplyValue())
-				|| Double.parseDouble(getView().getSupplyValue()) <= 0
-				|| getView().getSupplyUnit() == SizeUnits.Count && Double.parseDouble(getView().getSupplyValue()) != 1
+				|| !NumberUtils.isNumber(getView().getSupplyValue())
+				|| !Quantity.isValidQuantity(
+						Double.parseDouble(getView().getSupplyValue()),
+						SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit()))
 				) {
 			getView().enableOK(false);
 			return;
@@ -130,42 +127,7 @@ public class AddProductGroupController extends Controller implements
 		//IInventoryController inventoryController = InventoryController.getInventoryController();
 		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().getProductContainerFactory().createProductGroup(name);
 		//ProductContainerData parent = inventoryController.getSelectedProductContainer();
-		model.Unit unit;
-		switch(supplyUnit) {	//TODO: We need to put this somewhere else.
-		case Count:
-			unit = Unit.COUNT;
-			break;
-		case FluidOunces:
-			unit = Unit.FLOZ;
-			break;
-		case Gallons:
-			unit = Unit.GAL;
-			break;
-		case Grams:
-			unit = Unit.G;
-			break;
-		case Kilograms:
-			unit = Unit.KG;
-			break;
-		case Liters:
-			unit = Unit.LITER;
-			break;
-		case Ounces:
-			unit = Unit.OZ;
-			break;
-		case Pints:
-			unit = Unit.PINT;
-			break;
-		case Pounds:
-			unit = Unit.LBS;
-			break;
-		case Quarts:
-			unit = Unit.QUART;
-			break;
-		default:
-			unit = null;
-			break;
-		}
+		model.Unit unit = gui.common.SizeUnitsUnitConversion.sizeUnitsToUnit(supplyUnit);
 		Quantity quantity = new Quantity(Double.parseDouble(supplyValue), unit);
 		model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
 		gui.inventory.ProductContainerData child = new gui.inventory.ProductContainerData(name);

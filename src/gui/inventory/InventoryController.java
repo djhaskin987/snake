@@ -419,8 +419,8 @@ public class InventoryController extends Controller
 			case INSERT_PRODUCT_GROUP:
 				insertProductGroup(payload);
 				break;
-			case EDIT_PRODUCT_GROUP:
-				editProductGroup(payload);
+			case RENAME_PRODUCT_GROUP:
+				renameProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
@@ -496,7 +496,27 @@ public class InventoryController extends Controller
         v.selectProductContainer(pcd);
 	}
 
-	private void editProductGroup(ITagable payload) {
+	private void renameProductGroup(ITagable payload) {
+        ProductContainerData pcd = (ProductContainerData) payload.getTag();
+        Model m = Model.getInstance();
+        ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
+        IInventoryView v1 = getView();
+        // insert product container in sorted order
+        int index = 0;
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            ProductContainerData existing = parent.getChild(i);
+            if(existing == pcd) {
+            	continue;
+            }
+            index++;
+            String existingName = existing.getName();
+            String pcdName = pcd.getName();
+            if (existingName.compareTo(pcdName) > 0)
+                break;
+        }
+        v1.renameProductContainer(pcd, pcd.getName(), index);
+        // select product container
+        v1.selectProductContainer(pcd);
 
 	}
 

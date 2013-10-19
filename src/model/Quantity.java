@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 /**
  * Contains both numerical value and unit of measurement of
  * Product and Item unit quantities
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * @author Nathan Standiford
  */
 public class Quantity implements Serializable {
+	//TODO: Currently, this only allows a value of one if the unit is count. That should be true in item, but in other places it only needs to be an integer.
 	/**
 	 * the serial version id
 	 */
@@ -60,7 +62,7 @@ public class Quantity implements Serializable {
 	 */
 	public static boolean isValidQuantity(Double value, Unit unit)
 	{
-		return value != null && unit != null && (unit == Unit.COUNT && value == 1.0
+		return value != null && unit != null && (unit == Unit.COUNT && value % 1.0 == 0
                 || unit != Unit.COUNT && value > 0);
 		//return false;
 	}
@@ -138,6 +140,24 @@ public class Quantity implements Serializable {
 	 * {@post string of quantity}
 	 */	
 	public String getString() {
-		return value + " " + unit.name();
+		return getValueString() + " " + unit.name();
+	}
+	
+	/**
+	 * Gets a string representation of the value of the quantity
+	 * 
+	 * @return the string representation of the value of the quantity, as an integer if unit is count and two decimal digits otherwise.
+	 * 
+	 * {@pre unit != null && value !- null}
+	 * 
+	 * {@post string of value of quantity}
+	 */
+	public String getValueString() {
+		if(unit == Unit.COUNT) {
+			return Integer.toString(value.intValue());
+		} else {
+			DecimalFormat df = new DecimalFormat("#.00");
+			return df.format(value);
+		}
 	}
 }

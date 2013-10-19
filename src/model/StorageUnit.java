@@ -90,4 +90,32 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	public String getProductGroupName() {
 		return null;
 	}
+
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
+	@Override
+	public Unit getThreeMonthSupplyUnit() {
+		return null;
+	}
+
+	/**
+	 * Not used. Always returns null
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post null}
+	 */
+	@Override
+	public String getThreeMonthSupplyValueString() {
+		return null;
+	}
 }

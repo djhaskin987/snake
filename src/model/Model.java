@@ -1,7 +1,5 @@
 package model;
 
-import gui.inventory.ProductContainerData;
-
 
 /**
  * One true singleton.
@@ -118,9 +116,13 @@ public class Model {
 		return productGroup;
 	}
 
-
 	public void addProductGroup(IProductContainer p)
 	{
 		storageUnits.addProductGroup((ProductGroup)p);
+	}
+
+	public void renameProductGroup(IProductContainer p)
+	{
+		storageUnits.renameProductGroup((ProductGroup)p);
 	}
 }

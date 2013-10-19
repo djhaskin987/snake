@@ -102,5 +102,9 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	public void enable();
 	
 	public void disable();
+	
+	public Unit getThreeMonthSupplyUnit();
+	
+	public String getThreeMonthSupplyValueString();
 
 }

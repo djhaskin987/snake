@@ -1,5 +1,12 @@
 package gui.productgroup;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import model.IProductContainer;
+import model.Model;
+import model.ProductGroup;
+import model.Quantity;
+import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -8,6 +15,8 @@ import gui.inventory.*;
  */
 public class EditProductGroupController extends Controller 
 										implements IEditProductGroupController {
+
+	private ProductContainerData productContainerData;
 	
 	/**
 	 * Constructor.
@@ -17,7 +26,7 @@ public class EditProductGroupController extends Controller
 	 */
 	public EditProductGroupController(IView view, ProductContainerData target) {
 		super(view);
-
+		productContainerData = target;
 		construct();
 	}
 
@@ -49,6 +58,31 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
+		IProductContainer productContainer = ((IProductContainer) productContainerData.getTag());
+		IProductContainer parent = productContainer.getParent();
+		ProductContainerData parentData = (ProductContainerData) parent.getTag();
+		if(
+				getView().getProductGroupName().equals("")
+				|| !NumberUtils.isNumber(getView().getSupplyValue())
+				|| !Quantity.isValidQuantity(
+						Double.parseDouble(getView().getSupplyValue()),
+						SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit()))
+				) {
+			getView().enableOK(false);
+			return;
+		}
+		if(getView().getProductGroupName().equals(productContainerData.getName())) {
+			getView().enableOK(true);
+			return;
+		}
+		for(int i=0; i<parentData.getChildCount(); ++i) {
+			if(getView().getProductGroupName().equals(parentData.getChild(i).getName())) {
+				getView().enableOK(false);
+				return;
+			}
+		}
+		getView().enableOK(true);
+		return;
 	}
 
 	/**
@@ -60,6 +94,10 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
+		ProductGroup productGroup = (ProductGroup)productContainerData.getTag();
+		getView().setProductGroupName(productGroup.getName().toString());
+		getView().setSupplyUnit(SizeUnitsUnitConversion.unitToSizeUnits(productGroup.getThreeMonthSupplyUnit()));
+		getView().setSupplyValue(productGroup.getThreeMonthSupplyValueString());
 	}
 
 	//
@@ -79,6 +117,7 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -89,10 +128,21 @@ public class EditProductGroupController extends Controller
 	 * 
 	 * {@pre None}
 	 * 
-	 * {@post product grou is altered and view is refreshed}
+	 * {@post product group is altered and view is refreshed}
 	 */
 	@Override
 	public void editProductGroup() {
+		ProductGroup productGroup = (ProductGroup)productContainerData.getTag();
+		if(!productContainerData.getName().equals(getView().getProductGroupName())) {
+			productContainerData.setName(getView().getProductGroupName());
+			productGroup.setProductContainerName(getView().getProductGroupName());
+			//Resort
+		}
+		double value = Double.parseDouble(getView().getSupplyValue());
+		Unit unit = gui.common.SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit());
+		Quantity threeMonthSupply = new Quantity(value, unit);
+		productGroup.setThreeMonthSupply(threeMonthSupply);
+		Model.getInstance().renameProductGroup(productGroup);
 	}
 
 }
