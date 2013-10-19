@@ -125,4 +125,32 @@ public class Model {
 	{
 		storageUnits.renameProductGroup((ProductGroup)p);
 	}
+	
+	public IProduct createProduct(String barcode, String description, Quantity itemSize, Integer shelfLife, Integer threeMonthSupply)
+	{
+		return productFactory.createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
+	}
+
+	public void addProduct(IProduct product) {
+		productCollection.add(product);
+	}
+
+	public IProduct getProduct(String barcode) {
+		return productCollection.getProduct(new Barcode(barcode));
+	}
+	
+	public IItem createItem(IProduct product, java.util.Date date) throws InvalidHITDateException {
+		ValidDate entryDate = new ValidDate(date);
+		Date expireDate = null;
+		if(product.getShelfLife() != 0) {
+			expireDate = entryDate.plusMonths(product.getShelfLife());
+		}
+		Barcode barcode = new Barcode();	//TODO: Is this right, or are there rules on making these?
+		return itemFactory.createInstance(product, barcode, expireDate, null);
+	}
+
+	public void addItem(IItem item, IProductContainer productContainer) {
+		item.setProductContainer(productContainer);
+		productContainer.addItem(item);
+	}
 }

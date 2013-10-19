@@ -37,7 +37,7 @@ public interface IContextPanelNode {
 	public String getProductGroupName();
 	
 	/**
-	 * Get's all items related to a specific Product
+	 * Gets all items related to a specific Product
 	 * 
 	 * @param productName String Name of a Product 
 	 * 

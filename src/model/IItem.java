@@ -1,5 +1,7 @@
 package model;
 
+import gui.common.ITagable;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * @author Kevin
  *
  */
-public interface IItem extends Serializable{
+public interface IItem extends ITagable, Serializable{
 	
 	/**
 	 * Connects the IItem with a specific IProductContainer
@@ -31,7 +33,7 @@ public interface IItem extends Serializable{
 	 * Indicates what type of Product the IItem is
 	 * @return Product type of the Item
 	 */
-	public Product getProduct();
+	public IProduct getProduct();
 	
 	/**
 	 * The barcode corresponding with the IItem

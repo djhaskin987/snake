@@ -1,5 +1,12 @@
 package gui.product;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import model.Barcode;
+import model.IProduct;
+import model.Model;
+import model.Quantity;
+import model.Unit;
 import gui.common.*;
 
 /**
@@ -7,6 +14,8 @@ import gui.common.*;
  */
 public class AddProductController extends Controller implements
 		IAddProductController {
+	
+	String barcode;
 	
 	/**
 	 * Constructor.
@@ -16,7 +25,7 @@ public class AddProductController extends Controller implements
 	 */
 	public AddProductController(IView view, String barcode) {
 		super(view);
-		
+		this.barcode = barcode;
 		construct();
 	}
 
@@ -48,6 +57,21 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		if(
+				Barcode.isValidBarcode(getView().getBarcode())
+				&& !getView().getDescription().isEmpty()
+				&& NumberUtils.isNumber(getView().getSizeValue())
+				&& Quantity.isValidQuantity(Double.parseDouble(getView().getSizeValue()), SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSizeUnit()))
+				&& (getView().getSizeUnit() != SizeUnits.Count || Double.parseDouble(getView().getSizeValue()) == 1)
+				&& NumberUtils.isDigits(getView().getShelfLife())
+				&& Integer.parseInt(getView().getShelfLife()) >= 0
+				&& NumberUtils.isDigits(getView().getSupply())
+				&& Integer.parseInt(getView().getSupply()) >= 0
+				) {
+			getView().enableOK(true);
+		} else {
+			getView().enableOK(false);
+		}
 	}
 
 	/**
@@ -59,6 +83,24 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().enableBarcode(false);
+		getView().enableDescription(false);
+		getView().enableOK(false);
+		getView().setBarcode(barcode);
+		getView().setDescription("Identifying Product – Please Wait");
+		
+		//Until I can figure out how to make the view visible, this next part will just be annoying.
+		/*try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		getView().setDescription("");
+		getView().enableDescription(true);
+		//TODO: Is the barcode ever enabled?
+		
 	}
 
 	//
@@ -78,6 +120,7 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -92,6 +135,31 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void addProduct() {
+		/*ProductData productData = new ProductData();
+		productData.setBarcode(getView().getBarcode());
+		productData.setDescription(getView().getDescription());
+		productData.setSize(getView().getSizeValue() + " " + getView().getSizeUnit());*/
+		
+		String barcode = getView().getBarcode();
+		String description = getView().getDescription();
+		double sizeValue = Double.parseDouble(getView().getSizeValue());
+		Unit sizeUnit = SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSizeUnit());
+		Quantity itemSize = new Quantity(sizeValue, sizeUnit);
+		int shelfLife = Integer.parseInt(getView().getShelfLife());
+		int threeMonthSupply = Integer.parseInt(getView().getSupply());
+		IProduct product = Model.getInstance().createProduct(barcode, description, itemSize, shelfLife, threeMonthSupply);
+		
+		ProductData productData = new ProductData();
+		productData.setBarcode(barcode);
+		productData.setDescription(description);
+		productData.setSize(itemSize.getString());
+		productData.setShelfLife(Integer.toString(shelfLife));
+		productData.setSupply(Integer.toString(threeMonthSupply));
+		
+		productData.setTag(product);
+		product.setTag(productData);
+		
+		Model.getInstance().addProduct(product);
 	}
 
 }

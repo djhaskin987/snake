@@ -117,6 +117,30 @@ public class Date extends AbstractDateTime {
 		calendar = new GregorianCalendar(year, month, day);
 	}
 	
+	public Date(java.util.Date date) {
+		calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+	
+	public Date(GregorianCalendar calendar) {
+		this.calendar = calendar;
+	}
+	
+	public Date plusMonths(int months) {
+		GregorianCalendar newCalendar = (GregorianCalendar) calendar.clone();
+		newCalendar.add(Calendar.MONTH, months);
+		Date date = new Date(newCalendar);
+		return date;
+	}
+	
+	public java.util.Date toJavaUtilDate() {
+		return calendar.getTime();
+	}
+	
 	/**
 	 * Gives the date in mm/dd/yyyy format.
 	 */

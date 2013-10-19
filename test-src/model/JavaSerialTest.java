@@ -51,7 +51,7 @@ public class JavaSerialTest {
 		Integer shelfLife = 0;
 		Integer threeMonthSupply = 0;
 		
-		Product product1 = new Product(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		Product product1 = new Product(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		Model.getInstance().getProductCollection().add(product1);
 		
 		

@@ -10,7 +10,7 @@ public class ItemTest {
 
 	@Test
 	public void test() {
-		Product product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1, new ArrayList<ProductContainer>());
+		Product product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode("123456789012");
 		Date expireDate = new Date();
 		IProductContainer container = (IProductContainer) new StorageUnit();

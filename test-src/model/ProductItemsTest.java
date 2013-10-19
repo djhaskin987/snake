@@ -9,8 +9,8 @@ public class ProductItemsTest {
 	@Test
 	public void test() {
 		ProductItems productItems = new ProductItems();
-		Product product0 = new Product(null, null, null, 0, 0, null);
-		Product product1 = new Product(null, null, null, 0, 0, null);
+		Product product0 = new Product(null, null, null, 0, 0);
+		Product product1 = new Product(null, null, null, 0, 0);
 		Item item00 = new Item(product0, null, null, null);
 		Item item01 = new Item(product0, null, null, null);
 		Item item10 = new Item(product1, null, null, null);

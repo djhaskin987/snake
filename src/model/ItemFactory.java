@@ -29,7 +29,7 @@ public class ItemFactory {
       return instance;
     }
 	
-	
+
 	/**
 	 * Acts as the constructor for the Item class
 	 * 
@@ -47,9 +47,32 @@ public class ItemFactory {
 	 * 
 	 * {@post an Item instance}
 	 */
-	public IItem createInstance(Product product, Barcode barcode,
+	public IItem createInstance(IProduct product, Barcode barcode,
             Date expireDate, IProductContainer container) {
 		return new Item(product, barcode, expireDate, container);
+	}
+	/**
+	 * Acts as the constructor for the Item class
+	 * 
+	 * @param product the product
+	 * 
+	 * @param barcode the barcode
+	 * 
+	 * @param entryDate the entry date
+	 * 
+	 * @param expireDate the expire date
+	 * 
+	 * @param container the container
+	 * 
+	 * @return an item
+	 * 
+	 * {@pre See Item}
+	 * 
+	 * {@post an Item instance}
+	 */
+	public IItem createInstance(Product product, Barcode barcode,
+            ValidDate entryDate, Date expireDate, IProductContainer container) {
+		return new Item(product, barcode, entryDate, expireDate, container);
 	}
 
 }

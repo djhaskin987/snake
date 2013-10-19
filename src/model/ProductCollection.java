@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Observable;
 import java.util.TreeMap;
 
 /**
@@ -12,7 +13,7 @@ import java.util.TreeMap;
  * @invariant all the Products are added both to StorageUnits and this class.
  *
  */
-public class ProductCollection implements Serializable{
+public class ProductCollection extends Observable implements Serializable{
 
     private static final long serialVersionUID = 414358389788920747L;
 
@@ -44,7 +45,7 @@ public class ProductCollection implements Serializable{
      * {@post the specified product is added to this ProductCollection.}
      * @param product to be added to collection
      */
-    public void add(Product product){
+    public void add(IProduct product){
         this.products.put(product.getBarcode().getBarcode(), product);
     }
     

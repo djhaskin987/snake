@@ -30,11 +30,11 @@ public class ProductCollectionTest {
         product0 = new Product(new Barcode("036000291452"),
                         new NonEmptyString("Soups"),
                         null,
-                        new Integer(12), new Integer(24), null);
+                        new Integer(12), new Integer(24));
         product1 = new Product(new Barcode("001010101015"),
                 new NonEmptyString("Sandwiches"),
                 null,
-                new Integer(13), new Integer(2), null);
+                new Integer(13), new Integer(2));
         item0 = new Item(product0, null, null, null);
         item1 = new Item(product0, null, null, null);
         item2 = new Item(product1, null, null, null);

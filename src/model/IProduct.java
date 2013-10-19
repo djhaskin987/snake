@@ -1,5 +1,7 @@
 package model;
 
+import gui.common.ITagable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * @author Kevin
  *
  */
-public interface IProduct extends Serializable {
+public interface IProduct extends Serializable, ITagable {
 
 	/**
 	 * This must be a NonEmptyString

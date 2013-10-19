@@ -40,10 +40,16 @@ public class ProductFactory {
 	 * @return A Product
 	 * {@post a Product has been created}
 	 */
-	public IProduct createInstance(Barcode barcode, NonEmptyString description, Quantity itemSize, 
-			Integer shelfLife, Integer threeMonthSupply, List<ProductContainer> containers){
+	public IProduct createInstance(String barcode, String description, Quantity itemSize, 
+			Integer shelfLife, Integer threeMonthSupply){
 		
-		return new Product(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		return new Product(new Barcode(barcode), new NonEmptyString(description), itemSize, shelfLife, threeMonthSupply);
+	}
+
+	public IProduct createInstance(Barcode barcode, NonEmptyString description,
+			Quantity itemSize, Integer shelfLife, Integer threeMonthSupply) {
+
+		return new Product(barcode, description, itemSize, shelfLife, threeMonthSupply);
 	}
 
 }

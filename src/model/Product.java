@@ -1,5 +1,8 @@
 package model;
 
+import gui.common.Tagable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +10,7 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class Product implements IProduct{
+public class Product extends Tagable implements IProduct{
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
 	private Barcode barcode;
@@ -27,14 +30,14 @@ public class Product implements IProduct{
 	 * {@post a Product is created}
 	 */
 	public Product(Barcode aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
-			Integer aShelfLife, Integer aThreeMonthSupply, List<ProductContainer> aContainers){
+			Integer aShelfLife, Integer aThreeMonthSupply){
 		this.creation = new ValidDate();
 		this.barcode = aBarcode;
 		this.description = aDescription;
 		this.itemSize = aItemSize;
 		this.shelfLife = aShelfLife;
 		this.threeMonthSupply = aThreeMonthSupply;
-		this.containers = aContainers;
+		this.containers = new ArrayList<ProductContainer>();
 	}
 	
 	/**

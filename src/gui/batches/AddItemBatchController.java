@@ -1,7 +1,18 @@
 package gui.batches;
 
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import model.IItem;
+import model.IProduct;
+import model.IProductContainer;
+import model.InvalidHITDateException;
+import model.Model;
 import gui.common.*;
 import gui.inventory.*;
+import gui.item.ItemData;
+import gui.main.GUI;
 import gui.product.*;
 
 /**
@@ -10,6 +21,9 @@ import gui.product.*;
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 
+	ProductContainerData productContainerData;
+	ArrayList<ProductData> products;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -18,7 +32,8 @@ public class AddItemBatchController extends Controller implements
 	 */
 	public AddItemBatchController(IView view, ProductContainerData target) {
 		super(view);
-		
+		productContainerData = target;
+		products = new ArrayList<ProductData>();
 		construct();
 	}
 
@@ -128,6 +143,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
+		getView().setItems((ItemData[]) getView().getSelectedProduct().getTag());
 	}
 
 	/**
@@ -142,6 +158,53 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void addItem() {
+		IProduct product = Model.getInstance().getProduct(getView().getBarcode());
+		if(product == null) {
+			getView().displayAddProductView();
+			product = Model.getInstance().getProduct(getView().getBarcode());
+			if(product == null) {
+				return;
+			}
+		}
+		IItem item;
+		try {
+			item = Model.getInstance().createItem(product, getView().getEntryDate());
+		} catch (InvalidHITDateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		int count = Integer.parseInt(getView().getCount());
+		ItemData[] items = new ItemData[count];
+		for(int i=0; i<count; ++i) {
+			ItemData itemData = new ItemData();
+			itemData.setBarcode(item.getBarcode().getBarcode());
+			itemData.setEntryDate(getView().getEntryDate());
+			if(item.getExpireDate() != null) {
+				itemData.setExpirationDate(item.getExpireDate().toJavaUtilDate());
+			}
+			itemData.setProductGroup(productContainerData.getName());
+			itemData.setTag(item);
+			item.setTag(itemData);
+			//It might be best to wait until the window is closed.
+			//Model.getInstance().addItem(item, (IProductContainer) productContainerData.getTag());
+			items[i] = itemData;
+		}
+		ProductData baseProductData = (ProductData) product.getTag();
+		ProductData productData = new ProductData();
+		productData.setBarcode(baseProductData.getBarcode());
+		productData.setDescription(baseProductData.getDescription());
+		productData.setShelfLife(baseProductData.getShelfLife());
+		productData.setSize(baseProductData.getSize());
+		productData.setSupply(baseProductData.getSupply());
+
+		productData.setCount(getView().getCount());
+
+		productData.setTag(items);
+		
+		products.add(productData);
+		getView().setProducts(products.toArray(new ProductData[0]));
+		getView().setItems(items);
 	}
 	
 	/**
@@ -172,6 +235,11 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void done() {
+		for(ProductData product : products) {
+			for(ItemData item : (ItemData[]) product.getTag()) {
+				Model.getInstance().addItem((IItem) item.getTag(), (IProductContainer) productContainerData.getTag());
+			}
+		}
 		getView().close();
 	}
 	

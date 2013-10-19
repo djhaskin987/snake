@@ -80,11 +80,12 @@ public abstract class ProductContainer implements IProductContainer {
 	 * 
 	 * {@post a list of items}
 	 */
+	//TODO: Something is seriously wrong here. Can we just pass in the product, rather than its name? Even without that, we can look through the products instead of the items.
     @Override
 	public Collection<IItem> getItems(String productName) {
 		List<IItem> items = new ArrayList<IItem>();
 		for (IItem i : productItems.getItems()) {
-			Product p = i.getProduct();
+			IProduct p = i.getProduct();
 			String pName = p.getDescription().getValue();
 			if (pName == productName)
 				items.add(i);
@@ -93,7 +94,7 @@ public abstract class ProductContainer implements IProductContainer {
 	}
 	
 	public void add(IItem item) {
-		Product product = item.getProduct();
+		IProduct product = item.getProduct();
 		for (ProductGroup productGroup : productGroups) {
 			if(productGroup.contains(product)) {
 				productGroup.add(item);
@@ -115,7 +116,7 @@ public abstract class ProductContainer implements IProductContainer {
 	 * 
 	 * {@post true if product is contained in the ProductContainer. False otherwise. }
 	 */
-	public boolean contains(Product product)
+	public boolean contains(IProduct product)
 	{
 		return productItems.contains(product);
 	}

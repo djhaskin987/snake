@@ -30,9 +30,8 @@ public class IProductTest {
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
 		Integer threeMonthSupply = 0;
-		List<ProductContainer> containers = null;
 		
-		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		assertTrue(test.getDescription().toString().equals("Can of Coca-Cola"));
 		assertTrue(test.getBarcode().getBarcode().toString().equals("123456789012"));
 		assertTrue(test.getItemSize().getUnit().equals(Unit.FLOZ));
@@ -45,9 +44,8 @@ public class IProductTest {
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
 		Integer threeMonthSupply = 0;
-		List<ProductContainer> containers = null;
 		
-		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		
 		assertTrue(test.getShelfLife() == 0);
 		try {
@@ -72,9 +70,8 @@ public class IProductTest {
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
 		Integer threeMonthSupply = 0;
-		List<ProductContainer> containers = null;
 		
-		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		
 		assertTrue(test.getThreeMonthSupply() == 0);
 		try {
@@ -98,9 +95,8 @@ public class IProductTest {
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
 		Integer threeMonthSupply = 0;
-		List<ProductContainer> containers = null;
 		
-		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply, containers);
+		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		assertTrue(test.getDescription().toString().equals("Can of Coca-Cola"));
 		test.setDescription(new NonEmptyString("Can of Pepsi"));
 		assertTrue(test.getDescription().toString().equals("Can of Pepsi"));
