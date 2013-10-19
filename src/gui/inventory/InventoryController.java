@@ -7,6 +7,7 @@ import gui.product.*;
 import java.util.*;
 
 import model.IContextPanelNode;
+import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
 import model.StorageUnits;
@@ -34,8 +35,7 @@ public class InventoryController extends Controller
 
 
 	private void initObservers() {
-		Model model = Model.getInstance();
-		StorageUnits storageUnitsManager = model.getStorageUnits();
+		StorageUnits storageUnitsManager = getStorageUnitsManager();
 		storageUnitsManager.addObserver(this);
 	}
 
@@ -277,7 +277,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditItem() {
-		return true;
+		return getStorageUnitsManager().canEditItem(
+				getView().getSelectedItem().getBarcode());
 	}
 
 	/**
@@ -293,7 +294,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return true;
+		return getStorageUnitsManager().canRemoveItem();
 	}
 
 	/**
@@ -308,7 +309,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditProduct() {
-		return true;
+		return getStorageUnitsManager().canEditProduct(
+				getView().getSelectedProduct().getBarcode());
 	}
 
 	/**
@@ -404,7 +406,7 @@ public class InventoryController extends Controller
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is
-        // observing is the StorageUnits instance
+		// observing is the StorageUnits instance
 		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();
@@ -450,50 +452,84 @@ public class InventoryController extends Controller
 		
 	}
 
-
-
 	private void removeItems(ITagable payload) {
 		// TODO Auto-generated method stub
 		
 	}
-
-
 
 	private void transferItems(ITagable payload) {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-
 	private void editProduct(ITagable payload) {
 		
 	}
 
-
-
 	private void editStorageUnit(ITagable payload) {
+		IProductContainer StU = (IProductContainer) payload;
+		ProductContainerData pcd = (ProductContainerData)
+				payload.getTag();
+		renameProductContainerSorted(getRoot(), pcd, StU.getName().getValue());
+		// the following line is a hack because renameProductContainer doesn't 
+		// work properly
+		getView().setProductContainers(getRoot());
+		getView().selectProductContainer(pcd);
+		productContainerSelectionChanged();
 	}
 
+	private ProductContainerData getRoot()
+	{
+		return (ProductContainerData) getStorageUnitsManager().getTag();
+	}
+	
 	private void insertProductGroup(ITagable payload) {
         ProductContainerData pcd = (ProductContainerData) payload.getTag();
         ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
         IInventoryView v = getView();
+        insertProductContainerSorted(parent,pcd);
+        v.selectProductContainer(pcd);
+        productContainerSelectionChanged();
+	}
+
+	private void insertProductContainerSorted(
+			ProductContainerData parent, ProductContainerData pcd) {
+		IInventoryView v = getView();
         // insert product container in sorted order
-        int next;
-        for (next = 0; next < parent.getChildCount(); next++) {
-            System.out.println("test");
-            ProductContainerData existing = parent.getChild(next);
+        int next = getNewProductContainerIndex(parent,pcd);
+        v.insertProductContainer(parent, pcd, next);
+        // select product container
+	}
+	
+	private int getNewProductContainerIndex(
+			ProductContainerData parent,
+			ProductContainerData pcd)
+	{
+		int next;
+		// populating this list is for the case where we're renaming
+		List<ProductContainerData> lst = new ArrayList<ProductContainerData>
+			(parent.getChildCount());
+		for (next = 0; next < parent.getChildCount(); next++) {
+			if (!parent.getChild(next).equals(pcd))
+			{
+				lst.add(parent.getChild(next));
+			}
+		}
+		for (next = 0; next < lst.size(); next++) {
+            ProductContainerData existing = lst.get(next);
             String existingName = existing.getName();
             String pcdName = pcd.getName();
             if (existingName.compareTo(pcdName) > 0)
-                break;
+            	return next;
         }
-        System.out.println("parent.getChildCount():\t" + parent.getChildCount());
-        System.out.println("next:\t" + next);
-        v.insertProductContainer(parent, pcd, next);
-        // select product container
-        v.selectProductContainer(pcd);
+        return next;
+	}
+	
+	private void renameProductContainerSorted(
+			ProductContainerData parent,
+			ProductContainerData pcd, String newName) {
+		getView().renameProductContainer(pcd, newName,
+        		getNewProductContainerIndex(parent, pcd));
 	}
 
 	private void editProductGroup(ITagable payload) {
@@ -514,23 +550,19 @@ public class InventoryController extends Controller
 
 	private void insertStorageUnit(ITagable payload) {
 		ProductContainerData pcd = (ProductContainerData) payload.getTag();
-		Model m = Model.getInstance();
-		StorageUnits su = m.getStorageUnits();
+		StorageUnits su = getStorageUnitsManager();
 		// get the root ProductContainerData object
 		ProductContainerData root = (ProductContainerData) su.getTag();
 		IInventoryView v = getView();
-		// insert product container in sorted order
-		int next;
-		for (next = 0; next < root.getChildCount(); next++) {
-			ProductContainerData existing = root.getChild(next);
-			String existingName = existing.getName();
-			String pcdName = pcd.getName();
-			if (existingName.compareTo(pcdName) > 0)
-				break;
-		}
-		v.insertProductContainer(root, pcd, next);
-		// select product container
+		insertProductContainerSorted(root, pcd);
 		v.selectProductContainer(pcd);
+		productContainerSelectionChanged();
+	}
+
+	private StorageUnits getStorageUnitsManager() {
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		return su;
 	}
 }
 

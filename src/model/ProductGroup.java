@@ -104,4 +104,5 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	public String getProductGroupName() {
 		return name.getValue();
 	}
+
 }

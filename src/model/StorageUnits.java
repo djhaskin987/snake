@@ -6,7 +6,6 @@ package model;
  */
 import gui.common.ITagable;
 import gui.common.Tagable;
-import gui.inventory.ProductContainerData;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -52,10 +51,8 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
 		storageUnits.put(storageUnit.getName(), storageUnit);
-		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_STORAGE_UNIT, (ITagable)storageUnit);
-		System.out.println("Number of Observers: " + countObservers());
-		setChanged();
-		notifyObservers(pair);
+		notifyObservers(ModelActions.INSERT_STORAGE_UNIT,
+				storageUnit);
 	}
 	
 	public List<String> getStorageUnitNames(){
@@ -196,17 +193,62 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	public boolean hasTag() {
 		return tagable.hasTag();
 	}
-
-	public void addProductGroup(ProductGroup p) {
-		Pair<ModelActions, ITagable> pair = Pair.of(ModelActions.INSERT_PRODUCT_GROUP, (ITagable)p);
+	
+	private void notifyObservers(ModelActions action,
+			ITagable payload)
+	{
+		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
 		System.out.println("Number of Observers: " + countObservers());
 		setChanged();
 		notifyObservers(pair);
 	}
 
+	public void addProductGroup(IProductContainer p) {
+		notifyObservers(ModelActions.INSERT_PRODUCT_GROUP,
+				p);
+	}
+
+
+	
 	public boolean canAddStorageUnit(String name) {
 		return name != null &&
 				!name.isEmpty() &&
 				!getStorageUnitNames().contains(name);
+	}
+
+	public boolean canEditStorageUnit(String storageUnitName,
+			IProductContainer storageUnit) {
+		if (storageUnitName == null || storageUnitName.isEmpty() ||
+				storageUnitName.equals(storageUnit.getName().toString()))
+		{
+			return false;
+		}
+		List<String> lst = getStorageUnitNames();
+		lst.remove(storageUnit.getName().toString());
+		return !lst.contains(storageUnitName);
+	}
+	
+	public void changeStorageUnitName(IProductContainer stU, String name) {
+		storageUnits.remove(stU.getName());
+		stU.setName(name);
+		storageUnits.put(stU.getName(), (StorageUnit) stU);
+		notifyObservers(ModelActions.EDIT_STORAGE_UNIT,
+				stU);
+	}
+
+	public boolean canRemoveItem() {
+		
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean canEditItem(String barcode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean canEditProduct(String barcode) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
