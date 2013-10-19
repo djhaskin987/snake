@@ -17,7 +17,7 @@ import java.util.TreeMap;
 import org.apache.commons.lang3.tuple.Pair;
 
 
-public class StorageUnits extends Observable implements IContextPanelNode, Serializable, ITagable {
+public class StorageUnits extends ProductContainer implements IContextPanelNode, Serializable, ITagable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
@@ -168,9 +168,9 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 				return unit;
 			}
 			else{
-				for(ProductGroup group:unit.getProductGroups()){
-					if(group.isEnabled()){
-						return group;
+				for(IProductContainer pc : unit.getProductContainers()){
+					if (pc.isEnabled()){
+						return pc;
 					}
 				}
 			}
@@ -241,6 +241,30 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public boolean hasItems()
+	{
+		for (StorageUnit s : storageUnits.values())
+		{
+			if (s.hasItems())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasItemsRecursive()
+	{
+		for (StorageUnit s : storageUnits.values())
+		{
+			if (s.hasItemsRecursive())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean canEditItem(String barcode) {
 		// TODO Auto-generated method stub
@@ -250,5 +274,15 @@ public class StorageUnits extends Observable implements IContextPanelNode, Seria
 	public boolean canEditProduct(String barcode) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public boolean canTransferItems() {
+		return hasItemsRecursive();
+	}
+
+	@Override
+	public IProductContainer getParent() {
+		// TODO Auto-generated method stub
+		return (IProductContainer) this;
 	}
 }
