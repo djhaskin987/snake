@@ -12,7 +12,6 @@ public class AddProductGroupView extends ProductGroupView implements IAddProduct
 		super(parent, dialog);
 		
 		construct();		
-
 		_controller = new AddProductGroupController(this, container);
 	}
 

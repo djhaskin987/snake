@@ -25,9 +25,9 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	 * 
 	 * {@post a ProductGroup object}
 	 */
-	public ProductGroup(NonEmptyString name, ProductContainer parentContainer, Quantity threeMonthSupply) {
+	public ProductGroup(NonEmptyString name, IProductContainer parent, Quantity threeMonthSupply) {
 		super(name);
-		this.parentContainer = parentContainer;
+		this.parentContainer = parent;
 		this.threeMonthSupply = threeMonthSupply;
 	}
 	
@@ -124,5 +124,10 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	@Override
 	public String getThreeMonthSupplyValueString() {
 		return threeMonthSupply.getValueString();
+	}
+	
+	@Override
+	public void setParent(ProductContainer productContainer) {
+		parentContainer = productContainer;
 	}
 }

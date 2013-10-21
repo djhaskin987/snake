@@ -1,5 +1,7 @@
 package gui.common;
 
+import model.Model;
+
 /**
  * Controller is a base class that provides common functionality required
  * by all controllers in the program (i.e., all controller classes extend Controller).
@@ -89,6 +91,11 @@ package gui.common;
 	 */
 	protected void enableComponents() {
 		return;
+	}
+	
+	public Model getModel()
+	{
+		return Model.getInstance();
 	}
 	
 }

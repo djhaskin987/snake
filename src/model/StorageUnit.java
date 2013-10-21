@@ -107,4 +107,8 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		return "";
 	}
 
+	@Override
+	public void setParent(ProductContainer productContainer) {
+		throw new UnsupportedOperationException("StorageUnits have but one parent");
+	}
 }

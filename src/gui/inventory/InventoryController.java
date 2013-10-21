@@ -12,9 +12,6 @@ import model.IProduct;
 import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
-import model.NonEmptyString;
-import model.ObservableArgs;
-import model.ProductContainer;
 import model.StorageUnits;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -92,7 +89,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
-		// As long as you're root, you can always do this
+		// You can always do this
 		return true;
 	}
 
@@ -391,7 +388,7 @@ public class InventoryController extends Controller
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is
 		// observing is the StorageUnits instance
-		Pair<ModelActions, ITagable> pair = (Pair<ModelActions, ITagable>) arg1;
+		Pair<ModelActions, ITagable> pair = pairExtract(arg1);
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();
 		switch(action)
@@ -405,8 +402,8 @@ public class InventoryController extends Controller
 			case INSERT_PRODUCT_GROUP:
 				insertProductGroup(payload);
 				break;
-			case RENAME_PRODUCT_GROUP:
-				renameProductGroup(payload);
+			case EDIT_PRODUCT_GROUP:
+				editProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
@@ -429,6 +426,13 @@ public class InventoryController extends Controller
 			default:
 				throw new IllegalStateException("Could not detect what changed");
 		}
+	}
+
+
+
+	@SuppressWarnings("unchecked")
+	private Pair<ModelActions, ITagable> pairExtract(Object arg1) {
+		return (Pair<ModelActions, ITagable>) arg1;
 	}
 
 	private void insertItems(ITagable payload) {
@@ -479,7 +483,7 @@ public class InventoryController extends Controller
 	
 	private void insertProductGroup(ITagable payload) {
         ProductContainerData pcd = (ProductContainerData) payload.getTag();
-        ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
+        ProductContainerData parent = (ProductContainerData) ((IProductContainer)payload).getParent().getTag();
         IInventoryView v = getView();
         insertProductContainerSorted(parent,pcd);
         v.selectProductContainer(pcd);
@@ -526,7 +530,7 @@ public class InventoryController extends Controller
 			getNewProductContainerIndex(parent, pcd));
 	}
 
-	private void renameProductGroup(ITagable payload) {
+	private void editProductGroup(ITagable payload) {
         ProductContainerData pcd = (ProductContainerData) payload.getTag();
         ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
         IInventoryView v1 = getView();
@@ -550,10 +554,6 @@ public class InventoryController extends Controller
 	}
 
 	private void insertProduct(ITagable payload) {
-
-	}
-
-	private void insertItem(ITagable payload) {
 
 	}
 

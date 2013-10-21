@@ -3,10 +3,8 @@ package gui.productgroup;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import model.IProductContainer;
-import model.Model;
 import model.ProductGroup;
 import model.Quantity;
-import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -132,17 +130,14 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void editProductGroup() {
-		ProductGroup productGroup = (ProductGroup)productContainerData.getTag();
+		IProductContainer productGroup = (IProductContainer) productContainerData.getTag();
 		if(!productContainerData.getName().equals(getView().getProductGroupName())) {
 			productContainerData.setName(getView().getProductGroupName());
-			productGroup.setName(getView().getProductGroupName());
-			//Resort
+			getModel().changeProductGroup(productGroup,
+					getView().getProductGroupName(),
+					getView().getSupplyValue(),
+					getView().getSupplyUnit().toString());
 		}
-		double value = Double.parseDouble(getView().getSupplyValue());
-		Unit unit = gui.common.SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit());
-		Quantity threeMonthSupply = new Quantity(value, unit);
-		productGroup.setThreeMonthSupply(threeMonthSupply);
-		Model.getInstance().renameProductGroup(productGroup);
 	}
 
 }

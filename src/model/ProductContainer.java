@@ -2,7 +2,6 @@ package model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Observable;
 
 import gui.common.*;
 
@@ -13,7 +12,7 @@ import gui.common.*;
  * @author Daniel Carrier
  *
  */
-public abstract class ProductContainer extends Observable implements IProductContainer {
+public abstract class ProductContainer extends ModelObservable implements IProductContainer {
 	/**
 	 * 
 	 */
@@ -188,9 +187,9 @@ public abstract class ProductContainer extends Observable implements IProductCon
 	 * {@post productGroup added}
 	 */
 	@Override
-	public void addProductGroup(ProductGroup productGroup) {
-		productGroup.setParent(this);
-		productContainers.add(productGroup);
+	public void addProductContainer(IProductContainer PC) {
+		PC.setParent(this);
+		productContainers.add(PC);
 	}
 
 	

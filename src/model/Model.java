@@ -1,8 +1,6 @@
 package model;
 
 import java.util.Observable;
-import gui.common.ITagable;
-import org.apache.commons.lang3.tuple.*;
 import java.util.Observer;
 
 
@@ -11,7 +9,7 @@ import java.util.Observer;
  * When you serialize, this is the only singleton you need to worry about.
  *
  */
-public class Model extends Observable implements Observer {
+public class Model extends ModelObservable implements Observer {
 	private static Model instance;
 	
 	private StorageUnits storageUnits;
@@ -134,9 +132,13 @@ public class Model extends Observable implements Observer {
 		storageUnits.addStorageUnit((StorageUnit)s); 
 	}
 	
-	public IProductContainer createProductGroup(String name, ProductContainer parentContainer, Quantity threeMonthSupply)
+	public IProductContainer createProductGroup(String name, String supplyValue,
+			String supplyUnit, IProductContainer parent)
 	{
-		IProductContainer productGroup = productContainerFactory.createProductGroup(name, parentContainer, threeMonthSupply);
+		Unit unit = Unit.getInstance(supplyUnit);
+		Double supply = Double.parseDouble(supplyValue);
+		Quantity threeMonthSupply = new Quantity(supply, unit);
+		IProductContainer productGroup = productContainerFactory.createProductGroup(name, parent, threeMonthSupply);
 		return productGroup;
 	}
 
@@ -195,7 +197,7 @@ public class Model extends Observable implements Observer {
 		args.add(target);
 		args.add(item);
 		setChanged();
-		notifyObservers(arg);
+		notifyObservers(target);
 	}
 
 	public boolean canTransferItems() {
@@ -226,5 +228,34 @@ public class Model extends Observable implements Observer {
 	public boolean canRemoveItem() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		setChanged();
+		notifyObservers(arg);
+	}
+
+
+	public boolean canAddStorageUnit(String name) {
+		return getStorageUnits().canAddStorageUnit(name);
+	}
+
+
+	public void changeStorageUnitName(IProductContainer stU, String name) {
+		getStorageUnits().changeStorageUnitName(stU, name);
+		
+	}
+
+	public void changeProductGroup(IProductContainer productGroup,
+			String productGroupName, String supplyValue, String supplyUnit) {
+		IProductContainer parent = productGroup.getParent();
+		parent.deleteProductContainer(productGroup.getName().toString());
+		productGroup.setName(productGroupName);
+		Double amount = Double.parseDouble(supplyValue);
+		Unit unit = Unit.getInstance(supplyUnit);
+		((ProductGroup)productGroup).setThreeMonthSupply(new Quantity(amount, unit));
+		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, productGroup);
 	}
 }

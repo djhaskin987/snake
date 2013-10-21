@@ -3,7 +3,7 @@ package model;
  * Enumeration that guarantees
  * that only the specific
  * units of measurement are used
- * @author Kevin
+ * @author Daniel Haskin
  *
  */
 public enum Unit {
@@ -30,5 +30,37 @@ public enum Unit {
 	 */
 	public String getStatusCode() {
 		return statusCode;
+	}
+	
+	
+	
+	private static NaturalLanguageTable<Unit> table;
+	private static NaturalLanguageTable<Unit> getTable()
+	{
+		if (table == null)
+		{
+			initTable();
+		}
+		return table;
+	}
+	
+	private static void initTable() {
+		table = new NaturalLanguageTable<Unit>(true);
+		table.addEntry("^\\s*(count|cnt[.]?)\\s*$", Unit.COUNT);
+		table.addEntry("^\\s*(pounds|lbs[.]?|[#])\\s*$", Unit.LBS);
+		table.addEntry("^\\s*(ounces|oz[.]?)\\s*$", Unit.OZ);
+		table.addEntry("^\\s*(grams|g[.]?)\\s*$", Unit.G);
+		table.addEntry("^\\s*(kilo[-]?grams|kg[.]?)\\s*$", Unit.KG);
+		table.addEntry("^\\s*(gallons|gal[.]?)\\s*$", Unit.GAL);
+		table.addEntry("^\\s*(quart|qt[.]?)\\s*$", Unit.QUART);
+		table.addEntry("^\\s*(pint|pt[.]?)\\s*$", Unit.PINT);
+		table.addEntry("^\\s*(fluid|fl[.]?)\\s+(ounces|oz[.]?)\\s*$", Unit.FLOZ);
+		table.addEntry("^\\s*(litre|liter|l[.]?)\\s*$", Unit.LITER);
+	}
+
+	public static Unit getInstance(String s)
+	{
+		return getTable().match(s);
+		
 	}
 }

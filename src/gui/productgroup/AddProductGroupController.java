@@ -2,10 +2,8 @@ package gui.productgroup;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import model.Model;
-import model.ProductGroup;
+import model.IProductContainer;
 import model.Quantity;
-import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -123,17 +121,15 @@ public class AddProductGroupController extends Controller implements
 	public void addProductGroup() {
 		String name = getView().getProductGroupName();
 		String supplyValue = getView().getSupplyValue();
-		SizeUnits supplyUnit = getView().getSupplyUnit();
-		//IInventoryController inventoryController = InventoryController.getInventoryController();
-		//model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().getProductContainerFactory().createProductGroup(name);
-		//ProductContainerData parent = inventoryController.getSelectedProductContainer();
-		model.Unit unit = gui.common.SizeUnitsUnitConversion.sizeUnitsToUnit(supplyUnit);
-		Quantity quantity = new Quantity(Double.parseDouble(supplyValue), unit);
-		model.ProductGroup productGroup = (ProductGroup) model.Model.getInstance().createProductGroup(name, (model.ProductContainer) parent.getTag(), quantity);
-		gui.inventory.ProductContainerData child = new gui.inventory.ProductContainerData(name);
-		child.setTag(productGroup);
-		productGroup.setTag(child);
-		Model.getInstance().addProductGroup(productGroup);
+		String supplyUnit = getView().getSupplyUnit().toString();
+		IProductContainer parentPC =
+				(IProductContainer) parent.getTag();
+		
+		IProductContainer newPC = getModel().createProductGroup(name, supplyValue, supplyUnit, parentPC);
+		ProductContainerData child = new ProductContainerData(name);
+		child.setTag(newPC);
+		newPC.setTag(child);
+		getModel().addProductGroup(newPC);
 	}
 
 }

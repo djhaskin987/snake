@@ -39,7 +39,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
      * already-present product groups}
 	 * {@post the specified ProductGroup is added to the IProductContainer}
 	 */
-	public void addProductGroup(ProductGroup productGroup);
+	public void addProductContainer(IProductContainer productGroup);
 	
 	/**
 	 * If this is a StorageUnit must be empty
@@ -120,5 +120,6 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	boolean canDelete();
 	boolean contains(IProduct product);
 	void add(IItem item);
+	void setParent(ProductContainer productContainer);
 
 }
