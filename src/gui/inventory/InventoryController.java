@@ -405,7 +405,7 @@ public class InventoryController extends Controller
 				insertProductGroup(payload);
 				break;
 			case RENAME_PRODUCT_GROUP:
-				renameProductGroup(payload);
+				editProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
