@@ -89,7 +89,7 @@ public class RemoveItemBatchController extends Controller implements
 		ItemData iData = v.getSelectedItem();
 		IItem item = (IItem)iData.getTag();
 		Model m = Model.getInstance();
-		if (m.canRemoveItem())
+		if (m.canRemoveItem(item.getBarcode().getBarcode()))
 			m.removeItem(item);
 	}
 	

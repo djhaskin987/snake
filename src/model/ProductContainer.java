@@ -34,6 +34,9 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public ProductContainer()
 	{
 		this.name = new NonEmptyString("test");
+		productContainers = new ProductContainers();
+		productItems = new ProductItems();
+		tagable = new Tagable();
 	}
 	
 	public boolean isEnabled() {
@@ -175,6 +178,21 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public void addItem(IItem item) {
 		productItems.addItem(item);
+	}
+
+	
+	/**
+	 * Adds a batch to the ProductUnit
+	 * 
+	 * @param item the Item to add
+	 * 
+	 * {@pre item != null && productItems != null}
+	 * 
+	 * {@post item added}
+	 */
+	@Override
+	public void addBatch(List<IItem> batch) {
+		productItems.addBatch(batch);
 	}
 
 	/**

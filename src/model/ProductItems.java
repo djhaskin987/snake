@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -20,14 +21,14 @@ public class ProductItems extends Observable implements Serializable {
 	 */
 	private static final long serialVersionUID = 1120419510043040681L;
 	
-	private Map<IProduct, Collection<IItem>> map;
+	private Map<IProduct, List<IItem>> map;
 	
 	/**
 	 * {@pre	None}
 	 * {@post	Constructs an empty ProductItems}
 	 */
 	public ProductItems() {
-		map = new HashMap<IProduct, Collection<IItem>>();
+		map = new HashMap<IProduct, List<IItem>>();
 	}
 	
 	/**
@@ -47,7 +48,9 @@ public class ProductItems extends Observable implements Serializable {
 	public Collection<IItem> getItems() {
 		ArrayList<IItem> out = new ArrayList<IItem>();
 		for(Collection<IItem> itemList : map.values()) {
-			out.addAll(itemList);
+			if(itemList != null) {
+				out.addAll(itemList);
+			}
 		}
 		return out;
 	}
@@ -59,7 +62,7 @@ public class ProductItems extends Observable implements Serializable {
 	 */
 	public void addItem(IItem item) {	//TODO: Should I check if the item is already in the list?
 		IProduct product = item.getProduct();
-		Collection<IItem> itemList = map.get(product);
+		List<IItem> itemList = map.get(product);
 		if(itemList == null) {
 			itemList = new ArrayList<IItem>();
 			itemList.add(item);
@@ -111,6 +114,18 @@ public class ProductItems extends Observable implements Serializable {
 			return false;
 		} else {
 			return itemList.contains(item);
+		}
+	}
+
+	public void addBatch(List<IItem> batch) {
+		IProduct product = batch.get(0).getProduct();
+		List<IItem> itemList = map.get(product);
+		if(itemList == null) {
+			List<IItem> newItemList = new ArrayList<IItem>();
+			newItemList.addAll(batch);
+			map.put(product, itemList);
+		} else {
+			itemList.addAll(batch);
 		}
 	}
 }

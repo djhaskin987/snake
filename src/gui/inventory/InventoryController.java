@@ -12,6 +12,7 @@ import model.IProduct;
 import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
+import model.ObservableArgs;
 import model.StorageUnits;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -402,6 +403,7 @@ public class InventoryController extends Controller
 				editStorageUnit(payload);
 				break;
 			case INSERT_PRODUCT_GROUP:
+				System.out.println("insert product group");
 				insertProductGroup(payload);
 				break;
 			case RENAME_PRODUCT_GROUP:
@@ -437,9 +439,39 @@ public class InventoryController extends Controller
 		return (Pair<ModelActions, ITagable>) arg1;
 	}
 
+	private void refreshProducts() {
+		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
+		Collection<IProduct> products = productContainer.getProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		int i = 0;
+		for(IProduct product : products) {
+			productDatas[i] = (ProductData) product.getTag();
+			++i;
+		}
+		getView().setProducts(productDatas);
+	}
+	
+	private void refreshItems() {
+		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
+		Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
+		ItemData[] itemDatas = new ItemData[items.size()];
+		int i = 0;
+		for(IItem item : items) {
+			itemDatas[i] = (ItemData) item.getTag();
+			++i;
+		}
+		getView().setItems(itemDatas);
+	}
+	
 	private void insertItems(ITagable payload) {
-		// TODO Auto-generated method stub
-		
+		ObservableArgs<IItem> insteredItems = (ObservableArgs<IItem>) payload;
+		ProductData productData = (ProductData) insteredItems.get(0).getProduct().getTag();
+		if(getView().getSelectedProduct() == productData) {
+			refreshItems();
+		} else {
+			//This might not be necessary, but you clearly already have that product if it's selected.
+			refreshProducts();
+		}
 	}
 
 

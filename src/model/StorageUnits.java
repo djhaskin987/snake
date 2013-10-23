@@ -22,10 +22,12 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
+	private Tagable tagable;
 	
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
 		storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
+		tagable = new Tagable();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -178,15 +180,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		}
 		return null;
 	}
-	
-	private void notifyObservers(ModelActions action,
-			ITagable payload)
-	{
-		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
-		System.out.println("Number of Observers: " + countObservers());
-		setChanged();
-		notifyObservers(pair);
-	}
 
 	public void addProductGroup(IProductContainer p) {
 		p.getParent().addProductContainer(p);
@@ -194,6 +187,8 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 				p);
 	}
 
+
+	
 	public boolean canAddStorageUnit(String name) {
 		return name != null &&
 				!name.isEmpty() &&

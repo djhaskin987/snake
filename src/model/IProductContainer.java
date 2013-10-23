@@ -3,6 +3,7 @@ package model;
 import gui.common.ITagable;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Interface for Product Container to increase modularity of ProductContainer
@@ -121,5 +122,6 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	boolean contains(IProduct product);
 	void add(IItem item);
 	void setParent(ProductContainer productContainer);
+	void addBatch(List<IItem> batch);
 
 }

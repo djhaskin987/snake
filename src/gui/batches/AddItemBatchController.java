@@ -12,6 +12,7 @@ import model.IProduct;
 import model.IProductContainer;
 import model.InvalidHITDateException;
 import model.Model;
+import model.ObservableArgs;
 import model.StorageUnit;
 import gui.common.*;
 import gui.inventory.*;
@@ -200,7 +201,8 @@ public class AddItemBatchController extends Controller implements
 			return;
 		}
 		int count = Integer.parseInt(getView().getCount());
-		ItemData[] items = new ItemData[count];
+		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
+		ItemData[] itemDatas = new ItemData[count];
 		for(int i=0; i<count; ++i) {
 			ItemData itemData = new ItemData();
 			itemData.setBarcode(item.getBarcode().getBarcode());
@@ -214,8 +216,11 @@ public class AddItemBatchController extends Controller implements
 			item.setTag(itemData);
 			//It might be best to wait until the window is closed.
 			//Model.getInstance().addItem(item, (IProductContainer) productContainerData.getTag());
-			items[i] = itemData;
+			items.add(item);
+			itemDatas[i] = itemData;
 		}
+		items.setTag(itemDatas);
+		Model.getInstance().addBatch(items, (IProductContainer) productContainerData.getTag());
 		ProductData baseProductData = (ProductData) product.getTag();
 		ProductData productData = new ProductData();
 		productData.setBarcode(baseProductData.getBarcode());
@@ -226,11 +231,11 @@ public class AddItemBatchController extends Controller implements
 
 		productData.setCount(getView().getCount());
 
-		productData.setTag(items);
+		productData.setTag(itemDatas);
 		
 		products.add(productData);
 		getView().setProducts(products.toArray(new ProductData[0]));
-		getView().setItems(items);
+		getView().setItems(itemDatas);
 		
 		getView().setCount("1");
 		getView().setEntryDate(new java.util.Date());
@@ -265,11 +270,6 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void done() {
-		for(ProductData product : products) {
-			for(ItemData item : (ItemData[]) product.getTag()) {
-				Model.getInstance().addItem((IItem) item.getTag(), (IProductContainer) productContainerData.getTag());
-			}
-		}
 		getView().close();
 	}
 	

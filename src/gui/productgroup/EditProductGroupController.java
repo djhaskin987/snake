@@ -133,10 +133,7 @@ public class EditProductGroupController extends Controller
 		IProductContainer productGroup = (IProductContainer) productContainerData.getTag();
 		if(!productContainerData.getName().equals(getView().getProductGroupName())) {
 			productContainerData.setName(getView().getProductGroupName());
-			getModel().changeProductGroup(productGroup,
-					getView().getProductGroupName(),
-					getView().getSupplyValue(),
-					getView().getSupplyUnit().toString());
+			getModel().renameProductGroup(productGroup);
 		}
 	}
 

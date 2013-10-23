@@ -1,5 +1,6 @@
 package model;
 
+import java.util.List;
 import java.util.Observable;
 import gui.common.ITagable;
 import java.util.Observer;
@@ -162,6 +163,7 @@ public class Model extends ModelObservable implements Observer {
 
 	public void addProduct(IProduct product) {
 		productCollection.add(product);
+		notifyObservers(ModelActions.INSERT_PRODUCT, (ITagable) product);
 	}
 	
 	public void addItem(IItem item) {
@@ -191,7 +193,21 @@ public class Model extends ModelObservable implements Observer {
 		productContainer.addItem(item);
 		itemCollection.add(item);
 	}
-	
+
+
+	public void addBatch(ObservableArgs<IItem> batch, IProductContainer productContainer) {
+		for(IItem item : batch) {
+			item.setProductContainer(productContainer);
+			itemCollection.add(item);
+		}
+		productContainer.addBatch(batch);
+		notifyObservers(ModelActions.INSERT_ITEMS, (ITagable)batch);
+	}
+
+	public void changeStorageUnitName(IProductContainer StU, String name) {
+		storageUnits.changeStorageUnitName(StU, name);
+	}
+
 	public void transferItem(IItem item, IProductContainer target) {
 		// TODO Add unit tests and javadocs
 		IProductContainer current = item.getProductContainer();

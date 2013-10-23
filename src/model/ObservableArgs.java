@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import gui.common.ITagable;
 
-public class ObservableArgs extends ArrayList<Object> implements ITagable {
+public class ObservableArgs<E> extends ArrayList<E> implements ITagable {
 
 	@Override
 	public Object getTag() {
