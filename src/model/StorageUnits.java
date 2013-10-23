@@ -9,6 +9,7 @@ import gui.common.Tagable;
 import gui.inventory.ProductContainerData;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -147,11 +148,14 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	}
 
 	/**
-	 * Does nothing.
+	 * Returns a list of all the items of that product.
+	 * 
+	 * @return A list of all the items of that product.
 	 */
 	@Override
 	public Collection<IItem> getItems(String productName) {
-		return null;
+		return new ArrayList<IItem>();
+		//TODO: Make it show all the items of that product, instead of none.
 	}
 
 	/**

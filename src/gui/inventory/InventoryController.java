@@ -217,18 +217,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productSelectionChanged() {
-		ProductContainerData pcd = getView().getSelectedProductContainer();
-		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
-		ProductData productData = getView().getSelectedProduct();
-		Collection<IItem> items = node.getItems(productData.getDescription());
-
-		ItemData[] itemDatas = new ItemData[items.size()];
-		int i=0;
-		for(IItem item : items) {
-			itemDatas[i] = (ItemData) item.getTag();
-			++i;
-		}
-		getView().setItems(itemDatas);
+		refreshItems();
 	}
 
 	/**
@@ -452,6 +441,7 @@ public class InventoryController extends Controller
 	}
 	
 	private void refreshItems() {
+		System.out.println("Items refreshed.");
 		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
 		Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
 		ItemData[] itemDatas = new ItemData[items.size()];
