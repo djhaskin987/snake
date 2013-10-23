@@ -286,6 +286,11 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void removeItem() {
+		Model m = Model.getInstance();
+		IInventoryView v = getView();
+		ItemData iData = v.getSelectedItem();
+		IItem item = (IItem) iData.getTag();
+		m.removeItem(item);
 	}
 
 	/**
@@ -406,7 +411,7 @@ public class InventoryController extends Controller
 				System.out.println("insert product group");
 				insertProductGroup(payload);
 				break;
-			case RENAME_PRODUCT_GROUP:
+			case EDIT_PRODUCT_GROUP:
 				editProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
@@ -598,7 +603,7 @@ public class InventoryController extends Controller
 
 	private void editItem(ITagable payload) {
 	}
-
+	
 	private void insertStorageUnit(ITagable payload) {
 		ProductContainerData pcd = (ProductContainerData) payload.getTag();
 		StorageUnits su = getStorageUnitsManager();

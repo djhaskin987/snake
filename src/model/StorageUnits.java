@@ -180,6 +180,15 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		}
 		return null;
 	}
+	
+	private void notifyObservers(ModelActions action,
+			ITagable payload)
+	{
+		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
+		System.out.println("Number of Observers: " + countObservers());
+		setChanged();
+		notifyObservers(pair);
+	}
 
 	public void addProductGroup(IProductContainer p) {
 		p.getParent().addProductContainer(p);
