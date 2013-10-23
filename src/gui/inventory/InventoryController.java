@@ -89,7 +89,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canAddStorageUnit() {
-		// You can always do this
+		// As long as you're root, you can always do this
 		return true;
 	}
 
@@ -275,7 +275,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return Model.getInstance().canRemoveItem();
+		IInventoryView v = getView();
+		ItemData iData = v.getSelectedItem();
+		return Model.getInstance().canRemoveItem(iData.getBarcode());
 	}
 
 	/**
@@ -391,7 +393,7 @@ public class InventoryController extends Controller
 		Pair<ModelActions, ITagable> pair = pairExtract(arg1);
 		ModelActions action = pair.getLeft();
 		ITagable payload = pair.getRight();
-		switch(action)
+		switch (action)
 		{
 			case INSERT_STORAGE_UNIT:
 				insertStorageUnit(payload);
@@ -402,8 +404,8 @@ public class InventoryController extends Controller
 			case INSERT_PRODUCT_GROUP:
 				insertProductGroup(payload);
 				break;
-			case EDIT_PRODUCT_GROUP:
-				editProductGroup(payload);
+			case RENAME_PRODUCT_GROUP:
+				renameProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
@@ -443,8 +445,11 @@ public class InventoryController extends Controller
 
 
 	private void removeItems(ITagable payload) {
-		// TODO Auto-generated method stub
-		
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		// remove item from storage unit and product group
+		iData.setProductGroup("");
+		iData.setStorageUnit("");
 	}
 
 
@@ -485,7 +490,7 @@ public class InventoryController extends Controller
         ProductContainerData pcd = (ProductContainerData) payload.getTag();
         ProductContainerData parent = (ProductContainerData) ((IProductContainer)payload).getParent().getTag();
         IInventoryView v = getView();
-        insertProductContainerSorted(parent,pcd);
+        insertProductContainerSorted(parent, pcd);
         v.selectProductContainer(pcd);
         productContainerSelectionChanged();
 	}
@@ -554,11 +559,12 @@ public class InventoryController extends Controller
 	}
 
 	private void insertProduct(ITagable payload) {
+	}
 
+	private void insertItem(ITagable payload) {
 	}
 
 	private void editItem(ITagable payload) {
-
 	}
 
 	private void insertStorageUnit(ITagable payload) {

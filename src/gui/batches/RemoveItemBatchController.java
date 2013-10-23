@@ -1,6 +1,10 @@
 package gui.batches;
 
+import model.IItem;
+import model.Model;
+import model.ModelActions;
 import gui.common.*;
+import gui.item.ItemData;
 import gui.product.*;
 
 /**
@@ -81,6 +85,12 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged() {
+		IRemoveItemBatchView v = getView();
+		ItemData iData = v.getSelectedItem();
+		IItem item = (IItem)iData.getTag();
+		Model m = Model.getInstance();
+		if (m.canRemoveItem())
+			m.removeItem(item);
 	}
 	
 	/**

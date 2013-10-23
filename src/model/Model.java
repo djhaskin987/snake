@@ -1,7 +1,10 @@
 package model;
 
 import java.util.Observable;
+import gui.common.ITagable;
 import java.util.Observer;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 
 /**
@@ -190,14 +193,12 @@ public class Model extends ModelObservable implements Observer {
 	}
 	
 	public void transferItem(IItem item, IProductContainer target) {
+		// TODO Add unit tests and javadocs
 		IProductContainer current = item.getProductContainer();
 		current.transferItem(item, (ProductContainer)target);
-		ObservableArgs args = new ObservableArgs();
-		args.add(current);
-		args.add(target);
-		args.add(item);
+		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.TRANSFER_ITEMS, (ITagable)item);
 		setChanged();
-		notifyObservers(target);
+		notifyObservers(p);
 	}
 
 	public boolean canTransferItems() {
@@ -225,37 +226,31 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 
-	public boolean canRemoveItem() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean canRemoveItem(String barcode) {
+		// TODO Add unit Tests and javadoc
+		return true;
+		// FIXME doesn't actually do anything meaningful
 	}
 
+	public void removeItem(IItem i) {
+		// TODO Add unit tests and javadoc
+		IProductContainer pc = i.getProductContainer();
+		if (pc != null)
+			pc.removeItem(i.getBarcode());
+		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (ITagable)i);
+		setChanged();
+		notifyObservers(p);
+	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void update(Observable arg0, Object arg1) {
 		setChanged();
-		notifyObservers(arg);
+		this.notifyObservers(arg1);
 	}
 
 
 	public boolean canAddStorageUnit(String name) {
-		return getStorageUnits().canAddStorageUnit(name);
-	}
-
-
-	public void changeStorageUnitName(IProductContainer stU, String name) {
-		getStorageUnits().changeStorageUnitName(stU, name);
-		
-	}
-
-	public void changeProductGroup(IProductContainer productGroup,
-			String productGroupName, String supplyValue, String supplyUnit) {
-		IProductContainer parent = productGroup.getParent();
-		parent.deleteProductContainer(productGroup.getName().toString());
-		productGroup.setName(productGroupName);
-		Double amount = Double.parseDouble(supplyValue);
-		Unit unit = Unit.getInstance(supplyUnit);
-		((ProductGroup)productGroup).setThreeMonthSupply(new Quantity(amount, unit));
-		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, productGroup);
+		// TODO: Add unit tests and javadoc
+		return storageUnits.canAddStorageUnit(name);
 	}
 }

@@ -51,8 +51,10 @@ public class Barcode extends VerticalPositionMark implements Serializable {
 		final int MAX_DIGITS = 12;
 		Random rand = new Random();
 		String sBarcode = "";
-		for (int i = 0; i < MAX_DIGITS; i++)
-			sBarcode += (rand.nextInt() % TEN);
+		for (int i = 0; i < MAX_DIGITS; i++) {
+			Integer digit = Math.abs(rand.nextInt(TEN));
+			sBarcode += digit.toString();
+		}
 		int checkBit = getExpectedCheckDigit(sBarcode);
 		sBarcode = sBarcode.substring(0, MAX_DIGITS - 1) + checkBit;
 		this.barcode = sBarcode;

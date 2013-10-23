@@ -1,5 +1,8 @@
 package gui.batches;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import model.*;
 import gui.common.*;
 import gui.inventory.*;
@@ -42,6 +45,19 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+
+		Model m = Model.getInstance();
+		ItemCollection ic = m.getItemCollection();
+		Collection<IItem> c = ic.getItems();
+		ArrayList<ItemData> iDataList = new ArrayList<ItemData>();
+		for(IItem i : c) {
+			ItemData iData = (ItemData) i.getTag();
+			iDataList.add(iData);
+		}
+		ItemData[] iDataAry = new ItemData[iDataList.size()];
+		iDataAry = iDataList.toArray(iDataAry);
+		ITransferItemBatchView v = getView();
+		v.setItems(iDataAry);
 	}
 
 	/**
@@ -121,6 +137,7 @@ public class TransferItemBatchController extends Controller implements
 		IItem item = (IItem) iData.getTag();
 		Model m = Model.getInstance();
 		m.transferItem(item, target);
+		loadValues();	
 	}
 	
 	/**

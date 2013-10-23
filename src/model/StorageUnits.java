@@ -5,12 +5,17 @@ package model;
  * all StorageUnits
  */
 import gui.common.ITagable;
+import gui.common.Tagable;
+import gui.inventory.ProductContainerData;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
 import java.util.TreeMap;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 
 public class StorageUnits extends ProductContainer implements IContextPanelNode, Serializable, ITagable {
@@ -173,6 +178,15 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		}
 		return null;
 	}
+	
+	private void notifyObservers(ModelActions action,
+			ITagable payload)
+	{
+		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
+		System.out.println("Number of Observers: " + countObservers());
+		setChanged();
+		notifyObservers(pair);
+	}
 
 	public void addProductGroup(IProductContainer p) {
 		p.getParent().addProductContainer(p);
@@ -257,6 +271,13 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		return "";
 	}
 
+	public boolean containsItem(String barcode) {
+		// TODO: Add Javadocs and unit tests
+		for (StorageUnit u : storageUnits.values()) {
+			
+		}
+		return false;
+	}
 	@Override
 	public void setParent(ProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits class IS the parent!");

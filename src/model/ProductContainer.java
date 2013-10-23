@@ -334,8 +334,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	}
 	
 	@Override
-	public boolean canDelete()
-	{
+	public boolean canDelete() {
 		return !hasItemsRecursive();
 	}
+	
 }
