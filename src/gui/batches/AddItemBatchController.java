@@ -26,8 +26,8 @@ import gui.product.*;
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 
-	ProductContainerData productContainerData;
-	ArrayList<ProductData> products;
+	private ProductContainerData productContainerData;
+	private ArrayList<ProductData> products;
 	
 	/**
 	 * Constructor.
@@ -272,6 +272,15 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
+		BarcodeSheet codes = new BarcodeSheet();
+		for(ProductData product : products) {
+			ItemData[] itemDatas = (ItemData[]) product.getTag();
+			for(ItemData itemData : itemDatas) {
+				codes.addBarcode((IItem) itemData.getTag());
+			}
+		}
+		codes.close();
+		codes.print();
 	}
 	
 }
