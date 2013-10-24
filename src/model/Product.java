@@ -3,6 +3,7 @@ package model;
 import gui.common.Tagable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -155,5 +156,12 @@ public class Product extends Tagable implements IProduct{
 	@Override
 	public Integer getShelfLife() {
 		return shelfLife;
+	}
+
+	@Override
+	public Collection<IItem> getItems(IProductContainer pc) {
+		NonEmptyString neDescription = getDescription();
+		String description = neDescription.getValue();
+		return pc.getItems(description);
 	}
 }

@@ -12,10 +12,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.tuple.Pair;
 
 
 public class StorageUnits extends ProductContainer implements IContextPanelNode, Serializable, ITagable {

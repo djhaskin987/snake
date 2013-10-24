@@ -3,8 +3,8 @@ package gui.productgroup;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import model.IProductContainer;
-import model.ProductGroup;
 import model.Quantity;
+import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -44,6 +44,12 @@ public class EditProductGroupController extends Controller
 		return (IEditProductGroupView)super.getView();
 	}
 
+	private IProductContainer getProductContainer()
+	{
+		return ((IProductContainer)productContainerData.getTag());
+	}
+	
+	
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
 	 * A component should be enabled only if the user is currently
@@ -56,28 +62,18 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		IProductContainer productContainer = ((IProductContainer) productContainerData.getTag());
-		IProductContainer parent = productContainer.getParent();
-		ProductContainerData parentData = (ProductContainerData) parent.getTag();
 		if(
 				getView().getProductGroupName().equals("")
+				|| getView().getSupplyValue().equals("")
 				|| !NumberUtils.isNumber(getView().getSupplyValue())
 				|| !Quantity.isValidQuantity(
 						Double.parseDouble(getView().getSupplyValue()),
-						SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit()))
+						Unit.getInstance(getView().getSupplyUnit().toString()))
+				|| getProductContainer().getParent().hasChild(
+						getView().getProductGroupName())
 				) {
 			getView().enableOK(false);
 			return;
-		}
-		if(getView().getProductGroupName().equals(productContainerData.getName())) {
-			getView().enableOK(true);
-			return;
-		}
-		for(int i=0; i<parentData.getChildCount(); ++i) {
-			if(getView().getProductGroupName().equals(parentData.getChild(i).getName())) {
-				getView().enableOK(false);
-				return;
-			}
 		}
 		getView().enableOK(true);
 		return;
@@ -92,10 +88,11 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		ProductGroup productGroup = (ProductGroup)productContainerData.getTag();
-		getView().setProductGroupName(productGroup.getName().toString());
-		getView().setSupplyUnit(SizeUnitsUnitConversion.unitToSizeUnits(productGroup.getThreeMonthSupplyUnit()));
-		getView().setSupplyValue(productGroup.getThreeMonthSupplyValueString());
+		getView().setProductGroupName(getProductContainer().getName().toString());
+		getView().setSupplyUnit(SizeUnitsUnitConversion.unitToSizeUnits(
+				getProductContainer().getThreeMonthSupplyUnit()));
+		getView().setSupplyValue(
+				getProductContainer().getThreeMonthSupplyValueString());
 	}
 
 	//
@@ -130,11 +127,10 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void editProductGroup() {
-		IProductContainer productGroup = (IProductContainer) productContainerData.getTag();
-		if(!productContainerData.getName().equals(getView().getProductGroupName())) {
-			productContainerData.setName(getView().getProductGroupName());
-			getModel().renameProductGroup(productGroup);
-		}
+		getModel().changeProductGroup(getProductContainer(),
+				getView().getProductGroupName(),
+				getView().getSupplyValue(),
+				getView().getSupplyUnit().toString());
 	}
 
 }

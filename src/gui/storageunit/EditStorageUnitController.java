@@ -52,7 +52,9 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		getView().enableOK(false);
+		boolean isEnabled = getModel().canEditStorageUnit(getView().getStorageUnitName(), 
+				(IProductContainer)target.getTag());
+		getView().enableOK(isEnabled);
 	}
 
 	/**
@@ -85,11 +87,7 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
-		Model m = Model.getInstance();
-		StorageUnits s = m.getStorageUnits();
-		boolean isEnabled = s.canEditStorageUnit(getView().getStorageUnitName(),
-				(IProductContainer)target.getTag());
-		getView().enableOK(isEnabled);
+		enableComponents();
 	}
 
 	/**
@@ -105,12 +103,10 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void editStorageUnit() {
-		IEditStorageUnitView v = getView();
-		String name = v.getStorageUnitName();
-		Model m = Model.getInstance();
-		StorageUnits s = m.getStorageUnits();
+		String name = getView().getStorageUnitName();
 		IProductContainer StU = (IProductContainer) target.getTag();
-		m.changeStorageUnitName(StU,name);
+		
+		getModel().changeStorageUnitName(StU,name);
 		
 		// no need for tagging, they're already tagged
 	}

@@ -21,7 +21,6 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	protected NonEmptyString name;
 	protected ProductItems productItems;
 	protected ProductContainers productContainers;
-	private boolean enabled = false;
 	private Tagable tagable;
 
 	public ProductContainer(NonEmptyString name) {
@@ -37,18 +36,6 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		productContainers = new ProductContainers();
 		productItems = new ProductItems();
 		tagable = new Tagable();
-	}
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
-	public void enable(){
-		this.enabled = true;
-	}
-	
-	public void disable(){
-		this.enabled = false;
 	}
 
 	public Collection<IProductContainer> getProductContainers() {
@@ -356,4 +343,10 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		return !hasItemsRecursive();
 	}
 	
+	@Override
+	public boolean hasChild(String pcName)
+	{
+		NonEmptyString key = new NonEmptyString(pcName);
+		return productContainers.getProductContainers().containsKey(key);
+	}
 }

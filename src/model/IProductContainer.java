@@ -104,13 +104,6 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	 * @return IproductContainer that contains ProductContainer
 	 */
 	public IProductContainer getParent();
-	
-	public boolean isEnabled();
-	
-	public void enable();
-	
-	public void disable();
-	
 	public Unit getThreeMonthSupplyUnit();
 	
 	public String getThreeMonthSupplyValueString();
@@ -120,6 +113,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	boolean canRemoveItems();
 	boolean canDelete();
 	boolean contains(IProduct product);
+	boolean hasChild(String string);
 	void add(IItem item);
 	void setParent(ProductContainer productContainer);
 	void addBatch(List<IItem> batch);

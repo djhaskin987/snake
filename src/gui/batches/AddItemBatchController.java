@@ -1,6 +1,9 @@
 package gui.batches;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,6 +17,7 @@ import model.InvalidHITDateException;
 import model.Model;
 import model.ObservableArgs;
 import model.StorageUnit;
+import model.ValidDate;
 import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
@@ -179,67 +183,108 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void addItem() {
-		IProduct product = Model.getInstance().getProduct(getView().getBarcode());
+		
+		// Get the Product
+		IProduct product = getProduct();
 		if(product == null) {
 			getView().displayAddProductView();
-			product = Model.getInstance().getProduct(getView().getBarcode());
+			product = getProduct();
 			if(product == null) {
 				return;
+			} else {
+				ProductData pData = (ProductData) product.getTag();
+				products.add(pData);
 			}
 		}
-		IProductContainer current = (IProductContainer) productContainerData.getTag();
-		while(!(current instanceof StorageUnit)) {
-			current = current.getParent();
-		}
-		String storageUnitName = current.getName().toString();
-		IItem item;
-		try {
-			item = Model.getInstance().createItem(product, getView().getEntryDate());
-		} catch (InvalidHITDateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-		int count = Integer.parseInt(getView().getCount());
+		
+		int count = getItemCount();		
+		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
-		ItemData[] itemDatas = new ItemData[count];
 		for(int i=0; i<count; ++i) {
-			ItemData itemData = new ItemData();
-			itemData.setBarcode(item.getBarcode().getBarcode());
-			itemData.setEntryDate(getView().getEntryDate());
-			if(item.getExpireDate() != null) {
-				itemData.setExpirationDate(item.getExpireDate().toJavaUtilDate());
-			}
-			itemData.setProductGroup(productContainerData.getName());
-			itemData.setStorageUnit(storageUnitName);
-			itemData.setTag(item);
-			item.setTag(itemData);
-			//It might be best to wait until the window is closed.
-			//Model.getInstance().addItem(item, (IProductContainer) productContainerData.getTag());
+			IItem item = createItem();
 			items.add(item);
-			itemDatas[i] = itemData;
 		}
-		items.setTag(itemDatas);
 		Model.getInstance().addBatch(items, (IProductContainer) productContainerData.getTag());
-		ProductData baseProductData = (ProductData) product.getTag();
-		ProductData productData = new ProductData();
-		productData.setBarcode(baseProductData.getBarcode());
-		productData.setDescription(baseProductData.getDescription());
-		productData.setShelfLife(baseProductData.getShelfLife());
-		productData.setSize(baseProductData.getSize());
-		productData.setSupply(baseProductData.getSupply());
-
-		productData.setCount(getView().getCount());
-
-		productData.setTag(itemDatas);
 		
-		products.add(productData);
 		getView().setProducts(products.toArray(new ProductData[0]));
-		getView().setItems(itemDatas);
-		
-		getView().setCount("1");
-		getView().setEntryDate(new java.util.Date());
-		
+		resetControls();
+	}
+	
+	private void resetControls() {
+		IAddItemBatchView v = getView();
+		v.setCount("1");
+		v.setEntryDate(new java.util.Date());
+	}
+	
+	private ItemData[] getItems(ProductData pData) {
+		IProduct product = (IProduct) pData.getTag();
+		IProductContainer pc = (IProductContainer) productContainerData.getTag();
+		Collection<IItem> items = product.getItems(pc);
+		if (items.size() > 0) {
+				ItemData[] iDatas = new ItemData[items.size()];
+				Iterator<IItem> itr = items.iterator();
+				for (int i = 0; i < iDatas.length; i++) {
+					IItem item = itr.next();
+					iDatas[i] = (ItemData) item.getTag();
+				}
+				return iDatas;
+		}
+		return null;
+	}
+	
+	private ItemData createItemData(IItem item) {
+		ItemData iData = new ItemData();
+		Barcode barcode = item.getBarcode();
+		String barcodeStr = barcode.getBarcode();
+		iData.setBarcode(barcodeStr);
+		String storageUnitName = item.getStorageUnitName();
+		iData.setStorageUnit(storageUnitName);
+		String productGroupName = item.getProductGroupName();
+		iData.setProductGroup(productGroupName);
+		ValidDate vEntryDate = item.getEntryDate();
+		Date entryDate = vEntryDate.toJavaUtilDate();
+		iData.setEntryDate(entryDate);
+		model.Date dExpireDate = item.getExpireDate();
+		Date expireDate = dExpireDate.toJavaUtilDate();
+		iData.setExpirationDate(expireDate);
+		iData.setTag(item);
+		item.setTag(iData);
+		return iData;
+	}
+	
+	private IItem createItem() {
+		Model m = Model.getInstance();
+		Date entryDate = getEntryDate();
+		IProduct p = getProduct();
+		try {
+			IItem item = m.createItem(p, entryDate);
+			createItemData(item);
+			return item;
+		} catch (InvalidHITDateException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private IProduct getProduct() {
+		Model m = Model.getInstance();
+		IAddItemBatchView v = getView();
+		String barcode = v.getBarcode();
+		IProduct p = m.getProduct(barcode);
+		return p;
+	}
+	
+	private int getItemCount() {
+		IAddItemBatchView v = getView();
+		String countStr = v.getCount();
+		int count = Integer.parseInt(countStr);
+		return count;
+	}
+	
+	private Date getEntryDate() {
+		IAddItemBatchView v = getView();
+		Date entryDate = v.getEntryDate();
+		return entryDate;
 	}
 	
 	/**

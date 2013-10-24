@@ -3,6 +3,7 @@ package model;
 import gui.common.ITagable;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -93,8 +94,9 @@ public interface IProduct extends Serializable, ITagable {
 	 */
 	public Integer getShelfLife();
 	
+	public Collection<IItem> getItems(IProductContainer pc);
+	
 	@SuppressWarnings("serial")
 	public class InvalidIntegerException extends Exception{
-	}
-
+	}	
 }
