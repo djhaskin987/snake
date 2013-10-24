@@ -70,8 +70,7 @@ public class NonEmptyString implements Serializable, Comparable<NonEmptyString> 
 	public boolean equals(Object other)
 	{
 		if (other instanceof NonEmptyString){
-			return ((NonEmptyString)other).getValue() ==
-					getValue();
+			return ((NonEmptyString)other).getValue().equals(getValue());
 		}
 		return false;
 	}

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import model.IProductContainer;
 import model.Quantity;
+import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -43,6 +44,11 @@ public class AddProductGroupController extends Controller implements
 		return (IAddProductGroupView)super.getView();
 	}
 
+	private IProductContainer getParentProductContainer()
+	{
+		return ((IProductContainer)parent.getTag());
+	}
+	
 	/**
 	 * Sets the enable/disable state of all components in the controller's view.
 	 * A component should be enabled only if the user is currently
@@ -55,21 +61,18 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
-		if(
+		if (
 				getView().getProductGroupName().equals("")
+				|| getView().getSupplyValue().equals("")
 				|| !NumberUtils.isNumber(getView().getSupplyValue())
 				|| !Quantity.isValidQuantity(
 						Double.parseDouble(getView().getSupplyValue()),
-						SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSupplyUnit()))
+						Unit.getInstance(getView().getSupplyUnit().toString()))
+				|| getParentProductContainer().hasChild(
+						getView().getProductGroupName())
 				) {
 			getView().enableOK(false);
 			return;
-		}
-		for(int i=0; i<parent.getChildCount(); ++i) {
-			if(getView().getProductGroupName().equals(parent.getChild(i).getName())) {
-				getView().enableOK(false);
-				return;
-			}
 		}
 		getView().enableOK(true);
 		return;
@@ -84,6 +87,8 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setSupplyValue("0");
+		getView().setSupplyUnit(SizeUnits.Count);
 		enableComponents();
 	}
 

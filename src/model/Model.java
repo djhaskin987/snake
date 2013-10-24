@@ -2,7 +2,9 @@ package model;
 
 import java.util.List;
 import java.util.Observable;
+
 import gui.common.ITagable;
+
 import java.util.Observer;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -150,11 +152,6 @@ public class Model extends ModelObservable implements Observer {
 	{
 		storageUnits.addProductGroup((ProductGroup)p);
 	}
-
-	public void renameProductGroup(IProductContainer p)
-	{
-		storageUnits.changeStorageUnitName((ProductGroup)p, p.getName().toString());
-	}
 	
 	public IProduct createProduct(String barcode, String description, Quantity itemSize, Integer shelfLife, Integer threeMonthSupply)
 	{
@@ -249,7 +246,6 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void removeItem(IItem i) {
-		// TODO Add unit tests and javadoc
 		IProductContainer pc = i.getProductContainer();
 		if (pc != null)
 			pc.removeItem(i.getBarcode());
@@ -266,7 +262,26 @@ public class Model extends ModelObservable implements Observer {
 
 
 	public boolean canAddStorageUnit(String name) {
-		// TODO: Add unit tests and javadoc
 		return storageUnits.canAddStorageUnit(name);
+	}
+
+
+	public boolean canEditStorageUnit(String storageUnitName,
+			IProductContainer tag) {
+		return storageUnits.canEditStorageUnit(storageUnitName, tag);
+	}
+
+
+	public void changeProductGroup(IProductContainer productContainer,
+			String productGroupName, String supplyValue, String supplyUnit) {
+		Unit newUnit = Unit.getInstance(supplyUnit);
+		Quantity newQuantity = new Quantity(
+				Double.parseDouble(supplyValue), newUnit);
+		ProductGroup pg = ((ProductGroup)productContainer);
+		pg.getParent().deleteProductContainer(pg.getName().toString());
+		pg.setThreeMonthSupply(newQuantity);
+		pg.setName(productGroupName);
+		pg.getParent().addProductContainer(pg);
+		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, pg);
 	}
 }
