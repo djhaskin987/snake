@@ -35,8 +35,6 @@ public class InventoryController extends Controller
 
 	}
 
-
-
 	private void initObservers() {
 		Model.getInstance().addObserver(this);
 	}
@@ -157,6 +155,7 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canAddProductGroup() {
+		// per page 15 of the spec, this is always true.
 		return true;
 	}
 
@@ -407,7 +406,7 @@ public class InventoryController extends Controller
 				System.out.println("insert product group");
 				insertProductGroup(payload);
 				break;
-			case RENAME_PRODUCT_GROUP:
+			case EDIT_PRODUCT_GROUP:
 				editProductGroup(payload);
 				break;
 			case INSERT_ITEMS:
@@ -485,8 +484,6 @@ public class InventoryController extends Controller
 		iData.setStorageUnit("");
 	}
 
-
-
 	private void transferItems(ITagable payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
@@ -507,11 +504,6 @@ public class InventoryController extends Controller
 		ProductContainerData pcd = (ProductContainerData)
 				payload.getTag();
 		renameProductContainerSorted(getRoot(), pcd, StU.getName().getValue());
-		// the following line is a hack because renameProductContainer doesn't 
-		// work properly
-		getView().setProductContainers(getRoot());
-		getView().selectProductContainer(pcd);
-		productContainerSelectionChanged();
 	}
 
 	private ProductContainerData getRoot()
@@ -575,29 +567,20 @@ public class InventoryController extends Controller
 			ProductContainerData pcd, String newName) {
 		getView().renameProductContainer(pcd, newName,
 				getNewProductContainerIndex(parent, pcd, newName));
+		// the following line is a hack because renameProductContainer doesn't 
+		// work properly
+		getView().setProductContainers(getRoot());
+		getView().selectProductContainer(pcd);
+		productContainerSelectionChanged();
 	}
 
 	private void editProductGroup(ITagable payload) {
-		ProductContainerData pcd = (ProductContainerData) payload.getTag();
-		ProductContainerData parent = (ProductContainerData) ((model.ProductGroup)payload).getParent().getTag();
-		IInventoryView v1 = getView();
-		// insert product container in sorted order
-		int index = 0;
-		for (int i = 0; i < parent.getChildCount(); i++) {
-			ProductContainerData existing = parent.getChild(i);
-			if(existing == pcd) {
-				continue;
-			}
-			index++;
-			String existingName = existing.getName();
-			String pcdName = pcd.getName();
-			if (existingName.compareTo(pcdName) > 0)
-				break;
-		}
-		v1.renameProductContainer(pcd, pcd.getName(), index);
-		// select product container
-		v1.selectProductContainer(pcd);
-
+		IProductContainer pg = (IProductContainer) payload;
+		ProductContainerData pcd = (ProductContainerData)
+				payload.getTag();
+		renameProductContainerSorted(
+				(ProductContainerData)pg.getParent().getTag(),
+				pcd, pg.getName().getValue());
 	}
 
 	private void insertProduct(ITagable payload) {
