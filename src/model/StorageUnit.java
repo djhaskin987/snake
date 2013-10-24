@@ -34,61 +34,19 @@ public class StorageUnit extends ProductContainer implements Serializable {
 		super();
 	}
 
-
 	/**
-	 * Not used. Always returns null
+	 * Yields the Storage Units Manager.
 	 * 
-	 * @return null
+	 * @return StorageUnits manager
 	 * 
 	 * {@pre none}
 	 * 
-	 * {@post null}
+	 * {@post no change}
+	 * {@returns the Storage Units Manager}
 	 */
 	@Override
 	public IProductContainer getParent() {
-		return null;
-	}
-
-	/**
-	 * Not used. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public String getUnit() {
-		return getName().getValue();
-	}
-
-	/**
-	 * Not used. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public String getThreeMonthSupply() {
-		return "";
-	}
-
-	/**
-	 * Not used. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public String getProductGroupName() {
-		return "";
+		return Model.getInstance().getStorageUnits();
 	}
 
 	/**
@@ -96,7 +54,7 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public Unit getThreeMonthSupplyUnit() {
-		return null;
+		throw new UnsupportedOperationException("Storage Unit does not have a three month supply");
 	}
 
 	/**
@@ -104,11 +62,11 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public String getThreeMonthSupplyValueString() {
-		return "";
+		throw new UnsupportedOperationException("Storage Unit does not have a three month supply");
 	}
 
 	@Override
-	public void setParent(ProductContainer productContainer) {
+	public void setParent(IProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits have but one parent");
 	}
 }

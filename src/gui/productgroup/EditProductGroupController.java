@@ -62,21 +62,18 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
-		if(
-				getView().getProductGroupName().equals("")
-				|| getView().getSupplyValue().equals("")
-				|| !NumberUtils.isNumber(getView().getSupplyValue())
-				|| !Quantity.isValidQuantity(
-						Double.parseDouble(getView().getSupplyValue()),
-						Unit.getInstance(getView().getSupplyUnit().toString()))
-				|| getProductContainer().getParent().hasChild(
-						getView().getProductGroupName())
-				) {
-			getView().enableOK(false);
-			return;
+		if (getModel().canEditProductGroup(
+				getProductContainer(),
+				getView().getProductGroupName(),
+				getView().getSupplyValue(),
+				getView().getSupplyUnit().toString()))
+		{
+			getView().enableOK(true);
 		}
-		getView().enableOK(true);
-		return;
+		else
+		{
+			getView().enableOK(false);
+		}
 	}
 
 	/**
@@ -93,6 +90,7 @@ public class EditProductGroupController extends Controller
 				getProductContainer().getThreeMonthSupplyUnit()));
 		getView().setSupplyValue(
 				getProductContainer().getThreeMonthSupplyValueString());
+		valuesChanged();
 	}
 
 	//

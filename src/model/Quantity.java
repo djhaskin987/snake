@@ -2,6 +2,9 @@ package model;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * Contains both numerical value and unit of measurement of
  * Product and Item unit quantities
@@ -75,6 +78,12 @@ public class Quantity implements Serializable {
 		}
 	}
 	
+	public static Quantity createInstance(String supplyValue, 
+			String supplyUnit)
+	{
+		return new Quantity(Double.parseDouble(supplyValue),
+							Unit.getInstance(supplyUnit));
+	}
 	/**
 	 * Gets the value
 	 * 
@@ -139,8 +148,9 @@ public class Quantity implements Serializable {
 	 * 
 	 * {@post string of quantity}
 	 */	
-	public String getString() {
-		return getValueString() + " " + unit.name();
+	public String toString()
+	{
+		return getValueString() + " " + unit.toString();
 	}
 	
 	/**
@@ -159,5 +169,28 @@ public class Quantity implements Serializable {
 			DecimalFormat df = new DecimalFormat("#.00");
 			return df.format(value);
 		}
+	}
+	
+	public boolean equals(Object obj)
+	{
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		
+		Quantity rhs = ((Quantity)obj);
+		return new EqualsBuilder()
+			.append(unit, rhs.unit)
+			.append(value,rhs.value)
+			.isEquals();
+	}
+	
+	public int hashCode()
+	{
+		return new HashCodeBuilder(817,997)
+			.append(unit)
+			.append(value)
+			.toHashCode();
 	}
 }

@@ -3,6 +3,7 @@ package model;
 import gui.common.ITagable;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -10,7 +11,53 @@ import java.util.List;
  * @author Daniel Jay Haskin
  *
  */
-public interface IProductContainer extends Serializable, IContextPanelNode, ITagable {
+public interface IProductContainer extends Serializable, ITagable {
+	
+	/**
+	 * Converts an enum into a string to display
+	 * 
+	 * @return String telling user what unit of measure a particular Item or Product uses
+	 */
+	public String getUnit();
+	
+	/**
+	 * 
+	 * @return Numerical value and unit of measurement of a Three Month Supply
+	 */
+	public String getThreeMonthSupply();
+	
+	/**
+	 * 
+	 * @return List of Products
+	 */
+	public Collection<IProduct> getProducts();
+	
+	/**
+	 * Gets the name of ProductGroup
+	 * 
+	 * @return ProductGroup name
+	 */
+	public String getProductGroupName();
+	
+	/**
+	 * Gets all items related to a specific Product
+	 * 
+	 * @param productName String Name of a Product 
+	 * 
+	 * @return ProductGroup name
+	 */
+	public Collection<IItem> getItems(String productName);
+	
+	/**
+	 * Takes in a barcode and removes an Item from a ProductContainer and sets
+     * the exitDate of that Item
+     * 
+	 * @param barcode the barcode 
+	 */
+	public void removeItem(Barcode barcode);
+	
+	
+	
 	
 	/** Retrieve the name of this product container.
 	 * {@pre The product container is initialized and not null.}
@@ -115,7 +162,7 @@ public interface IProductContainer extends Serializable, IContextPanelNode, ITag
 	boolean contains(IProduct product);
 	boolean hasChild(String string);
 	void add(IItem item);
-	void setParent(ProductContainer productContainer);
+	void setParent(IProductContainer productContainer);
 	void addBatch(List<IItem> batch);
 
 }

@@ -344,6 +344,64 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	}
 	
 	@Override
+	public String getUnit()
+	{
+		IProductContainer child = null;
+		IProductContainer parent = this;
+		IProductContainer grandParent = getParent();
+		while (grandParent != null && grandParent != parent)
+		{
+			child = parent;
+			parent = grandParent;
+			grandParent = parent.getParent();
+		}
+		if (child == null)
+		{
+			// I must be the top node
+			return "All";
+		}
+		else
+		{
+			return child.getName().toString();
+		} 
+	}
+	
+
+	/**
+	 * Used to display product group name in context panel.
+	 * Not all product containers have a product group.
+	 * By default, returns the empty string.
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post none}
+	 * {@returns the empty string}
+	 */
+	@Override
+	public String getProductGroupName() {
+		return "";
+	}
+	
+	/**
+	 * Used to display three month supply in context panel.
+	 * Not all product containers have a three month supply.
+	 * By default, returns the empty string.
+	 * 
+	 * @return null
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post none}
+	 * {@returns the empty string}
+	 */
+	@Override
+	public String getThreeMonthSupply() {
+		return "";
+	}
+	
+	@Override
 	public boolean hasChild(String pcName)
 	{
 		NonEmptyString key = new NonEmptyString(pcName);

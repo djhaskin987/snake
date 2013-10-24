@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 
-public class StorageUnits extends ProductContainer implements IContextPanelNode, Serializable {
+public class StorageUnits extends ProductContainer implements Serializable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
@@ -100,21 +100,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		return storageUnits.containsKey(new NonEmptyString(name));
 	}
 
-	/**
-	 * Always returns "All"
-	 */
-	@Override
-	public String getUnit() {
-		return "All";
-	}
-
-	/**
-	 * Does nothing.
-	 */
-	@Override
-	public String getThreeMonthSupply() {
-		return "";
-	}
 	
 	/**
 	 * Gets all of the products
@@ -226,12 +211,9 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		return (IProductContainer) this;
 	}
 
-	/**
-	 * Does nothing.
-	 */
 	@Override
 	public Unit getThreeMonthSupplyUnit() {
-		return null;
+		throw new UnsupportedOperationException("StorageUnits class doesn't have a three month supply");
 	}
 
 	/**
@@ -243,7 +225,7 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	}
 
 	@Override
-	public void setParent(ProductContainer productContainer) {
+	public void setParent(IProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits class IS the parent!");
 	}
 }

@@ -6,7 +6,6 @@ import gui.product.*;
 
 import java.util.*;
 
-import model.IContextPanelNode;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
@@ -196,7 +195,7 @@ public class InventoryController extends Controller
 	@Override
 	public void productContainerSelectionChanged() {
 		ProductContainerData pcd = getView().getSelectedProductContainer();
-		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		IProductContainer node = (IProductContainer) pcd.getTag();
 		getView().setContextGroup(node.getProductGroupName());
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
@@ -217,7 +216,18 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productSelectionChanged() {
-		refreshItems();
+		ProductContainerData pcd = getView().getSelectedProductContainer();
+		IProductContainer node = (IProductContainer) pcd.getTag();
+		ProductData productData = getView().getSelectedProduct();
+		Collection<IItem> items = node.getItems(productData.getDescription());
+
+		ItemData[] itemDatas = new ItemData[items.size()];
+		int i=0;
+		for(IItem item : items) {
+			itemDatas[i] = (ItemData) item.getTag();
+			++i;
+		}
+		getView().setItems(itemDatas);
 	}
 
 	/**
@@ -392,7 +402,6 @@ public class InventoryController extends Controller
 				editStorageUnit(payload);
 				break;
 			case INSERT_PRODUCT_GROUP:
-				System.out.println("insert product group");
 				insertProductGroup(payload);
 				break;
 			case EDIT_PRODUCT_GROUP:
@@ -441,7 +450,6 @@ public class InventoryController extends Controller
 	}
 	
 	private void refreshItems() {
-		System.out.println("Items refreshed.");
 		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
 		Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
 		ItemData[] itemDatas = new ItemData[items.size()];
