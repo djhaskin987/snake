@@ -2,7 +2,9 @@ package model;
 
 import java.util.List;
 import java.util.Observable;
+
 import gui.common.ITagable;
+
 import java.util.Observer;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -249,7 +251,6 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void removeItem(IItem i) {
-		// TODO Add unit tests and javadoc
 		IProductContainer pc = i.getProductContainer();
 		if (pc != null)
 			pc.removeItem(i.getBarcode());
@@ -266,7 +267,12 @@ public class Model extends ModelObservable implements Observer {
 
 
 	public boolean canAddStorageUnit(String name) {
-		// TODO: Add unit tests and javadoc
 		return storageUnits.canAddStorageUnit(name);
+	}
+
+
+	public boolean canEditStorageUnit(String storageUnitName,
+			IProductContainer tag) {
+		return storageUnits.canEditStorageUnit(storageUnitName, tag);
 	}
 }
