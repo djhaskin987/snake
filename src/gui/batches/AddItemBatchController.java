@@ -20,8 +20,8 @@ import model.StorageUnit;
 import model.ValidDate;
 import gui.common.*;
 import gui.inventory.*;
-import gui.item.ItemData;
-import gui.main.GUI;
+	import gui.item.ItemData;
+	import gui.main.GUI;
 import gui.product.*;
 
 /**
@@ -322,7 +322,7 @@ public class AddItemBatchController extends Controller implements
 		getView().close();
 		BarcodeSheet codes = new BarcodeSheet();
 		for(ProductData product : products) {
-			ItemData[] itemDatas = (ItemData[]) product.getTag();
+			ItemData[] itemDatas = getItems(product);
 			for(ItemData itemData : itemDatas) {
 				codes.addBarcode((IItem) itemData.getTag());
 			}
