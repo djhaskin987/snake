@@ -56,7 +56,8 @@ public class TransferItemBatchController extends Controller implements
 			++i;
 		}
 		ITransferItemBatchView v = getView();
-		v.setItems(productDatas);
+		v.setProducts(productDatas);
+		enableComponents();
 	}
 
 	/**
@@ -71,6 +72,13 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		ITransferItemBatchView v = getView();
+		String barcodeStr = v.getBarcode();
+		boolean enableTransfer = Barcode.isValidBarcode(barcodeStr);
+		v.enableItemAction(enableTransfer);
+		// not implemented
+		v.enableRedo(false);
+		v.enableUndo(false);
 	}
 
 	/**
@@ -86,6 +94,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -129,6 +138,7 @@ public class TransferItemBatchController extends Controller implements
 		}
 		v.setItems(itemDatas);
 		v.selectItem(itemDatas[i - 1]);
+		enableComponents();
 
 	}
 	
@@ -146,14 +156,13 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void transferItem() {
 		ITransferItemBatchView v = getView();
-		ItemData iData = v.getSelectedItem();
-		IItem item = (IItem) iData.getTag();
 		Model m = Model.getInstance();
+		String barcode = v.getBarcode();
+		IItem item = m.getItem(barcode);
 		m.transferItem(item, target);
 		ProductData pData = v.getSelectedProduct();
 		loadValues();	
 		v.selectProduct(pData);
-		v.selectItem(iData);
 	}
 	
 	/**

@@ -1,13 +1,11 @@
 package gui.batches;
 
 import java.util.Collection;
-import java.util.List;
 
 import model.Barcode;
 import model.IItem;
 import model.IProduct;
 import model.Model;
-import model.ModelActions;
 import model.ProductCollection;
 import gui.common.*;
 import gui.item.ItemData;
@@ -156,11 +154,11 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void removeItem() {
 		IRemoveItemBatchView v = getView();
-		ItemData iData = v.getSelectedItem();
-		IItem item = (IItem)iData.getTag();
 		Model m = Model.getInstance();
-		if (m.canRemoveItem(item.getBarcode().getBarcode()))
+		if (m.canRemoveItem(v.getBarcode())) {
+			IItem item = m.getItem(v.getBarcode());
 			m.removeItem(item);
+		}
 		v.setBarcode("");
 		v.giveBarcodeFocus();
 	}
