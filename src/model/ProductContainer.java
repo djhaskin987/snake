@@ -26,7 +26,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
 		productContainers = new ProductContainers();
-		productItems = new ProductItems();
+		productItems = new ProductItems((IProductContainer)this);
 		tagable = new Tagable();
 	}
 	
@@ -34,7 +34,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	{
 		this.name = new NonEmptyString("test");
 		productContainers = new ProductContainers();
-		productItems = new ProductItems();
+		productItems = new ProductItems((IProductContainer)this);
 		tagable = new Tagable();
 	}
 

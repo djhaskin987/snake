@@ -19,7 +19,7 @@ public class Product extends Tagable implements IProduct {
 	private Quantity itemSize;
 	private Integer shelfLife;
 	private Integer threeMonthSupply;
-	private List<ProductContainer> containers;
+	private List<IProductContainer> containers;
 	/**
 	 * 
 	 * @param aBarcode
@@ -38,7 +38,7 @@ public class Product extends Tagable implements IProduct {
 		this.itemSize = aItemSize;
 		this.shelfLife = aShelfLife;
 		this.threeMonthSupply = aThreeMonthSupply;
-		this.containers = new ArrayList<ProductContainer>();
+		this.containers = new ArrayList<IProductContainer>();
 	}
 	
 	/**
@@ -157,6 +157,7 @@ public class Product extends Tagable implements IProduct {
 	public Integer getShelfLife() {
 		return shelfLife;
 	}
+	
 
 	@Override
 	public Collection<IItem> getItems(IProductContainer pc) {
@@ -168,10 +169,20 @@ public class Product extends Tagable implements IProduct {
 	@Override
 	public Collection<IItem> getAllItems() {
 		ArrayList<IItem> out = new ArrayList<IItem>();
-		for (ProductContainer container : containers) {
+		for (IProductContainer container : containers) {
 			Collection<IItem> items = this.getItems(container);
 			out.addAll(items);
 		}
 		return out;
+	}
+
+	@Override
+	public void addProductContainer(IProductContainer pc) {
+		containers.add(pc);	
+	}
+
+	@Override
+	public void removeProductContainer(IProductContainer pc) {
+		containers.remove(pc);
 	}
 }
