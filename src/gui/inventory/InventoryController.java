@@ -375,6 +375,7 @@ public class InventoryController extends Controller
 	@Override
 	public void addProductToContainer(ProductData productData,
 										ProductContainerData containerData) {
+		
 	}
 
 	/**
@@ -387,6 +388,14 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+		IItem item = (IItem) itemData.getTag();
+		IProductContainer target = (IProductContainer) containerData.getTag();
+		Model m = Model.getInstance();
+		try {
+			m.transferItem(item, target);
+		} catch (Exception e ) {
+			getView().displayErrorMessage(e.getMessage());
+		}
 	}
 
 

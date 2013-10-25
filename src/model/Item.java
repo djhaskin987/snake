@@ -116,7 +116,7 @@ public class Item extends Tagable implements IItem {
 			return null;
 		} else {
 			IProductContainer cur = container;
-			while (cur.getParent() != null) {
+			while (cur.getClass() != StorageUnits.class) {
 				cur = cur.getParent();
 			}
 			NonEmptyString nes = cur.getName();
