@@ -246,7 +246,10 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-		return true;
+		return getModel().canDeleteProduct(
+				(IProductContainer) getView().getSelectedProductContainer().getTag(),
+				(IProduct) getView().getSelectedProduct().getTag()
+				);
 	}
 
 	/**
@@ -254,6 +257,11 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteProduct() {
+		getModel().deleteProduct(
+				(IProductContainer) getView().getSelectedProductContainer().getTag(),
+				(IProduct) getView().getSelectedProduct().getTag()
+				);
+		refreshProducts();
 	}
 
 	/**
@@ -378,6 +386,7 @@ public class InventoryController extends Controller
 	@Override
 	public void addProductToContainer(ProductData productData,
 										ProductContainerData containerData) {
+		
 	}
 
 	/**
@@ -390,6 +399,14 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+		IItem item = (IItem) itemData.getTag();
+		IProductContainer target = (IProductContainer) containerData.getTag();
+		Model m = Model.getInstance();
+		try {
+			m.transferItem(item, target);
+		} catch (Exception e ) {
+			getView().displayErrorMessage(e.getMessage());
+		}
 	}
 
 
@@ -486,6 +503,8 @@ public class InventoryController extends Controller
 		// remove item from storage unit and product group
 		iData.setProductGroup("");
 		iData.setStorageUnit("");
+		refreshProducts();
+		refreshItems();
 	}
 
 	private void transferItems(ITagable payload) {
@@ -493,6 +512,7 @@ public class InventoryController extends Controller
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
 		iData.setStorageUnit(item.getStorageUnitName());
+		refreshItems();
 	}
 
 

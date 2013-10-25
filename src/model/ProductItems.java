@@ -22,13 +22,16 @@ public class ProductItems extends Observable implements Serializable {
 	private static final long serialVersionUID = 1120419510043040681L;
 	
 	private Map<IProduct, List<IItem>> map;
+	private IProductContainer productContainer;
 	
 	/**
 	 * {@pre	None}
 	 * {@post	Constructs an empty ProductItems}
+	 * @param iProductContainer 
 	 */
-	public ProductItems() {
+	public ProductItems(IProductContainer iProductContainer) {
 		map = new HashMap<IProduct, List<IItem>>();
+		productContainer = iProductContainer;
 	}
 	
 	/**
@@ -134,9 +137,16 @@ public class ProductItems extends Observable implements Serializable {
 		// create a new one if it doesn't already exist
 		if (itemList == null) {
 			itemList = new ArrayList<IItem>();
+			product.addProductContainer(productContainer);
 			map.put(product, itemList);
 		}
 		// add items to list
 		itemList.addAll(batch);	
+	}
+
+	public void removeProduct(IProduct product) {
+		//TODO: It says this is an optional operation. I need to make sure it actually exists.
+		map.remove(product);
+		product.removeProductContainer(productContainer);
 	}
 }

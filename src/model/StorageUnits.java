@@ -243,7 +243,13 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	}
 
 	@Override
-	public void setParent(ProductContainer productContainer) {
+	public void setParent(IProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits class IS the parent!");
+	}
+	
+	@Override
+	public void removeProduct(IProduct product) {
+		Model.getInstance().getRemovedItems().deleteItemsByProduct(product.getDescription().getValue());
+		removeProductRecursive(product);
 	}
 }

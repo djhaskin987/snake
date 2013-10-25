@@ -26,7 +26,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
 		productContainers = new ProductContainers();
-		productItems = new ProductItems();
+		productItems = new ProductItems((IProductContainer)this);
 		tagable = new Tagable();
 	}
 	
@@ -34,7 +34,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	{
 		this.name = new NonEmptyString("test");
 		productContainers = new ProductContainers();
-		productItems = new ProductItems();
+		productItems = new ProductItems((IProductContainer)this);
 		tagable = new Tagable();
 	}
 
@@ -246,6 +246,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 */
 	@Override
 	public void transferItem(IItem item, ProductContainer newProductContainer) {
+		if (getUnitPC() == newProductContainer.getUnitPC())
+			throw new IllegalArgumentException("Item cannot be transferred within the same storage unit.");
 		productItems.removeItem(item);
 		newProductContainer.add(item);
 	}
@@ -346,6 +348,21 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public String getUnit()
 	{
+		IProductContainer unit = getUnitPC();
+		if (unit == null)
+		{
+			return "All";
+		}
+		else
+		{
+			return unit.getName().toString();
+		}
+	}
+	
+	@Override
+	public IProductContainer getUnitPC()
+	{
+
 		IProductContainer child = null;
 		IProductContainer parent = this;
 		IProductContainer grandParent = getParent();
@@ -353,17 +370,16 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		{
 			child = parent;
 			parent = grandParent;
-			grandParent = parent.getParent();
+			grandParent = grandParent.getParent();
 		}
 		if (child == null)
 		{
-			// I must be the top node
-			return "All";
+			return null;
 		}
 		else
 		{
-			return child.getName().toString();
-		} 
+			return child;
+		}
 	}
 	
 
@@ -406,5 +422,18 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	{
 		NonEmptyString key = new NonEmptyString(pcName);
 		return productContainers.getProductContainers().containsKey(key);
+	}
+	
+	@Override
+	public void removeProduct(IProduct product) {
+		productItems.removeProduct(product);
+	}
+	
+	@Override
+	public void removeProductRecursive(IProduct product) {
+		for(IProductContainer productContainer : productContainers) {
+			productContainer.removeProductRecursive(product);
+		}
+		removeProduct(product);
 	}
 }

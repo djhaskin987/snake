@@ -45,19 +45,19 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-
 		Model m = Model.getInstance();
-		ItemCollection ic = m.getItemCollection();
-		Collection<IItem> c = ic.getItems();
-		ArrayList<ItemData> iDataList = new ArrayList<ItemData>();
-		for(IItem i : c) {
-			ItemData iData = (ItemData) i.getTag();
-			iDataList.add(iData);
+		ProductCollection pc = m.getProductCollection();
+		Collection<IProduct> products = pc.getProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		int i = 0;
+		for (IProduct product : products) {
+			ProductData pData = (ProductData) product.getTag();
+			productDatas[i] = pData;
+			++i;
 		}
-		ItemData[] iDataAry = new ItemData[iDataList.size()];
-		iDataAry = iDataList.toArray(iDataAry);
 		ITransferItemBatchView v = getView();
-		v.setItems(iDataAry);
+		v.setProducts(productDatas);
+		enableComponents();
 	}
 
 	/**
@@ -72,6 +72,13 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		ITransferItemBatchView v = getView();
+		String barcodeStr = v.getBarcode();
+		boolean enableTransfer = Barcode.isValidBarcode(barcodeStr);
+		v.enableItemAction(enableTransfer);
+		// not implemented
+		v.enableRedo(false);
+		v.enableUndo(false);
 	}
 
 	/**
@@ -87,6 +94,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -117,6 +125,21 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
+		ITransferItemBatchView v = getView();
+		ProductData pData = v.getSelectedProduct();
+		IProduct product = (IProduct) pData.getTag();
+		Collection<IItem> items = product.getAllItems();
+		ItemData[] itemDatas = new ItemData[items.size()];
+		int i = 0;
+		for (IItem item : items) {
+			ItemData iData = (ItemData) item.getTag();
+			itemDatas[i] = iData;
+			++i;
+		}
+		v.setItems(itemDatas);
+		v.selectItem(itemDatas[i - 1]);
+		enableComponents();
+
 	}
 	
 	/**
@@ -133,11 +156,13 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void transferItem() {
 		ITransferItemBatchView v = getView();
-		ItemData iData = v.getSelectedItem();
-		IItem item = (IItem) iData.getTag();
 		Model m = Model.getInstance();
+		String barcode = v.getBarcode();
+		IItem item = m.getItem(barcode);
 		m.transferItem(item, target);
+		ProductData pData = v.getSelectedProduct();
 		loadValues();	
+		v.selectProduct(pData);
 	}
 	
 	/**

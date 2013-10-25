@@ -102,7 +102,7 @@ public class Item extends Tagable implements IItem {
 	}
 	@Override
 	public String getProductGroupName() {
-		if (container == null || container.getParent() == null) {
+		if (container == null || container.getClass() == StorageUnit.class) {
 			return null;
 		} else {
 			NonEmptyString nes = container.getName();
@@ -116,7 +116,7 @@ public class Item extends Tagable implements IItem {
 			return null;
 		} else {
 			IProductContainer cur = container;
-			while (cur.getParent() != null) {
+			while (cur.getClass() != StorageUnit.class) {
 				cur = cur.getParent();
 			}
 			NonEmptyString nes = cur.getName();
