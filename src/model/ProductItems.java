@@ -117,15 +117,26 @@ public class ProductItems extends Observable implements Serializable {
 		}
 	}
 
+	/**
+	 * Adds a batch of IItem objects to ProductItems
+	 * 
+	 * @param batch the batch of items
+	 *
+	 * {@pre batch != null && batch.size() > 0}
+	 * 
+	 * {@post batch is added}
+	 */
 	public void addBatch(List<IItem> batch) {
+		// get the product
 		IProduct product = batch.get(0).getProduct();
+		// get the item list
 		List<IItem> itemList = map.get(product);
-		if(itemList == null) {
-			List<IItem> newItemList = new ArrayList<IItem>();
-			newItemList.addAll(batch);
+		// create a new one if it doesn't already exist
+		if (itemList == null) {
+			itemList = new ArrayList<IItem>();
 			map.put(product, itemList);
-		} else {
-			itemList.addAll(batch);
 		}
+		// add items to list
+		itemList.addAll(batch);	
 	}
 }
