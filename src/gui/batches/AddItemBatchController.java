@@ -169,7 +169,10 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
-		getView().setItems((ItemData[]) getView().getSelectedProduct().getTag());
+		IAddItemBatchView v = getView();
+		ProductData pData = v.getSelectedProduct();
+		ItemData[] iDatas = getItems(pData);
+		v.setItems(iDatas);	
 	}
 
 	/**
