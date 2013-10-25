@@ -421,4 +421,17 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		NonEmptyString key = new NonEmptyString(pcName);
 		return productContainers.getProductContainers().containsKey(key);
 	}
+	
+	@Override
+	public void removeProduct(IProduct product) {
+		productItems.removeProduct(product);
+	}
+	
+	@Override
+	public void removeProductRecursive(IProduct product) {
+		for(IProductContainer productContainer : productContainers) {
+			productContainer.removeProductRecursive(product);
+		}
+		removeProduct(product);
+	}
 }

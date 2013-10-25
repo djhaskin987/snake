@@ -243,7 +243,10 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-		return true;
+		return getModel().canDeleteProduct(
+				(IProductContainer) getView().getSelectedProductContainer().getTag(),
+				(IProduct) getView().getSelectedProduct().getTag()
+				);
 	}
 
 	/**
@@ -251,6 +254,11 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteProduct() {
+		getModel().deleteProduct(
+				(IProductContainer) getView().getSelectedProductContainer().getTag(),
+				(IProduct) getView().getSelectedProduct().getTag()
+				);
+		refreshProducts();
 	}
 
 	/**

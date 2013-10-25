@@ -166,4 +166,7 @@ public interface IProductContainer extends Serializable, ITagable {
 	void addBatch(List<IItem> batch);
 	public IProductContainer getUnitPC();
 
+	public void removeProduct(IProduct product);
+	public void removeProductRecursive(IProduct product);
+
 }
