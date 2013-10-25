@@ -235,8 +235,8 @@ public class Model extends ModelObservable implements Observer {
 
 
 	public boolean canEditProduct(String barcode) {
-		// TODO Auto-generated method stub
-		return false;
+		// FIXME
+		return true;
 	}
 
 
@@ -337,5 +337,10 @@ public class Model extends ModelObservable implements Observer {
 	
 	public void editItem(IItem item) {
 		notifyObservers(ModelActions.EDIT_ITEM, item);
+	}
+
+
+	public void editProduct(IProduct product) {
+		notifyObservers(ModelActions.EDIT_PRODUCT, product);	
 	}
 }

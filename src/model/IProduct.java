@@ -88,6 +88,7 @@ public interface IProduct extends Serializable, ITagable {
 	 */
 	public Quantity getItemSize();
 	
+	public void setItemSize(Quantity q);
 	/**
 	 * 
 	 * @return A ValidDate of when the product was first created

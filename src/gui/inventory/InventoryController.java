@@ -11,8 +11,11 @@ import model.IProduct;
 import model.IProductContainer;
 import model.Model;
 import model.ModelActions;
+import model.NonEmptyString;
 import model.ObservableArgs;
+import model.Quantity;
 import model.StorageUnits;
+import model.Unit;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -493,9 +496,24 @@ public class InventoryController extends Controller
 	}
 
 
-
 	private void editProduct(ITagable payload) {
-		
+		IProduct product = (IProduct) payload;
+		ProductData pData = (ProductData) product.getTag();
+		NonEmptyString neDescription = product.getDescription();
+		String description = neDescription.getValue();
+		pData.setDescription(description);
+		Integer shelfLife = product.getShelfLife();
+		pData.setShelfLife(shelfLife.toString());
+		Integer nMonthSupply = product.getThreeMonthSupply();
+		pData.setSupply(nMonthSupply.toString());
+		Quantity itemSize = product.getItemSize();
+		if (itemSize.getUnit() == Unit.COUNT) {
+			pData.setCount(itemSize.getValueString());
+		} else {
+			pData.setCount("1");
+		}
+		pData.setSize(itemSize.toString());
+		refreshProducts();
 	}
 
 

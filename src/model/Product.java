@@ -164,4 +164,10 @@ public class Product extends Tagable implements IProduct{
 		String description = neDescription.getValue();
 		return pc.getItems(description);
 	}
+
+	@Override
+	public void setItemSize(Quantity q) {
+		itemSize = q;
+		
+	}
 }
