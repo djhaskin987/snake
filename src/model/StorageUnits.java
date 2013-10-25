@@ -243,7 +243,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	}
 
 	@Override
-	public void setParent(ProductContainer productContainer) {
+	public void setParent(IProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits class IS the parent!");
 	}
 }

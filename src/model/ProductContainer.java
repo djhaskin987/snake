@@ -346,6 +346,21 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public String getUnit()
 	{
+		IProductContainer unit = getUnitPC();
+		if (unit == null)
+		{
+			return "All";
+		}
+		else
+		{
+			return unit.getName().toString();
+		}
+	}
+	
+	@Override
+	public IProductContainer getUnitPC()
+	{
+
 		IProductContainer child = null;
 		IProductContainer parent = this;
 		IProductContainer grandParent = getParent();
@@ -353,17 +368,16 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		{
 			child = parent;
 			parent = grandParent;
-			grandParent = parent.getParent();
+			grandParent = grandParent.getParent();
 		}
 		if (child == null)
 		{
-			// I must be the top node
-			return "All";
+			return null;
 		}
 		else
 		{
-			return child.getName().toString();
-		} 
+			return child;
+		}
 	}
 	
 
