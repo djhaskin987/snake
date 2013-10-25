@@ -500,6 +500,8 @@ public class InventoryController extends Controller
 		// remove item from storage unit and product group
 		iData.setProductGroup("");
 		iData.setStorageUnit("");
+		refreshProducts();
+		refreshItems();
 	}
 
 	private void transferItems(ITagable payload) {
@@ -507,6 +509,7 @@ public class InventoryController extends Controller
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
 		iData.setStorageUnit(item.getStorageUnitName());
+		refreshItems();
 	}
 
 

@@ -1,8 +1,14 @@
 package gui.batches;
 
+import java.util.Collection;
+import java.util.List;
+
+import model.Barcode;
 import model.IItem;
+import model.IProduct;
 import model.Model;
 import model.ModelActions;
+import model.ProductCollection;
 import gui.common.*;
 import gui.item.ItemData;
 import gui.product.*;
@@ -41,6 +47,19 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		enableComponents();
+		IRemoveItemBatchView v = getView();
+		Model m = Model.getInstance();
+		ProductCollection pc = m.getProductCollection();
+		Collection<IProduct> products = pc.getProducts();
+		ProductData[] productDatas = new ProductData[products.size()];
+		int i = 0;
+		for (IProduct product : products) {
+			ProductData pData = (ProductData) product.getTag();
+			productDatas[i] = pData;
+			++i;
+		}
+		v.setProducts(productDatas);
 	}
 
 	/**
@@ -55,6 +74,13 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		IRemoveItemBatchView v = getView();
+		String barcodeStr = v.getBarcode();
+		boolean enableRemove = Barcode.isValidBarcode(barcodeStr);
+		v.enableItemAction(enableRemove);
+		// not implemented
+		v.enableRedo(false);
+		v.enableUndo(false);
 	}
 
 	/**
@@ -70,6 +96,7 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -85,12 +112,6 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged() {
-		IRemoveItemBatchView v = getView();
-		ItemData iData = v.getSelectedItem();
-		IItem item = (IItem)iData.getTag();
-		Model m = Model.getInstance();
-		if (m.canRemoveItem(item.getBarcode().getBarcode()))
-			m.removeItem(item);
 	}
 	
 	/**
@@ -106,6 +127,20 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
+		IRemoveItemBatchView v = getView();
+		ProductData pData = v.getSelectedProduct();
+		IProduct product = (IProduct) pData.getTag();
+		Model m = Model.getInstance();
+		Collection<IItem> items = product.getAllItems();
+		ItemData[] itemDatas = new ItemData[items.size()];
+		int i = 0;
+		for (IItem item : items) {
+			ItemData iData = (ItemData) item.getTag();
+			itemDatas[i] = iData;
+			++i;
+		}
+		v.setItems(itemDatas);
+		v.selectItem(itemDatas[i - 1]);
 	}
 	
 	/**
@@ -120,6 +155,14 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void removeItem() {
+		IRemoveItemBatchView v = getView();
+		ItemData iData = v.getSelectedItem();
+		IItem item = (IItem)iData.getTag();
+		Model m = Model.getInstance();
+		if (m.canRemoveItem(item.getBarcode().getBarcode()))
+			m.removeItem(item);
+		v.setBarcode("");
+		v.giveBarcodeFocus();
 	}
 	
 	/**

@@ -96,6 +96,8 @@ public interface IProduct extends Serializable, ITagable {
 	
 	public Collection<IItem> getItems(IProductContainer pc);
 	
+	public Collection<IItem> getAllItems();
+	
 	@SuppressWarnings("serial")
 	public class InvalidIntegerException extends Exception{
 	}	

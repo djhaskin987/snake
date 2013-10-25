@@ -11,7 +11,7 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class Product extends Tagable implements IProduct{
+public class Product extends Tagable implements IProduct {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
 	private Barcode barcode;
@@ -163,5 +163,15 @@ public class Product extends Tagable implements IProduct{
 		NonEmptyString neDescription = getDescription();
 		String description = neDescription.getValue();
 		return pc.getItems(description);
+	}
+
+	@Override
+	public Collection<IItem> getAllItems() {
+		ArrayList<IItem> out = new ArrayList<IItem>();
+		for (ProductContainer container : containers) {
+			Collection<IItem> items = this.getItems(container);
+			out.addAll(items);
+		}
+		return out;
 	}
 }
