@@ -1,7 +1,11 @@
 package gui.item;
 
+import java.util.Date;
+
 import model.Barcode;
 import model.IItem;
+import model.Model;
+import model.ValidDate;
 import gui.common.*;
 
 /**
@@ -50,7 +54,11 @@ public class EditItemController extends Controller
 	 * have been set appropriately.}
 	 */
 	@Override
-	protected void enableComponents() {
+	protected void enableComponents() {	
+		IEditItemView eiv = getView();
+		eiv.enableBarcode(false);
+		eiv.enableDescription(false);
+		eiv.enableEntryDate(true);
 	}
 	
 	private IItem getModelItem()
@@ -104,6 +112,18 @@ public class EditItemController extends Controller
 	 */
 	@Override
 	public void editItem() {
+		IEditItemView eiv = getView();
+		Date entryDate = eiv.getEntryDate();
+		try {
+			IItem item = getModelItem();
+			ValidDate validEntryDate = new ValidDate(entryDate);
+			item.setEntryDate(validEntryDate);
+			Model m = Model.getInstance();
+			m.editItem(item);
+		} catch (Exception e) {
+			eiv.displayErrorMessage(e.getMessage());
+			return;
+		}
 	}
 
 }

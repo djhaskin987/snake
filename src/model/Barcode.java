@@ -29,7 +29,6 @@ public class Barcode extends VerticalPositionMark implements Serializable {
 	/**
 	 * The constructor will make sure that the string passed in is a valid Barcode string
 	 * 
-	 * 
 	 * @param barcode the Barcode
 	 * 
 	 * @throws model.InvalidBarcodeException if barcode is not valid.

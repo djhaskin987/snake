@@ -15,13 +15,14 @@ import model.IProduct;
 import model.IProductContainer;
 import model.InvalidHITDateException;
 import model.Model;
+import model.NonEmptyString;
 import model.ObservableArgs;
 import model.StorageUnit;
 import model.ValidDate;
 import gui.common.*;
 import gui.inventory.*;
-	import gui.item.ItemData;
-	import gui.main.GUI;
+import gui.item.ItemData;
+import gui.main.GUI;
 import gui.product.*;
 
 /**
@@ -204,13 +205,21 @@ public class AddItemBatchController extends Controller implements
 		int count = getItemCount();		
 		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
+		IItem lastItem = null;
 		for(int i=0; i<count; ++i) {
 			IItem item = createItem();
 			items.add(item);
+			lastItem = item;
 		}
+		updateCount(count, product);
+		
 		Model.getInstance().addBatch(items, (IProductContainer) productContainerData.getTag());
 		
 		getView().setProducts(products.toArray(new ProductData[0]));
+		getView().selectProduct((ProductData) product.getTag());
+		selectedProductChanged();
+		getView().selectItem((ItemData) lastItem.getTag());
+		
 		resetControls();
 	}
 	
@@ -218,6 +227,19 @@ public class AddItemBatchController extends Controller implements
 		IAddItemBatchView v = getView();
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
+	}
+	
+	private void updateCount(int numberOfItemsAdded, IProduct product) {
+		ProductData pData = (ProductData) product.getTag();
+		String pCountStr = pData.getCount();
+		if (pCountStr != null && pCountStr != "") {
+			int pCount = Integer.parseInt(pCountStr);
+			pCount += numberOfItemsAdded;
+			pCountStr = "" + pCount;
+		} else {
+			pCountStr = "" + numberOfItemsAdded;
+		}
+		pData.setCount(pCountStr);
 	}
 	
 	private ItemData[] getItems(ProductData pData) {
@@ -236,14 +258,15 @@ public class AddItemBatchController extends Controller implements
 		return null;
 	}
 	
+	
 	private ItemData createItemData(IItem item) {
 		ItemData iData = new ItemData();
 		Barcode barcode = item.getBarcode();
 		String barcodeStr = barcode.getBarcode();
 		iData.setBarcode(barcodeStr);
-		String storageUnitName = item.getStorageUnitName();
+		String storageUnitName = getStorageUnitName();
 		iData.setStorageUnit(storageUnitName);
-		String productGroupName = item.getProductGroupName();
+		String productGroupName = getProductGroupName();
 		iData.setProductGroup(productGroupName);
 		ValidDate vEntryDate = item.getEntryDate();
 		Date entryDate = vEntryDate.toJavaUtilDate();
@@ -254,6 +277,26 @@ public class AddItemBatchController extends Controller implements
 		iData.setTag(item);
 		item.setTag(iData);
 		return iData;
+	}
+	
+	private String getStorageUnitName() {
+		IProductContainer pc = (IProductContainer) productContainerData.getTag();
+		while (pc.getClass() != StorageUnit.class) {
+			pc = pc.getParent();
+		}
+		NonEmptyString neName = pc.getName();
+		String name = neName.getValue();
+		return name;
+	}
+	
+	private String getProductGroupName() {
+		IProductContainer pc = (IProductContainer) productContainerData.getTag();
+		if (pc.getClass() != StorageUnit.class) {
+			NonEmptyString neName = pc.getName();
+			String name = neName.getValue();
+			return name;
+		} else
+			return "";
 	}
 	
 	private IItem createItem() {

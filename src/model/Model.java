@@ -334,4 +334,8 @@ public class Model extends ModelObservable implements Observer {
 		}
 		return !trampling;
 	}
+	
+	public void editItem(IItem item) {
+		notifyObservers(ModelActions.EDIT_ITEM, item);
+	}
 }

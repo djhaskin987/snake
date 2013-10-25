@@ -477,8 +477,6 @@ public class InventoryController extends Controller
 		}
 	}
 
-
-
 	private void removeItems(ITagable payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
@@ -509,8 +507,7 @@ public class InventoryController extends Controller
 		renameProductContainerSorted(getRoot(), pcd, StU.getName().getValue());
 	}
 
-	private ProductContainerData getRoot()
-	{
+	private ProductContainerData getRoot() {
 		return (ProductContainerData) getStorageUnitsManager().getTag();
 	}
 	
@@ -589,10 +586,13 @@ public class InventoryController extends Controller
 	private void insertProduct(ITagable payload) {
 	}
 
-	private void insertItem(ITagable payload) {
-	}
-
 	private void editItem(ITagable payload) {
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		model.ValidDate vDate = item.getEntryDate();
+		Date date = vDate.toJavaUtilDate();
+		iData.setEntryDate(date);
+		refreshItems();
 	}
 	
 	private void insertStorageUnit(ITagable payload) {
