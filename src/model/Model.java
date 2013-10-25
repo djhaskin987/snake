@@ -22,6 +22,7 @@ public class Model extends ModelObservable implements Observer {
 	private StorageUnits storageUnits;
 	private ProductCollection productCollection;
 	private ItemCollection itemCollection;
+	private RemovedItems removedItems;
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
@@ -47,6 +48,7 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
 		itemCollection = new ItemCollection();
+		removedItems = new RemovedItems();
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
@@ -98,6 +100,11 @@ public class Model extends ModelObservable implements Observer {
 	
 	public void setItemCollection(ItemCollection items){
 		this.itemCollection = items;
+	}
+
+
+	public RemovedItems getRemovedItems() {
+		return removedItems;
 	}
 	/**
 	 * 
@@ -337,5 +344,17 @@ public class Model extends ModelObservable implements Observer {
 	
 	public void editItem(IItem item) {
 		notifyObservers(ModelActions.EDIT_ITEM, item);
+	}
+
+
+	public boolean canDeleteProduct(IProductContainer iProductContainer, IProduct product) {
+		return
+				iProductContainer != null
+				&& product != null
+				&& iProductContainer.getItems(product.getDescription().getValue()).size() == 0;
+	}
+
+	public void deleteProduct(IProductContainer productContainer, IProduct product) {
+		productContainer.removeProduct(product);
 	}
 }

@@ -139,4 +139,9 @@ public class ProductItems extends Observable implements Serializable {
 		// add items to list
 		itemList.addAll(batch);	
 	}
+
+	public void removeProduct(IProduct product) {
+		//TODO: It says this is an optional operation. I need to make sure it actually exists.
+		map.remove(product);
+	}
 }

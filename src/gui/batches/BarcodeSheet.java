@@ -106,11 +106,12 @@ public class BarcodeSheet implements Closeable {
 		}
 	}
 
-	public static void main(String[] args) throws IOException, DocumentException {
+//TODO: make this a JUnit test.
+/*	public static void main(String[] args) throws IOException, DocumentException {
 		BarcodeSheet codes = new BarcodeSheet();
 		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test"), null, 1, null), new model.Barcode(), new Date(), null));
 		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test2"), null, 2, null), new model.Barcode(), new Date(), null));
 		codes.close();
 		codes.print();
-	}
+	}*/
 }
