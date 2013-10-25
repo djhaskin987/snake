@@ -159,7 +159,7 @@ public class AddProductController extends Controller implements
 		ProductData productData = new ProductData();
 		productData.setBarcode(barcode);
 		productData.setDescription(description);
-		productData.setSize(itemSize.getString());
+		productData.setSize(itemSize.toString());
 		productData.setShelfLife(Integer.toString(shelfLife));
 		productData.setSupply(Integer.toString(threeMonthSupply));
 		

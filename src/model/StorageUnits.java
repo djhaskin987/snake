@@ -4,28 +4,22 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
-import gui.common.ITagable;
-import gui.common.Tagable;
-import gui.inventory.ProductContainerData;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
 
-
-public class StorageUnits extends ProductContainer implements IContextPanelNode, Serializable, ITagable {
+public class StorageUnits extends ProductContainer implements Serializable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
-	private Tagable tagable;
 	
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
 		storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
-		tagable = new Tagable();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -145,11 +139,14 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	}
 
 	/**
-	 * Does nothing.
+	 * Returns a list of all the items of that product.
+	 * 
+	 * @return A list of all the items of that product.
 	 */
 	@Override
 	public Collection<IItem> getItems(String productName) {
-		return null;
+		return new ArrayList<IItem>();
+		//TODO: Make it show all the items of that product, instead of none.
 	}
 
 	/**
@@ -158,34 +155,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	@Override
 	public void removeItem(Barcode barcode) {
 		
-	}
-	
-
-	public IProductContainer getProductContainer(String name){
-		Collection<StorageUnit> StorageUnits= storageUnits.values();
-		
-		for(StorageUnit unit:StorageUnits){
-			if (unit.getName().toString().equals(name)){
-				return unit;
-			}
-			else{
-				for(IProductContainer pc : unit.getProductContainers()){
-					if (pc.isEnabled()){
-						return pc;
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	private void notifyObservers(ModelActions action,
-			ITagable payload)
-	{
-		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
-		System.out.println("Number of Observers: " + countObservers());
-		setChanged();
-		notifyObservers(pair);
 	}
 
 	public void addProductGroup(IProductContainer p) {
@@ -262,7 +231,7 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 	 */
 	@Override
 	public Unit getThreeMonthSupplyUnit() {
-		return null;
+		throw new UnsupportedOperationException("StorageUnits class doesn't have a three month supply");
 	}
 
 	/**
@@ -273,13 +242,6 @@ public class StorageUnits extends ProductContainer implements IContextPanelNode,
 		return "";
 	}
 
-	public boolean containsItem(String barcode) {
-		// TODO: Add Javadocs and unit tests
-		for (StorageUnit u : storageUnits.values()) {
-			
-		}
-		return false;
-	}
 	@Override
 	public void setParent(ProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits class IS the parent!");

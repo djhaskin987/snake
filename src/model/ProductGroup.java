@@ -56,23 +56,11 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	}
 	
 	// internal
-	void setParent(IProductContainer container) {
+	@Override
+	public void setParent(IProductContainer container) {
 		parentContainer = container;
 	}
-	
-	/**
-	 * Nothing. Always returns null
-	 * 
-	 * @return null
-	 * 
-	 * {@pre none}
-	 * 
-	 * {@post null}
-	 */
-	@Override
-	public String getUnit() {
-		return null;
-	}
+
 	
 	/**
 	 * Gets the three month supply for the product group, if it exists.
@@ -88,9 +76,13 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		if (threeMonthSupply != null)
 			return threeMonthSupply.toString();
 		else
-			return null;
+			return "";
 	}
 	
+	public Quantity getThreeMonthSupplyQuantity()
+	{
+		return threeMonthSupply;
+	}
 	/**
 	 * @param threeMonthSupply
 	 * 
@@ -125,9 +117,5 @@ public class ProductGroup extends ProductContainer implements Serializable {
 	public String getThreeMonthSupplyValueString() {
 		return threeMonthSupply.getValueString();
 	}
-	
-	@Override
-	public void setParent(ProductContainer productContainer) {
-		parentContainer = productContainer;
-	}
+
 }

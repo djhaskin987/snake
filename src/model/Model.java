@@ -7,6 +7,7 @@ import gui.common.ITagable;
 
 import java.util.Observer;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 
@@ -279,9 +280,58 @@ public class Model extends ModelObservable implements Observer {
 				Double.parseDouble(supplyValue), newUnit);
 		ProductGroup pg = ((ProductGroup)productContainer);
 		pg.getParent().deleteProductContainer(pg.getName().toString());
-		pg.setThreeMonthSupply(newQuantity);
-		pg.setName(productGroupName);
+		if (!productGroupName.equals(productContainer.getName().toString()))
+		{
+			pg.setName(productGroupName);
+		}
+		if (!pg.getThreeMonthSupplyQuantity().equals(newQuantity))
+		{
+			pg.setThreeMonthSupply(newQuantity);
+		}
 		pg.getParent().addProductContainer(pg);
 		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, pg);
+	}
+
+	private boolean areValidProductGroupSpecifiers(
+			String name,
+			String supplyValue,
+			String supplyUnit)
+	{
+		return !name.equals("")
+				&& !supplyValue.equals("")
+				&& NumberUtils.isNumber(supplyValue)
+				&& Quantity.isValidQuantity(
+						Double.parseDouble(supplyValue),
+						Unit.getInstance(supplyUnit));
+	}
+	
+	public boolean canAddProductGroup(
+			IProductContainer parent,
+			String name,
+			String supplyValue,
+			String supplyUnit)
+	{
+		return areValidProductGroupSpecifiers(name,
+				supplyValue, supplyUnit) && 
+				!parent.hasChild(name);
+	}
+	
+	public boolean canEditProductGroup(IProductContainer productContainer,
+			String productGroupName, String supplyValue, String supplyUnit) {
+		if (!areValidProductGroupSpecifiers(productGroupName,
+				supplyValue, supplyUnit))
+		{
+			return false;
+		}
+		Quantity correspondingQuantity =
+				Quantity.createInstance(supplyValue, supplyUnit);
+		ProductGroup pg = (ProductGroup)productContainer;
+
+		boolean trampling = pg.getParent().hasChild(productGroupName);
+		if (!pg.getThreeMonthSupplyQuantity().equals(correspondingQuantity))
+		{
+			trampling = trampling && !pg.getName().toString().equals(productGroupName);
+		}
+		return !trampling;
 	}
 }

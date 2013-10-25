@@ -11,7 +11,6 @@ public class ModelObservable extends Observable {
 			ITagable payload)
 	{
 		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
-		System.out.println("Number of Observers: " + countObservers());
 		setChanged();
 		notifyObservers(pair);
 	}

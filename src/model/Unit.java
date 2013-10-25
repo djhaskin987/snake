@@ -60,7 +60,12 @@ public enum Unit {
 
 	public static Unit getInstance(String s)
 	{
-		return getTable().match(s);
-		
+		Unit correspondingUnit = getTable().match(s);
+		if (correspondingUnit == null)
+		{
+			throw new IllegalArgumentException("Given an invalid unit string '" +
+					s + "'");
+		}
+		return correspondingUnit;
 	}
 }

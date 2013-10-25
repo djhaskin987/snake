@@ -61,21 +61,16 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
-		if (
-				getView().getProductGroupName().equals("")
-				|| getView().getSupplyValue().equals("")
-				|| !NumberUtils.isNumber(getView().getSupplyValue())
-				|| !Quantity.isValidQuantity(
-						Double.parseDouble(getView().getSupplyValue()),
-						Unit.getInstance(getView().getSupplyUnit().toString()))
-				|| getParentProductContainer().hasChild(
-						getView().getProductGroupName())
-				) {
-			getView().enableOK(false);
-			return;
+		if(getModel().canAddProductGroup(getParentProductContainer(),
+				getView().getProductGroupName(), getView().getSupplyValue(),
+				getView().getSupplyUnit().toString()))
+		{
+			getView().enableOK(true);
 		}
-		getView().enableOK(true);
-		return;
+		else
+		{
+			getView().enableOK(false);
+		}
 	}
 
 	/**

@@ -6,7 +6,6 @@ import gui.product.*;
 
 import java.util.*;
 
-import model.IContextPanelNode;
 import model.IItem;
 import model.IProduct;
 import model.IProductContainer;
@@ -196,7 +195,7 @@ public class InventoryController extends Controller
 	@Override
 	public void productContainerSelectionChanged() {
 		ProductContainerData pcd = getView().getSelectedProductContainer();
-		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		IProductContainer node = (IProductContainer) pcd.getTag();
 		getView().setContextGroup(node.getProductGroupName());
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
@@ -218,7 +217,7 @@ public class InventoryController extends Controller
 	@Override
 	public void productSelectionChanged() {
 		ProductContainerData pcd = getView().getSelectedProductContainer();
-		IContextPanelNode node = (IContextPanelNode) pcd.getTag();
+		IProductContainer node = (IProductContainer) pcd.getTag();
 		ProductData productData = getView().getSelectedProduct();
 		Collection<IItem> items = node.getItems(productData.getDescription());
 
@@ -408,7 +407,6 @@ public class InventoryController extends Controller
 				editStorageUnit(payload);
 				break;
 			case INSERT_PRODUCT_GROUP:
-				System.out.println("insert product group");
 				insertProductGroup(payload);
 				break;
 			case EDIT_PRODUCT_GROUP:
