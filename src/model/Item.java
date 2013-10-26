@@ -125,4 +125,9 @@ public class Item extends Tagable implements IItem {
 			return val;
 		}
 	}
+	@Override
+	public void move(IProductContainer target) {
+		getProductContainer().removeItem(getBarcode());
+		target.add(this);
+	}
 }

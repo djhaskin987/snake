@@ -214,9 +214,7 @@ public class Model extends ModelObservable implements Observer {
 		// TODO Add unit tests and javadocs
 		IProductContainer current = item.getProductContainer();
 		current.transferItem(item, (ProductContainer)target);
-		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.TRANSFER_ITEMS, (ITagable)item);
-		setChanged();
-		notifyObservers(p);
+		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
 	}
 
 	public boolean canTransferItems() {
@@ -378,5 +376,23 @@ public class Model extends ModelObservable implements Observer {
 	public void deleteProductGroup(IProductContainer pc) {
 		pc.getParent().deleteProductContainer(
 				pc.getName().toString());
+	}
+
+	public void moveItemToContainer(IItem item, IProductContainer target) {
+		IProductContainer targetUnit = target.getUnitPC();
+		IProductContainer ExistingPC = targetUnit.whoHasProduct(item.getProduct());
+		if (ExistingPC != null)
+		{
+			ExistingPC.moveProduct(item.getProduct(), target);
+		}
+		else
+		{
+			item.move(target);
+		}
+	}
+
+
+	public void addProductToContainer(IProduct tag, IProductContainer tag2) {
+		
 	}
 }

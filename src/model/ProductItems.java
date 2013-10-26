@@ -150,4 +150,9 @@ public class ProductItems extends Observable implements Serializable {
 		map.remove(product);
 		product.removeProductContainer(productContainer);
 	}
+
+	public Collection<IItem> getItems(IProduct product) {
+		return java.util.Collections.unmodifiableList(
+				map.get(product));
+	}
 }

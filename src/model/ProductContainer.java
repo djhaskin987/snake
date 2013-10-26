@@ -285,28 +285,29 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 * @return 		IProductContainer object containing Product with description of 'name'.
 	 * 				Null if there nothing is there.
 	 *
-	 * {@pre name is not null}
+	 * {@pre name is not null,
+	 * each product is unique within a storage unit}
 	 * {@post ProductContainer object}
 	 */
 	@Override
-	public IProductContainer whoHasProduct(String name) {
-		if (hasProduct(this, name))
+	public IProductContainer whoHasProduct(IProduct product) {
+		if (productItems.contains(product))
+		{
 			return this;
-		
-		for (IProductContainer pc : productContainers.getProductContainers().values()) {
-			if (hasProduct(pc, name))
-				return pc;
 		}
-		return null;
-	}
-	
-	private static boolean hasProduct(IProductContainer pc, String name)
-	{
-		for (IProduct p : pc.getProducts()) {
-			if (p.getDescription().getValue() == name)
-				return true;
+		else
+		{
+			IProductContainer child = null;
+			for (IProductContainer pc : productContainers.getProductContainers().values())
+			{
+				child = pc.whoHasProduct(product);
+				if (child != null)
+				{
+					break;
+				}
+			}
+			return child;
 		}
-		return false;
 	}
 	
 	public Object getTag()
@@ -453,5 +454,29 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			returned.addAll(pc.getProductsRecursive());
 		}
 		return returned;
+	}
+	
+	public void moveProduct(IProduct product, IProductContainer target)
+	{
+		if (product == null)
+		{
+			throw new IllegalArgumentException("Product given is null.");
+		}
+		if (!this.getProducts().contains(product))
+		{
+			throw new IllegalArgumentException("this Product Container doesn't contain product '" +
+					product.getDescription() + "'");
+		}
+		Collection<IItem> pi = productItems.getItems(product);
+		productItems.removeProduct(product);
+		for (IItem i : pi)
+		{
+			target.addItem(i);
+		}
+	}
+	
+	public void moveItem(IItem item, IProductContainer target)
+	{
+
 	}
 }

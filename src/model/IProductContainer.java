@@ -46,7 +46,8 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * 
 	 * @return collection of items of a specific product
 	 */
-	public Collection<IItem> getItems(IProduct p);
+	//TODO: Was this supposed to return null or an empty collection if there is no such item?
+	public Collection<IItem> getItems(String productName);
 	
 	/**
 	 * Takes in a barcode and removes an Item from a ProductContainer and sets
@@ -55,7 +56,6 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * @param barcode the barcode 
 	 */
 	public void removeItem(Barcode barcode);
-	
 	
 	/** Retrieve the name of this product container.
 	 * {@pre The product container is initialized and not null.}
@@ -140,7 +140,7 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * {@post object remains unchanged.}
 	 * @return IproductContainer that holds Product
 	 */
-	public IProductContainer whoHasProduct(String name);
+	public IProductContainer whoHasProduct(IProduct product);
 	
 	
 	/**
@@ -171,4 +171,5 @@ public interface IProductContainer extends Serializable, ITagable {
 
 	public Collection<IProduct> getProductsRecursive();
 
+	public void moveProduct(IProduct product, IProductContainer target);
 }

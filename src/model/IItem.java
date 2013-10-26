@@ -70,4 +70,7 @@ public interface IItem extends ITagable, Serializable {
 	
 	public String getStorageUnitName();
 
+	public void move(IProductContainer target);
+
+
 }
