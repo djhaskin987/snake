@@ -477,9 +477,9 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			target.addItem(i);
 		}
 	}
-
-	public void moveItem(IItem item, IProductContainer target)
+	
+	public void addProduct(IProduct product)
 	{
-
+		productItems.addProduct(product);
 	}
 }

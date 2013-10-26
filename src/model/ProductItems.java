@@ -151,4 +151,11 @@ public class ProductItems extends Observable implements Serializable {
 		return java.util.Collections.unmodifiableList(
 				map.get(product));
 	}
+
+	public void addProduct(IProduct product) {
+		if (!map.containsKey(product))
+		{
+			map.put(product, new ArrayList<IItem>());
+		}
+	}
 }

@@ -379,20 +379,30 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void moveItemToContainer(IItem item, IProductContainer target) {
-		IProductContainer targetUnit = target.getUnitPC();
-		IProductContainer ExistingPC = targetUnit.whoHasProduct(item.getProduct());
-		if (ExistingPC != null)
-		{
-			ExistingPC.moveProduct(item.getProduct(), target);
-		}
-		else
+		if (!moveProduct(item.getProduct(), target))
 		{
 			item.move(target);
 		}
 	}
 
-
-	public void addProductToContainer(IProduct tag, IProductContainer tag2) {
-		
+	private boolean moveProduct(IProduct product, IProductContainer target)
+	{
+		IProductContainer targetUnit = target.getUnitPC();
+		IProductContainer ExistingPC = targetUnit.whoHasProduct(product);
+		if (ExistingPC != null)
+		{
+			ExistingPC.moveProduct(product, target);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public void addProductToContainer(IProduct product, IProductContainer target) {
+		if (!moveProduct(product, target))
+		{
+			target.addProduct(product);
+		}
 	}
 }

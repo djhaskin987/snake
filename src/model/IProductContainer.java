@@ -172,4 +172,6 @@ public interface IProductContainer extends Serializable, ITagable {
 	public Collection<IProduct> getProductsRecursive();
 
 	public void moveProduct(IProduct product, IProductContainer target);
+
+	public void addProduct(IProduct product);
 }
