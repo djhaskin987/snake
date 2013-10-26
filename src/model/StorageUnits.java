@@ -167,8 +167,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 
 	public boolean canEditStorageUnit(String storageUnitName,
 			IProductContainer storageUnit) {
-		if (storageUnitName == null || storageUnitName.isEmpty() ||
-				storageUnitName.equals(storageUnit.getName().toString()))
+		if (storageUnitName == null || storageUnitName.isEmpty())
 		{
 			return false;
 		}
