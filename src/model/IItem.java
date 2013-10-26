@@ -24,7 +24,7 @@ public interface IItem extends ITagable, Serializable {
 	public void setEntryDate(ValidDate date);
 	
 	/**
-	 * Sets the exitDate of the IItem and removes it from any ProductContainer
+	 * Sets the exitDate of the IItem
 	 */
 	public void exit();
 	

@@ -46,6 +46,7 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * 
 	 * @return ProductGroup name
 	 */
+	//TODO: Was this supposed to return null or an empty collection if there is no such item?
 	public Collection<IItem> getItems(String productName);
 	
 	/**
@@ -168,5 +169,6 @@ public interface IProductContainer extends Serializable, ITagable {
 
 	public void removeProduct(IProduct product);
 	public void removeProductRecursive(IProduct product);
+	public Collection<IItem> recursiveGetItems(String productName);
 
 }

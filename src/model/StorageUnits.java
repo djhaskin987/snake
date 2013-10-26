@@ -15,11 +15,9 @@ import java.util.TreeMap;
 public class StorageUnits extends ProductContainer implements Serializable {
 
 	private static final long serialVersionUID = 8036575061038335165L;
-	private TreeMap<NonEmptyString, StorageUnit> storageUnits;
 	
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
-		storageUnits = new TreeMap<NonEmptyString, StorageUnit>();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -34,8 +32,8 @@ public class StorageUnits extends ProductContainer implements Serializable {
 			throw new IllegalArgumentException("Arguments cannot be null.");
 		}
 		NonEmptyString realName = new NonEmptyString(name);
-		storageUnits.remove(realName);
-		storageUnits.put(realName, storageUnit);
+		productContainers.remove(realName);
+		productContainers.add(storageUnit);
 	}
 	
 	/** Adds a storage unit to the internal storage units collection.
@@ -44,15 +42,14 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 * @param storageUnit
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
-		storageUnits.put(storageUnit.getName(), storageUnit);
+		productContainers.add(storageUnit);
 		notifyObservers(ModelActions.INSERT_STORAGE_UNIT,
 				storageUnit);
 	}
 	
 	public List<String> getStorageUnitNames(){
-		
 		List<String> returned = new LinkedList<String>();
-		for (NonEmptyString name : storageUnits.keySet())
+		for (NonEmptyString name : productContainers.getProductContainers().keySet())
 		{
 			returned.add(name.getValue());
 		}
@@ -71,7 +68,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 * {@post a stroage unit}
 	 */
 	public StorageUnit getStorageUnit(String name){
-		return storageUnits.get(new NonEmptyString(name));
+		return (StorageUnit) productContainers.getProductContainers().get(new NonEmptyString(name));
 	}
 	
 	/**
@@ -83,7 +80,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 * {@post storage unit is removed}
 	 */
 	public void deleteStorageUnit(String name){
-		storageUnits.remove(new NonEmptyString(name));
+		productContainers.remove(new NonEmptyString(name));
 	}
 	
 	/**
@@ -97,7 +94,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 * {@post boolean value}
 	 */
 	public boolean canDelete(String name){
-		return storageUnits.containsKey(new NonEmptyString(name));
+		return productContainers.getProductContainers().containsKey(new NonEmptyString(name));
 	}
 
 	/**
@@ -145,8 +142,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public Collection<IItem> getItems(String productName) {
-		return new ArrayList<IItem>();
-		//TODO: Make it show all the items of that product, instead of none.
+		return recursiveGetItems(productName);
 	}
 
 	/**
@@ -184,9 +180,9 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	}
 	
 	public void changeStorageUnitName(IProductContainer stU, String name) {
-		storageUnits.remove(stU.getName());
+		productContainers.remove(stU.getName());
 		stU.setName(name);
-		storageUnits.put(stU.getName(), (StorageUnit) stU);
+		productContainers.add(stU);
 		notifyObservers(ModelActions.EDIT_STORAGE_UNIT,
 				stU);
 	}
@@ -194,7 +190,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	@Override
 	public boolean hasItems()
 	{
-		for (StorageUnit s : storageUnits.values())
+		for (IProductContainer s : productContainers.getProductContainers().values())
 		{
 			if (s.hasItems())
 			{
@@ -207,7 +203,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	@Override
 	public boolean hasItemsRecursive()
 	{
-		for (StorageUnit s : storageUnits.values())
+		for (IProductContainer s : productContainers.getProductContainers().values())
 		{
 			if (s.hasItemsRecursive())
 			{
@@ -249,7 +245,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	
 	@Override
 	public void removeProduct(IProduct product) {
-		Model.getInstance().getRemovedItems().deleteItemsByProduct(product.getDescription().getValue());
+		Model.getInstance().getRemovedItems().deleteItemsByProduct(product);
 		removeProductRecursive(product);
 		Model.getInstance().getProductCollection().removeProduct(product);
 		//product.remove();

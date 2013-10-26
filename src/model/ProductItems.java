@@ -78,18 +78,13 @@ public class ProductItems extends Observable implements Serializable {
 	/**
 	 * {@pre		item is in this}
 	 * {@post		item is removed. If item was the last Item of its Product,
-	 * 		that product is also removed.}
-	 * @param item	Item to be removed. Automatically removes the product if that's the last item.
+	 * 		that product is now empty.}
+	 * @param item	Item to be removed. Leaves an empty product if that's the last item.
 	 */
 	public void removeItem(IItem item) {
 		IProduct product = item.getProduct();
 		Collection<IItem> itemList = map.get(product);
-		if(itemList.size() == 1) {
-			map.remove(product);
-		} else {
-			itemList.remove(item);
-			
-		}
+		itemList.remove(item);
 	}
 
 	/**

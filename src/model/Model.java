@@ -247,11 +247,12 @@ public class Model extends ModelObservable implements Observer {
 		// FIXME doesn't actually do anything meaningful
 	}
 
-	public void removeItem(IItem i) {
-		IProductContainer pc = i.getProductContainer();
-		if (pc != null)
-			pc.removeItem(i.getBarcode());
-		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (ITagable)i);
+	public void removeItem(IItem item) {
+		IProductContainer productContainer = item.getProductContainer();
+		if (productContainer != null)
+			item.exit();
+			productContainer.transferItem(item, removedItems);
+		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (ITagable) item);
 		setChanged();
 		notifyObservers(p);
 	}
@@ -345,7 +346,10 @@ public class Model extends ModelObservable implements Observer {
 		return
 				iProductContainer != null
 				&& product != null
-				&& iProductContainer.getItems(product.getDescription().getValue()).size() == 0;
+				&& (
+						iProductContainer.getItems(product.getDescription().getValue()) == null
+						|| iProductContainer.getItems(product.getDescription().getValue()).size() == 0
+				);
 	}
 
 	public void deleteProduct(IProductContainer productContainer, IProduct product) {

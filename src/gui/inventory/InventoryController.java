@@ -223,6 +223,10 @@ public class InventoryController extends Controller
 		IProductContainer node = (IProductContainer) pcd.getTag();
 		ProductData productData = getView().getSelectedProduct();
 		Collection<IItem> items = node.getItems(productData.getDescription());
+		if(items == null) {
+			getView().setItems(new ItemData[0]);
+			return;
+		}
 
 		ItemData[] itemDatas = new ItemData[items.size()];
 		int i=0;
@@ -269,6 +273,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditItem() {
+		if(getView().getSelectedItem() == null) {
+			return false;
+		}
 		return Model.getInstance().canEditItem(
 				getView().getSelectedItem().getBarcode());
 	}
@@ -288,6 +295,9 @@ public class InventoryController extends Controller
 	public boolean canRemoveItem() {
 		IInventoryView v = getView();
 		ItemData iData = v.getSelectedItem();
+		if(iData == null) {
+			return false;
+		}
 		return getModel().canRemoveItem(iData.getBarcode());
 	}
 
@@ -308,6 +318,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canEditProduct() {
+		if(getView().getSelectedProduct() == null) {
+			return false;
+		}
 		return Model.getInstance().canEditProduct(
 				getView().getSelectedProduct().getBarcode());
 	}
