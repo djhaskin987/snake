@@ -363,6 +363,9 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
+		if(products.size() == 0) {
+			return;
+		}
 		BarcodeSheet codes = new BarcodeSheet();
 		for(ProductData product : products) {
 			ItemData[] itemDatas = getItems(product);
