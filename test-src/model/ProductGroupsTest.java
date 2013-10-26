@@ -10,16 +10,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ProductGroupsTest {
-	ProductGroups pg;
+	ProductContainers pg;
 	
 	@Before
 	public void setUp() throws Exception {
-		pg = new ProductGroups();
+		pg = new ProductContainers();
 	}
 
 	@Test
 	public void testGetProductGroups() {
-		Map<NonEmptyString, ProductGroup> map = pg.getProductGroups();
+		Map<NonEmptyString, IProductContainer> map = pg.getProductContainers();
 		assertTrue("must not be null", map != null);
 	}
 
@@ -27,7 +27,7 @@ public class ProductGroupsTest {
 	public void testSetProductGroup() {
 		ProductGroup instance = new ProductGroup();
 		pg.setProductGroup(instance.getName(), instance);
-		Map<NonEmptyString, ProductGroup> map = pg.getProductGroups();
+		Map<NonEmptyString, IProductContainer> map = pg.getProductContainers();
 		assertTrue(map.containsKey(instance.getName()));
 		assertTrue(map.containsValue(instance));
 	}
@@ -61,7 +61,7 @@ public class ProductGroupsTest {
 
 	@Test
 	public void testIterator() {
-		Iterator<ProductGroup> itr = pg.iterator();
+		Iterator<IProductContainer> itr = pg.iterator();
 		assertTrue("must not be null", itr != null);
 	}
 

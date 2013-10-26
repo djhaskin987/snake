@@ -48,29 +48,29 @@ public class ProductGroupTest {
 	@Test
 	public void testAddProductGroup() {
 		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
+		productGroup.addProductContainer(pg);
+		Collection<IProductContainer> pgCollection = productGroup.getProductContainers();
 		assertTrue("should contain a product group", pgCollection.contains(pg));
 	}
 
 	@Test
 	public void testDeleteProductContainer() {
 		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
+		productGroup.addProductContainer(pg);
 		productGroup.deleteProductContainer("testPG");
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
+		Collection<IProductContainer> pgCollection = productGroup.getProductContainers();
 		assertTrue("should not contain a product group", !pgCollection.contains(pg));
 	}
 
 	@Test
 	public void testSetProductContainer() {
 		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
-		productGroup.addProductGroup(pg);
+		productGroup.addProductContainer(pg);
 		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
 		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
 		pg2.add(new Item(product, new Barcode(), new Date(), pg2));
 		productGroup.setProductContainer("testPG", pg2);
-		Collection<ProductGroup> pgCollection = productGroup.getProductGroups();
+		Collection<IProductContainer> pgCollection = productGroup.getProductContainers();
 		assertTrue("must contain the last item", pgCollection.contains(pg2));
 	}
 

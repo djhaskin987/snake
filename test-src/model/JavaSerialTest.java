@@ -41,7 +41,7 @@ public class JavaSerialTest {
 		StorageUnit stuTest = new StorageUnit(stUName);
 		NonEmptyString prdGName = new NonEmptyString("Soda");
 		ProductGroup prodGTest = new ProductGroup(prdGName);
-		stuTest.addProductGroup(prodGTest);
+		stuTest.addProductContainer(prodGTest);
 		
 		List<ProductContainer> containers = new ArrayList();
 		containers.add(prodGTest);

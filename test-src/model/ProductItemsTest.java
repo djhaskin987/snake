@@ -8,7 +8,7 @@ public class ProductItemsTest {
 
 	@Test
 	public void test() {
-		ProductItems productItems = new ProductItems();
+		ProductItems productItems = new ProductItems(null);
 		Product product0 = new Product(null, null, null, 0, 0);
 		Product product1 = new Product(null, null, null, 0, 0);
 		Item item00 = new Item(product0, null, null, null);
@@ -42,11 +42,11 @@ public class ProductItemsTest {
 		assertFalse(productItems.getItems().contains(item10));
 		
 		productItems.removeItem(item00);
-		assertTrue(productItems.getProducts().size() == 0);
+		assertTrue(productItems.getProducts().size() == 1);
 		assertTrue(productItems.getItems().size() == 0);
-		assertFalse(productItems.contains(product0));
+		assertTrue(productItems.contains(product0));
 		assertFalse(productItems.contains(product1));
-		assertFalse(productItems.getProducts().contains(product0));
+		assertTrue(productItems.getProducts().contains(product0));
 		assertFalse(productItems.getProducts().contains(product1));
 		assertFalse(productItems.contains(item00));
 		assertFalse(productItems.contains(item01));
