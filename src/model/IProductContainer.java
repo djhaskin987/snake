@@ -47,7 +47,7 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * @return collection of items of a specific product
 	 */
 	//TODO: Was this supposed to return null or an empty collection if there is no such item?
-	public Collection<IItem> getItems(String productName);
+	public Collection<IItem> getItems(IProduct product);
 	
 	/**
 	 * Takes in a barcode and removes an Item from a ProductContainer and sets
@@ -135,7 +135,7 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * Searchs ProductContainer to see who has a specific Product.  
 	 * Once it finds the Product it stops looking because every ProductContainer Tree 
 	 * can only contain one instance of a unique Product
-	 * @param name
+	 * @param iProduct
 	 * {@pre name is non-null and non-empty, and actually names a Product}
 	 * {@post object remains unchanged.}
 	 * @return IproductContainer that holds Product

@@ -455,7 +455,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		return returned;
 	}
-
+	
+	@Override
 	public void moveProduct(IProduct product, IProductContainer target)
 	{
 		if (product == null)
@@ -475,6 +476,12 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 	}
 
+	@Override
+	public Collection<IItem> getItemsRecursive(String productName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public void moveItem(IItem item, IProductContainer target)
 	{
 

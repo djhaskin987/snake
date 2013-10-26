@@ -58,10 +58,6 @@ public class ProductItems extends Observable implements Serializable {
 		return out;
 	}
 	
-	public Collection<IItem> getItems(IProduct p) {
-		return map.get(p);
-	}
-	
 	/**
 	 * @pre			{item is not already in this}
 	 * @post		{item is added}
