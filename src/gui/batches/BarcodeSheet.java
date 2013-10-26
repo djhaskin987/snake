@@ -72,8 +72,12 @@ public class BarcodeSheet implements Closeable {
 		}
 		//font.setSize(1.0f);
 		cell.addElement(new Paragraph(item.getProduct().getDescription().getValue(), font));
-		cell.addElement(new Paragraph(item.getEntryDate().toString()
-				+ " exp " + item.getExpireDate(), font));
+		if(item.getExpireDate() == null) {
+			cell.addElement(new Paragraph(item.getEntryDate().toString(), font));
+		} else  {
+			cell.addElement(new Paragraph(item.getEntryDate().toString()
+					+ " exp " + item.getExpireDate(), font));
+		}
 		cell.addElement(new Paragraph(" ", font));
 		cell.addElement(codeEAN.createImageWithBarcode(cb, null, null));
 		cell.setBorder(0);

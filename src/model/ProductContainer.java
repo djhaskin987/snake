@@ -85,6 +85,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			}
 		}
 		productItems.addItem(item);
+		item.setProductContainer(this);
 		return;
 	}
 	
