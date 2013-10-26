@@ -137,7 +137,8 @@ public class TransferItemBatchController extends Controller implements
 			++i;
 		}
 		v.setItems(itemDatas);
-		v.selectItem(itemDatas[i - 1]);
+		if (i > 0)
+			v.selectItem(itemDatas[i - 1]);
 		enableComponents();
 
 	}

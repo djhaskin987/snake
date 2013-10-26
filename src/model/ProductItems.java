@@ -74,6 +74,7 @@ public class ProductItems extends Observable implements Serializable {
 			itemList = new ArrayList<IItem>();
 			itemList.add(item);
 			map.put(product, itemList);
+			product.addProductContainer(productContainer);
 		} else {
 			itemList.add(item);
 		}

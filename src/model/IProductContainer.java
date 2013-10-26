@@ -42,12 +42,11 @@ public interface IProductContainer extends Serializable, ITagable {
 	/**
 	 * Gets all items related to a specific Product
 	 * 
-	 * @param productName String Name of a Product 
+	 * @param p an IProduct 
 	 * 
-	 * @return ProductGroup name
+	 * @return collection of items of a specific product
 	 */
-	//TODO: Was this supposed to return null or an empty collection if there is no such item?
-	public Collection<IItem> getItems(String productName);
+	public Collection<IItem> getItems(IProduct p);
 	
 	/**
 	 * Takes in a barcode and removes an Item from a ProductContainer and sets
@@ -56,8 +55,6 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * @param barcode the barcode 
 	 */
 	public void removeItem(Barcode barcode);
-	
-	
 	
 	
 	/** Retrieve the name of this product container.
@@ -170,7 +167,7 @@ public interface IProductContainer extends Serializable, ITagable {
 
 	public void removeProduct(IProduct product);
 	public void removeProductRecursive(IProduct product);
-	public Collection<IItem> getItemsRecursive(String productName);
+	public Collection<IItem> getItemsRecursive(IProduct product);
 
 	public Collection<IProduct> getProductsRecursive();
 
