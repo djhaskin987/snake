@@ -67,6 +67,7 @@ public class AddStorageUnitController extends Controller implements
 	protected void loadValues() {
 		IAddStorageUnitView v = getView();
 		v.setStorageUnitName("");
+		enableComponents();
 	}
 
 	//
