@@ -439,7 +439,9 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		Collection<IItem> items = new ArrayList<IItem>();
 		for(IProductContainer productContainer : productContainers) {
 			items.addAll(productContainer.getItemsRecursive(product));
-			items.addAll(productContainer.getItems(product));
+			Collection<IItem> c = productContainer.getItems(product);
+			if (c != null)
+					items.addAll(c);
 		}
 		return items;
 	}
