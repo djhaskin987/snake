@@ -476,14 +476,18 @@ public class InventoryController extends Controller
 	
 	private void refreshItems() {
 		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
-		Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
-		ItemData[] itemDatas = new ItemData[items.size()];
-		int i = 0;
-		for(IItem item : items) {
-			itemDatas[i] = (ItemData) item.getTag();
-			++i;
+		if(productContainer != null && getView().getSelectedProduct() != null) {
+			Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
+			ItemData[] itemDatas = new ItemData[items.size()];
+			int i = 0;
+			for(IItem item : items) {
+				itemDatas[i] = (ItemData) item.getTag();
+				++i;
+			}
+			getView().setItems(itemDatas);
+		} else {
+			getView().setItems(new ItemData[0]);
 		}
-		getView().setItems(itemDatas);
 	}
 	
 	private void insertItems(ITagable payload) {

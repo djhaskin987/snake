@@ -61,7 +61,7 @@ public interface IProduct extends Serializable, ITagable {
 	 *
 	 * @return List of all Product Containers that contain this Product
 	 */
-	public List<ProductContainer> getContainers();
+	public List<IProductContainer> getContainers();
 	
 	/**
 	 * 
@@ -105,5 +105,7 @@ public interface IProduct extends Serializable, ITagable {
 	
 	@SuppressWarnings("serial")
 	public class InvalidIntegerException extends Exception{
-	}	
+	}
+
+	//void remove();	
 }

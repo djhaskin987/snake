@@ -251,5 +251,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	public void removeProduct(IProduct product) {
 		Model.getInstance().getRemovedItems().deleteItemsByProduct(product.getDescription().getValue());
 		removeProductRecursive(product);
+		Model.getInstance().getProductCollection().removeProduct(product);
+		//product.remove();
 	}
 }

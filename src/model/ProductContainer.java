@@ -433,7 +433,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public void removeProductRecursive(IProduct product) {
 		for(IProductContainer productContainer : productContainers) {
 			productContainer.removeProductRecursive(product);
+			productContainer.removeProduct(product);
 		}
-		removeProduct(product);
 	}
 }

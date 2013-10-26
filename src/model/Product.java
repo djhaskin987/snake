@@ -108,7 +108,7 @@ public class Product extends Tagable implements IProduct {
 	 * {@post Must be a non-null List of ProductContainers}
 	 */
 	@Override
-	public List<ProductContainer> getContainers() {
+	public List<IProductContainer> getContainers() {
 		return this.containers;
 	}
 	
@@ -157,7 +157,6 @@ public class Product extends Tagable implements IProduct {
 	public Integer getShelfLife() {
 		return shelfLife;
 	}
-	
 
 	@Override
 	public Collection<IItem> getItems(IProductContainer pc) {
@@ -166,7 +165,14 @@ public class Product extends Tagable implements IProduct {
 		return pc.getItems(description);
 	}
 
-	@Override
+/*	@Override
+	public void remove() {
+		IProductContainer[] tempContainers = containers.toArray(new IProductContainer[0]);
+		for(IProductContainer productContainer : tempContainers) {
+			productContainer.removeProduct(this);
+		}
+	}*/
+
 	public Collection<IItem> getAllItems() {
 		ArrayList<IItem> out = new ArrayList<IItem>();
 		for (IProductContainer container : containers) {

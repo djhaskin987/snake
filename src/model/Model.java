@@ -1,6 +1,5 @@
 package model;
 
-import java.util.List;
 import java.util.Observable;
 
 import gui.common.ITagable;
@@ -48,6 +47,7 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
 		itemCollection = new ItemCollection();
+		removedItems = new RemovedItems();
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
@@ -353,5 +353,9 @@ public class Model extends ModelObservable implements Observer {
 	}
 	public void editProduct(IProduct product) {
 		notifyObservers(ModelActions.EDIT_PRODUCT, product);	
+	}
+
+	public RemovedItems getRemovedItems() {
+		return removedItems;
 	}
 }
