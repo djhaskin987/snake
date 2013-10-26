@@ -432,6 +432,8 @@ public class InventoryController extends Controller
 		IItem item = (IItem) itemData.getTag();
 		IProductContainer target = (IProductContainer) containerData.getTag();
 		getModel().moveItemToContainer(item, target);
+		refreshProducts();
+		refreshItems();
 	}
 
 	
