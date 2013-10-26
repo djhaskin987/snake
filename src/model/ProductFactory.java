@@ -43,7 +43,8 @@ public class ProductFactory {
 	public IProduct createInstance(String barcode, String description, Quantity itemSize, 
 			Integer shelfLife, Integer threeMonthSupply){
 		
-		return new Product(new Barcode(barcode), new NonEmptyString(description), itemSize, shelfLife, threeMonthSupply);
+		return new Product(new Barcode(barcode), new NonEmptyString(description),
+				itemSize, shelfLife, threeMonthSupply);
 	}
 
 	public IProduct createInstance(Barcode barcode, NonEmptyString description,

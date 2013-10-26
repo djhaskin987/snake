@@ -125,7 +125,8 @@ public class AddProductGroupController extends Controller implements
 		IProductContainer parentPC =
 				(IProductContainer) parent.getTag();
 		
-		IProductContainer newPC = getModel().createProductGroup(name, supplyValue, supplyUnit, parentPC);
+		IProductContainer newPC = getModel().createProductGroup(
+				name, supplyValue, supplyUnit, parentPC);
 		ProductContainerData child = new ProductContainerData(name);
 		child.setTag(newPC);
 		newPC.setTag(child);

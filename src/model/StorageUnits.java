@@ -227,7 +227,8 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public Unit getThreeMonthSupplyUnit() {
-		throw new UnsupportedOperationException("StorageUnits class doesn't have a three month supply");
+		throw new UnsupportedOperationException(
+				"StorageUnits class doesn't have a three month supply");
 	}
 
 	/**

@@ -56,7 +56,8 @@ public class Item extends Tagable implements IItem {
 	 *			It is also automatically given the current date as an entry date,
 	 *			and null as the exit time.}
 	 */
-	public Item(Product product, Barcode barcode, ValidDate entryDate, Date expireDate, IProductContainer container) {
+	public Item(Product product, Barcode barcode, ValidDate entryDate,
+			Date expireDate, IProductContainer container) {
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;

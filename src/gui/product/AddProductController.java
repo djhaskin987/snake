@@ -67,8 +67,6 @@ public class AddProductController extends Controller implements
 				Barcode.isValidBarcode(getView().getBarcode())
 				&& !getView().getDescription().isEmpty()
 				&& NumberUtils.isNumber(getView().getSizeValue())
-				//&& Quantity.isValidQuantity(Double.parseDouble(getView().getSizeValue()), SizeUnitsUnitConversion.sizeUnitsToUnit(getView().getSizeUnit()))
-				//&& (getView().getSizeUnit() != SizeUnits.Count || Double.parseDouble(getView().getSizeValue()) == 1)
 				&& NumberUtils.isDigits(getView().getShelfLife())
 				&& Integer.parseInt(getView().getShelfLife()) >= 0
 				&& NumberUtils.isDigits(getView().getSupply())
@@ -154,7 +152,8 @@ public class AddProductController extends Controller implements
 		Quantity itemSize = new Quantity(sizeValue, sizeUnit);
 		int shelfLife = Integer.parseInt(getView().getShelfLife());
 		int threeMonthSupply = Integer.parseInt(getView().getSupply());
-		IProduct product = Model.getInstance().createProduct(barcode, description, itemSize, shelfLife, threeMonthSupply);
+		IProduct product = Model.getInstance().createProduct(
+				barcode, description, itemSize, shelfLife, threeMonthSupply);
 		
 		ProductData productData = new ProductData();
 		productData.setBarcode(barcode);

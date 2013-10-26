@@ -12,7 +12,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author Nathan Standiford
  */
 public class Quantity implements Serializable {
-	//TODO: Currently, this only allows a value of one if the unit is count. That should be true in item, but in other places it only needs to be an integer.
+	//TODO: Currently, this only allows a value of one if the unit is count.
+	//That should be true in item, but in other places it only needs to be an integer.
 	/**
 	 * the serial version id
 	 */
@@ -156,7 +157,8 @@ public class Quantity implements Serializable {
 	/**
 	 * Gets a string representation of the value of the quantity
 	 * 
-	 * @return the string representation of the value of the quantity, as an integer if unit is count and two decimal digits otherwise.
+	 * @return the string representation of the value of the quantity,
+	 * 		as an integer if unit is count and two decimal digits otherwise.
 	 * 
 	 * {@pre unit != null && value !- null}
 	 * 

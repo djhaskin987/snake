@@ -146,7 +146,9 @@ public class Model extends ModelObservable implements Observer {
 		Unit unit = Unit.getInstance(supplyUnit);
 		Double supply = Double.parseDouble(supplyValue);
 		Quantity threeMonthSupply = new Quantity(supply, unit);
-		IProductContainer productGroup = productContainerFactory.createProductGroup(name, parent, threeMonthSupply);
+		IProductContainer productGroup =
+				productContainerFactory.createProductGroup(
+						name, parent, threeMonthSupply);
 		return productGroup;
 	}
 
@@ -155,9 +157,11 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits.addProductGroup((ProductGroup)p);
 	}
 	
-	public IProduct createProduct(String barcode, String description, Quantity itemSize, Integer shelfLife, Integer threeMonthSupply)
+	public IProduct createProduct(String barcode, String description,
+			Quantity itemSize, Integer shelfLife, Integer threeMonthSupply)
 	{
-		return productFactory.createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
+		return productFactory.createInstance(barcode, description, itemSize,
+				shelfLife, threeMonthSupply);
 	}
 
 	public void addProduct(IProduct product) {
@@ -347,8 +351,10 @@ public class Model extends ModelObservable implements Observer {
 				iProductContainer != null
 				&& product != null
 				&& (
-						iProductContainer.getItems(product.getDescription().getValue()) == null
-						|| iProductContainer.getItems(product.getDescription().getValue()).size() == 0
+						iProductContainer.getItems(
+								product.getDescription().getValue()) == null
+						|| iProductContainer.getItems(
+								product.getDescription().getValue()).size() == 0
 				);
 	}
 

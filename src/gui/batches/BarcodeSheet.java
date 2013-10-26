@@ -72,7 +72,8 @@ public class BarcodeSheet implements Closeable {
 		}
 		//font.setSize(1.0f);
 		cell.addElement(new Paragraph(item.getProduct().getDescription().getValue(), font));
-		cell.addElement(new Paragraph(item.getEntryDate().toString() + " exp " + item.getExpireDate(), font));
+		cell.addElement(new Paragraph(item.getEntryDate().toString()
+				+ " exp " + item.getExpireDate(), font));
 		cell.addElement(new Paragraph(" ", font));
 		cell.addElement(codeEAN.createImageWithBarcode(cb, null, null));
 		cell.setBorder(0);
@@ -109,8 +110,10 @@ public class BarcodeSheet implements Closeable {
 //TODO: make this a JUnit test.
 /*	public static void main(String[] args) throws IOException, DocumentException {
 		BarcodeSheet codes = new BarcodeSheet();
-		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test"), null, 1, null), new model.Barcode(), new Date(), null));
-		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test2"), null, 2, null), new model.Barcode(), new Date(), null));
+		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test"),
+				null, 1, null), new model.Barcode(), new Date(), null));
+		codes.addBarcode(new Item(new Product(null, new NonEmptyString("test2"),
+				null, 2, null), new model.Barcode(), new Date(), null));
 		codes.close();
 		codes.print();
 	}*/

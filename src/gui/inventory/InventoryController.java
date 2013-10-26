@@ -476,7 +476,8 @@ public class InventoryController extends Controller
 	}
 
 	private void refreshProducts() {
-		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
+		IProductContainer productContainer = (IProductContainer)
+				getView().getSelectedProductContainer().getTag();
 		Collection<IProduct> products = productContainer.getProducts();
 		ProductData[] productDatas = new ProductData[products.size()];
 		int i = 0;
@@ -488,9 +489,11 @@ public class InventoryController extends Controller
 	}
 	
 	private void refreshItems() {
-		IProductContainer productContainer = (IProductContainer) getView().getSelectedProductContainer().getTag();
+		IProductContainer productContainer = (IProductContainer)
+				getView().getSelectedProductContainer().getTag();
 		if(productContainer != null && getView().getSelectedProduct() != null) {
-			Collection<IItem> items = productContainer.getItems(getView().getSelectedProduct().getDescription());
+			Collection<IItem> items = productContainer.getItems(
+					getView().getSelectedProduct().getDescription());
 			ItemData[] itemDatas = new ItemData[items.size()];
 			int i = 0;
 			for(IItem item : items) {
@@ -509,7 +512,8 @@ public class InventoryController extends Controller
 		if(getView().getSelectedProduct() == productData) {
 			refreshItems();
 		} else {
-			//This might not be necessary, but you clearly already have that product if it's selected.
+			//This might not be necessary, but you clearly already have that product
+			//if it's selected.
 			refreshProducts();
 		}
 	}
@@ -568,7 +572,8 @@ public class InventoryController extends Controller
 	
 	private void insertProductGroup(ITagable payload) {
 		ProductContainerData pcd = (ProductContainerData) payload.getTag();
-		ProductContainerData parent = (ProductContainerData) ((IProductContainer)payload).getParent().getTag();
+		ProductContainerData parent = (ProductContainerData)
+				((IProductContainer) payload).getParent().getTag();
 		IInventoryView v = getView();
 		insertProductContainerSorted(parent, pcd);
 		v.selectProductContainer(pcd);

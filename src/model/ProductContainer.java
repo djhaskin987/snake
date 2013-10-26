@@ -247,7 +247,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public void transferItem(IItem item, ProductContainer newProductContainer) {
 		if (getUnitPC() == newProductContainer.getUnitPC())
-			throw new IllegalArgumentException("Item cannot be transferred within the same storage unit.");
+			throw new IllegalArgumentException(
+					"Item cannot be transferred within the same storage unit.");
 		productItems.removeItem(item);
 		newProductContainer.add(item);
 	}

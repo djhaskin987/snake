@@ -95,7 +95,8 @@ public interface IProductContainer extends Serializable, ITagable {
 	 * @param name
 	 * {@pre the specified name is actually associated with a product container
      * within this IProductContainer.}
-	 * {@post the ProductContainer corresponding to the name is removed from this IProductContainer.}
+	 * {@post the ProductContainer corresponding to the name is removed
+	 * 		from this IProductContainer.}
 	 */
 	public void deleteProductContainer(String name);
 	
