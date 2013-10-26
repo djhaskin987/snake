@@ -9,6 +9,8 @@ import java.util.Observer;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import common.StringOps;
+
 import model.Barcode;
 import model.IItem;
 import model.IProduct;
@@ -66,6 +68,8 @@ public class AddItemBatchController extends Controller implements
 	protected void loadValues() {
 		//TODO, add debug mode to run this.
 		//getView().setBarcode(new Barcode().getBarcode());
+		getView().setUseScanner(true);
+		getView().setCount("1");
 		enableComponents();
 	}
 
@@ -140,6 +144,15 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged() {
 		enableComponents();
+		if(getView().getUseScanner() && Barcode.isValidBarcode(getView().getBarcode())) {
+			String count = getView().getCount();
+			if(StringOps.isNumeric(count)
+					&& Integer.parseInt(count) > 0) {
+				addItem();
+			} else {
+				getView().displayErrorMessage("Error: Count '" + count + "' is not valid.");
+			}
+		}
 	}
 
 	/**
@@ -244,6 +257,9 @@ public class AddItemBatchController extends Controller implements
 	}
 	
 	private ItemData[] getItems(ProductData pData) {
+		if(pData == null) {
+			return new ItemData[0];
+		}
 		IProduct product = (IProduct) pData.getTag();
 		IProductContainer pc = (IProductContainer) productContainerData.getTag();
 		Collection<IItem> items = product.getItems(pc);
@@ -256,7 +272,7 @@ public class AddItemBatchController extends Controller implements
 				}
 				return iDatas;
 		}
-		return null;
+		return new ItemData[0];
 	}
 	
 	
@@ -273,7 +289,12 @@ public class AddItemBatchController extends Controller implements
 		Date entryDate = vEntryDate.toJavaUtilDate();
 		iData.setEntryDate(entryDate);
 		model.Date dExpireDate = item.getExpireDate();
-		Date expireDate = dExpireDate.toJavaUtilDate();
+		Date expireDate;
+		if(dExpireDate == null) {
+			expireDate = null;
+		} else {
+			expireDate = dExpireDate.toJavaUtilDate();
+		}
 		iData.setExpirationDate(expireDate);
 		iData.setTag(item);
 		item.setTag(iData);
