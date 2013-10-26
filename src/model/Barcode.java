@@ -91,11 +91,11 @@ public class Barcode implements Serializable {
 	 * 
 	 */
 	public static boolean isValidBarcode(String barcode) {
-		return true;
+		//TODO: Perhaps we should make a debug mode run it as always true.
 		//All that other stuff is nice, but it makes it really hard to test.
-		/*return (barcode != null && barcode.length() == 12 &&
+		return (barcode != null && barcode.length() == 12 &&
                 StringOps.isNumeric(barcode) &&
-                hasValidCheckDigit(barcode));*/
+                hasValidCheckDigit(barcode));
 	}
 	
 	
