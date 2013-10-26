@@ -34,12 +34,11 @@ public class Item extends Tagable implements IItem {
 	 *			It is also automatically given the current date as an entry date,
 	 *			and null as the exit time.}
 	 */
-	public Item(IProduct product, Barcode barcode, Date expireDate, IProductContainer container) {
+	public Item(IProduct product, Barcode barcode, IProductContainer container) {
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = new ValidDate();
 		this.exitTime = null;
-		this.expireDate = expireDate;
 		this.container = container;
 	}
 	/**
@@ -57,12 +56,11 @@ public class Item extends Tagable implements IItem {
 	 *			and null as the exit time.}
 	 */
 	public Item(Product product, Barcode barcode, ValidDate entryDate,
-			Date expireDate, IProductContainer container) {
+			IProductContainer container) {
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;
 		this.exitTime = null;
-		this.expireDate = expireDate;
 		this.container = container;
 	}
 	@Override
@@ -95,7 +93,11 @@ public class Item extends Tagable implements IItem {
 	}
 	@Override
 	public Date getExpireDate() {
-		return expireDate;
+		Integer shelfLife = product.getShelfLife();
+		if (shelfLife != null && shelfLife > 0)
+			return entryDate.plusMonths(product.getShelfLife());
+		else
+			return null;
 	}
 	@Override
 	public IProductContainer getProductContainer() {

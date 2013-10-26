@@ -188,7 +188,7 @@ public class Model extends ModelObservable implements Observer {
 			expireDate = entryDate.plusMonths(product.getShelfLife());
 		}
 		Barcode barcode = new Barcode();
-		return itemFactory.createInstance(product, barcode, expireDate, null);
+		return itemFactory.createInstance(product, barcode, null);
 	}
 
 	public void addItem(IItem item, IProductContainer productContainer) {

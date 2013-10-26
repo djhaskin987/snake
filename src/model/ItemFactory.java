@@ -48,8 +48,8 @@ public class ItemFactory {
 	 * {@post an Item instance}
 	 */
 	public IItem createInstance(IProduct product, Barcode barcode,
-            Date expireDate, IProductContainer container) {
-		return new Item(product, barcode, expireDate, container);
+            IProductContainer container) {
+		return new Item(product, barcode, container);
 	}
 	/**
 	 * Acts as the constructor for the Item class
@@ -71,8 +71,8 @@ public class ItemFactory {
 	 * {@post an Item instance}
 	 */
 	public IItem createInstance(Product product, Barcode barcode,
-            ValidDate entryDate, Date expireDate, IProductContainer container) {
-		return new Item(product, barcode, entryDate, expireDate, container);
+            ValidDate entryDate, IProductContainer container) {
+		return new Item(product, barcode, entryDate, container);
 	}
 
 }

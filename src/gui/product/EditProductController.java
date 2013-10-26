@@ -1,8 +1,11 @@
 package gui.product;
 
+import java.util.Collection;
+
 import common.StringOps;
 
 import model.Barcode;
+import model.IItem;
 import model.IProduct;
 import model.IProduct.InvalidIntegerException;
 import model.Model;
@@ -10,6 +13,7 @@ import model.NonEmptyString;
 import model.Quantity;
 import model.Unit;
 import gui.common.*;
+import gui.item.ItemData;
 
 /**
  * Controller class for the edit product view.
@@ -183,9 +187,23 @@ public class EditProductController extends Controller
 			epv.displayErrorMessage(e.getMessage());
 			return;
 		}	
+		updateProductItemDatas(product);
 		Model m = Model.getInstance();
 		m.editProduct(product);
+		
 	}
 
+	private void updateProductItemDatas(IProduct p) {
+		
+		Collection<IItem> items = p.getAllItems();
+		for (IItem item : items) {
+			ItemData iData = (ItemData) item.getTag();
+			model.Date dExpire = item.getExpireDate();
+			java.util.Date expire = dExpire.toJavaUtilDate();
+			iData.setExpirationDate(expire);
+		}
+		
+	}
+	
 }
 
