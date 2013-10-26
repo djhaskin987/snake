@@ -98,7 +98,7 @@ public class AddItemBatchController extends Controller implements
 		getView().enableUndo(false);
 		getView().enableRedo(false);
 	}
-
+	
 	/**
 	 * This method is called when the "Entry Date" field in the
 	 * add item batch view is changed by the user.
@@ -112,6 +112,13 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void entryDateChanged() {
+		Date d = getView().getEntryDate();
+		try {
+			model.ValidDate vDate = new ValidDate(d);
+			getView().enableItemAction(true);
+		} catch (Exception e) {
+			getView().enableItemAction(false);
+		}
 	}
 
 	/**
@@ -169,6 +176,11 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void useScannerChanged() {
 		enableComponents();
+		IAddItemBatchView v = getView();
+		boolean useScannerEnabled = v.getUseScanner();
+		if (true == useScannerEnabled) {
+			v.setBarcode("");
+		}
 	}
 
 	/**
@@ -205,10 +217,10 @@ public class AddItemBatchController extends Controller implements
 		
 		// Get the Product
 		IProduct product = getProduct();
-		if(product == null) {
+		if (product == null) {
 			getView().displayAddProductView();
 			product = getProduct();
-			if(product == null) {
+			if (product == null) {
 				return;
 			} else {
 				ProductData pData = (ProductData) product.getTag();
@@ -220,14 +232,15 @@ public class AddItemBatchController extends Controller implements
 		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
 		IItem lastItem = null;
-		for(int i=0; i<count; ++i) {
-			IItem item = createItem();
+		for (int i = 0; i < count; ++i) {
+			IItem item = createItem(product);
 			items.add(item);
 			lastItem = item;
 		}
 		updateCount(count, product);
 		
-		Model.getInstance().addBatch(items, (IProductContainer) productContainerData.getTag());
+		Model m = Model.getInstance();
+		m.addBatch(items, (IProductContainer) productContainerData.getTag());
 		
 		getView().setProducts(products.toArray(new ProductData[0]));
 		getView().selectProduct((ProductData) product.getTag());
@@ -241,6 +254,7 @@ public class AddItemBatchController extends Controller implements
 		IAddItemBatchView v = getView();
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
+		v.setBarcode("");
 	}
 	
 	private void updateCount(int numberOfItemsAdded, IProduct product) {
@@ -257,13 +271,11 @@ public class AddItemBatchController extends Controller implements
 	}
 	
 	private ItemData[] getItems(ProductData pData) {
-		if(pData == null) {
-			return new ItemData[0];
-		}
-		IProduct product = (IProduct) pData.getTag();
-		IProductContainer pc = (IProductContainer) productContainerData.getTag();
-		Collection<IItem> items = product.getItems(pc);
-		if (items.size() > 0) {
+		if(pData != null) {
+			IProduct product = (IProduct) pData.getTag();
+			IProductContainer pc = (IProductContainer) productContainerData.getTag();
+			Collection<IItem> items = product.getItems(pc);
+			if (items.size() > 0) {
 				ItemData[] iDatas = new ItemData[items.size()];
 				Iterator<IItem> itr = items.iterator();
 				for (int i = 0; i < iDatas.length; i++) {
@@ -271,6 +283,7 @@ public class AddItemBatchController extends Controller implements
 					iDatas[i] = (ItemData) item.getTag();
 				}
 				return iDatas;
+			}
 		}
 		return new ItemData[0];
 	}
@@ -321,10 +334,9 @@ public class AddItemBatchController extends Controller implements
 			return "";
 	}
 	
-	private IItem createItem() {
+	private IItem createItem(IProduct p) {
 		Model m = Model.getInstance();
 		Date entryDate = getEntryDate();
-		IProduct p = getProduct();
 		try {
 			IItem item = m.createItem(p, entryDate);
 			createItemData(item);
@@ -389,7 +401,7 @@ public class AddItemBatchController extends Controller implements
 			return;
 		}
 		BarcodeSheet codes = new BarcodeSheet();
-		for(ProductData product : products) {
+		for (ProductData product : products) {
 			ItemData[] itemDatas = getItems(product);
 			for(ItemData itemData : itemDatas) {
 				codes.addBarcode((IItem) itemData.getTag());

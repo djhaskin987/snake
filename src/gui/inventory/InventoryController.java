@@ -237,7 +237,7 @@ public class InventoryController extends Controller
 		ProductContainerData pcd = getView().getSelectedProductContainer();
 		IProductContainer node = (IProductContainer) pcd.getTag();
 		ProductData productData = getView().getSelectedProduct();
-		Collection<IItem> items = node.getItems(productData.getDescription());
+		Collection<IItem> items = node.getItems((IProduct) productData.getTag());
 		if(items == null) {
 			getView().setItems(new ItemData[0]);
 			return;
@@ -508,7 +508,7 @@ public class InventoryController extends Controller
 				getView().getSelectedProductContainer().getTag();
 		if(productContainer != null && getView().getSelectedProduct() != null) {
 			Collection<IItem> items = productContainer.getItems(
-					getView().getSelectedProduct().getDescription());
+					(IProduct) getView().getSelectedProduct().getTag());
 			ItemData[] itemDatas = new ItemData[items.size()];
 			int i = 0;
 			for(IItem item : items) {

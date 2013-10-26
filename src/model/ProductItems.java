@@ -58,6 +58,10 @@ public class ProductItems extends Observable implements Serializable {
 		return out;
 	}
 	
+	public Collection<IItem> getItems(IProduct p) {
+		return map.get(p);
+	}
+	
 	/**
 	 * @pre			{item is not already in this}
 	 * @post		{item is added}
@@ -84,7 +88,8 @@ public class ProductItems extends Observable implements Serializable {
 	public void removeItem(IItem item) {
 		IProduct product = item.getProduct();
 		Collection<IItem> itemList = map.get(product);
-		itemList.remove(item);
+		if (itemList.size() > 0)
+			itemList.remove(item);	
 	}
 
 	/**

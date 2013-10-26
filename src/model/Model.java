@@ -200,10 +200,9 @@ public class Model extends ModelObservable implements Observer {
 
 	public void addBatch(ObservableArgs<IItem> batch, IProductContainer productContainer) {
 		for(IItem item : batch) {
-			item.setProductContainer(productContainer);
-			itemCollection.add(item);
+			addItem(item, productContainer);
 		}
-		productContainer.addBatch(batch);
+		//productContainer.addBatch(batch);
 		notifyObservers(ModelActions.INSERT_ITEMS, (ITagable)batch);
 	}
 
@@ -351,10 +350,8 @@ public class Model extends ModelObservable implements Observer {
 				iProductContainer != null
 				&& product != null
 				&& (
-						iProductContainer.getItems(
-								product.getDescription().getValue()) == null
-						|| iProductContainer.getItems(
-								product.getDescription().getValue()).size() == 0
+						iProductContainer.getItems(product) == null
+						|| iProductContainer.getItems(product).size() == 0
 				);
 	}
 

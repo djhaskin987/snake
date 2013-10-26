@@ -160,9 +160,7 @@ public class Product extends Tagable implements IProduct {
 
 	@Override
 	public Collection<IItem> getItems(IProductContainer pc) {
-		NonEmptyString neDescription = getDescription();
-		String description = neDescription.getValue();
-		return pc.getItems(description);
+		return pc.getItems(this);
 	}
 
 /*	@Override
