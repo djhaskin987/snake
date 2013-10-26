@@ -216,7 +216,7 @@ public class AddItemBatchController extends Controller implements
 			}
 		}
 		
-		int count = getItemCount();		
+		int count = getItemCount();
 		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
 		IItem lastItem = null;
@@ -239,6 +239,7 @@ public class AddItemBatchController extends Controller implements
 	
 	private void resetControls() {
 		IAddItemBatchView v = getView();
+		v.setBarcode("");
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
 	}
