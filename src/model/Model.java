@@ -224,8 +224,8 @@ public class Model extends ModelObservable implements Observer {
 		return storageUnits.canTransferItems();
 	}
 
-	public boolean canDeleteStorageUnit(String name) {
-		return storageUnits.canDelete(name);
+	public boolean canDeleteProductContainer(IProductContainer pc) {
+		return pc.canDelete();
 	}
 
 	public void deleteStorageUnit(String name) {
@@ -367,5 +367,19 @@ public class Model extends ModelObservable implements Observer {
 
 	public RemovedItems getRemovedItems() {
 		return removedItems;
+	}
+	
+	public boolean canDeleteProductGroup(IProductContainer pc)
+	{
+		return canDeleteProductContainer(pc);
+	}
+	public boolean canDeleteStorageUnit(IProductContainer pc)
+	{
+		return canDeleteProductContainer(pc);
+	}
+
+	public void deleteProductGroup(IProductContainer pc) {
+		pc.getParent().deleteProductContainer(
+				pc.getName().toString());
 	}
 }

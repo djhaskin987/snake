@@ -130,17 +130,26 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteStorageUnit() {
-		return Model.getInstance().canDeleteStorageUnit(
-				getView().getSelectedProductContainer().getName());
+		return getModel().canDeleteStorageUnit(
+				getSelectedModelProductContainer());
 	}
 
+	private void blankOutContext()
+	{
+		getView().setContextGroup("");
+		getView().setContextSupply("");
+		getView().setContextUnit("");
+	}
+	
 	/**
 	 * This method is called when the user selects the "Delete Storage Unit" menu item.
 	 */
 	@Override
 	public void deleteStorageUnit() {
-		Model.getInstance().deleteStorageUnit(
+		blankOutContext();
+		getModel().deleteStorageUnit(
 				getView().getSelectedProductContainer().getName());
+		getView().deleteProductContainer(getView().getSelectedProductContainer());
 	}
 
 	/**
@@ -166,7 +175,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProductGroup() {
-		return getSelectedModelProductContainer().canDelete();
+		return getModel().canDeleteProductGroup(
+				getSelectedModelProductContainer());
+		
 	}
 
 	/**
@@ -188,8 +199,12 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteProductGroup() {
-		getSelectedModelProductContainer().getParent().deleteProductContainer(
-				getView().getSelectedProductContainer().getName());
+		getView().setContextGroup("");
+		getView().setContextSupply("");
+		getView().setContextUnit("");
+		getModel().deleteProductGroup(
+				getSelectedModelProductContainer());
+		getView().deleteProductContainer(getView().getSelectedProductContainer());
 	}
 
 	/**
@@ -556,8 +571,6 @@ public class InventoryController extends Controller
 		pData.setSize(itemSize.toString());
 		refreshProducts();
 	}
-
-
 
 	private void editStorageUnit(ITagable payload) {
 		IProductContainer StU = (IProductContainer) payload;

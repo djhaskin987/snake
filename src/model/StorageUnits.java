@@ -5,11 +5,9 @@ package model;
  * all StorageUnits
  */
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
 
 
 public class StorageUnits extends ProductContainer implements Serializable {
@@ -142,7 +140,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 */
 	@Override
 	public Collection<IItem> getItems(String productName) {
-		return recursiveGetItems(productName);
+		return getItemsRecursive(productName);
 	}
 
 	/**

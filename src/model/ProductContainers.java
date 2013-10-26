@@ -118,17 +118,31 @@ public class ProductContainers implements Serializable, Collection<IProductConta
 	public boolean remove(Object arg0) {
 		if (arg0.getClass() == String.class) {
 			NonEmptyString nes = new NonEmptyString((String)arg0);
-			productContainers.remove(nes);
+			removeProductContainer(nes);
 			return true;
 		} else if (arg0.getClass() == NonEmptyString.class) {
-			productContainers.remove(arg0);
+			removeProductContainer((NonEmptyString)arg0);
 			return true;
 		} else if (arg0.getClass() == ProductGroup.class) {
 			NonEmptyString name = ((ProductGroup)arg0).getName();
-			productContainers.remove(name);
+			removeProductContainer(name);
 			return true;
 		}
+		
 		return false;
+	}
+
+	private void removeProductContainer(NonEmptyString name) {
+		if (productContainers.containsKey(name))
+		{
+			IProductContainer toRemove = productContainers.get(name);
+			Collection<IProduct> ps = toRemove.getProductsRecursive();
+			for (IProduct p : ps)
+			{
+				toRemove.removeProductRecursive(p);
+			}
+			productContainers.remove(name);
+		}
 	}
 
 	/**

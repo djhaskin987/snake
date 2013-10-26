@@ -170,6 +170,8 @@ public interface IProductContainer extends Serializable, ITagable {
 
 	public void removeProduct(IProduct product);
 	public void removeProductRecursive(IProduct product);
-	public Collection<IItem> recursiveGetItems(String productName);
+	public Collection<IItem> getItemsRecursive(String productName);
+
+	public Collection<IProduct> getProductsRecursive();
 
 }

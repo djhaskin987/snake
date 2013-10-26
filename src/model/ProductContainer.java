@@ -105,7 +105,9 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public boolean hasItemsRecursive()
 	{
 		if (hasItems())
+		{
 			return true;
+		}
 		for (IProductContainer productContainer : productContainers)
 		{
 			if (productContainer.hasItemsRecursive())
@@ -363,7 +365,6 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public IProductContainer getUnitPC()
 	{
-
 		IProductContainer child = null;
 		IProductContainer parent = this;
 		IProductContainer grandParent = getParent();
@@ -438,12 +439,25 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 	}
 
-	public Collection<IItem> recursiveGetItems(String productName) {
+	@Override
+	public Collection<IItem> getItemsRecursive(String productName) {
 		Collection<IItem> items = new ArrayList<IItem>();
 		for(IProductContainer productContainer : productContainers) {
-			items.addAll(productContainer.recursiveGetItems(productName));
+			items.addAll(productContainer.getItemsRecursive(productName));
 			items.addAll(productContainer.getItems(productName));
 		}
 		return items;
+	}
+	
+	@Override
+	public Collection<IProduct> getProductsRecursive()
+	{
+		Collection<IProduct> returned = 
+				getProducts();
+		for (IProductContainer pc : productContainers)
+		{
+			returned.addAll(pc.getProductsRecursive());
+		}
+		return returned;
 	}
 }
