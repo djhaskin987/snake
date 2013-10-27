@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import gui.common.*;
+import gui.item.ItemData;
 
 /**
  * Abstract superclass of StorageUnit and ProductGroup.
@@ -86,6 +87,10 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		productItems.addItem(item);
 		item.setProductContainer(this);
+		
+		ItemData itemData = (ItemData) item.getTag();
+		itemData.setProductGroup(item.getProductGroupName());
+		itemData.setStorageUnit(item.getStorageUnitName());
 		return;
 	}
 
@@ -242,6 +247,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 */
 	@Override
 	public void transferItem(IItem item, ProductContainer newProductContainer) {
+		System.out.println("Item transferred.");
 		if (getUnitPC() == newProductContainer.getUnitPC())
 			throw new IllegalArgumentException(
 					"Item cannot be transferred within the same storage unit.");
