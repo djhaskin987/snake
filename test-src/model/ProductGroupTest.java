@@ -19,8 +19,8 @@ public class ProductGroupTest {
 		productGroup = new ProductGroup(new NonEmptyString("testPG"));
 		product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		item = new Item(product, barcode, expireDate, productGroup);
+		//Date expireDate = new Date();
+		item = new Item(product, barcode, productGroup);
 		productGroup.add(item);
 	}
 
@@ -38,10 +38,10 @@ public class ProductGroupTest {
 	@Test
 	public void testAddItem() {
 		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		Item item = new Item(product, barcode, expireDate, productGroup);
+		//Date expireDate = new Date();
+		Item item = new Item(product, barcode, productGroup);
 		productGroup.add(item);
-		Collection<IItem> items = productGroup.getItems("bagel");
+		Collection<IItem> items = productGroup.getItems(product);
 		assertTrue("should contain item", items.contains(item));
 	}
 
@@ -68,7 +68,7 @@ public class ProductGroupTest {
 		productGroup.addProductContainer(pg);
 		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
 		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
-		pg2.add(new Item(product, new Barcode(), new Date(), pg2));
+		pg2.add(new Item(product, new Barcode(), pg2));
 		productGroup.setProductContainer("testPG", pg2);
 		Collection<IProductContainer> pgCollection = productGroup.getProductContainers();
 		assertTrue("must contain the last item", pgCollection.contains(pg2));
@@ -78,7 +78,7 @@ public class ProductGroupTest {
 	public void testTransferItem() {
 		ProductGroup su = new ProductGroup(new NonEmptyString("test"));
 		productGroup.transferItem(item, su);
-		assertTrue("item not transferred", !su.getItems("bagel").isEmpty() && productGroup.getItems("bagel").isEmpty());
+		assertTrue("item not transferred", !su.getItems(product).isEmpty() && productGroup.getItems(product).isEmpty());
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class ProductGroupTest {
 
 	@Test
 	public void testWhoHasProduct() {
-		IProductContainer pc = productGroup.whoHasProduct("bagel");
+		IProductContainer pc = productGroup.whoHasProduct(product);
 		assertTrue("storage unit has this product", pc == productGroup);
 	}
 
@@ -112,13 +112,13 @@ public class ProductGroupTest {
 
 	@Test
 	public void testGetItemsString() {
-		Collection<IItem> items = productGroup.getItems("bagel");
+		Collection<IItem> items = productGroup.getItems(product);
 		assertTrue("must contain item", items.contains(item));
 	}
 
 	@Test
 	public void testRemoveItem() {
 		productGroup.removeItem(item.getBarcode());
-		assertTrue("must not have any items", productGroup.getItems("bagel").isEmpty());
+		assertTrue("must not have any items", productGroup.getItems(product).isEmpty());
 	}
 }

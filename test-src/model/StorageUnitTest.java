@@ -18,8 +18,8 @@ public class StorageUnitTest {
 		storageUnit = new StorageUnit(new NonEmptyString("testSR"));
 		product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		item = new Item(product, barcode, expireDate, storageUnit);
+		//Date expireDate = new Date();
+		item = new Item(product, barcode, storageUnit);
 		storageUnit.add(item);
 	}
 
@@ -37,10 +37,10 @@ public class StorageUnitTest {
 	@Test
 	public void testAddItem() {
 		Barcode barcode = new Barcode();
-		Date expireDate = new Date();
-		Item item = new Item(product, barcode, expireDate, storageUnit);
+		//Date expireDate = new Date();
+		Item item = new Item(product, barcode, storageUnit);
 		storageUnit.add(item);
-		Collection<IItem> items = storageUnit.getItems("bagel");
+		Collection<IItem> items = storageUnit.getItems(product);
 		assertTrue("should contain item", items.contains(item));
 	}
 
@@ -67,7 +67,7 @@ public class StorageUnitTest {
 		storageUnit.addProductContainer(pg);
 		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
 		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
-		pg2.add(new Item(product, new Barcode(), new Date(), pg2));
+		pg2.add(new Item(product, new Barcode(), pg2));
 		storageUnit.setProductContainer("testPG", pg2);
 		Collection<IProductContainer> pgCollection = storageUnit.getProductContainers();
 		assertTrue("must contain the last item", pgCollection.contains(pg2));
@@ -77,7 +77,7 @@ public class StorageUnitTest {
 	public void testTransferItem() {
 		StorageUnit su = new StorageUnit(new NonEmptyString("test"));
 		storageUnit.transferItem(item, su);
-		assertTrue("item not transferred", !su.getItems("bagel").isEmpty() && storageUnit.getItems("bagel").isEmpty());
+		assertTrue("item not transferred", !su.getItems(product).isEmpty() && storageUnit.getItems(product).isEmpty());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class StorageUnitTest {
 
 	@Test
 	public void testWhoHasProduct() {
-		IProductContainer pc = storageUnit.whoHasProduct("bagel");
+		IProductContainer pc = storageUnit.whoHasProduct(product);
 		assertTrue("storage unit has this product", pc == storageUnit);
 	}
 
@@ -115,14 +115,14 @@ public class StorageUnitTest {
 
 	@Test
 	public void testGetItemsString() {
-		Collection<IItem> items = storageUnit.getItems("bagel");
+		Collection<IItem> items = storageUnit.getItems(product);
 		assertTrue("must contain item", items.contains(item));
 	}
 
 	@Test
 	public void testRemoveItem() {
 		storageUnit.removeItem(item.getBarcode());
-		assertTrue("must not have any items", storageUnit.getItems("bagel").isEmpty());
+		assertTrue("must not have any items", storageUnit.getItems(product).isEmpty());
 	}
 
 }

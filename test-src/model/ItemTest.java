@@ -12,14 +12,14 @@ public class ItemTest {
 	public void test() {
 		Product product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode("123456789012");
-		Date expireDate = new Date();
+		//Date expireDate = new Date();
 		IProductContainer container = (IProductContainer) new StorageUnit();
-		Item item = new Item(product, barcode, expireDate, container);
+		Item item = new Item(product, barcode, container);
 		assertTrue(item.getProduct() == product);
 		assertTrue(item.getBarcode() == barcode);
 		assertTrue(item.getEntryDate().compareTo(new Date()) == 0);
 		assertTrue(item.getExitTime() == null);
-		assertTrue(item.getExpireDate() == expireDate);
+		//assertTrue(item.getExpireDate() == expireDate);
 		assertTrue(item.getProductContainer() == container);
 		ValidDate newEntryDate = new ValidDate();
 		assertTrue(item.getEntryDate() != newEntryDate);
