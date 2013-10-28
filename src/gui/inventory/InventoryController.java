@@ -221,7 +221,7 @@ public class InventoryController extends Controller
 		ProductData[] productDatas = new ProductData[products.size()];
 		int i=0;
 		for(IProduct product : products) {
-			productDatas[i] = (ProductData) product.getTag();
+			productDatas[i] = getProductData(node, product);
 			++i;
 		}
 		getView().setProducts(productDatas);
@@ -498,11 +498,22 @@ public class InventoryController extends Controller
 		ProductData[] productDatas = new ProductData[products.size()];
 		int i = 0;
 		for(IProduct product : products) {
-			productDatas[i] = (ProductData) product.getTag();
+			ProductData pData = getProductData(productContainer, product);
+			productDatas[i] = pData;
+			
 			++i;
 		}
 		getView().setProducts(productDatas);
 	}
+	
+	private ProductData getProductData(IProductContainer pc, IProduct p) {
+		ProductData pData = new ProductData((ProductData) p.getTag());
+		Collection<IItem> items = p.getItems(pc);
+		Integer count = items.size();
+		pData.setCount(count.toString());
+		return pData;
+	}
+	
 	
 	private void refreshItems() {
 		IProductContainer productContainer = (IProductContainer)

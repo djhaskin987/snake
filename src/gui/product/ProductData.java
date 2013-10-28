@@ -57,7 +57,18 @@ public class ProductData extends Tagable {
 		_supply = "";
 		_barcode = "";
 	}
-
+	
+	public ProductData(ProductData pd) {
+		_description = pd._description;
+		_size = pd._size;
+		_count = pd._count;
+		_shelfLife = pd._shelfLife;
+		_supply = pd._supply;
+		_barcode = pd._barcode;
+		if (pd.hasTag())
+			super.setTag(pd.getTag());
+	}
+	
 	/**
 	 * Returns the value of the Barcode attribute.
 	 */
