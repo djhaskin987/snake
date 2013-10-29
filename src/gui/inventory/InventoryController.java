@@ -218,16 +218,8 @@ public class InventoryController extends Controller
 		getView().setContextGroup(node.getProductGroupName());
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
-		Collection<IProduct> products = node.getProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		int i=0;
-		for(IProduct product : products) {
-			productDatas[i] = (ProductData) product.getTag();
-			++i;
-		}
-		getView().setProducts(productDatas);
-
-		getView().setItems(new ItemData[0]);
+		refreshProducts();
+		refreshItems();
 	}
 
 	/**
@@ -506,6 +498,9 @@ public class InventoryController extends Controller
 		int i = 0;
 		for(IProduct product : products) {
 			productDatas[i] = (ProductData) product.getTag();
+			//The way this is currently set up, there is only one productData for each product, so count can't be kept accurate.
+			//This next line adjusts the count to whatever is appropriate for that product group.
+			productDatas[i].setCount(Integer.toString(productContainer.getItems(product).size()));
 			++i;
 		}
 		getView().setProducts(productDatas);
