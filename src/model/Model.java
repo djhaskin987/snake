@@ -301,7 +301,6 @@ public class Model extends ModelObservable implements Observer {
 			String supplyUnit)
 	{
 		return !name.equals("")
-				&& !supplyValue.equals("")
 				&& NumberUtils.isNumber(supplyValue)
 				&& Quantity.isValidQuantity(
 						Double.parseDouble(supplyValue),

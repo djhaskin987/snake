@@ -255,7 +255,6 @@ public class AddItemBatchController extends Controller implements
 		v.setBarcode("");
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
-		v.setBarcode("");
 	}
 	
 	private void updateCount(int numberOfItemsAdded, IProduct product) {
