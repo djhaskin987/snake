@@ -116,8 +116,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItems() {
-		System.out.println("Can remove items");
-		return getSelectedModelProductContainer().canRemoveItems();
+		// per the specs, page 26
+		return true;
 	}
 	
 	public IProductContainer getSelectedModelProductContainer()
@@ -314,11 +314,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void removeItem() {
-		Model m = Model.getInstance();
-		IInventoryView v = getView();
-		ItemData iData = v.getSelectedItem();
+		ItemData iData = getView().getSelectedItem();
 		IItem item = (IItem) iData.getTag();
-		m.removeItem(item);
+		getModel().removeItem(item);
 	}
 
 	/**
