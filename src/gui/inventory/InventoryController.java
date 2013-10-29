@@ -14,6 +14,7 @@ import model.ModelActions;
 import model.NonEmptyString;
 import model.ObservableArgs;
 import model.Quantity;
+import model.StorageUnit;
 import model.StorageUnits;
 import model.Unit;
 
@@ -473,11 +474,17 @@ public class InventoryController extends Controller
 			case EDIT_ITEM:
 				editItem(payload);
 				break;
+			case MOVE_ITEM:
+				moveItem(payload);
+				break;
 			case INSERT_PRODUCT:
 				insertProduct(payload);
 				break;
 			case EDIT_PRODUCT:
 				editProduct(payload);
+				break;
+			case TRANSFER_PRODUCT:
+				transferProduct(payload);
 				break;
 			default:
 				throw new IllegalStateException("Could not detect what changed");
@@ -667,6 +674,31 @@ public class InventoryController extends Controller
 		Date date = vDate.toJavaUtilDate();
 		iData.setEntryDate(date);
 		refreshItems();
+	}
+	
+	private void moveItem(ITagable payload) {
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		iData.setProductGroup(item.getProductGroupName());
+		iData.setStorageUnit(item.getStorageUnitName());
+		refreshItems();//TODO: Is this necessary?
+	}
+	
+	private void transferProduct(ITagable payload) {
+		ObservableArgs<ITagable> args = (ObservableArgs<ITagable>) payload;
+		IProduct product = (IProduct) args.get(0);
+		IProductContainer productContainer = (IProductContainer) args.get(1);
+		/*String productGroup;
+		if(productContainer instanceof StorageUnit) {	//TODO: This might be better if I could get it in the ProductContainer class.
+			productGroup = "";
+		} else {
+			productGroup = productContainer.getName().getValue();
+		}*/
+		for(IItem item : productContainer.getItems(product)) {
+			ItemData itemData = (ItemData) item.getTag();
+			System.out.println("Product group name:\t" + item.getProductGroupName());
+			itemData.setProductGroup(item.getProductGroupName());
+		}
 	}
 	
 	private void insertStorageUnit(ITagable payload) {
