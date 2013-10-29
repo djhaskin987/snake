@@ -14,6 +14,7 @@ import model.ModelActions;
 import model.NonEmptyString;
 import model.ObservableArgs;
 import model.Quantity;
+import model.StorageUnit;
 import model.StorageUnits;
 import model.Unit;
 
@@ -217,16 +218,8 @@ public class InventoryController extends Controller
 		getView().setContextGroup(node.getProductGroupName());
 		getView().setContextUnit(node.getUnit());
 		getView().setContextSupply(node.getThreeMonthSupply());
-		Collection<IProduct> products = node.getProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		int i=0;
-		for(IProduct product : products) {
-			productDatas[i] = getProductData(node, product);
-			++i;
-		}
-		getView().setProducts(productDatas);
-
-		getView().setItems(new ItemData[0]);
+		refreshProducts();
+		refreshItems();
 	}
 
 	/**
@@ -473,11 +466,17 @@ public class InventoryController extends Controller
 			case EDIT_ITEM:
 				editItem(payload);
 				break;
+			case MOVE_ITEM:
+				moveItem(payload);
+				break;
 			case INSERT_PRODUCT:
 				insertProduct(payload);
 				break;
 			case EDIT_PRODUCT:
 				editProduct(payload);
+				break;
+			case TRANSFER_PRODUCT:
+				transferProduct(payload);
 				break;
 			default:
 				throw new IllegalStateException("Could not detect what changed");
@@ -498,22 +497,14 @@ public class InventoryController extends Controller
 		ProductData[] productDatas = new ProductData[products.size()];
 		int i = 0;
 		for(IProduct product : products) {
-			ProductData pData = getProductData(productContainer, product);
-			productDatas[i] = pData;
-			
+			productDatas[i] = (ProductData) product.getTag();
+			//The way this is currently set up, there is only one productData for each product, so count can't be kept accurate.
+			//This next line adjusts the count to whatever is appropriate for that product group.
+			productDatas[i].setCount(Integer.toString(productContainer.getItems(product).size()));
 			++i;
 		}
 		getView().setProducts(productDatas);
 	}
-	
-	private ProductData getProductData(IProductContainer pc, IProduct p) {
-		ProductData pData = new ProductData((ProductData) p.getTag());
-		Collection<IItem> items = p.getItems(pc);
-		Integer count = items.size();
-		pData.setCount(count.toString());
-		return pData;
-	}
-	
 	
 	private void refreshItems() {
 		IProductContainer productContainer = (IProductContainer)
@@ -678,6 +669,31 @@ public class InventoryController extends Controller
 		Date date = vDate.toJavaUtilDate();
 		iData.setEntryDate(date);
 		refreshItems();
+	}
+	
+	private void moveItem(ITagable payload) {
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		iData.setProductGroup(item.getProductGroupName());
+		iData.setStorageUnit(item.getStorageUnitName());
+		refreshItems();//TODO: Is this necessary?
+	}
+	
+	private void transferProduct(ITagable payload) {
+		ObservableArgs<ITagable> args = (ObservableArgs<ITagable>) payload;
+		IProduct product = (IProduct) args.get(0);
+		IProductContainer productContainer = (IProductContainer) args.get(1);
+		/*String productGroup;
+		if(productContainer instanceof StorageUnit) {	//TODO: This might be better if I could get it in the ProductContainer class.
+			productGroup = "";
+		} else {
+			productGroup = productContainer.getName().getValue();
+		}*/
+		for(IItem item : productContainer.getItems(product)) {
+			ItemData itemData = (ItemData) item.getTag();
+			System.out.println("Product group name:\t" + item.getProductGroupName());
+			itemData.setProductGroup(item.getProductGroupName());
+		}
 	}
 	
 	private void insertStorageUnit(ITagable payload) {

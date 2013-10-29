@@ -1,10 +1,6 @@
 package gui.productgroup;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import model.IProductContainer;
-import model.Quantity;
-import model.Unit;
 import gui.common.*;
 import gui.inventory.*;
 

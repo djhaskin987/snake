@@ -301,7 +301,6 @@ public class Model extends ModelObservable implements Observer {
 			String supplyUnit)
 	{
 		return !name.equals("")
-				&& !supplyValue.equals("")
 				&& NumberUtils.isNumber(supplyValue)
 				&& Quantity.isValidQuantity(
 						Double.parseDouble(supplyValue),
@@ -382,9 +381,11 @@ public class Model extends ModelObservable implements Observer {
 		if (!moveProduct(item.getProduct(), target))
 		{
 			item.move(target);
+			notifyObservers(ModelActions.MOVE_ITEM, item);
 		}
 	}
 
+	//Returns true if the product is already in the target storage unit.
 	private boolean moveProduct(IProduct product, IProductContainer target)
 	{
 		IProductContainer targetUnit = target.getUnitPC();
@@ -392,6 +393,10 @@ public class Model extends ModelObservable implements Observer {
 		if (ExistingPC != null)
 		{
 			ExistingPC.moveProduct(product, target);
+			ObservableArgs<ITagable> args = new ObservableArgs<ITagable>();
+			args.add(product);
+			args.add(target);
+			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);
 			return true;
 		}
 		else

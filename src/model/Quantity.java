@@ -66,8 +66,12 @@ public class Quantity implements Serializable {
 	 */
 	public static boolean isValidQuantity(Double value, Unit unit)
 	{
-		return value != null && unit != null && (unit == Unit.COUNT && value % 1.0 == 0
-                || unit != Unit.COUNT && value > 0);
+		return
+				value != null
+				&& value >= 0
+				&& unit != null
+				&& (unit == Unit.COUNT && value % 1.0 == 0
+                	|| unit != Unit.COUNT);
 		//return false;
 	}
 	

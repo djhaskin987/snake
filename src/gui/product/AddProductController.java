@@ -67,6 +67,7 @@ public class AddProductController extends Controller implements
 				Barcode.isValidBarcode(getView().getBarcode())
 				&& !getView().getDescription().isEmpty()
 				&& NumberUtils.isNumber(getView().getSizeValue())
+				&& Double.parseDouble(getView().getSizeValue()) > 0
 				&& NumberUtils.isDigits(getView().getShelfLife())
 				&& Integer.parseInt(getView().getShelfLife()) >= 0
 				&& NumberUtils.isDigits(getView().getSupply())

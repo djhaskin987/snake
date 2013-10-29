@@ -87,10 +87,6 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		productItems.addItem(item);
 		item.setProductContainer(this);
-		
-		ItemData itemData = (ItemData) item.getTag();
-		itemData.setProductGroup(item.getProductGroupName());
-		itemData.setStorageUnit(item.getStorageUnitName());
 		return;
 	}
 
@@ -155,16 +151,17 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 
 
 	/**
-	 * Adds an Item to the ProductUnit
+	 * Adds an Item to the ProductUnit. Updates the item to know that this is the product container.
 	 *
 	 * @param item the Item to add
 	 *
 	 * {@pre item != null && productItems != null}
 	 *
-	 * {@post item added}
+	 * {@post item added && item.getProductContainer() == this}
 	 */
 	@Override
 	public void addItem(IItem item) {
+		item.setProductContainer(this);
 		productItems.addItem(item);
 	}
 
@@ -247,7 +244,6 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 */
 	@Override
 	public void transferItem(IItem item, ProductContainer newProductContainer) {
-		System.out.println("Item transferred.");
 		if (getUnitPC() == newProductContainer.getUnitPC())
 			throw new IllegalArgumentException(
 					"Item cannot be transferred within the same storage unit.");
