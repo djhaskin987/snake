@@ -64,7 +64,7 @@ public class AddProductController extends Controller implements
 			getView().enableSizeValue(true);
 		}
 		if(
-				Barcode.isValidBarcode(getView().getBarcode())
+				!getView().getBarcode().isEmpty()
 				&& !getView().getDescription().isEmpty()
 				&& NumberUtils.isNumber(getView().getSizeValue())
 				&& Double.parseDouble(getView().getSizeValue()) > 0

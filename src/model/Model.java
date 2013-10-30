@@ -174,7 +174,7 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public IProduct getProduct(String barcode) {
-		return productCollection.getProduct(new Barcode(barcode));
+		return productCollection.getProduct(new NonEmptyString(barcode));
 	}
 	
 	public IItem getItem(String barcode) {

@@ -83,8 +83,8 @@ public class EditProductController extends Controller
 	protected void loadValues() {
 		IProduct product = (IProduct) productData.getTag();
 		IEditProductView epv = getView();
-		Barcode barcode = product.getBarcode();
-		String barcodeStr = barcode.getBarcode();
+		NonEmptyString barcode = product.getBarcode();
+		String barcodeStr = barcode.getValue();
 		epv.setBarcode(barcodeStr);
 		NonEmptyString neDescription = product.getDescription();
 		String description = neDescription.getValue();

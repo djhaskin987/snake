@@ -46,7 +46,7 @@ public class ProductCollection extends Observable implements Serializable{
      * @param product to be added to collection
      */
     public void add(IProduct product){
-        this.products.put(product.getBarcode().getBarcode(), product);
+        this.products.put(product.getBarcode().getValue(), product);
     }
     
     /**
@@ -56,8 +56,8 @@ public class ProductCollection extends Observable implements Serializable{
      * {@post the ProductCollection is unchanged.}
      * @return Product by Barcode
      */
-    public IProduct getProduct(Barcode barcode){
-        return products.get(barcode.getBarcode());
+    public IProduct getProduct(NonEmptyString barcode){
+        return products.get(barcode.getValue());
     }
     
     /**
@@ -76,7 +76,7 @@ public class ProductCollection extends Observable implements Serializable{
     }
 
 	public void removeProduct(IProduct product) {
-		products.remove(product.getBarcode().getBarcode());
+		products.remove(product.getBarcode().getValue());
 	}
 }
 

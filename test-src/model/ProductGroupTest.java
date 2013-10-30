@@ -17,7 +17,7 @@ public class ProductGroupTest {
 	@Before
 	public void setUp() throws Exception {
 		productGroup = new ProductGroup(new NonEmptyString("testPG"));
-		product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
+		product = new Product(new NonEmptyString("123"), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode();
 		//Date expireDate = new Date();
 		item = new Item(product, barcode, productGroup);
@@ -67,7 +67,7 @@ public class ProductGroupTest {
 		ProductGroup pg = new ProductGroup(new NonEmptyString("testPG"));
 		productGroup.addProductContainer(pg);
 		ProductGroup pg2 = new ProductGroup(new NonEmptyString("testPG"));
-		Product product = new Product(new Barcode(), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
+		Product product = new Product(new NonEmptyString("123"), new NonEmptyString("bagel"), new Quantity(1.0, Unit.COUNT), 1, 1);
 		pg2.add(new Item(product, new Barcode(), pg2));
 		productGroup.setProductContainer("testPG", pg2);
 		Collection<IProductContainer> pgCollection = productGroup.getProductContainers();

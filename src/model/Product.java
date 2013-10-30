@@ -14,7 +14,7 @@ import java.util.List;
 public class Product extends Tagable implements IProduct {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
-	private Barcode barcode;
+	private NonEmptyString barcode;
 	private NonEmptyString description;
 	private Quantity itemSize;
 	private Integer shelfLife;
@@ -30,7 +30,7 @@ public class Product extends Tagable implements IProduct {
 	 * @param aContainers
 	 * {@post a Product is created}
 	 */
-	public Product(Barcode aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
+	public Product(NonEmptyString aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
 			Integer aShelfLife, Integer aThreeMonthSupply){
 		this.creation = new ValidDate();
 		this.barcode = aBarcode;
@@ -126,7 +126,7 @@ public class Product extends Tagable implements IProduct {
 	 * {@post Must be a non-null Barcode}
 	 */
 	@Override
-	public Barcode getBarcode() {
+	public NonEmptyString getBarcode() {
 		return barcode;
 	}
 	

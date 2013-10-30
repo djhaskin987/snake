@@ -498,8 +498,9 @@ public class InventoryController extends Controller
 		int i = 0;
 		for(IProduct product : products) {
 			productDatas[i] = (ProductData) product.getTag();
-			//The way this is currently set up, there is only one productData for each product, so count can't be kept accurate.
-			//This next line adjusts the count to whatever is appropriate for that product group.
+			/*The way this is currently set up, there is only one productData for each product,
+			 * so count can't be kept accurate. This next line adjusts the count to
+			 * whatever is appropriate for that product group.*/
 			productDatas[i].setCount(Integer.toString(productContainer.getItems(product).size()));
 			++i;
 		}
@@ -683,12 +684,6 @@ public class InventoryController extends Controller
 		ObservableArgs<ITagable> args = (ObservableArgs<ITagable>) payload;
 		IProduct product = (IProduct) args.get(0);
 		IProductContainer productContainer = (IProductContainer) args.get(1);
-		/*String productGroup;
-		if(productContainer instanceof StorageUnit) {	//TODO: This might be better if I could get it in the ProductContainer class.
-			productGroup = "";
-		} else {
-			productGroup = productContainer.getName().getValue();
-		}*/
 		for(IItem item : productContainer.getItems(product)) {
 			ItemData itemData = (ItemData) item.getTag();
 			System.out.println("Product group name:\t" + item.getProductGroupName());

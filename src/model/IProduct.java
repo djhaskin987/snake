@@ -73,7 +73,7 @@ public interface IProduct extends Serializable, ITagable {
 	 * 
 	 * @return A Barcode that is unique to this product
 	 */
-	public Barcode getBarcode();
+	public NonEmptyString getBarcode();
 
 	/**
 	 * 
