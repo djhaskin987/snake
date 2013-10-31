@@ -1,7 +1,9 @@
 package model;
 
-import java.util.Observable;
+import gui.item.ItemData;
 
+import java.util.Collection;
+import java.util.Observable;
 import java.util.Observer;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -353,6 +355,7 @@ public class Model extends ModelObservable implements Observer {
 	public void deleteProduct(IProductContainer productContainer, IProduct product) {
 		productContainer.removeProduct(product);
 	}
+
 	public void editProduct(IProduct product) {
 		notifyObservers(ModelActions.EDIT_PRODUCT, product);	
 	}

@@ -491,6 +491,8 @@ public class InventoryController extends Controller
 	}
 
 	private void refreshProducts() {
+		ProductData current = getView().getSelectedProduct();
+
 		IProductContainer productContainer = (IProductContainer)
 				getView().getSelectedProductContainer().getTag();
 		Collection<IProduct> products = productContainer.getProducts();
@@ -505,12 +507,18 @@ public class InventoryController extends Controller
 			++i;
 		}
 		getView().setProducts(productDatas);
+		
+		if(current != null && products.contains(current.getTag())) {
+			getView().selectProduct(current);
+		}
 	}
 	
 	private void refreshItems() {
 		IProductContainer productContainer = (IProductContainer)
 				getView().getSelectedProductContainer().getTag();
 		if(productContainer != null && getView().getSelectedProduct() != null) {
+			ItemData current = getView().getSelectedItem();
+			
 			Collection<IItem> items = productContainer.getItems(
 					(IProduct) getView().getSelectedProduct().getTag());
 			ItemData[] itemDatas = new ItemData[items.size()];
@@ -520,6 +528,10 @@ public class InventoryController extends Controller
 				++i;
 			}
 			getView().setItems(itemDatas);
+			
+			if(current != null && items.contains(current.getTag())) {
+				getView().selectItem(current);
+			}
 		} else {
 			getView().setItems(new ItemData[0]);
 		}
@@ -558,6 +570,18 @@ public class InventoryController extends Controller
 
 	private void editProduct(IModelTagable payload) {
 		IProduct product = (IProduct) payload;
+		
+		Collection<IItem> items = product.getAllItems();
+		for (IItem item : items) {
+			ItemData iData = (ItemData) item.getTag();
+			model.Date dExpire = item.getExpireDate();
+			java.util.Date expire = null;
+			if(dExpire != null) {
+				expire = dExpire.toJavaUtilDate();
+			}
+			iData.setExpirationDate(expire);
+		}
+		
 		ProductData pData = (ProductData) product.getTag();
 		NonEmptyString neDescription = product.getDescription();
 		String description = neDescription.getValue();
@@ -574,6 +598,7 @@ public class InventoryController extends Controller
 		}
 		pData.setSize(itemSize.toString());
 		refreshProducts();
+		refreshItems();
 	}
 
 	private void editStorageUnit(IModelTagable payload) {
