@@ -11,7 +11,7 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class Product extends Tagable implements IProduct {
+public class Product extends ModelTagable implements IProduct {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
 	private NonEmptyString barcode;

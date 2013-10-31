@@ -1,7 +1,5 @@
 package model;
 
-import gui.common.ITagable;
-
 import java.io.Serializable;
 
 /**
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * @author Kevin
  *
  */
-public interface IItem extends ITagable, Serializable {
+public interface IItem extends IModelTagable, Serializable {
 	
 	/**
 	 * Connects the IItem with a specific IProductContainer

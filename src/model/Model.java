@@ -2,8 +2,6 @@ package model;
 
 import java.util.Observable;
 
-import gui.common.ITagable;
-
 import java.util.Observer;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -166,7 +164,7 @@ public class Model extends ModelObservable implements Observer {
 
 	public void addProduct(IProduct product) {
 		productCollection.add(product);
-		notifyObservers(ModelActions.INSERT_PRODUCT, (ITagable) product);
+		notifyObservers(ModelActions.INSERT_PRODUCT, (IModelTagable) product);
 	}
 	
 	public void addItem(IItem item) {
@@ -203,7 +201,7 @@ public class Model extends ModelObservable implements Observer {
 			addItem(item, productContainer);
 		}
 		//productContainer.addBatch(batch);
-		notifyObservers(ModelActions.INSERT_ITEMS, (ITagable)batch);
+		notifyObservers(ModelActions.INSERT_ITEMS, (IModelTagable)batch);
 	}
 
 	public void changeStorageUnitName(IProductContainer StU, String name) {
@@ -253,7 +251,7 @@ public class Model extends ModelObservable implements Observer {
 		if (productContainer != null)
 			item.exit();
 			productContainer.transferItem(item, removedItems);
-		Pair<ModelActions, ITagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (ITagable) item);
+		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (IModelTagable) item);
 		setChanged();
 		notifyObservers(p);
 	}
@@ -393,7 +391,7 @@ public class Model extends ModelObservable implements Observer {
 		if (ExistingPC != null)
 		{
 			ExistingPC.moveProduct(product, target);
-			ObservableArgs<ITagable> args = new ObservableArgs<ITagable>();
+			ObservableArgs<IModelTagable> args = new ObservableArgs<IModelTagable>();
 			args.add(product);
 			args.add(target);
 			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);

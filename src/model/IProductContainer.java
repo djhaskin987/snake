@@ -1,7 +1,5 @@
 package model;
 
-import gui.common.ITagable;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  * @author Daniel Jay Haskin
  *
  */
-public interface IProductContainer extends Serializable, ITagable {
+public interface IProductContainer extends Serializable, IModelTagable {
 	
 	/**
 	 * Converts an enum into a string to display
