@@ -87,7 +87,7 @@ public class AddItemBatchController extends Controller implements
 	protected void enableComponents() {
 		if(
 				!getView().getUseScanner()
-				&& Barcode.isValidBarcode(getView().getBarcode())
+				&& !getView().getBarcode().isEmpty()
 				&& NumberUtils.isDigits(getView().getCount())
 				&& Integer.parseInt(getView().getCount()) > 0
 				) {
@@ -114,7 +114,7 @@ public class AddItemBatchController extends Controller implements
 	public void entryDateChanged() {
 		Date d = getView().getEntryDate();
 		try {
-			model.ValidDate vDate = new ValidDate(d);
+			new ValidDate(d);
 			getView().enableItemAction(true);
 		} catch (Exception e) {
 			getView().enableItemAction(false);

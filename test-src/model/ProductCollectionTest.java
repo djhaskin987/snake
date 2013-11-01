@@ -27,11 +27,11 @@ public class ProductCollectionTest {
      */
     @Before
     public void setUp() throws Exception {
-        product0 = new Product(new Barcode("036000291452"),
+        product0 = new Product(new NonEmptyString("036000291452"),
                         new NonEmptyString("Soups"),
                         null,
                         new Integer(12), new Integer(24));
-        product1 = new Product(new Barcode("001010101015"),
+        product1 = new Product(new NonEmptyString("001010101015"),
                 new NonEmptyString("Sandwiches"),
                 null,
                 new Integer(13), new Integer(2));

@@ -1,16 +1,14 @@
 package model;
 
-import gui.common.ITagable;
-
 import java.util.Observable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ModelObservable extends Observable {
 	public void notifyObservers(ModelActions action,
-			ITagable payload)
+			IModelTagable payload)
 	{
-		Pair<ModelActions, ITagable> pair = Pair.of(action, payload);
+		Pair<ModelActions, IModelTagable> pair = Pair.of(action, payload);
 		setChanged();
 		notifyObservers(pair);
 	}

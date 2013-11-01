@@ -1,7 +1,5 @@
 package model;
 
-import gui.common.ITagable;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  * @author Kevin
  *
  */
-public interface IProduct extends Serializable, ITagable {
+public interface IProduct extends Serializable, IModelTagable {
 
 	/**
 	 * This must be a NonEmptyString
@@ -73,7 +71,7 @@ public interface IProduct extends Serializable, ITagable {
 	 * 
 	 * @return A Barcode that is unique to this product
 	 */
-	public Barcode getBarcode();
+	public NonEmptyString getBarcode();
 
 	/**
 	 * 

@@ -45,7 +45,7 @@ public class JavaSerialTest {
 		
 		List<ProductContainer> containers = new ArrayList();
 		containers.add(prodGTest);
-		Barcode barcode = new Barcode("123456789012");
+		NonEmptyString barcode = new NonEmptyString("123456789012");
 		NonEmptyString description = new NonEmptyString("Can of Coca-Cola");
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
@@ -55,7 +55,7 @@ public class JavaSerialTest {
 		Model.getInstance().getProductCollection().add(product1);
 		
 		
-		Item item1 = new Item(product1, barcode, null, prodGTest);
+		Item item1 = new Item(product1, new Barcode("123456789012"), null, prodGTest);
 		
 		
 		Model.getInstance().getStorageUnits().addStorageUnit(stuTest);

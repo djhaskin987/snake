@@ -2,9 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
-import gui.common.ITagable;
+public class ObservableArgs<E> extends ArrayList<E> implements IModelTagable {
 
-public class ObservableArgs<E> extends ArrayList<E> implements ITagable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7374929275966449579L;
 
 	@Override
 	public Object getTag() {

@@ -13,7 +13,7 @@ public class ItemFactoryTest {
 		assertTrue(ItemFactory.getInstance() != null);
 		assertTrue(ItemFactory.getInstance() == ItemFactory.getInstance());
 
-		Product product = new Product(new Barcode("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1);
+		Product product = new Product(new NonEmptyString("123456789012"), new NonEmptyString(" "), new Quantity(1.0, Unit.COUNT), 1, 1);
 		Barcode barcode = new Barcode("123456789012");
 		//Date expireDate = new Date();
 		IProductContainer container = (IProductContainer) new StorageUnit();

@@ -59,6 +59,11 @@ public class EditItemController extends Controller
 		eiv.enableBarcode(false);
 		eiv.enableDescription(false);
 		eiv.enableEntryDate(true);
+		if(eiv.getEntryDate() == null || eiv.getEntryDate().after(new Date())) {
+			eiv.enableOK(false);
+		} else {
+			eiv.enableOK(true);
+		}
 	}
 	
 	private IItem getModelItem()
@@ -75,6 +80,7 @@ public class EditItemController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setEntryDate(new Date());
 		getView().setBarcode(target.getBarcode());
 		getView().setDescription(getModelItem().getProduct().getDescription().getValue());
 		enableComponents();

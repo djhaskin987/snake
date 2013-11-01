@@ -83,8 +83,8 @@ public class EditProductController extends Controller
 	protected void loadValues() {
 		IProduct product = (IProduct) productData.getTag();
 		IEditProductView epv = getView();
-		Barcode barcode = product.getBarcode();
-		String barcodeStr = barcode.getBarcode();
+		NonEmptyString barcode = product.getBarcode();
+		String barcodeStr = barcode.getValue();
 		epv.setBarcode(barcodeStr);
 		NonEmptyString neDescription = product.getDescription();
 		String description = neDescription.getValue();
@@ -148,7 +148,7 @@ public class EditProductController extends Controller
 		if (!StringOps.isNullOrEmpty(s)) {
 			if (StringOps.isNumeric(s)) {
 				Integer value = Integer.parseInt(s);
-				return (value > 0);
+				return (value >= 0);
 			}
 		}
 		return false;
@@ -186,22 +186,9 @@ public class EditProductController extends Controller
 		} catch (InvalidIntegerException e) {
 			epv.displayErrorMessage(e.getMessage());
 			return;
-		}	
-		updateProductItemDatas(product);
+		}
 		Model m = Model.getInstance();
 		m.editProduct(product);
-		
-	}
-
-	private void updateProductItemDatas(IProduct p) {
-		
-		Collection<IItem> items = p.getAllItems();
-		for (IItem item : items) {
-			ItemData iData = (ItemData) item.getTag();
-			model.Date dExpire = item.getExpireDate();
-			java.util.Date expire = dExpire.toJavaUtilDate();
-			iData.setExpirationDate(expire);
-		}
 		
 	}
 	

@@ -25,7 +25,7 @@ public class IProductTest {
 
 	@Test
 	public void constructorTest() {
-		Barcode barcode = new Barcode("123456789012");
+		NonEmptyString barcode = new NonEmptyString("123456789012");
 		NonEmptyString description = new NonEmptyString("Can of Coca-Cola");
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
@@ -33,13 +33,13 @@ public class IProductTest {
 		
 		IProduct test= ProductFactory.getInstance().createInstance(barcode, description, itemSize, shelfLife, threeMonthSupply);
 		assertTrue(test.getDescription().toString().equals("Can of Coca-Cola"));
-		assertTrue(test.getBarcode().getBarcode().toString().equals("123456789012"));
+		assertTrue(test.getBarcode().getValue().equals("123456789012"));
 		assertTrue(test.getItemSize().getUnit().equals(Unit.FLOZ));
 	}
 	
 	@Test
 	public void setShelfLifeTest(){
-		Barcode barcode = new Barcode("123456789012");
+		NonEmptyString barcode = new NonEmptyString("123456789012");
 		NonEmptyString description = new NonEmptyString("Can of Coca-Cola");
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
@@ -65,7 +65,7 @@ public class IProductTest {
 	
 	@Test
 	public void setThreeMonthSupplyTest(){
-		Barcode barcode = new Barcode("123456789012");
+		NonEmptyString barcode = new NonEmptyString("123456789012");
 		NonEmptyString description = new NonEmptyString("Can of Coca-Cola");
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;
@@ -90,7 +90,7 @@ public class IProductTest {
 	
 	@Test
 	public void setDescriptionTest(){
-		Barcode barcode = new Barcode("123456789012");
+		NonEmptyString barcode = new NonEmptyString("123456789012");
 		NonEmptyString description = new NonEmptyString("Can of Coca-Cola");
 		Quantity itemSize = new Quantity(12.5, Unit.FLOZ);
 		Integer shelfLife = 0;

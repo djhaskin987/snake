@@ -109,7 +109,7 @@ public class AddStorageUnitController extends Controller implements
 		IProductContainer s = m.createStorageUnit(name);
 		ProductContainerData pcd = new ProductContainerData(name);
 		pcd.setTag(s);
-		((ITagable)s).setTag((Object)pcd);
+		((IModelTagable)s).setTag((Object)pcd);
 		m.addStorageUnit(s);
 	}
 
