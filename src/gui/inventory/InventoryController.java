@@ -694,6 +694,7 @@ public class InventoryController extends Controller
 		model.ValidDate vDate = item.getEntryDate();
 		Date date = vDate.toJavaUtilDate();
 		iData.setEntryDate(date);
+		iData.setExpirationDate(item.getExpireDate().toJavaUtilDate());
 		refreshItems();
 	}
 	
