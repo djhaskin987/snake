@@ -1,16 +1,14 @@
 package gui.batches;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
 import common.StringOps;
-
 import model.Barcode;
 import model.IItem;
 import model.IProduct;
@@ -24,7 +22,6 @@ import model.ValidDate;
 import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
-import gui.main.GUI;
 import gui.product.*;
 
 /**
@@ -34,7 +31,8 @@ public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 
 	private ProductContainerData productContainerData;
-	private ArrayList<ProductData> products;
+	//private ArrayList<ProductData> products;
+	private Map<ProductData, List<ItemData>> productItems;
 	
 	/**
 	 * Constructor.
@@ -45,7 +43,8 @@ public class AddItemBatchController extends Controller implements
 	public AddItemBatchController(IView view, ProductContainerData target) {
 		super(view);
 		productContainerData = target;
-		products = new ArrayList<ProductData>();
+		productItems = new HashMap<ProductData, List<ItemData>>();
+		//products = new ArrayList<ProductData>();
 		construct();
 	}
 
@@ -198,7 +197,7 @@ public class AddItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 		IAddItemBatchView v = getView();
 		ProductData pData = v.getSelectedProduct();
-		ItemData[] iDatas = getItems(pData);
+		ItemData[] iDatas = productItems.get(pData).toArray(new ItemData[0]);
 		v.setItems(iDatas);	
 	}
 
@@ -222,27 +221,32 @@ public class AddItemBatchController extends Controller implements
 			product = getProduct();
 			if (product == null) {
 				return;
-			} else {
-				ProductData pData = (ProductData) product.getTag();
-				products.add(pData);
 			}
+		}
+		ProductData pData = (ProductData) product.getTag();
+		List<ItemData> iDatas;
+		if(productItems.containsKey(pData)) {
+			iDatas = productItems.get(pData);
+		} else {
+			iDatas = new ArrayList<ItemData>();
+			productItems.put(pData, iDatas);
 		}
 		
 		int count = getItemCount();
 		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
-		IItem lastItem = null;
 		for (int i = 0; i < count; ++i) {
 			IItem item = createItem(product);
 			items.add(item);
-			lastItem = item;
+			iDatas.add((ItemData) item.getTag());
 		}
+		IItem lastItem = items.get(count-1);
 		updateCount(count, product);
 		
 		Model m = Model.getInstance();
 		m.addBatch(items, (IProductContainer) productContainerData.getTag());
 		
-		getView().setProducts(products.toArray(new ProductData[0]));
+		getView().setProducts(productItems.keySet().toArray(new ProductData[0]));
 		getView().selectProduct((ProductData) product.getTag());
 		selectedProductChanged();
 		getView().selectItem((ItemData) lastItem.getTag());
@@ -269,25 +273,6 @@ public class AddItemBatchController extends Controller implements
 		}
 		pData.setCount(pCountStr);
 	}
-	
-	private ItemData[] getItems(ProductData pData) {
-		if(pData != null) {
-			IProduct product = (IProduct) pData.getTag();
-			IProductContainer pc = (IProductContainer) productContainerData.getTag();
-			Collection<IItem> items = product.getItems(pc);
-			if (items.size() > 0) {
-				ItemData[] iDatas = new ItemData[items.size()];
-				Iterator<IItem> itr = items.iterator();
-				for (int i = 0; i < iDatas.length; i++) {
-					IItem item = itr.next();
-					iDatas[i] = (ItemData) item.getTag();
-				}
-				return iDatas;
-			}
-		}
-		return new ItemData[0];
-	}
-	
 	
 	private ItemData createItemData(IItem item) {
 		ItemData iData = new ItemData();
@@ -351,6 +336,9 @@ public class AddItemBatchController extends Controller implements
 		Model m = Model.getInstance();
 		IAddItemBatchView v = getView();
 		String barcode = v.getBarcode();
+		if(barcode.isEmpty()) {
+			return null;
+		}
 		IProduct p = m.getProduct(barcode);
 		return p;
 	}
@@ -397,12 +385,11 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
-		if(products.size() == 0) {
+		if(productItems.size() == 0) {
 			return;
 		}
 		BarcodeSheet codes = new BarcodeSheet();
-		for (ProductData product : products) {
-			ItemData[] itemDatas = getItems(product);
+		for (List<ItemData> itemDatas : productItems.values()) {
 			for(ItemData itemData : itemDatas) {
 				codes.addBarcode((IItem) itemData.getTag());
 			}
