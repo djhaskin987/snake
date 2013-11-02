@@ -410,7 +410,6 @@ public class InventoryController extends Controller
 		getModel().addProductToContainer(
 				(IProduct)productData.getTag(),
 				(IProductContainer) containerData.getTag());
-		getView().selectProductContainer(containerData);
 		refreshProducts();
 		refreshItems();
 	}
@@ -428,7 +427,6 @@ public class InventoryController extends Controller
 		IItem item = (IItem) itemData.getTag();
 		IProductContainer target = (IProductContainer) containerData.getTag();
 		getModel().moveItemToContainer(item, target);
-		getView().selectProductContainer(containerData);
 		refreshProducts();
 		refreshItems();
 	}
