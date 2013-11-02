@@ -148,8 +148,11 @@ public class ProductItems extends Observable implements Serializable {
 	}
 
 	public Collection<IItem> getItems(IProduct product) {
-		return java.util.Collections.unmodifiableList(
-				map.get(product));
+		List<IItem> items = map.get(product);
+		if(items == null) {
+			items = new ArrayList<IItem>();
+		}
+		return java.util.Collections.unmodifiableList(items);
 	}
 
 	public void addProduct(IProduct product) {
