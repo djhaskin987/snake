@@ -59,12 +59,51 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		ProductContainerData root = new ProductContainerData();
-		StorageUnits su = Model.getInstance().getStorageUnits();
-		su.setTag(root);
-		root.setTag(su);
-		getView().setProductContainers(root);
+		StorageUnits su = getStorageUnitsManager();
+		ProductContainerData root = loadValues(su);
+		IInventoryView ivw = getView();
+		ivw.setProductContainers(root);
 		System.out.println("Inventory Controller values loaded");
+	}
+	
+	private ProductContainerData loadValues(IProductContainer pc) {
+		ProductContainerData pcd = new ProductContainerData();
+		pcd.setName(pc.getName().getValue());
+		pcd.setTag(pc);
+		pc.setTag(pcd);
+		for (IProduct p : pc.getProducts()) {
+			ProductData pData = new ProductData();
+			pData.setBarcode(p.getBarcode().getBarcode());
+			Collection<IItem> items = p.getItems(pc);
+			if (items != null) {
+				Integer size = items.size();
+				pData.setCount(size.toString());
+			}
+			pData.setDescription(p.getDescription().getValue());
+			pData.setShelfLife(p.getShelfLife().toString());
+			pData.setSize(p.getItemSize().toString());
+			if (p.getItemSize().getUnit() == Unit.COUNT)
+				pData.setCount(p.getItemSize().getValueString());
+			else 
+				pData.setCount("1");
+			p.setTag(pData);
+			pData.setTag(p);
+			for (IItem i : p.getItems(pc)) {
+				ItemData iData = new ItemData();
+				iData.setBarcode(i.getBarcode().getBarcode());
+				iData.setEntryDate(i.getEntryDate().toJavaUtilDate());
+				iData.setExpirationDate(i.getExpireDate().toJavaUtilDate());
+				iData.setProductGroup(i.getProductGroupName());
+				iData.setStorageUnit(i.getStorageUnitName());
+				i.setTag(iData);
+				iData.setTag(i);
+			}
+		}
+		for (IProductContainer p : pc.getChildren()) {
+			ProductContainerData child = loadValues(p);
+			pcd.addChild(child);
+		}
+		return pcd;
 	}
 
 	/**
@@ -116,8 +155,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canRemoveItems() {
-		System.out.println("Can remove items");
-		return getSelectedModelProductContainer().canRemoveItems();
+		// per the specs, page 26
+		return true;
 	}
 	
 	public IProductContainer getSelectedModelProductContainer()
@@ -314,11 +353,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void removeItem() {
-		Model m = Model.getInstance();
-		IInventoryView v = getView();
-		ItemData iData = v.getSelectedItem();
+		ItemData iData = getView().getSelectedItem();
 		IItem item = (IItem) iData.getTag();
-		m.removeItem(item);
+		getModel().removeItem(item);
 	}
 
 	/**
@@ -410,7 +447,6 @@ public class InventoryController extends Controller
 		getModel().addProductToContainer(
 				(IProduct)productData.getTag(),
 				(IProductContainer) containerData.getTag());
-		getView().selectProductContainer(containerData);
 		refreshProducts();
 		refreshItems();
 	}
@@ -428,7 +464,6 @@ public class InventoryController extends Controller
 		IItem item = (IItem) itemData.getTag();
 		IProductContainer target = (IProductContainer) containerData.getTag();
 		getModel().moveItemToContainer(item, target);
-		getView().selectProductContainer(containerData);
 		refreshProducts();
 		refreshItems();
 	}
@@ -694,6 +729,11 @@ public class InventoryController extends Controller
 		model.ValidDate vDate = item.getEntryDate();
 		Date date = vDate.toJavaUtilDate();
 		iData.setEntryDate(date);
+		if(item.getExpireDate() == null) {
+			iData.setExpirationDate(null);
+		} else {
+			iData.setExpirationDate(item.getExpireDate().toJavaUtilDate());
+		}
 		refreshItems();
 	}
 	

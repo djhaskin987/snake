@@ -1,6 +1,17 @@
 package gui.main;
 
+import java.util.Collection;
+
+import model.IItem;
+import model.IProduct;
+import model.IProductContainer;
+import model.Model;
+import model.StorageUnits;
+import model.Unit;
 import gui.common.*;
+import gui.inventory.ProductContainerData;
+import gui.item.ItemData;
+import gui.product.ProductData;
 
 /**
  * Controller class for the main view.  The main view allows the user
@@ -15,8 +26,60 @@ public class MainController extends Controller implements IMainController {
 	 */
 	public MainController(IMainView view) {
 		super(view);
-		
+		loadValues();
 		construct();
+	}
+	
+	@Override
+	public void loadValues() {
+		super.loadValues();
+		Model m = Model.getInstance();
+		m.load();
+		StorageUnits s = m.getStorageUnits();
+		loadValues(s);
+	}
+	
+	private ProductContainerData loadValues(IProductContainer pc) {
+		if (pc == null)
+			return null;
+		ProductContainerData pcd = new ProductContainerData();
+		pcd.setName(pc.getName().getValue());
+		pcd.setTag(pc);
+		pc.setTag(pcd);
+		for (IProduct p : pc.getProducts()) {
+			ProductData pData = new ProductData();
+			pData.setBarcode(p.getBarcode().getBarcode());
+			Collection<IItem> items = p.getItems(pc);
+			if (items != null) {
+				Integer size = items.size();
+				pData.setCount(size.toString());
+			}
+			pData.setDescription(p.getDescription().getValue());
+			pData.setShelfLife(p.getShelfLife().toString());
+			pData.setSize(p.getItemSize().toString());
+			if (p.getItemSize().getUnit() == Unit.COUNT)
+				pData.setCount(p.getItemSize().getValueString());
+			else 
+				pData.setCount("1");
+			p.setTag(pData);
+			pData.setTag(p);
+			for (IItem i : p.getItems(pc)) {
+				ItemData iData = new ItemData();
+				iData.setBarcode(i.getBarcode().getBarcode());
+				iData.setEntryDate(i.getEntryDate().toJavaUtilDate());
+				iData.setExpirationDate(i.getExpireDate().toJavaUtilDate());
+				iData.setProductGroup(i.getProductGroupName());
+				iData.setStorageUnit(i.getStorageUnitName());
+				i.setTag(iData);
+				iData.setTag(i);
+			}
+		}
+		for (IProductContainer p : pc.getChildren()) {
+			ProductContainerData child = loadValues(p);
+			if (child != null)
+				pcd.addChild(child);
+		}
+		return pcd;
 	}
 	
 	/**
@@ -44,6 +107,8 @@ public class MainController extends Controller implements IMainController {
 	 */
 	@Override
 	public void exit() {
+		Model m = Model.getInstance();
+		m.store();
 	}
 
 	/**

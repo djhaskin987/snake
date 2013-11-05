@@ -411,4 +411,13 @@ public class Model extends ModelObservable implements Observer {
 			target.addProduct(product);
 		}
 	}
+	
+	public void store() {
+		storageUnits.store();
+	}
+	
+	public void load() {
+		storageUnits.load();
+		System.out.println("model loaded");
+	}
 }

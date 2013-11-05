@@ -127,6 +127,7 @@ public class EditItemController extends Controller
 			Model m = Model.getInstance();
 			m.editItem(item);
 		} catch (Exception e) {
+			e.printStackTrace();
 			eiv.displayErrorMessage(e.getMessage());
 			return;
 		}

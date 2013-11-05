@@ -149,16 +149,28 @@ public class ProductItems extends Observable implements Serializable {
 
 	public Collection<IItem> getItems(IProduct product) {
 		List<IItem> items = map.get(product);
-		if (items != null)
-			return java.util.Collections.unmodifiableList(items);
-		else 
-			return null;
+		if(items == null) {
+			items = new ArrayList<IItem>();
+		}
+		return java.util.Collections.unmodifiableList(items);
 	}
 
 	public void addProduct(IProduct product) {
 		if (!map.containsKey(product))
 		{
 			map.put(product, new ArrayList<IItem>());
+		}
+	}
+
+	public void clearAllTags() {
+		for (IProduct p : map.keySet()) {
+			p.setTag(null);
+			Collection<IItem> items = map.get(p);
+			if (items != null) {
+				for (IItem item : items) {
+					item.setTag(null);
+				}
+			}
 		}
 	}
 }

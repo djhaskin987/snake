@@ -22,7 +22,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	protected NonEmptyString name;
 	protected ProductItems productItems;
 	protected ProductContainers productContainers;
-	private Tagable tagable;
+	private transient Tagable tagable;
 
 	public ProductContainer(NonEmptyString name) {
 		this.name = name;
@@ -483,5 +483,19 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public void addProduct(IProduct product)
 	{
 		productItems.addProduct(product);
+	}
+	
+	public void clearAllTags() {
+		this.tagable = null;
+		this.productItems.clearAllTags();
+		for (IProductContainer container : productContainers) {
+			((ProductContainer)container).clearAllTags();
+		}
+	}
+	
+	@Override
+	public Collection<IProductContainer> getChildren() {
+		Collection<IProductContainer> pcs = productContainers.getProductContainers().values();
+		return pcs;
 	}
 }

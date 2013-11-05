@@ -1,7 +1,9 @@
 package model;
 
+import gui.common.ITagable;
 import gui.common.Tagable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,15 +13,16 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class Product extends ModelTagable implements IProduct {
+public class Product implements IProduct, ITagable, Serializable {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
-	private NonEmptyString barcode;
+	private Barcode barcode;
 	private NonEmptyString description;
 	private Quantity itemSize;
 	private Integer shelfLife;
 	private Integer threeMonthSupply;
 	private List<IProductContainer> containers;
+	private transient Tagable tagable;
 	/**
 	 * 
 	 * @param aBarcode
@@ -39,6 +42,7 @@ public class Product extends ModelTagable implements IProduct {
 		this.shelfLife = aShelfLife;
 		this.threeMonthSupply = aThreeMonthSupply;
 		this.containers = new ArrayList<IProductContainer>();
+		this.tagable = new Tagable();
 	}
 	
 	/**
@@ -192,5 +196,21 @@ public class Product extends ModelTagable implements IProduct {
 
 	public void setItemSize(Quantity q) {
 		itemSize = q;
+	}
+
+	@Override
+	public Object getTag() {
+		return tagable.getTag();
+	}
+
+	@Override
+	public void setTag(Object o) {
+		tagable.setTag(o);
+		
+	}
+
+	@Override
+	public boolean hasTag() {
+		return tagable.hasTag();
 	}
 }

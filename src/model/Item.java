@@ -1,5 +1,8 @@
 package model;
 
+import java.io.Serializable;
+
+import gui.common.ITagable;
 import gui.common.Tagable;
 
 /**
@@ -10,7 +13,7 @@ import gui.common.Tagable;
  *
  */
 
-public class Item extends Tagable implements IItem {
+public class Item implements IItem, ITagable, Serializable {
 
 	private static final long serialVersionUID = 8752461391777156867L;
 	
@@ -20,6 +23,7 @@ public class Item extends Tagable implements IItem {
 	private DateTime exitTime;
 	private Date expireDate;
 	private IProductContainer container;
+	private transient Tagable tagable;
 	
 	/**
 	 * @param product		The product this item is an instance of
@@ -40,6 +44,7 @@ public class Item extends Tagable implements IItem {
 		this.entryDate = new ValidDate();
 		this.exitTime = null;
 		this.container = container;
+		this.tagable = new Tagable();
 	}
 	/**
 	 * @param product		The product this item is an instance of
@@ -62,6 +67,7 @@ public class Item extends Tagable implements IItem {
 		this.entryDate = entryDate;
 		this.exitTime = null;
 		this.container = container;
+		this.tagable = new Tagable();
 	}
 	@Override
 	public void setProductContainer(IProductContainer container) {
@@ -119,7 +125,7 @@ public class Item extends Tagable implements IItem {
 			return null;
 		} else {
 			IProductContainer cur = container;
-			while (cur.getClass() != StorageUnit.class) {
+			while (cur.getClass() != StorageUnit.class && cur.getClass() != RemovedItems.class) {
 				cur = cur.getParent();
 			}
 			NonEmptyString nes = cur.getName();
@@ -132,4 +138,18 @@ public class Item extends Tagable implements IItem {
 		getProductContainer().removeItem(getBarcode());
 		target.add(this);
 	}
+	@Override
+	public Object getTag() {
+		return tagable.getTag();
+	}
+	@Override
+	public void setTag(Object o) {
+		tagable.setTag(o);
+	}
+	@Override
+	public boolean hasTag() {
+		return tagable.hasTag();
+	}
+	
+	
 }

@@ -4,13 +4,22 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class StorageUnits extends ProductContainer implements Serializable {
+public class StorageUnits extends ProductContainer implements Serializable, IPersistance {
 
 	private static final long serialVersionUID = 8036575061038335165L;
 	
@@ -248,4 +257,51 @@ public class StorageUnits extends ProductContainer implements Serializable {
 		Model.getInstance().getProductCollection().removeProduct(product);
 		//product.remove();
 	}
+
+	@Override
+	public void store() {
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			Files.deleteIfExists(p);
+			FileOutputStream fileOut = new FileOutputStream("inventory-tracker.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(this);
+			out.close();
+			fileOut.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void update() {
+		store();
+	}
+
+	@Override
+	public void load() {
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			if (Files.exists(p)) {
+		
+					FileInputStream fileIn = new FileInputStream(p.toFile());
+					ObjectInputStream in = new ObjectInputStream(fileIn);
+					StorageUnits s = (StorageUnits) in.readObject();
+					loadValues(s);
+					in.close();
+					fileIn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
+	}
+	
+	private void loadValues(StorageUnits s) {
+		// lets hope that the gc won't wreck us
+		this.name = s.name;
+		this.productContainers = s.productContainers;
+		this.productItems = s.productItems;
+	}
+	
+
 }
