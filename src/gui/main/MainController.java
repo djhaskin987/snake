@@ -48,7 +48,7 @@ public class MainController extends Controller implements IMainController {
 		pc.setTag(pcd);
 		for (IProduct p : pc.getProducts()) {
 			ProductData pData = new ProductData();
-			pData.setBarcode(p.getBarcode().toString());
+			pData.setBarcode(p.getBarcode().getValue());
 			Collection<IItem> items = p.getItems(pc);
 			if (items != null) {
 				Integer size = items.size();

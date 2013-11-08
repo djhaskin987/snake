@@ -16,7 +16,7 @@ import java.util.List;
 public class Product implements IProduct, ITagable, Serializable {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
-	private Barcode barcode;
+	private NonEmptyString barcode;
 	private NonEmptyString description;
 	private Quantity itemSize;
 	private Integer shelfLife;
@@ -35,7 +35,7 @@ public class Product implements IProduct, ITagable, Serializable {
 	public Product(NonEmptyString aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
 			Integer aShelfLife, Integer aThreeMonthSupply){
 		this.creation = new ValidDate();
-		this.barcode = new Barcode(aBarcode);
+		this.barcode = aBarcode;
 		this.description = aDescription;
 		this.itemSize = aItemSize;
 		this.shelfLife = aShelfLife;
@@ -130,7 +130,7 @@ public class Product implements IProduct, ITagable, Serializable {
 	 */
 	@Override
 	public NonEmptyString getBarcode() {
-		return new NonEmptyString(barcode.getBarcode());
+		return barcode;
 	}
 	
 	/**
