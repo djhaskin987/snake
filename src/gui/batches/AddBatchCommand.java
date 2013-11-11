@@ -24,7 +24,7 @@ public class AddBatchCommand implements ICommand {
 	private ObservableArgs<IItem> batch;
 	private int count;
 	private AddItemBatchController controller;
-	private boolean newProduct;
+	private AddBatchCase addBatchCase;
 	
 	public AddBatchCommand(ProductData product, List<ItemData> items, ProductItemsData productItems, ProductContainerData productContainerData, AddItemBatchController controller) {
 		this.product = product;
@@ -33,7 +33,14 @@ public class AddBatchCommand implements ICommand {
 		this.controller = controller;
 		productContainer = (IProductContainer) productContainerData.getTag();
 		batch = new ObservableArgs<IItem>();
-		newProduct = !productContainer.contains((IProduct) product.getTag());
+		if(productContainer.contains((IProduct) product.getTag())) {
+			addBatchCase = AddBatchCase.NORMAL;
+			//This line could be optimized.
+		} else if(((IProduct) product.getTag()).getAllItems().size() == 0) {
+			addBatchCase = AddBatchCase.ADD_PRODUCT_TO_SYSTEM;
+		} else {
+			addBatchCase = AddBatchCase.ADD_PRODUCT_TO_STORAGE_UNIT;
+		}
 		for(ItemData item : items) {
 			batch.add((IItem) item.getTag());
 		}
@@ -65,15 +72,24 @@ public class AddBatchCommand implements ICommand {
 		//product.setCount(Integer.toString(count));
 		
 		Model m = Model.getInstance();
-		if(newProduct) {
+		switch(addBatchCase) {
+		case ADD_PRODUCT_TO_STORAGE_UNIT:
 			m.unaddProductAndBatch(batch, productContainer);
-		} else {
+			break;
+		case ADD_PRODUCT_TO_SYSTEM:
+			m.unaddNewProductAndBatch(batch, productContainer);
+			break;
+		case NORMAL:
 			m.unaddBatch(batch, productContainer);
+			break;
+		default:
+			System.err.println("You missed a case in AddBachCommand.undo()");
+			break;
 		}
 		
 		IAddItemBatchView view = controller.getView();
 		view.setProducts(productItems.getProductArray());
-		if(!newProduct) {
+		if(addBatchCase == AddBatchCase.NORMAL) {
 			view.selectProduct(product);
 			view.selectItem(productItems.getLastItem(product));
 		}

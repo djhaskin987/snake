@@ -26,8 +26,8 @@ public class Commands {
 	
 	public void redo() {
 		ICommand command = redoStack.pop();
-		command.execute();
 		undoStack.push(command);
+		command.execute();
 	}
 
 	public boolean canUndo() {

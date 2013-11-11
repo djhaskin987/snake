@@ -228,6 +228,15 @@ public class Model extends ModelObservable implements Observer {
 		notifyObservers(ModelActions.UNDO_INSERT_PRODUCT_AND_ITEMS, (IModelTagable) batch);
 	}
 
+	public void unaddNewProductAndBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		productCollection.removeProduct(batch.get(0).getProduct());
+		notifyObservers(ModelActions.UNDO_INSERT_NEW_PRODUCT_AND_ITEMS, (IModelTagable) batch);
+	}
+
 	public void changeStorageUnitName(IProductContainer StU, String name) {
 		storageUnits.changeStorageUnitName(StU, name);
 	}

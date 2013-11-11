@@ -459,6 +459,9 @@ public class InventoryController extends Controller
 			case UNDO_INSERT_PRODUCT_AND_ITEMS:
 				undoInsertProductAndItems(payload);
 				break;
+			case UNDO_INSERT_NEW_PRODUCT_AND_ITEMS:
+				undoInsertNewProductAndItems(payload);
+				break;
 			case REMOVE_ITEMS:
 				removeItems(payload);
 				break;
@@ -554,6 +557,11 @@ public class InventoryController extends Controller
 	}
 
 	private void undoInsertProductAndItems(IModelTagable payload) {
+		refreshProducts();
+		getView().setItems(new ItemData[0]);
+	}
+
+	private void undoInsertNewProductAndItems(IModelTagable payload) {
 		refreshProducts();
 		getView().setItems(new ItemData[0]);
 	}
