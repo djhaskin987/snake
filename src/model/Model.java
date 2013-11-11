@@ -205,6 +205,28 @@ public class Model extends ModelObservable implements Observer {
 		//productContainer.addBatch(batch);
 		notifyObservers(ModelActions.INSERT_ITEMS, (IModelTagable)batch);
 	}
+	
+	public void unaddItem(IItem item) {
+		item.getProductContainer().removeItem(item.getBarcode());
+		itemCollection.remove(item);
+	}
+
+	public void unaddBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		notifyObservers(ModelActions.UNDO_INSERT_ITEMS, (IModelTagable) batch);
+	}
+
+	public void unaddProductAndBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		productContainer.removeProduct(batch.get(0).getProduct());
+		notifyObservers(ModelActions.UNDO_INSERT_PRODUCT_AND_ITEMS, (IModelTagable) batch);
+	}
 
 	public void changeStorageUnitName(IProductContainer StU, String name) {
 		storageUnits.changeStorageUnitName(StU, name);
@@ -352,6 +374,7 @@ public class Model extends ModelObservable implements Observer {
 				);
 	}
 
+	//TODO: This doesn't look like it would totally remove the items of that product.
 	public void deleteProduct(IProductContainer productContainer, IProduct product) {
 		productContainer.removeProduct(product);
 	}
@@ -411,4 +434,5 @@ public class Model extends ModelObservable implements Observer {
 			target.addProduct(product);
 		}
 	}
+
 }

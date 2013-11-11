@@ -69,4 +69,8 @@ public class ItemCollection extends Observable implements Serializable {
     	return items.values();
     	
     }
+
+	public void remove(IItem item) {
+		items.remove(item.getBarcode().getBarcode());
+	}
 }

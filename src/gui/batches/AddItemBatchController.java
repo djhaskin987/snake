@@ -2,9 +2,7 @@ package gui.batches;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -32,7 +30,8 @@ public class AddItemBatchController extends Controller implements
 
 	private ProductContainerData productContainerData;
 	//private ArrayList<ProductData> products;
-	private Map<ProductData, List<ItemData>> productItems;
+	private ProductItemsData productItems;
+	private Commands commands;
 	
 	/**
 	 * Constructor.
@@ -43,7 +42,8 @@ public class AddItemBatchController extends Controller implements
 	public AddItemBatchController(IView view, ProductContainerData target) {
 		super(view);
 		productContainerData = target;
-		productItems = new HashMap<ProductData, List<ItemData>>();
+		productItems = new ProductItemsData();
+		commands = new Commands();
 		//products = new ArrayList<ProductData>();
 		construct();
 	}
@@ -94,8 +94,8 @@ public class AddItemBatchController extends Controller implements
 		} else {
 			getView().enableItemAction(false);
 		}
-		getView().enableUndo(false);
-		getView().enableRedo(false);
+		getView().enableUndo(commands.canUndo());
+		getView().enableRedo(commands.canRedo());
 	}
 	
 	/**
@@ -197,7 +197,7 @@ public class AddItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 		IAddItemBatchView v = getView();
 		ProductData pData = v.getSelectedProduct();
-		ItemData[] iDatas = productItems.get(pData).toArray(new ItemData[0]);
+		ItemData[] iDatas = productItems.getItemArray(pData);
 		v.setItems(iDatas);	
 	}
 
@@ -224,13 +224,7 @@ public class AddItemBatchController extends Controller implements
 			}
 		}
 		ProductData pData = (ProductData) product.getTag();
-		List<ItemData> iDatas;
-		if(productItems.containsKey(pData)) {
-			iDatas = productItems.get(pData);
-		} else {
-			iDatas = new ArrayList<ItemData>();
-			productItems.put(pData, iDatas);
-		}
+		List<ItemData> iDatas = new ArrayList<ItemData>();
 		
 		int count = getItemCount();
 		// create a list of items
@@ -240,38 +234,14 @@ public class AddItemBatchController extends Controller implements
 			items.add(item);
 			iDatas.add((ItemData) item.getTag());
 		}
-		IItem lastItem = items.get(count-1);
-		updateCount(count, product);
-		
-		Model m = Model.getInstance();
-		m.addBatch(items, (IProductContainer) productContainerData.getTag());
-		
-		getView().setProducts(productItems.keySet().toArray(new ProductData[0]));
-		getView().selectProduct((ProductData) product.getTag());
-		selectedProductChanged();
-		getView().selectItem((ItemData) lastItem.getTag());
-		
-		resetControls();
+		commands.execute(new AddBatchCommand(pData, iDatas, productItems, productContainerData, this));
 	}
 	
-	private void resetControls() {
+	public void resetControls() {
 		IAddItemBatchView v = getView();
 		v.setBarcode("");
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
-	}
-	
-	private void updateCount(int numberOfItemsAdded, IProduct product) {
-		ProductData pData = (ProductData) product.getTag();
-		String pCountStr = pData.getCount();
-		if (pCountStr != null && pCountStr != "") {
-			int pCount = Integer.parseInt(pCountStr);
-			pCount += numberOfItemsAdded;
-			pCountStr = "" + pCount;
-		} else {
-			pCountStr = "" + numberOfItemsAdded;
-		}
-		pData.setCount(pCountStr);
 	}
 	
 	private ItemData createItemData(IItem item) {
@@ -362,6 +332,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo() {
+		commands.redo();
 	}
 
 	/**
@@ -370,6 +341,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo() {
+		commands.undo();
 	}
 
 	/**
@@ -385,11 +357,11 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
-		if(productItems.size() == 0) {
+		if(productItems.isEmpty()) {
 			return;
 		}
 		BarcodeSheet codes = new BarcodeSheet();
-		for (List<ItemData> itemDatas : productItems.values()) {
+		for (List<ItemData> itemDatas : productItems.itemLists()) {
 			for(ItemData itemData : itemDatas) {
 				codes.addBarcode((IItem) itemData.getTag());
 			}
