@@ -140,14 +140,20 @@ public class Item implements IItem, ITagable, Serializable {
 	}
 	@Override
 	public Object getTag() {
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.getTag();
 	}
 	@Override
 	public void setTag(Object o) {
+		if (tagable == null)
+			tagable = new Tagable();
 		tagable.setTag(o);
 	}
 	@Override
 	public boolean hasTag() {
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.hasTag();
 	}
 	

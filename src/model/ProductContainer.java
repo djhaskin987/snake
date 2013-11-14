@@ -314,17 +314,23 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 
 	public Object getTag()
 	{
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.getTag();
 	}
 
 	public void setTag(Object o)
 	{
+		if (tagable == null)
+			tagable = new Tagable();
 		tagable.setTag(o);
 	}
 
 
 	public boolean hasTag()
 	{
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.hasTag();
 	}
 

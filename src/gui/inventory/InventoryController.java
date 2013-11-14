@@ -59,7 +59,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		StorageUnits su = getStorageUnitsManager();
+		Model m = Model.getInstance();
+		m.load();
+		StorageUnits su = m.getStorageUnits();
 		ProductContainerData root = loadValues(su);
 		IInventoryView ivw = getView();
 		ivw.setProductContainers(root);
@@ -67,13 +69,15 @@ public class InventoryController extends Controller
 	}
 	
 	private ProductContainerData loadValues(IProductContainer pc) {
+		if (pc == null)
+			return null;
 		ProductContainerData pcd = new ProductContainerData();
 		pcd.setName(pc.getName().getValue());
 		pcd.setTag(pc);
 		pc.setTag(pcd);
 		for (IProduct p : pc.getProducts()) {
 			ProductData pData = new ProductData();
-			pData.setBarcode(p.getBarcode().getBarcode());
+			pData.setBarcode(p.getBarcode().getValue());
 			Collection<IItem> items = p.getItems(pc);
 			if (items != null) {
 				Integer size = items.size();
@@ -92,7 +96,9 @@ public class InventoryController extends Controller
 				ItemData iData = new ItemData();
 				iData.setBarcode(i.getBarcode().getBarcode());
 				iData.setEntryDate(i.getEntryDate().toJavaUtilDate());
-				iData.setExpirationDate(i.getExpireDate().toJavaUtilDate());
+				model.Date expireDate = i.getExpireDate();
+				if (expireDate != null)
+					iData.setExpirationDate(expireDate.toJavaUtilDate());
 				iData.setProductGroup(i.getProductGroupName());
 				iData.setStorageUnit(i.getStorageUnitName());
 				i.setTag(iData);
@@ -101,7 +107,8 @@ public class InventoryController extends Controller
 		}
 		for (IProductContainer p : pc.getChildren()) {
 			ProductContainerData child = loadValues(p);
-			pcd.addChild(child);
+			if (child != null)
+				pcd.addChild(child);
 		}
 		return pcd;
 	}

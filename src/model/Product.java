@@ -16,7 +16,7 @@ import java.util.List;
 public class Product implements IProduct, ITagable, Serializable {
 	private static final long serialVersionUID = 568171183669228421L;
 	private ValidDate creation;
-	private Barcode barcode;
+	private NonEmptyString barcode;
 	private NonEmptyString description;
 	private Quantity itemSize;
 	private Integer shelfLife;
@@ -200,17 +200,23 @@ public class Product implements IProduct, ITagable, Serializable {
 
 	@Override
 	public Object getTag() {
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.getTag();
 	}
 
 	@Override
 	public void setTag(Object o) {
+		if (tagable == null)
+			tagable = new Tagable();
 		tagable.setTag(o);
 		
 	}
 
 	@Override
 	public boolean hasTag() {
+		if (tagable == null)
+			tagable = new Tagable();
 		return tagable.hasTag();
 	}
 }

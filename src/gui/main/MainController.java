@@ -33,10 +33,6 @@ public class MainController extends Controller implements IMainController {
 	@Override
 	public void loadValues() {
 		super.loadValues();
-		Model m = Model.getInstance();
-		m.load();
-		StorageUnits s = m.getStorageUnits();
-		loadValues(s);
 	}
 	
 	private ProductContainerData loadValues(IProductContainer pc) {
@@ -48,7 +44,7 @@ public class MainController extends Controller implements IMainController {
 		pc.setTag(pcd);
 		for (IProduct p : pc.getProducts()) {
 			ProductData pData = new ProductData();
-			pData.setBarcode(p.getBarcode().getBarcode());
+			pData.setBarcode(p.getBarcode().getValue());
 			Collection<IItem> items = p.getItems(pc);
 			if (items != null) {
 				Integer size = items.size();
