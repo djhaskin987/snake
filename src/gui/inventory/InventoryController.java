@@ -73,7 +73,7 @@ public class InventoryController extends Controller
 		pc.setTag(pcd);
 		for (IProduct p : pc.getProducts()) {
 			ProductData pData = new ProductData();
-			pData.setBarcode(p.getBarcode().getBarcode());
+			pData.setBarcode(p.getBarcode().toString());
 			Collection<IItem> items = p.getItems(pc);
 			if (items != null) {
 				Integer size = items.size();

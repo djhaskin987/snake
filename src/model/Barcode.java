@@ -43,6 +43,21 @@ public class Barcode implements Serializable {
 		this.barcode = barcode;
 	}
 	
+	/** NonEmptyString version of above constructor
+	 * @param barcode the Barcode
+	 * @throws model.InvalidBarcodeException if barcode is not valid.
+	 * 
+	 * {@pre barcode is valid. A valid Barcode string must be numeric and be 12
+     * digits and have a valid check digit.}
+	 * 
+	 * {@post barcode != null}
+	 */
+	public Barcode(NonEmptyString barcode) {
+		String strBarcode = barcode.toString();
+		checkBarcode(strBarcode);
+		this.barcode = strBarcode;
+	}
+	
 	// generates a random barcode for testing
 	public Barcode()
 	{

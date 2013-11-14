@@ -36,7 +36,7 @@ public class Product implements IProduct, ITagable, Serializable {
 	public Product(NonEmptyString aBarcode, NonEmptyString aDescription, Quantity aItemSize, 
 			Integer aShelfLife, Integer aThreeMonthSupply){
 		this.creation = new ValidDate();
-		this.barcode = aBarcode;
+		this.barcode = new Barcode(aBarcode);
 		this.description = aDescription;
 		this.itemSize = aItemSize;
 		this.shelfLife = aShelfLife;
@@ -131,7 +131,7 @@ public class Product implements IProduct, ITagable, Serializable {
 	 */
 	@Override
 	public NonEmptyString getBarcode() {
-		return barcode;
+		return new NonEmptyString(barcode.getBarcode());
 	}
 	
 	/**
