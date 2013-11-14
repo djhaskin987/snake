@@ -499,8 +499,20 @@ public class InventoryController extends Controller
 			case INSERT_ITEMS:
 				insertItems(payload);
 				break;
+			case UNDO_INSERT_ITEMS:
+				undoInsertItems(payload);
+				break;
+			case UNDO_INSERT_PRODUCT_AND_ITEMS:
+				undoInsertProductAndItems(payload);
+				break;
+			case UNDO_INSERT_NEW_PRODUCT_AND_ITEMS:
+				undoInsertNewProductAndItems(payload);
+				break;
 			case REMOVE_ITEMS:
 				removeItems(payload);
+				break;
+			case UNDO_REMOVE_ITEMS:
+				undoRemoveItems(payload);
 				break;
 			case TRANSFER_ITEMS:
 				transferItems(payload);
@@ -524,8 +536,6 @@ public class InventoryController extends Controller
 				throw new IllegalStateException("Could not detect what changed");
 		}
 	}
-
-
 
 	@SuppressWarnings("unchecked")
 	private Pair<ModelActions, IModelTagable> pairExtract(Object arg1) {
@@ -580,8 +590,8 @@ public class InventoryController extends Controller
 	}
 	
 	private void insertItems(IModelTagable payload) {
-		ObservableArgs<IItem> insteredItems = (ObservableArgs<IItem>) payload;
-		ProductData productData = (ProductData) insteredItems.get(0).getProduct().getTag();
+		ObservableArgs<IItem> insertedItems = (ObservableArgs<IItem>) payload;
+		ProductData productData = (ProductData) insertedItems.get(0).getProduct().getTag();
 		if(getView().getSelectedProduct() == productData) {
 			refreshItems();
 		} else {
@@ -591,12 +601,36 @@ public class InventoryController extends Controller
 		}
 	}
 
+	private void undoInsertItems(IModelTagable payload) {
+		refreshItems();
+	}
+
+	private void undoInsertProductAndItems(IModelTagable payload) {
+		refreshProducts();
+		getView().setItems(new ItemData[0]);
+	}
+
+	private void undoInsertNewProductAndItems(IModelTagable payload) {
+		refreshProducts();
+		getView().setItems(new ItemData[0]);
+	}
+
 	private void removeItems(IModelTagable payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		// remove item from storage unit and product group
 		iData.setProductGroup("");
 		iData.setStorageUnit("");
+		refreshProducts();
+		refreshItems();
+	}
+
+	private void undoRemoveItems(IModelTagable payload) {
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		// unremove item from storage unit and product group
+		iData.setProductGroup(item.getProductGroupName());
+		iData.setStorageUnit(item.getStorageUnitName());
 		refreshProducts();
 		refreshItems();
 	}

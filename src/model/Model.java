@@ -205,6 +205,37 @@ public class Model extends ModelObservable implements Observer {
 		//productContainer.addBatch(batch);
 		notifyObservers(ModelActions.INSERT_ITEMS, (IModelTagable)batch);
 	}
+	
+	public void unaddItem(IItem item) {
+		item.getProductContainer().removeItem(item.getBarcode());
+		itemCollection.remove(item);
+	}
+
+	public void unaddBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		notifyObservers(ModelActions.UNDO_INSERT_ITEMS, (IModelTagable) batch);
+	}
+
+	public void unaddProductAndBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		productContainer.removeProduct(batch.get(0).getProduct());
+		notifyObservers(ModelActions.UNDO_INSERT_PRODUCT_AND_ITEMS, (IModelTagable) batch);
+	}
+
+	public void unaddNewProductAndBatch(ObservableArgs<IItem> batch,
+			IProductContainer productContainer) {
+		for(IItem item : batch) {
+			unaddItem(item);
+		}
+		productCollection.removeProduct(batch.get(0).getProduct());
+		notifyObservers(ModelActions.UNDO_INSERT_NEW_PRODUCT_AND_ITEMS, (IModelTagable) batch);
+	}
 
 	public void changeStorageUnitName(IProductContainer StU, String name) {
 		storageUnits.changeStorageUnitName(StU, name);
@@ -256,6 +287,15 @@ public class Model extends ModelObservable implements Observer {
 		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (IModelTagable) item);
 		setChanged();
 		notifyObservers(p);
+	}
+
+
+	//This is similar to addItem, but it does not add it to the item collection, and it notivies observers.
+	public void unremoveItem(IItem item, IProductContainer productContainer, int position) {
+		item.setProductContainer(productContainer);
+		productContainer.insertItem(item, item.getProduct(), position);
+		item.unexit();
+		notifyObservers(ModelActions.UNDO_REMOVE_ITEMS, item);
 	}
 
 	@Override
@@ -352,6 +392,7 @@ public class Model extends ModelObservable implements Observer {
 				);
 	}
 
+	//TODO: This doesn't look like it would totally remove the items of that product.
 	public void deleteProduct(IProductContainer productContainer, IProduct product) {
 		productContainer.removeProduct(product);
 	}
@@ -415,9 +456,15 @@ public class Model extends ModelObservable implements Observer {
 	public void store() {
 		storageUnits.store();
 	}
+
+
+	public int getPosition(IItem item) {
+		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
+	}
 	
 	public void load() {
 		storageUnits.load();
 		System.out.println("model loaded");
 	}
+
 }

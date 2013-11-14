@@ -1,12 +1,10 @@
 package gui.batches;
 
-import java.util.Collection;
+import java.util.List;
 
 import model.Barcode;
 import model.IItem;
-import model.IProduct;
 import model.Model;
-import model.ProductCollection;
 import gui.common.*;
 import gui.item.ItemData;
 import gui.product.*;
@@ -17,6 +15,9 @@ import gui.product.*;
 public class RemoveItemBatchController extends Controller implements
 		IRemoveItemBatchController {
 	
+	private Commands commands;
+	private ProductItemsData productItems;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -24,7 +25,8 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	public RemoveItemBatchController(IView view) {
 		super(view);
-
+		commands = new Commands();
+		productItems = new ProductItemsData();
 		construct();
 	}
 	
@@ -46,18 +48,6 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	protected void loadValues() {
 		enableComponents();
-		IRemoveItemBatchView v = getView();
-		Model m = Model.getInstance();
-		ProductCollection pc = m.getProductCollection();
-		Collection<IProduct> products = pc.getProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		int i = 0;
-		for (IProduct product : products) {
-			ProductData pData = (ProductData) product.getTag();
-			productDatas[i] = pData;
-			++i;
-		}
-		v.setProducts(productDatas);
 	}
 
 	/**
@@ -74,11 +64,11 @@ public class RemoveItemBatchController extends Controller implements
 	protected void enableComponents() {
 		IRemoveItemBatchView v = getView();
 		String barcodeStr = v.getBarcode();
-		boolean enableRemove = Barcode.isValidBarcode(barcodeStr);
+		boolean enableRemove = !barcodeStr.isEmpty();
+		//boolean enableRemove = Barcode.isValidBarcode(barcodeStr);
 		v.enableItemAction(enableRemove);
-		// not implemented
-		v.enableRedo(false);
-		v.enableUndo(false);
+		v.enableRedo(commands.canRedo());
+		v.enableUndo(commands.canUndo());
 	}
 
 	/**
@@ -127,18 +117,9 @@ public class RemoveItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 		IRemoveItemBatchView v = getView();
 		ProductData pData = v.getSelectedProduct();
-		IProduct product = (IProduct) pData.getTag();
-		Model m = Model.getInstance();
-		Collection<IItem> items = product.getAllItems();
-		ItemData[] itemDatas = new ItemData[items.size()];
-		int i = 0;
-		for (IItem item : items) {
-			ItemData iData = (ItemData) item.getTag();
-			itemDatas[i] = iData;
-			++i;
-		}
+		ItemData[] itemDatas = productItems.getItemArray(pData);
 		v.setItems(itemDatas);
-		v.selectItem(itemDatas[i - 1]);
+		v.selectItem(itemDatas[itemDatas.length-1]);
 	}
 	
 	/**
@@ -153,14 +134,13 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void removeItem() {
-		IRemoveItemBatchView v = getView();
-		Model m = Model.getInstance();
-		if (m.canRemoveItem(v.getBarcode())) {
-			IItem item = m.getItem(v.getBarcode());
-			m.removeItem(item);
+		IItem item = Model.getInstance().getItem(getView().getBarcode());
+		if(item == null) {
+			getView().displayErrorMessage("Error: Unrecognized barcode");
+			return;
 		}
-		v.setBarcode("");
-		v.giveBarcodeFocus();
+		commands.execute((ICommand) new RemoveItemCommand(item, productItems, this));
+		enableComponents();
 	}
 	
 	/**
@@ -169,6 +149,8 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo() {
+		commands.redo();
+		enableComponents();
 	}
 
 	/**
@@ -177,6 +159,8 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo() {
+		commands.undo();
+		enableComponents();
 	}
 
 	/**
@@ -188,5 +172,23 @@ public class RemoveItemBatchController extends Controller implements
 		getView().close();
 	}
 
+	public void refreshProducts() {
+		ProductData selected = getView().getSelectedProduct();
+		productItems.refreshCount();
+		getView().setProducts(productItems.getProductArray());
+		if(productItems.contains(selected)) {
+			getView().selectProduct(selected);
+		}
+	}
+
+	public void refreshItems() {
+		ItemData selected = getView().getSelectedItem();
+		getView().setItems(productItems.getItemArray(getView().getSelectedProduct()));
+		List<ItemData> items = productItems.getItemList(getView().getSelectedProduct());
+		if(items != null && items.contains(selected)) {
+			getView().selectItem(selected);
+		}
+	}
+	
 }
 

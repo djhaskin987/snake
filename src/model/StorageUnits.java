@@ -148,7 +148,7 @@ public class StorageUnits extends ProductContainer implements Serializable, IPer
 	 * @return A list of all the items of that product.
 	 */
 	@Override
-	public Collection<IItem> getItems(IProduct product) {
+	public List<IItem> getItems(IProduct product) {
 		return getItemsRecursive(product);
 	}
 

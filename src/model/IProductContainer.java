@@ -42,10 +42,10 @@ public interface IProductContainer extends Serializable, IModelTagable {
 	 * 
 	 * @param p an IProduct 
 	 * 
-	 * @return collection of items of a specific product
+	 * @return list of items of a specific product
 	 */
 	//TODO: Was this supposed to return null or an empty collection if there is no such item?
-	public Collection<IItem> getItems(IProduct product);
+	public List<IItem> getItems(IProduct product);
 	
 	/**
 	 * Takes in a barcode and removes an Item from a ProductContainer and sets
@@ -173,5 +173,6 @@ public interface IProductContainer extends Serializable, IModelTagable {
 
 	public void addProduct(IProduct product);
 
+	public void insertItem(IItem item, IProduct iProduct, int position);
 	public Collection<IProductContainer> getChildren();
 }
