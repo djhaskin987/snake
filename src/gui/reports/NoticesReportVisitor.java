@@ -1,5 +1,11 @@
 package gui.reports;
 
+import model.Item;
+import model.Product;
+import model.ProductGroup;
+import model.StorageUnit;
+import model.StorageUnits;
+
 /**
  * Used for the notices report
  * 
@@ -13,33 +19,33 @@ public class NoticesReportVisitor extends ReportVisitor {
 	}
 
 	@Override
-	public void visit(HeadingNode n) {
+	public void visit(StorageUnits storageUnits) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void visit(BodyNode n) {
+	public void visit(StorageUnit storageUnit) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void visit(ReportNode n) {
+	public void visit(ProductGroup productGroup) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void visit(ListNode n) {
+	public void visit(Item item) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void visit(SubHeadingNode n) {
+	public void visit(Product product) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }
