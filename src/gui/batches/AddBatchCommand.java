@@ -7,9 +7,6 @@ import model.IProduct;
 import model.IProductContainer;
 import model.Model;
 import model.ObservableArgs;
-import model.ProductContainer;
-
-import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import gui.common.ICommand;
 import gui.product.ProductData;
@@ -22,7 +19,6 @@ public class AddBatchCommand implements ICommand {
 	private ProductItemsData productItems;
 	private IProductContainer productContainer;
 	private ObservableArgs<IItem> batch;
-	private int count;
 	private AddItemBatchController controller;
 	private AddBatchCase addBatchCase;
 	
@@ -45,23 +41,25 @@ public class AddBatchCommand implements ICommand {
 			batch.add((IItem) item.getTag());
 		}
 		batch.setTag(items);
-		count = productItems.getCount(product);
 	}
 
 	@Override
 	public void execute() {
 		productItems.addItemDatas(product, items);
-		//product.setCount(Integer.toString(count+items.size()));
 		
 		Model m = Model.getInstance();
+		
+		//This will already be there on the first run through, but it's adding it to a map,
+		//so it just overwrites iteself instead of being duplicated.
+		m.getProductCollection().add((IProduct) product.getTag());
+		
 		m.addBatch(batch, productContainer);
 		
 		IAddItemBatchView view = controller.getView();
-		view.setProducts(productItems.getProductArray());
-		view.selectProduct(product);
-		controller.selectedProductChanged();
-		view.selectItem(items.get(items.size()-1));
-		
+		if(view.getSelectedProduct() == product) {
+			controller.refreshItems();
+		}
+		controller.refreshProducts();
 		controller.resetControls();
 		controller.enableComponents();
 	}
@@ -69,7 +67,6 @@ public class AddBatchCommand implements ICommand {
 	@Override
 	public void undo() {
 		productItems.removeItemDatas(product, items);
-		//product.setCount(Integer.toString(count));
 		
 		Model m = Model.getInstance();
 		switch(addBatchCase) {
@@ -88,12 +85,10 @@ public class AddBatchCommand implements ICommand {
 		}
 		
 		IAddItemBatchView view = controller.getView();
-		view.setProducts(productItems.getProductArray());
-		if(addBatchCase == AddBatchCase.NORMAL) {
-			view.selectProduct(product);
-			view.selectItem(productItems.getLastItem(product));
+		if(view.getSelectedProduct() == product) {
+			controller.refreshItems();
 		}
-		controller.selectedProductChanged();
+		controller.refreshProducts();
 		
 		controller.resetControls();
 		controller.enableComponents();

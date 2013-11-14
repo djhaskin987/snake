@@ -147,7 +147,7 @@ public class ProductItems extends Observable implements Serializable {
 		product.removeProductContainer(productContainer);
 	}
 
-	public Collection<IItem> getItems(IProduct product) {
+	public List<IItem> getItems(IProduct product) {
 		List<IItem> items = map.get(product);
 		if(items == null) {
 			items = new ArrayList<IItem>();
@@ -160,5 +160,9 @@ public class ProductItems extends Observable implements Serializable {
 		{
 			map.put(product, new ArrayList<IItem>());
 		}
+	}
+
+	public void insertItem(IItem item, IProduct product, int position) {
+		map.get(product).add(position, item);
 	}
 }

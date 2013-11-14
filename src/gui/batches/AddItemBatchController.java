@@ -369,6 +369,24 @@ public class AddItemBatchController extends Controller implements
 		codes.close();
 		codes.print();
 	}
+
+	public void refreshProducts() {
+		ProductData selected = getView().getSelectedProduct();
+		productItems.refreshCount();
+		getView().setProducts(productItems.getProductArray());
+		if(productItems.contains(selected)) {
+			getView().selectProduct(selected);
+		}
+	}
+
+	public void refreshItems() {
+		ItemData selected = getView().getSelectedItem();
+		getView().setItems(productItems.getItemArray(getView().getSelectedProduct()));
+		List<ItemData> items = productItems.getItemList(getView().getSelectedProduct());
+		if(items != null && items.contains(selected)) {
+			getView().selectItem(selected);
+		}
+	}
 	
 }
 

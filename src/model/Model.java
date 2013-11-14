@@ -289,6 +289,15 @@ public class Model extends ModelObservable implements Observer {
 		notifyObservers(p);
 	}
 
+
+	//This is similar to addItem, but it does not add it to the item collection, and it notivies observers.
+	public void unremoveItem(IItem item, IProductContainer productContainer, int position) {
+		item.setProductContainer(productContainer);
+		productContainer.insertItem(item, item.getProduct(), position);
+		item.unexit();
+		notifyObservers(ModelActions.UNDO_REMOVE_ITEMS, item);
+	}
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		setChanged();
@@ -442,6 +451,11 @@ public class Model extends ModelObservable implements Observer {
 		{
 			target.addProduct(product);
 		}
+	}
+
+
+	public int getPosition(IItem item) {
+		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
 
 }

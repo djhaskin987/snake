@@ -132,4 +132,8 @@ public class Item extends Tagable implements IItem {
 		getProductContainer().removeItem(getBarcode());
 		target.add(this);
 	}
+	@Override
+	public void unexit() {
+		exitTime = null;
+	}
 }

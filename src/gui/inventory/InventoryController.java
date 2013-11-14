@@ -465,6 +465,9 @@ public class InventoryController extends Controller
 			case REMOVE_ITEMS:
 				removeItems(payload);
 				break;
+			case UNDO_REMOVE_ITEMS:
+				undoRemoveItems(payload);
+				break;
 			case TRANSFER_ITEMS:
 				transferItems(payload);
 				break;
@@ -572,6 +575,16 @@ public class InventoryController extends Controller
 		// remove item from storage unit and product group
 		iData.setProductGroup("");
 		iData.setStorageUnit("");
+		refreshProducts();
+		refreshItems();
+	}
+
+	private void undoRemoveItems(IModelTagable payload) {
+		IItem item = (IItem) payload;
+		ItemData iData = (ItemData) item.getTag();
+		// unremove item from storage unit and product group
+		iData.setProductGroup(item.getProductGroupName());
+		iData.setStorageUnit(item.getStorageUnitName());
 		refreshProducts();
 		refreshItems();
 	}

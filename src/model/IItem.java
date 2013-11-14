@@ -70,5 +70,10 @@ public interface IItem extends IModelTagable, Serializable {
 
 	public void move(IProductContainer target);
 
+	/**
+	 * Sets the exit time to null. Used for undoing an exit.
+	 */
+	public void unexit();
+
 
 }

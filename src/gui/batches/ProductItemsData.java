@@ -60,8 +60,12 @@ public class ProductItemsData {
 		if(items.size() == 1) {
 			productItems.remove(product);
 		} else {
-			items.remove(items.size());
+			items.remove(items.size()-1);
 		}
+	}
+	
+	public List<ItemData> getItemList(ProductData product) {
+		return productItems.get(product);
 	}
 	
 	public ItemData[] getItemArray(ProductData product) {
@@ -106,5 +110,12 @@ public class ProductItemsData {
 
 	public boolean contains(ProductData product) {
 		return productItems.containsKey(product);
+	}
+
+	public void refreshCount() {
+		for(ProductData product : productItems.keySet()) {
+			int count = productItems.get(product).size();
+			product.setCount(Integer.toString(count));
+		}
 	}
 }

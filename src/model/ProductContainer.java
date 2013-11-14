@@ -73,7 +73,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 * {@post a list of items}
 	 */
     @Override
-	public Collection<IItem> getItems(IProduct p) {
+	public List<IItem> getItems(IProduct p) {
 		return productItems.getItems(p);
 	}
 
@@ -437,8 +437,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	}
 
 	@Override
-	public Collection<IItem> getItemsRecursive(IProduct product) {
-		Collection<IItem> items = new ArrayList<IItem>();
+	public List<IItem> getItemsRecursive(IProduct product) {
+		List<IItem> items = new ArrayList<IItem>();
 		for(IProductContainer productContainer : productContainers) {
 			items.addAll(productContainer.getItemsRecursive(product));
 			Collection<IItem> c = productContainer.getItems(product);
@@ -483,5 +483,9 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	public void addProduct(IProduct product)
 	{
 		productItems.addProduct(product);
+	}
+	
+	public void insertItem(IItem item, IProduct product, int position) {
+		productItems.insertItem(item, product, position);
 	}
 }
