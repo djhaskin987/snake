@@ -33,10 +33,6 @@ public class MainController extends Controller implements IMainController {
 	@Override
 	public void loadValues() {
 		super.loadValues();
-		Model m = Model.getInstance();
-		m.load();
-		StorageUnits s = m.getStorageUnits();
-		loadValues(s);
 	}
 	
 	private ProductContainerData loadValues(IProductContainer pc) {
