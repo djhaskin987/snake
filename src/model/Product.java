@@ -24,7 +24,6 @@ public class Product implements IProduct, ITagable, Serializable {
 	private List<IProductContainer> containers;
 	private transient Tagable tagable;
 	/**
-	 * 
 	 * @param aBarcode
 	 * @param aDescription
 	 * @param aItemSize
