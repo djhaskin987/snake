@@ -123,7 +123,8 @@ public class ReportsManager {
 		if (returned)
 		{
 			int intMonths = Integer.parseInt(monthsStr);
-			returned = returned && intMonths >= 0 && intMonths <= 100;
+			// per the specs, pages 30 and 32
+			returned = returned && intMonths >= 1 && intMonths <= 100;
 		}
 		return returned;
 	}
@@ -142,7 +143,6 @@ public class ReportsManager {
 		Model m = Model.getInstance();
 		StorageUnits su = m.getStorageUnits();
 		su.accept(rv);
-
 		return rv;
 	}
 }
