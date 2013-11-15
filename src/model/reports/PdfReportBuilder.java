@@ -1,4 +1,5 @@
-package gui.reports;
+package model.reports;
+
 
 public class PdfReportBuilder implements ReportBuilder {
 

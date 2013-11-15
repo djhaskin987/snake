@@ -20,8 +20,7 @@ public class Model extends ModelObservable implements Observer {
 	
 	private StorageUnits storageUnits;
 	private ProductCollection productCollection;
-	private ItemCollection itemCollection;
-	private RemovedItems removedItems;
+	private ItemCollection itemCollection;	
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
@@ -47,7 +46,6 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
 		itemCollection = new ItemCollection();
-		removedItems = new RemovedItems();
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
@@ -283,7 +281,7 @@ public class Model extends ModelObservable implements Observer {
 		IProductContainer productContainer = item.getProductContainer();
 		if (productContainer != null)
 			item.exit();
-			productContainer.transferItem(item, removedItems);
+			productContainer.transferItem(item, storageUnits.getRemovedItems());
 		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (IModelTagable) item);
 		setChanged();
 		notifyObservers(p);
@@ -402,7 +400,7 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public RemovedItems getRemovedItems() {
-		return removedItems;
+		return storageUnits.getRemovedItems();
 	}
 	
 	public boolean canDeleteProductGroup(IProductContainer pc)

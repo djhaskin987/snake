@@ -1,4 +1,4 @@
-package gui.reports;
+package model;
 
 /** This enumeration types outlines what types of reports we 
  * can generate in HIT.

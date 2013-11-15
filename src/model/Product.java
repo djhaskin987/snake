@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import model.reports.ReportVisitor;
+
 /**
  * A bar-coded product that can be stored in a Storage Unit.
  * @author Kevin
@@ -42,6 +44,7 @@ public class Product implements IProduct, ITagable, Serializable {
 		this.threeMonthSupply = aThreeMonthSupply;
 		this.containers = new ArrayList<IProductContainer>();
 		this.tagable = new Tagable();
+		this.removedItems = new ArrayList<IItem>();
 	}
 	
 	/**
@@ -193,6 +196,11 @@ public class Product implements IProduct, ITagable, Serializable {
 		containers.remove(pc);
     }
 
+	@Override
+	public void removeItem(IItem i) {
+		
+	}
+	
 	public void setItemSize(Quantity q) {
 		itemSize = q;
 	}
@@ -217,5 +225,10 @@ public class Product implements IProduct, ITagable, Serializable {
 		if (tagable == null)
 			tagable = new Tagable();
 		return tagable.hasTag();
+	}
+	
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);	
 	}
 }

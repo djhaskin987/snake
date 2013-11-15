@@ -1,4 +1,6 @@
-package gui.reports;
+package model.reports;
+
+import java.util.List;
 
 import model.Item;
 import model.Product;
@@ -12,15 +14,16 @@ import model.StorageUnits;
  * @author nstandif
  *
  */
-public class NoticesReportVisitor extends ReportVisitor {
-
-	public NoticesReportVisitor() {
-		// TODO Auto-generated constructor stub
+public class NoticesReportVisitor implements ReportVisitor {
+	private ReportBuilder builder;
+	
+	public NoticesReportVisitor(ReportBuilder b) {
+		builder = b;
+		builder.buildHeading("Notices Report");
 	}
-
+	
 	@Override
 	public void visit(StorageUnits storageUnits) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -46,6 +49,11 @@ public class NoticesReportVisitor extends ReportVisitor {
 	public void visit(Product product) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void display() {
+		builder.display();
 	}
 
 }

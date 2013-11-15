@@ -1,6 +1,12 @@
 package model;
 
+
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import model.reports.ReportVisitor;
 
 /**
  * A Storage Unit is a room, closet, pantry, cupboard, or some other enclosed area where
@@ -68,5 +74,11 @@ public class StorageUnit extends ProductContainer implements Serializable {
 	@Override
 	public void setParent(IProductContainer productContainer) {
 		throw new UnsupportedOperationException("StorageUnits have but one parent");
+	}
+
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
+		super.accept_traverse(v);
 	}
 }

@@ -2,12 +2,15 @@ package model;
 
 import java.io.Serializable;
 
+import model.reports.IReportNode;
+import gui.reports.*;
+
 /**
  * Interface of Item to increase modularity of the Item Object
  * @author Kevin
  *
  */
-public interface IItem extends IModelTagable, Serializable {
+public interface IItem extends IModelTagable, Serializable, IReportNode {
 	
 	/**
 	 * Connects the IItem with a specific IProductContainer

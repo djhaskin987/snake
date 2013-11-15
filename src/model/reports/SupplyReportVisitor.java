@@ -1,4 +1,4 @@
-package gui.reports;
+package model.reports;
 
 import model.Item;
 import model.Product;
@@ -6,9 +6,16 @@ import model.ProductGroup;
 import model.StorageUnit;
 import model.StorageUnits;
 
-public class RemovedItemsReportVisitor extends ReportVisitor {
 
-	public RemovedItemsReportVisitor() {
+/**
+ * used for the 3 month supply report
+ * 
+ * @author nstandif
+ *
+ */
+public class SupplyReportVisitor implements ReportVisitor {
+
+	public SupplyReportVisitor() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,5 +48,12 @@ public class RemovedItemsReportVisitor extends ReportVisitor {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void display() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

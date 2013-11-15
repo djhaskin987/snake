@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 
+import model.reports.ReportVisitor;
+
 import gui.common.ITagable;
 import gui.common.Tagable;
 
@@ -160,6 +162,10 @@ public class Item implements IItem, ITagable, Serializable {
 		if (tagable == null)
 			tagable = new Tagable();
 		return tagable.hasTag();
+	}
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
 	}
 	
 	

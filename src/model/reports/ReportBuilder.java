@@ -1,4 +1,4 @@
-package gui.reports;
+package model.reports;
 
 public interface ReportBuilder {
 	/**

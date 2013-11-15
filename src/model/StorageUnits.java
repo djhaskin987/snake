@@ -4,6 +4,7 @@ package model;
  * Singleton Design Pattern that allows for tracking
  * all StorageUnits
  */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,16 +16,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import model.reports.ReportVisitor;
 
 
 public class StorageUnits extends ProductContainer implements Serializable, IPersistance {
 
 	private static final long serialVersionUID = 8036575061038335165L;
+	private RemovedItems removedItems;
 	
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
+		removedItems = new RemovedItems();
     }
 	
     /** Set the storage unit associated with 'name' to 'storageUnit'.
@@ -302,6 +308,15 @@ public class StorageUnits extends ProductContainer implements Serializable, IPer
 		this.productContainers = s.productContainers;
 		this.productItems = s.productItems;
 	}
-	
 
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
+		super.accept_traverse(v);
+		removedItems.accept(v);
+	}
+	
+	public RemovedItems getRemovedItems() {
+		return removedItems;
+	}
 }

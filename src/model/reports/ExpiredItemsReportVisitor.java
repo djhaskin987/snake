@@ -1,4 +1,4 @@
-package gui.reports;
+package model.reports;
 
 import model.Item;
 import model.Product;
@@ -6,13 +6,14 @@ import model.ProductGroup;
 import model.StorageUnit;
 import model.StorageUnits;
 
+
 /**
  * used for the expired items report
  * 
  * @author nstandif
  *
  */
-public class ExpiredItemsReportVisitor extends ReportVisitor {
+public class ExpiredItemsReportVisitor implements ReportVisitor {
 
 	public ExpiredItemsReportVisitor() {
 		// TODO Auto-generated constructor stub
@@ -44,6 +45,12 @@ public class ExpiredItemsReportVisitor extends ReportVisitor {
 
 	@Override
 	public void visit(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void display() {
 		// TODO Auto-generated method stub
 		
 	}

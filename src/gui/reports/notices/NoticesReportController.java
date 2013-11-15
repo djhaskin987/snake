@@ -78,6 +78,9 @@ public class NoticesReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		INoticesReportView vw = getView();
+		FileFormat ff = vw.getFormat();
+		model.Format fmt = FileFormatFormatConversion.toFormat(ff);
 	}
 
 }
