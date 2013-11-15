@@ -1,15 +1,10 @@
 package gui.batches;
 
-import gui.inventory.ProductContainerData;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
-import java.util.List;
-import java.util.Map;
-
 import model.IItem;
 import model.IProduct;
-import model.IProductContainer;
 import model.Model;
 import model.StorageUnit;
 
@@ -28,7 +23,17 @@ public class TransferItemCommand implements ICommand {
 	private ITransferItemBatchController controller;
 	private ITransferItemBatchView view;
 	boolean newProduct;
+	int position;
 	
+	/**
+	 * @param storageUnitB		Storage unit to transfer items to
+	 * @param item				Item to transfer
+	 * @param productItems		ProductItemsData that tracks the items transferred
+	 * @param controller		ITransferItemBatchController that issued this command
+	 * @param view				Corresponding ITransferItemBatchView
+	 * 
+	 * Creates a command to transfer item to storageUnitB
+	 */
 	public TransferItemCommand(
 			StorageUnit storageUnitB,
 			ItemData item,
@@ -45,6 +50,7 @@ public class TransferItemCommand implements ICommand {
 		this.controller = controller;
 		this.view = view;
 		newProduct = !storageUnitB.contains(modelProduct);
+		position = Model.getInstance().getPosition((IItem) item.getTag());
 	}
 	/** Command associated with the transfer item batch command view.
 	 * 
@@ -73,7 +79,7 @@ public class TransferItemCommand implements ICommand {
 	@Override
 	public void undo() {
 		Model m = Model.getInstance();
-		m.transferItem((IItem) item.getTag(), storageUnitA);
+		m.transferItem((IItem) item.getTag(), storageUnitA, position);
 		if(newProduct) {
 			storageUnitB.removeProduct((IProduct) product.getTag());
 		}

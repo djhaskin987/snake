@@ -73,7 +73,7 @@ public class Commands {
 	 */
 	public boolean canUndo()
 	{
-		return undoStack.size() > 0;
+		return !undoStack.isEmpty();
 	}
 	/**
 	 * Returns if it is possible to redo any commands.
@@ -85,6 +85,6 @@ public class Commands {
 	 */
 	public boolean canRedo()
 	{
-		return redoStack.size() > 0;
+		return !redoStack.isEmpty();
 	}
 }

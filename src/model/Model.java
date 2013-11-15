@@ -248,6 +248,12 @@ public class Model extends ModelObservable implements Observer {
 		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
 	}
 
+	public void transferItem(IItem item, StorageUnit target, int position) {
+		IProductContainer current = item.getProductContainer();
+		current.transferItem(item, (ProductContainer)target, position);
+		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
+	}
+
 	public boolean canTransferItems() {
 		return storageUnits.canTransferItems();
 	}
@@ -452,14 +458,18 @@ public class Model extends ModelObservable implements Observer {
 			target.addProduct(product);
 		}
 	}
+
+	/**
+	 * @param item
+	 * @return	The position of item in the product container.
+	 * This is necessary to ensure that when undoing a command to remove or transfer an item, it is transferred to the appropriate place.
+	 */
+	public int getPosition(IItem item) {
+		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
+	}
 	
 	public void store() {
 		storageUnits.store();
-	}
-
-
-	public int getPosition(IItem item) {
-		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
 	
 	public void load() {
