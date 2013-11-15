@@ -19,7 +19,6 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	public ProductStatsReportController(IView view) {
 		super(view);
-		
 		construct();
 	}
 
@@ -51,6 +50,10 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableFormat(true);
+		getView().enableMonths(true);
+		boolean enableOk = getModel().canGetProductStatisticsReport(getView().getMonths());
+		getView().enableOK(enableOk);
 	}
 
 	/**
@@ -64,6 +67,7 @@ public class ProductStatsReportController extends Controller implements
 	protected void loadValues() {
 		IProductStatsReportView v = getView();
 		v.setMonths("3");
+		enableComponents();
 	}
 
 	//
@@ -76,10 +80,7 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
-		IProductStatsReportView v = getView();
-		String monthsStr = v.getMonths();
-		boolean enableOk = !(StringOps.isNullOrEmpty(monthsStr) || Integer.parseInt(monthsStr) < 1);
-		v.enableOK(enableOk);
+		enableComponents();
 	}
 	
 	/**
@@ -88,8 +89,7 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
-		IProductStatsReportView v = getView();
-		String monthsStr = v.getMonths();
+		String monthsStr = getView().getMonths();
 		int months = Integer.parseInt(monthsStr);
 		ReportVisitor rv = ReportsManager.getInstance().createProductStatisticsReport(Format.HTML, months);
 		rv.display();

@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.reports.ReportsManager;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -463,6 +465,11 @@ public class Model extends ModelObservable implements Observer {
 	public void load() {
 		storageUnits.load();
 		System.out.println("model loaded");
+	}
+
+
+	public boolean canGetProductStatisticsReport(String months) {
+		return ReportsManager.getInstance().canGetProductStatisticsReport(months);
 	}
 
 }

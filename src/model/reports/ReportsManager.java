@@ -1,5 +1,7 @@
 package model.reports;
 
+import common.StringOps;
+
 import model.Format;
 import model.Model;
 import model.StorageUnits;
@@ -112,5 +114,17 @@ public class ReportsManager {
 		}
 		return rb;
 	}
-	
+
+	public boolean canGetProductStatisticsReport(String months) {
+		String monthsStr = months;
+		boolean returned = !StringOps.isNullOrEmpty(monthsStr);
+		returned = returned && monthsStr.matches("^\\d{1,3}$");
+		System.out.println("Mathches? " + (returned ? "yes" : "no"));
+		if (returned)
+		{
+			int intMonths = Integer.parseInt(monthsStr);
+			returned = returned && intMonths >= 0 && intMonths <= 100;
+		}
+		return returned;
+	}
 }
