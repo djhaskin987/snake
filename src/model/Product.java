@@ -44,7 +44,6 @@ public class Product implements IProduct, ITagable, Serializable {
 		this.threeMonthSupply = aThreeMonthSupply;
 		this.containers = new ArrayList<IProductContainer>();
 		this.tagable = new Tagable();
-		this.removedItems = new ArrayList<IItem>();
 	}
 	
 	/**

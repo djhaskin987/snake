@@ -90,12 +90,14 @@ public class ReportsManager {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
-	public void displayProductStatisticsReport(Format f, int months) {
+	public ReportVisitor createProductStatisticsReport(Format f, int months) {
 		ReportBuilder rb = getReportBuilder(f);
-		ReportVisitor rv = new ProductStatisticsReport(rb, months);
+		ReportVisitor rv = new ProductStatisticsReportVisitor(rb, months);
 		Model m = Model.getInstance();
 		StorageUnits su = m.getStorageUnits();
 		su.accept(rv);
+
+		return rv;
 	}
 	
 	private ReportBuilder getReportBuilder(Format f) {

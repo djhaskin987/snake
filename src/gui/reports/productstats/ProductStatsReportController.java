@@ -1,5 +1,7 @@
 package gui.reports.productstats;
 
+import model.Format;
+import model.reports.*;
 import common.StringOps;
 
 import gui.common.*;
@@ -76,7 +78,7 @@ public class ProductStatsReportController extends Controller implements
 	public void valuesChanged() {
 		IProductStatsReportView v = getView();
 		String monthsStr = v.getMonths();
-		boolean enableOk = (StringOps.isNullOrEmpty(monthsStr) || Integer.parseInt(monthsStr) < 1);
+		boolean enableOk = !(StringOps.isNullOrEmpty(monthsStr) || Integer.parseInt(monthsStr) < 1);
 		v.enableOK(enableOk);
 	}
 	
@@ -87,7 +89,10 @@ public class ProductStatsReportController extends Controller implements
 	@Override
 	public void display() {
 		IProductStatsReportView v = getView();
-		
+		String monthsStr = v.getMonths();
+		int months = Integer.parseInt(monthsStr);
+		ReportVisitor rv = ReportsManager.getInstance().createProductStatisticsReport(Format.HTML, months);
+		rv.display();
 	}
 
 }
