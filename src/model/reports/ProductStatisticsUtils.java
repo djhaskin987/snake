@@ -1,5 +1,10 @@
 package model.reports;
 
+import java.util.List;
+
+import model.Item;
+import model.Product;
+
 class ProductStatisticsUtils {
 	public static String[] getRowHeader() {
 		String[] rowHeader = new String[] { "Description", "Barcode", "Size", "3-Month Supply", "Supply:\nCur/Avg" , 
