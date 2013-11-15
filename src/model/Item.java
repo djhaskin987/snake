@@ -134,6 +134,17 @@ public class Item implements IItem, ITagable, Serializable {
 		}
 	}
 	@Override
+	public StorageUnit getStorageUnit() {
+		IProductContainer current = container;
+		while(!(current instanceof StorageUnit)) {
+			if(current == null) {
+				return null;
+			}
+			current = current.getParent();
+		}
+		return (StorageUnit) current;
+	}
+	@Override
 	public void move(IProductContainer target) {
 		getProductContainer().removeItem(getBarcode());
 		target.add(this);
@@ -160,7 +171,6 @@ public class Item implements IItem, ITagable, Serializable {
 		if (tagable == null)
 			tagable = new Tagable();
 		return tagable.hasTag();
-	}
-	
+	}	
 	
 }

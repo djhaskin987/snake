@@ -1,5 +1,7 @@
 package gui.common;
 
+import gui.batches.ICommand;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 

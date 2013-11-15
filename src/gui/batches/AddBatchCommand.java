@@ -8,7 +8,6 @@ import model.IProductContainer;
 import model.Model;
 import model.ObservableArgs;
 
-import gui.common.ICommand;
 import gui.product.ProductData;
 import gui.inventory.ProductContainerData;
 import gui.item.ItemData;

@@ -1,12 +1,8 @@
 package gui.batches;
 
-import java.util.List;
-
 import model.IItem;
-import model.IProduct;
 import model.IProductContainer;
 import model.Model;
-import gui.common.ICommand;
 import gui.item.ItemData;
 import gui.product.ProductData;
 

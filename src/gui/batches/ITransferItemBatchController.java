@@ -49,5 +49,9 @@ public interface ITransferItemBatchController extends IController {
 	 */
 	void done();
 
+	void refreshItems();
+
+	void refreshProducts();
+
 }
 

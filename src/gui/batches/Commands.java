@@ -27,9 +27,9 @@ public class Commands {
 	 */
 	public void execute(ICommand c)
 	{
-		c.execute();
 		undoStack.push(c);
 		redoStack.clear();
+		c.execute();
 	}
 	
 	/**
@@ -45,8 +45,8 @@ public class Commands {
 	public void undo()
 	{
 		ICommand top = undoStack.pop();
-		top.undo();
 		redoStack.push(top);
+		top.undo();
 	}
 	/**
 	 * Redoes the last undone command.
@@ -60,8 +60,8 @@ public class Commands {
 	public void redo()
 	{
 		ICommand top = redoStack.pop();
-		top.execute();
 		undoStack.push(top);
+		top.execute();
 	}
 	/**
 	 * Returns if it is possible to undo any commands.
