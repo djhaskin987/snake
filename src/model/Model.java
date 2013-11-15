@@ -426,16 +426,12 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void moveItemToContainer(IItem item, IProductContainer target) {
-		if (!moveProduct(item.getProduct(), target))
-		{
-			item.move(target);
-			notifyObservers(ModelActions.MOVE_ITEM, item);
-		}
+		addProductToContainer(item.getProduct(), target);
+		item.move(target);
+		notifyObservers(ModelActions.MOVE_ITEM, item);
 	}
 
-	//Returns true if the product is already in the target storage unit.
-	private boolean moveProduct(IProduct product, IProductContainer target)
-	{
+	public void addProductToContainer(IProduct product, IProductContainer target) {
 		IProductContainer targetUnit = target.getUnitPC();
 		IProductContainer ExistingPC = targetUnit.whoHasProduct(product);
 		if (ExistingPC != null)
@@ -445,17 +441,11 @@ public class Model extends ModelObservable implements Observer {
 			args.add(product);
 			args.add(target);
 			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);
-			return true;
 		}
 		else
 		{
-			return false;
-		}
-	}
-	public void addProductToContainer(IProduct product, IProductContainer target) {
-		if (!moveProduct(product, target))
-		{
 			target.addProduct(product);
+			notifyObservers(ModelActions.INSERT_PRODUCT,  (IModelTagable) product);
 		}
 	}
 
