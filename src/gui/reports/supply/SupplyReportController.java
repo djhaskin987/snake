@@ -1,5 +1,8 @@
 package gui.reports.supply;
 
+import model.Format;
+import model.reports.ReportVisitor;
+import model.reports.ReportsManager;
 import gui.common.*;
 
 /**
@@ -48,6 +51,10 @@ import gui.common.*;
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableFormat(true);
+		getView().enableMonths(true);
+		boolean enableOk = getModel().canGetNMonthSupplyReport(getView().getMonths());
+		getView().enableOK(enableOk);
 	}
 
 	/**
@@ -59,6 +66,8 @@ import gui.common.*;
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setMonths("3");
+		enableComponents();
 	}
 
 	//
@@ -71,6 +80,7 @@ import gui.common.*;
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -79,6 +89,10 @@ import gui.common.*;
 	 */
 	@Override
 	public void display() {
+		String monthsStr = getView().getMonths();
+		int months = Integer.parseInt(monthsStr);
+		ReportVisitor rv = ReportsManager.getInstance().createNMonthSupplyReport(Format.HTML, months);
+		rv.display();
 	}
 
 }

@@ -26,6 +26,7 @@ public class Model extends ModelObservable implements Observer {
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
+	private ReportsManager reportsManager;
 	
 	
     /**
@@ -54,6 +55,7 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits.addObserver(this);
 		productCollection.addObserver(this);
 		itemCollection.addObserver(this);
+		reportsManager = ReportsManager.getInstance();
 	}
 	
 	/**
@@ -469,7 +471,12 @@ public class Model extends ModelObservable implements Observer {
 
 
 	public boolean canGetProductStatisticsReport(String months) {
-		return ReportsManager.getInstance().canGetProductStatisticsReport(months);
+		return reportsManager.canGetProductStatisticsReport(months);
+	}
+
+
+	public boolean canGetNMonthSupplyReport(String months) {
+		return reportsManager.canGetNMonthSupplyReport(months);
 	}
 
 }

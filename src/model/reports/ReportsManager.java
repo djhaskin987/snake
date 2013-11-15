@@ -1,7 +1,6 @@
 package model.reports;
 
 import common.StringOps;
-
 import model.Format;
 import model.Model;
 import model.StorageUnits;
@@ -114,8 +113,9 @@ public class ReportsManager {
 		}
 		return rb;
 	}
-
-	public boolean canGetProductStatisticsReport(String months) {
+	
+	private boolean isValidReportDuration(String months)
+	{
 		String monthsStr = months;
 		boolean returned = !StringOps.isNullOrEmpty(monthsStr);
 		returned = returned && monthsStr.matches("^\\d{1,3}$");
@@ -126,5 +126,23 @@ public class ReportsManager {
 			returned = returned && intMonths >= 0 && intMonths <= 100;
 		}
 		return returned;
+	}
+
+	public boolean canGetProductStatisticsReport(String months) {
+		return isValidReportDuration(months);
+	}
+
+	public boolean canGetNMonthSupplyReport(String months) {
+		return isValidReportDuration(months);
+	}
+
+	public ReportVisitor createNMonthSupplyReport(Format f, int months) {
+		ReportBuilder rb = getReportBuilder(f);
+		ReportVisitor rv = new SupplyReportVisitor(rb, months);
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		su.accept(rv);
+
+		return rv;
 	}
 }

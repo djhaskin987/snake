@@ -19,6 +19,10 @@ public class SupplyReportVisitor implements ReportVisitor {
 		// TODO Auto-generated constructor stub
 	}
 
+	public SupplyReportVisitor(ReportBuilder rb, int months) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void visit(StorageUnits storageUnits) {
 		// TODO Auto-generated method stub

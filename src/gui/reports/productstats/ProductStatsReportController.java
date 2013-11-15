@@ -65,8 +65,7 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-		IProductStatsReportView v = getView();
-		v.setMonths("3");
+		getView().setMonths("3");
 		enableComponents();
 	}
 
