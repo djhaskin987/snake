@@ -246,6 +246,12 @@ public class Model extends ModelObservable implements Observer {
 		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
 	}
 
+	public void transferItem(IItem item, StorageUnit target, int position) {
+		IProductContainer current = item.getProductContainer();
+		current.transferItem(item, (ProductContainer)target, position);
+		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
+	}
+
 	public boolean canTransferItems() {
 		return storageUnits.canTransferItems();
 	}
@@ -418,16 +424,12 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void moveItemToContainer(IItem item, IProductContainer target) {
-		if (!moveProduct(item.getProduct(), target))
-		{
-			item.move(target);
-			notifyObservers(ModelActions.MOVE_ITEM, item);
-		}
+		addProductToContainer(item.getProduct(), target);
+		item.move(target);
+		notifyObservers(ModelActions.MOVE_ITEM, item);
 	}
 
-	//Returns true if the product is already in the target storage unit.
-	private boolean moveProduct(IProduct product, IProductContainer target)
-	{
+	public void addProductToContainer(IProduct product, IProductContainer target) {
 		IProductContainer targetUnit = target.getUnitPC();
 		IProductContainer ExistingPC = targetUnit.whoHasProduct(product);
 		if (ExistingPC != null)
@@ -437,27 +439,25 @@ public class Model extends ModelObservable implements Observer {
 			args.add(product);
 			args.add(target);
 			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);
-			return true;
 		}
 		else
 		{
-			return false;
+			target.addProduct(product);
+			notifyObservers(ModelActions.INSERT_PRODUCT,  (IModelTagable) product);
 		}
 	}
-	public void addProductToContainer(IProduct product, IProductContainer target) {
-		if (!moveProduct(product, target))
-		{
-			target.addProduct(product);
-		}
+
+	/**
+	 * @param item
+	 * @return	The position of item in the product container.
+	 * This is necessary to ensure that when undoing a command to remove or transfer an item, it is transferred to the appropriate place.
+	 */
+	public int getPosition(IItem item) {
+		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
 	
 	public void store() {
 		storageUnits.store();
-	}
-
-
-	public int getPosition(IItem item) {
-		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
 	
 	public void load() {

@@ -193,6 +193,7 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 			Product p = itr.next();
 			List<Item> items = productItems.get(p);
 			table[i] = ProductStatisticsUtils.getRow(p, items, months);
+			++i;
 		}
 		return table;
 	}

@@ -119,6 +119,19 @@ public interface IProductContainer extends Serializable, IModelTagable, IReportN
 	 * {@post item is transferred to newProductContainer.}
 	 */
 	public void transferItem(IItem item, ProductContainer newProductContainer);
+
+	/**
+	 * Allows program to move a unique Item to a unique ProductContainer into a specific position
+	 * @param item
+	 * @param newProductContainer
+	 * @param position
+	 * {@pre item is non-null, and contained by some ProductContainer in this IProductContainer; 
+	 * 		item's product is a member of newProductContainer;
+	 * 		and newProductContainer is a member of this IProductContainer.
+	 * 		newProductContainer already has at least position items.}
+	 * {@post item is transferred to newProductContainer into the given position.}
+	 */
+	public void transferItem(IItem item, ProductContainer target, int position);
 	
 	
 	/**

@@ -78,5 +78,6 @@ public interface IItem extends IModelTagable, Serializable, IReportNode {
 	 */
 	public void unexit();
 
+	public StorageUnit getStorageUnit();
 
 }
