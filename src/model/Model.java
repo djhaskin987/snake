@@ -185,12 +185,8 @@ public class Model extends ModelObservable implements Observer {
 	
 	public IItem createItem(IProduct product, java.util.Date date) throws InvalidHITDateException {
 		ValidDate entryDate = new ValidDate(date);
-		Date expireDate = null;
-		if(product.getShelfLife() != 0) {
-			expireDate = entryDate.plusMonths(product.getShelfLife());
-		}
 		Barcode barcode = new Barcode();
-		return itemFactory.createInstance(product, barcode, null);
+		return itemFactory.createInstance(product, barcode, entryDate, null);
 	}
 
 	public void addItem(IItem item, IProductContainer productContainer) {

@@ -87,8 +87,13 @@ public class ReportsManager {
 	 * 
 	 * {@post the expired items report}
 	 */
-	private void displayExpiredItemsReport(Format f) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void displayExpiredItemsReport(Format f) {
+		ReportBuilder rb = getReportBuilder(f);
+		ReportVisitor rv = new ExpiredItemsReportVisitor(rb);
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		su.accept(rv);
+		rv.display();
 	}
 	
 	public ReportVisitor createProductStatisticsReport(Format f, int months) {

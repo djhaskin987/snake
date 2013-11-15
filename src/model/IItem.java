@@ -80,4 +80,8 @@ public interface IItem extends IModelTagable, Serializable, IReportNode {
 
 	public StorageUnit getStorageUnit();
 
+	String getEntryDateString();
+
+	String getExpireDateString();
+
 }
