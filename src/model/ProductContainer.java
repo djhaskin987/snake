@@ -506,6 +506,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		Collection<IItem> pi = productItems.getItems(product);
 		productItems.removeProduct(product);
+		target.addProduct(product);
 		for (IItem i : pi)
 		{
 			target.addItem(i);
