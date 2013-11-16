@@ -14,6 +14,7 @@ import model.IProduct;
 import model.Item;
 import model.Product;
 import model.ProductGroup;
+import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 import model.Unit;
@@ -82,6 +83,11 @@ public class SupplyReportVisitor implements ReportVisitor {
 		{
 			System.out.println("Item has been removed");
 		}
+	}
+
+	@Override
+	public void visit(RemovedItems removedItems) {
+		//do nothing
 	}
 
 	@Override

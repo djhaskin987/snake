@@ -17,6 +17,7 @@ import model.Item;
 import model.Model;
 import model.Product;
 import model.ProductGroup;
+import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 
@@ -40,6 +41,11 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 
 	@Override
 	public void visit(StorageUnit storageUnit) {
+		//do nothing
+	}
+
+	@Override
+	public void visit(RemovedItems removedItems) {
 		//do nothing
 	}
 

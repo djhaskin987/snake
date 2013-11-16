@@ -6,6 +6,7 @@ import model.Item;
 import model.Model;
 import model.Product;
 import model.ProductGroup;
+import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 
@@ -53,6 +54,11 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 		if(item.getExpireDate() != null && item.getExpireDate().compareTo(new Date()) <= 0) {
 			items.get(items.size()-1).add(item);
 		}
+	}
+
+	@Override
+	public void visit(RemovedItems removedItems) {
+		//do nothing
 	}
 
 	@Override

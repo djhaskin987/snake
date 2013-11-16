@@ -11,6 +11,7 @@ import model.Item;
 import model.Product;
 import model.ProductGroup;
 import model.Quantity;
+import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 
@@ -75,7 +76,14 @@ public class NoticesReportVisitor implements ReportVisitor {
 	@Override
 	public void display() {
 		builder.buildHeading("Notices");
-		if(products.isEmpty()) {
+		boolean empty = true;
+		for(Pair<ProductGroup, TreeSet<IProduct>> pair : products) {
+			if(!pair.getRight().isEmpty()) {
+				empty = false;
+				break;
+			}
+		}
+		if(empty) {
 			builder.buildParagraph("There is nothing to report.");
 		} else {
 			builder.buildSubHeading("3-Month Supply Warnings");
@@ -100,7 +108,7 @@ public class NoticesReportVisitor implements ReportVisitor {
 					paragraph.append("::");
 					paragraph.append(product.getDescription().getValue());
 					paragraph.append(" (size ");
-					paragraph.append(product.getItemSize().getValueString());
+					paragraph.append(product.getItemSize().toString());
 					paragraph.append(")");
 					builder.buildParagraph(paragraph.toString());
 				}
@@ -108,5 +116,10 @@ public class NoticesReportVisitor implements ReportVisitor {
 			}
 		}
 		builder.display();
+	}
+
+	@Override
+	public void visit(RemovedItems removedItems) {
+		productGroup = null;
 	}
 }
