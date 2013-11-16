@@ -1,5 +1,6 @@
 package model.reports;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import model.IItem;
 import model.IProduct;
 import model.Item;
 import model.Product;
@@ -18,6 +20,7 @@ import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 import model.Unit;
+import model.Unit.Dimension;
 
 
 /**
@@ -31,7 +34,6 @@ public class SupplyReportVisitor implements ReportVisitor {
 	private int months;
 	private List<Pair<ProductGroup,StorageUnit>> productGroups;
 	private Map<Product,Set<Item>> products;
-	private boolean productTableCompiled = false;
 
 	public void init()
 	{
@@ -63,7 +65,6 @@ public class SupplyReportVisitor implements ReportVisitor {
 	public void visit(ProductGroup pg) {
 		System.out.println("visited storage product group " + pg.getName().toString());
 		StorageUnit s = (StorageUnit)pg.getUnitPC();
-		Pair<ProductGroup, StorageUnit> a;
 		
 		productGroups.add(Pair.of(pg,s));
 	}
@@ -71,7 +72,7 @@ public class SupplyReportVisitor implements ReportVisitor {
 	@Override
 	public void visit(Item val) {
 		System.out.println("visited item " + val.getBarcode().toString());
-		if (val.getExitTime() != null) {
+		if (val.getExitTime() == null) {
 			Product key = (Product)val.getProduct();
 			if (!products.containsKey(key))
 			{
@@ -106,12 +107,85 @@ public class SupplyReportVisitor implements ReportVisitor {
 		
 	}
 	
+	private double getCurrentSupply(ProductGroup pg)
+	{
+		Unit pgUnit = pg.getThreeMonthSupplyUnit();
+		Dimension pgDimension = pgUnit.getDimension();
+		double currentSupply = 0.0;
+		Set<IProduct> products = new HashSet<IProduct>();
+		products.addAll(pg.getProductsRecursive());
+		products.addAll(pg.getProducts());
+		for (IProduct p : products) {
+			Collection<IItem> items = pg.getItemsRecursive(p);
+			if (pgDimension.equals(Dimension.COUNT))
+			{
+				if (items != null) {
+					currentSupply += items.size();
+				}
+			}
+			else
+			{
+				if (items != null) {
+					for (IItem item : items)
+					{
+						Unit itemUnit = p.getItemSize().getUnit();
+						Dimension itemDimension = itemUnit.getDimension();
+						if (pgDimension.equals(itemDimension))
+						{
+							double itemSize = p.getItemSize().getValue();
+							try {
+								itemSize = pgUnit.convert(itemSize, itemUnit);
+							} catch (Exception e) {
+								e.printStackTrace();
+								System.exit(1);
+							}
+							currentSupply += itemSize;
+						}
+					}
+				}
+			}
+		}
+		return currentSupply;
+	}
+	
 	private String[][] productGroupTable() {
-		String [][] returned = new String[1][4];
-		returned[0][0] = "A";
-		returned[0][1] = "B";
-		returned[0][2] = "C";
-		returned[0][3] = "D";
+		List<String []> rows = new LinkedList<String []>();
+		String [] heading =
+				{"Product Group","Storage Unit","" + months + "-Month Supply", 
+			"Current Supply"};
+		rows.add(heading);
+		for (Pair<ProductGroup,StorageUnit> p : productGroups)
+		{
+			ProductGroup pg = p.getLeft();
+			StorageUnit s = p.getRight();
+			Unit pgUnit = pg.getThreeMonthSupplyQuantity().getUnit();
+			double nMonthSupply = pg.getThreeMonthSupplyQuantity().getValue() * months / 3.0;
+			if (nMonthSupply > 0.0)
+			{
+				double currentSupply = getCurrentSupply(pg);
+				if (currentSupply < nMonthSupply)
+				{
+					String [] row = new String[4];
+					row[0] = "" + pg.getName();
+					row[1] = "" + s.getName();
+					row[2] = "" + String.format("%.2f", nMonthSupply) + 
+							" " + pgUnit.toString();
+					row[3] = "" + String.format("%.2f", currentSupply) + 
+							" " + pgUnit.toString();
+					rows.add(row);
+				}
+			}
+		}
+		String [][] returned = new String[rows.size()][4];
+		int i = 0;
+		for (String [] row : rows)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				returned[i][j] = row[j];
+			}
+			i++;
+		}
 		return returned;
 	}
 
@@ -162,70 +236,6 @@ public class SupplyReportVisitor implements ReportVisitor {
 			}
 			i++;
 		}
-		productTableCompiled = true;
 		return returned;
-	}
-	
-	private String [][] compileTable()
-	{
-		if (productTableCompiled)
-		{
-		}
-		else
-		{
-			List<String []> rows = new LinkedList<String []>();
-			String [] heading =
-					{"Product Group","Storage Unit","" + months + "-Month Supply", 
-				"Current Supply"};
-			rows.add(heading);
-			for (Pair<ProductGroup,StorageUnit> p : productGroups)
-			{
-				ProductGroup pg = p.getLeft();
-				StorageUnit s = p.getRight();
-				Unit pgUnit = pg.getThreeMonthSupplyQuantity().getUnit();
-				double nMonthSupply = pg.getThreeMonthSupplyQuantity().getValue() * months / 3.0;
-				if (nMonthSupply > 0.0)
-				{
-					double currentSupply = 0.0;
-					Set<IProduct> productSet = new HashSet<IProduct>();
-					productSet.addAll(pg.getProducts());
-					productSet.addAll(pg.getProductsRecursive());
-					for (IProduct pd : productSet)
-					{
-						Product product = (Product) pd;
-						if (pgUnit.canConvert(
-								product.getItemSize().getUnit()))
-						{
-							double itemQuantity = 0.0;
-							if (products.containsKey(product))
-							{
-								int itemCount = products.get(product).size();
-								itemQuantity += (product.getItemSize().getValue() *
-										itemCount);
-							}
-							try {
-								currentSupply += pgUnit.convert(itemQuantity, 
-										product.getItemSize().getUnit());
-							} catch (Exception e) {
-								e.printStackTrace();
-								System.exit(1);
-							}
-						}
-					}
-					if (currentSupply < nMonthSupply)
-					{
-						String [] row = new String[4];
-						row[0] = "" + pg.getName();
-						row[1] = "" + s.getName();
-						row[2] = "" + String.format("%.2f", nMonthSupply) + 
-								" " + pgUnit.toString();
-						row[3] = "" + String.format("%.2f", currentSupply) + 
-								" " + pgUnit.toString();
-						rows.add(row);
-					}
-				}
-			}
-		}
-		return null;
 	}
 }

@@ -59,9 +59,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		Model m = Model.getInstance();
-		m.load();
-		StorageUnits su = m.getStorageUnits();
+		getModel().load();
+		StorageUnits su = getModel().getStorageUnits();
 		ProductContainerData root = loadValues(su);
 		IInventoryView ivw = getView();
 		ivw.setProductContainers(root);
