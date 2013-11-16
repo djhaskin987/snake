@@ -9,6 +9,7 @@ import model.Product;
 import model.ProductGroup;
 import model.StorageUnit;
 import model.StorageUnits;
+import model.Unit;
 
 /**
  * Used for the notices report
@@ -18,7 +19,7 @@ import model.StorageUnits;
  */
 public class NoticesReportVisitor implements ReportVisitor {
 	private ReportBuilder builder;
-	private IProductContainer product;
+	private IProductContainer container;
 	
 	public NoticesReportVisitor(ReportBuilder b) {
 		builder = b;

@@ -7,16 +7,16 @@ package model;
  *
  */
 public enum Unit {
-	COUNT ("count", Dimension.COUNT, 1),
-	LBS ("lbs", Dimension.MASS, 453.592),
-	OZ ("oz", Dimension.MASS, 28.3495),
-	G ("grams", Dimension.MASS, 1),
-	KG ("kilograms", Dimension.MASS, 1000),
-	GAL ("gallons", Dimension.VOLUME, 3.78541),
-	QUART ("quart", Dimension.VOLUME, 0.946353),
-	PINT ("pint", Dimension.VOLUME, 0.473176),
-	FLOZ ("fluid oz", Dimension.VOLUME, 0.0295735),
-	LITER ("liter", Dimension.VOLUME, 1);
+	COUNT ("count",		Dimension.COUNT,	1),
+	LBS ("lbs",			Dimension.MASS,		453.592),
+	OZ ("oz",			Dimension.MASS,		28.3495),
+	G ("grams",			Dimension.MASS,		1),
+	KG ("kilograms",	Dimension.MASS,		1000),
+	GAL ("gallons",		Dimension.VOLUME,	3.78541),
+	QUART ("quart",		Dimension.VOLUME,	0.946353),
+	PINT ("pint",		Dimension.VOLUME,	0.473176),
+	FLOZ ("fluid oz",	Dimension.VOLUME,	0.0295735),
+	LITER ("liter",		Dimension.VOLUME,	1);
 	
 	private String statusCode;
 	private Dimension dimension;
@@ -40,7 +40,10 @@ public enum Unit {
 		return dimension == u.getDimension();
 	}
 	
-	public double convert(double amount, Unit unit) {
+	public double convert(double amount, Unit unit) throws Exception {
+		if(!canConvert(unit)) {
+			throw new Exception("Error: " + statusCode + " cannot be converted to " + unit.getStatusCode());
+		}
 		return amount*conversionConstant/unit.getConversionConstant();
 	}
 	
