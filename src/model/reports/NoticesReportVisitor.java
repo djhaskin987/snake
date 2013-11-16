@@ -24,15 +24,16 @@ public class NoticesReportVisitor implements ReportVisitor {
 	private ReportBuilder builder;
 	private ProductGroup productGroup;
 	private List<Pair<ProductGroup, TreeSet<IProduct>>> products;
-	
+
 	public NoticesReportVisitor(ReportBuilder b) {
 		builder = b;
 		products = new ArrayList<Pair<ProductGroup, TreeSet<IProduct>>>();
+		productGroup = null;
 	}
-	
+
 	@Override
 	public void visit(StorageUnits storageUnits) {
-		//do nothing
+		productGroup = null;
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class NoticesReportVisitor implements ReportVisitor {
 
 	@Override
 	public void visit(ProductGroup productGroup) {
-		if(productGroup.getThreeMonthSupplyUnit() == null) {
+		if(productGroup.getThreeMonthSupplyQuantity().getValue() == 0) {
 			this.productGroup = null;
 		} else {
 			this.productGroup = productGroup;
@@ -57,52 +58,55 @@ public class NoticesReportVisitor implements ReportVisitor {
 
 	@Override
 	public void visit(Product product) {
-		System.out.println();
 		if(productGroup == null) {
-			System.out.println("a");
 			return;
 		}
+		//System.out.println("ProductGroup: " + productGroup.getName().getValue());
 		Quantity size = product.getItemSize();
 		if(size == null) {
-			System.out.println("b");
 			return;
 		}
 		if(productGroup.getThreeMonthSupplyUnit().canConvert(size.getUnit())) {
-			System.out.println("c");
 			return;
 		}
-		System.out.println("d");
 		products.get(products.size()-1).getRight().add(product);
 	}
 
 	@Override
 	public void display() {
 		builder.buildHeading("Notices");
-		builder.buildSubHeading("3-Month Supply Warnings");
-		for(Pair<ProductGroup, TreeSet<IProduct>> pair : products) {
-			StringBuilder paragraph = new StringBuilder();
-			paragraph.append("Product group ");
-			paragraph.append(pair.getLeft().getUnitPC().getName().getValue());
-			paragraph.append("::");
-			paragraph.append(pair.getLeft().getName().getValue());
-			paragraph.append(" has a 3-month supply (");
-			paragraph.append(pair.getLeft().getThreeMonthSupply());
-			paragraph.append(") that is inconsistent with the following products:\n");
-			for(IProduct product : pair.getRight()) {
-				paragraph.append(" -");
-				paragraph.append(pair.getLeft().getName());
+		if(products.isEmpty()) {
+			builder.buildParagraph("There is nothing to report.");
+		} else {
+			builder.buildSubHeading("3-Month Supply Warnings");
+			builder.buildEmptyLine();
+			for(Pair<ProductGroup, TreeSet<IProduct>> pair : products) {
+				StringBuilder paragraph = new StringBuilder();
+				if(pair.getRight().size() == 0) {
+					continue;
+				}
+				paragraph.append("Product group ");
+				paragraph.append(pair.getLeft().getUnitPC().getName().getValue());
 				paragraph.append("::");
-				paragraph.append(product.getDescription().getValue());
-				paragraph.append(" (size ");
-				paragraph.append(product.getItemSize().getValueString());
-				paragraph.append(")\n");
+				paragraph.append(pair.getLeft().getName().getValue());
+				paragraph.append(" has a 3-month supply (");
+				paragraph.append(pair.getLeft().getThreeMonthSupply());
+				paragraph.append(") that is inconsistent with the following products:");
+				builder.buildParagraph(paragraph.toString());
+				for(IProduct product : pair.getRight()) {
+					paragraph = new StringBuilder();
+					paragraph.append("- ");
+					paragraph.append(pair.getLeft().getName());
+					paragraph.append("::");
+					paragraph.append(product.getDescription().getValue());
+					paragraph.append(" (size ");
+					paragraph.append(product.getItemSize().getValueString());
+					paragraph.append(")");
+					builder.buildParagraph(paragraph.toString());
+				}
+				builder.buildEmptyLine();
 			}
 		}
 		builder.display();
-	}
-
-	private String[][] compileTable() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

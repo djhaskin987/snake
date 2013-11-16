@@ -142,8 +142,12 @@ public class ProductItems extends Observable implements Serializable {
 	}
 
 	public void removeProduct(IProduct product) {
-		//TODO: It says this is an optional operation. I need to make sure it actually exists.
 		map.remove(product);
+		/*if(map.containsKey(product)) {
+			System.err.println("Product " + product.getBarcode().getValue() + " not successfully removed.");
+		} else {
+			System.out.println("Product " + product.getBarcode().getValue() + " successfully removed.");
+		}*/
 		product.removeProductContainer(productContainer);
 	}
 

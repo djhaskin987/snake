@@ -43,6 +43,16 @@ public interface ReportBuilder {
 	 * {@post paragraph is built into report}
 	 */
 	public void buildParagraph(String heading);
+
+	/**
+	 * Builds an empty line
+	 * 
+	 * {@pre none}
+	 * 
+	 * {@post an empty line is build into report}
+	 * 
+	 */
+	public void buildEmptyLine();
 	
 	/**
 	 * displays the built report

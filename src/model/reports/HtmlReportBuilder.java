@@ -99,4 +99,9 @@ public class HtmlReportBuilder implements ReportBuilder {
 		htmlBuilder.append(escapedHeading);
 		htmlBuilder.append("</p>\n");
 	}
+
+	@Override
+	public void buildEmptyLine() {
+		htmlBuilder.append("<br>");
+	}
 }

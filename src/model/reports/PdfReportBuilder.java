@@ -120,4 +120,14 @@ public class PdfReportBuilder implements ReportBuilder {
 		}
 	}
 
+	@Override
+	public void buildEmptyLine() {
+		try {
+			document.add(Chunk.NEWLINE);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }
