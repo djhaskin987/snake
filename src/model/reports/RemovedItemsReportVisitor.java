@@ -1,6 +1,20 @@
 package model.reports;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import model.DateTime;
+import model.IProduct;
 import model.Item;
+import model.Model;
 import model.Product;
 import model.ProductGroup;
 import model.StorageUnit;
@@ -8,51 +22,91 @@ import model.StorageUnits;
 
 
 public class RemovedItemsReportVisitor implements ReportVisitor {
+	
+	private ReportBuilder reportBuilder;
+	private Date sinceDate;
+	private TreeMap<IProduct, Integer> products;
 
-	public RemovedItemsReportVisitor() {
-		// TODO Auto-generated constructor stub
+	public RemovedItemsReportVisitor(ReportBuilder reportBuilder, Date sinceDate) {
+		this.reportBuilder = reportBuilder;
+		this.sinceDate = sinceDate;
+		products = new TreeMap<IProduct, Integer>(new ProductComparator());
 	}
 
 	@Override
 	public void visit(StorageUnits storageUnits) {
-		// TODO Auto-generated method stub
-		
+		//do nothing
 	}
 
 	@Override
 	public void visit(StorageUnit storageUnit) {
-		// TODO Auto-generated method stub
-		
+		//do nothing
 	}
 
 	@Override
 	public void visit(ProductGroup productGroup) {
-		// TODO Auto-generated method stub
-		
+		//do nothing
 	}
 
 	@Override
 	public void visit(Item item) {
-		// TODO Auto-generated method stub
-		
+		if(item.getExitTime() != null) {
+			if(products.containsKey(item.getProduct())) {
+				products.put(item.getProduct(), products.get(item.getProduct())+1);
+			} else {
+				products.put(item.getProduct(), 1);
+			}
+		}
 	}
 
 	@Override
 	public void visit(Product product) {
-		// TODO Auto-generated method stub
-		
+		//do nothing
 	}
 
 	@Override
 	public void display() {
-		// TODO Auto-generated method stub
-		
+		String heading;
+		if(sinceDate == null) {
+			heading = "Items Removed Since Ever";
+		} else {
+			DateFormat format = new SimpleDateFormat("dd/mm/yy hh:mm aaa");
+			heading = "Items Removed Since " + format.format(sinceDate);
+		}
+		reportBuilder.buildHeading(heading);
+		reportBuilder.buildTable(compileTable());
+		reportBuilder.display();
 	}
 
 	@Override
 	public String[][] compileTable() {
-		// TODO Auto-generated method stub
-		return null;
+		String[][] table = new String[products.size()+1][];
+		table[0] = new String[] {"Description", "Size", "Product Barcode", "Removed", "Current Supply"};
+		int i=1;
+		for(IProduct product : products.keySet()) {
+			table[i] = new String[] {
+					product.getDescription().getValue(),
+					product.getItemSize().toString(),
+					product.getBarcode().getValue(),
+					Integer.toString(products.get(product)),
+					Integer.toString(Model.getInstance().getStorageUnits().getItems(product).size())
+			};
+			++i;
+		}
+		return table;
+	}
+
+	private class ProductComparator implements Comparator<IProduct> {
+
+		@Override
+		public int compare(IProduct o1, IProduct o2) {
+			int out = o1.getDescription().compareTo(o2.getDescription());
+			if(out != 0) {
+				return out;
+			}
+			return o1.getBarcode().getValue().compareTo(o2.getBarcode().getValue());
+		}
+		
 	}
 
 }

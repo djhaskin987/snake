@@ -1,5 +1,7 @@
 package model.reports;
 
+import java.util.Date;
+
 import common.StringOps;
 import model.Format;
 import model.Model;
@@ -61,7 +63,7 @@ public class ReportsManager {
 	 * 
 	 * {@post the supply report}
 	 */
-	private void displaySupplyReport(Format f) {
+	public void displaySupplyReport(Format f) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 	
@@ -70,12 +72,19 @@ public class ReportsManager {
 	 * 
 	 * @param f the display format
 	 * 
+	 * @param sinceDate the date and time to show it from
+	 * 
 	 * {@pre f != null}
 	 * 
 	 * {@post the removed items report}
 	 */
-	private void displayRemovedItemsReport(Format f) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void displayRemovedItemsReport(Format f, Date sinceDate) {
+		ReportBuilder rb = getReportBuilder(f);
+		ReportVisitor rv = new RemovedItemsReportVisitor(rb, sinceDate);
+		Model m = Model.getInstance();
+		StorageUnits su = m.getStorageUnits();
+		su.accept(rv);
+		rv.display();
 	}
 	
 	/**

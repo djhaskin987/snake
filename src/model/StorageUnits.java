@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,9 +22,19 @@ import model.reports.ReportVisitor;
 
 public class StorageUnits extends ProductContainer implements Serializable, IPersistance {
 
-	private static final long serialVersionUID = 8036575061038335165L;
+	private static final long serialVersionUID = -1442677347571283408L;
 	private RemovedItems removedItems;
+	private java.util.Date dateSinceLastRemovedItemsReport;
 	
+	public java.util.Date getDateSinceLastRemovedItemsReport() {
+		return dateSinceLastRemovedItemsReport;
+	}
+
+	public void setDateSinceLastRemovedItemsReport(
+			java.util.Date dateSinceLastRemovedItemsReport) {
+		this.dateSinceLastRemovedItemsReport = dateSinceLastRemovedItemsReport;
+	}
+
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
 		removedItems = new RemovedItems();
@@ -305,6 +314,7 @@ public class StorageUnits extends ProductContainer implements Serializable, IPer
 		this.name = s.name;
 		this.productContainers = s.productContainers;
 		this.productItems = s.productItems;
+		this.dateSinceLastRemovedItemsReport = s.dateSinceLastRemovedItemsReport;
 	}
 
 	@Override

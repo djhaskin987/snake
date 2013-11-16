@@ -63,6 +63,29 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 	@Override
 	public void display() {
 		reportBuilder.buildHeading("Expired Items Report");
+		reportBuilder.buildTable(compileTable());
+		reportBuilder.display();
+	}
+
+	public class ItemComparator implements Comparator<Item> {
+
+		@Override
+		public int compare(Item o1, Item o2) {
+			int out = o1.getProduct().getDescription().getValue().compareTo(o2.getProduct().getDescription().getValue());
+			if(out != 0) {
+				return out;
+			}
+			out = o1.getEntryDate().compareTo(o2.getEntryDate());
+			if(out != 0) {
+				return out;
+			}
+			return Model.getInstance().getPosition(o1) - Model.getInstance().getPosition(o2);
+		}
+		
+	}
+
+	@Override
+	public String[][] compileTable() {
 		int size = 0;
 		for(TreeSet<Item> temp : items) {
 			size += temp.size();
@@ -86,57 +109,7 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 				++i;
 			}
 		}
-		reportBuilder.buildTable(table);
-		reportBuilder.display();
-		
-/*		StringBuilder page = new StringBuilder("<html><head><title>&nbsp;</title></head><body><h1>Expired Items Report</h1>"
-				+ "<table><thead><tr><th>Description</th><th>StorageUnit</th><th>ProductGroup</th>"
-				+ "<th>Entry Date</th><th>Expire Date</th></tr></thead><tbody>");
-		for(TreeSet<Item> temp : items) {
-			for(Item item : temp) {
-				page.append("<tr>");
-				page.append("<td>");
-				page.append(item.getProduct().getDescription().getValue());
-				page.append("</td>");
-				page.append("<td>");
-				page.append(item.getStorageUnitName());
-				page.append("</td>");
-				page.append("<td>");
-				page.append(item.getProductGroupName());
-				page.append("</td>");
-				page.append("<td>");
-				page.append(item.getEntryDate());
-				page.append("</td>");
-				page.append("<td>");
-				page.append(item.getExpireDate());
-				page.append("</td>");
-				page.append("</tr>");
-			}
-		}
-		page.append("</tbody></table></body></html>");*/
-	}
-
-	public class ItemComparator implements Comparator<Item> {
-
-		@Override
-		public int compare(Item o1, Item o2) {
-			int out = o1.getProduct().getDescription().getValue().compareTo(o2.getProduct().getDescription().getValue());
-			if(out != 0) {
-				return out;
-			}
-			out = o1.getEntryDate().compareTo(o2.getEntryDate());
-			if(out != 0) {
-				return out;
-			}
-			return Model.getInstance().getPosition(o1) - Model.getInstance().getPosition(o2);
-		}
-		
-	}
-
-	@Override
-	public String[][] compileTable() {
-		// TODO Auto-generated method stub
-		return null;
+		return table;
 	}
 
 }

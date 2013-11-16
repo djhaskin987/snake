@@ -1,8 +1,5 @@
 package model;
 
-import gui.item.ItemData;
-
-import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
