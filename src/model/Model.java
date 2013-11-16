@@ -301,13 +301,15 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		if (productContainer != null)
 			item.exit();
 			productContainer.transferItem(item, storageUnits.getRemovedItems());
-		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (IModelTagable) item);
+		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS,
+                (IModelTagable) item);
 		setChanged();
 		notifyObservers(p);
 	}
 
 
-	//This is similar to addItem, but it does not add it to the item collection, and it notivies observers.
+	//This is similar to addItem, but it does not add it to the item collection,
+    //and it notivies observers.
 	public void unremoveItem(IItem item, IProductContainer productContainer, int position) {
 		item.setProductContainer(productContainer);
 		productContainer.insertItem(item, item.getProduct(), position);
@@ -463,7 +465,8 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	/**
 	 * @param item
 	 * @return	The position of item in the product container.
-	 * This is necessary to ensure that when undoing a command to remove or transfer an item, it is transferred to the appropriate place.
+	 * This is necessary to ensure that when undoing a command to remove or
+     * transfer an item, it is transferred to the appropriate place.
 	 */
 	public int getPosition(IItem item) {
 		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);

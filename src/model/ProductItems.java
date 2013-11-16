@@ -144,9 +144,11 @@ public class ProductItems extends Observable implements Serializable {
 	public void removeProduct(IProduct product) {
 		map.remove(product);
 		/*if(map.containsKey(product)) {
-			System.err.println("Product " + product.getBarcode().getValue() + " not successfully removed.");
+			System.err.println("Product " + product.getBarcode().getValue() +
+            " not successfully removed.");
 		} else {
-			System.out.println("Product " + product.getBarcode().getValue() + " successfully removed.");
+			System.out.println("Product " + product.getBarcode().getValue() +
+            " successfully removed.");
 		}*/
 		product.removeProductContainer(productContainer);
 		printProducts();

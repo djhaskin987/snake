@@ -23,7 +23,7 @@ import model.StorageUnits;
 
 
 public class RemovedItemsReportVisitor implements ReportVisitor {
-	
+
 	private ReportBuilder reportBuilder;
 	private Date sinceDate;
 	private TreeMap<IProduct, Integer> products;
@@ -86,7 +86,8 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 
 	private String[][] compileTable() {
 		String[][] table = new String[products.size()+1][];
-		table[0] = new String[] {"Description", "Size", "Product Barcode", "Removed", "Current Supply"};
+		table[0] = new String[] {"Description", "Size", "Product Barcode",
+            "Removed", "Current Supply"};
 		int i=1;
 		for(IProduct product : products.keySet()) {
 			table[i] = new String[] {
@@ -94,7 +95,8 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 					product.getItemSize().toString(),
 					product.getBarcode().getValue(),
 					Integer.toString(products.get(product)),
-					Integer.toString(Model.getInstance().getStorageUnits().getItems(product).size())
+					Integer.toString(Model.getInstance().getStorageUnits()
+                            .getItems(product).size())
 			};
 			++i;
 		}

@@ -234,7 +234,8 @@ public class AddItemBatchController extends Controller implements
 			items.add(item);
 			iDatas.add((ItemData) item.getTag());
 		}
-		commands.execute((ICommand) new AddBatchCommand(pData, iDatas, productItems, productContainerData, this));
+		commands.execute((ICommand) new AddBatchCommand(pData, iDatas, productItems,
+                    productContainerData, this));
 	}
 	
 	public void resetControls() {
