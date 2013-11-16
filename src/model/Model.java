@@ -150,7 +150,9 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	
 	public void addStorageUnit(IProductContainer s)
 	{
-		storageUnits.addStorageUnit((StorageUnit)s); 
+		storageUnits.addStorageUnit((StorageUnit)s);
+		notifyObservers(ModelActions.INSERT_STORAGE_UNIT,
+				(StorageUnit)s);
 	}
 	
 	public IProductContainer createProductGroup(String name, String supplyValue,

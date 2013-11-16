@@ -57,8 +57,6 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	 */
 	public void addStorageUnit(StorageUnit storageUnit){
 		productContainers.add(storageUnit);
-		notifyObservers(ModelActions.INSERT_STORAGE_UNIT,
-				storageUnit);
 	}
 	
 	public List<String> getStorageUnitNames(){
