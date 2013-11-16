@@ -14,6 +14,7 @@ import model.DateTime;
 import model.Item;
 import model.Product;
 import model.ProductGroup;
+import model.RemovedItems;
 import model.StorageUnit;
 import model.StorageUnits;
 import model.reports.ReportBuilder;
@@ -118,5 +119,11 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 			++i;
 		}
 		return table;
+	}
+
+	@Override
+	public void visit(RemovedItems removedItems) {
+		// TODO Auto-generated method stub
+		
 	}
 }
