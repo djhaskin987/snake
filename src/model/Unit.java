@@ -32,7 +32,7 @@ public enum Unit {
 		return dimension;
 	}
 	
-	public double getConversionConstant() {
+	private double getConversionConstant() {
 		return conversionConstant;
 	}
 	
@@ -40,6 +40,14 @@ public enum Unit {
 		return dimension == u.getDimension();
 	}
 	
+	/**
+	 * Convert amount unit to this
+	 * 
+	 * @param amount		amount of unit to convert from
+	 * @param unit			unit to convert from
+	 * @return				amount unit in this unit
+	 * @throws Exception	if this and unit cannot convert
+	 */
 	public double convert(double amount, Unit unit) throws Exception {
 		if(!canConvert(unit)) {
 			throw new Exception("Error: " + statusCode + " cannot be converted to " + unit.getStatusCode());
