@@ -2,6 +2,8 @@ package model.reports;
 
 import java.util.List;
 
+import model.IProduct;
+import model.IProductContainer;
 import model.Item;
 import model.Product;
 import model.ProductGroup;
@@ -16,6 +18,7 @@ import model.StorageUnits;
  */
 public class NoticesReportVisitor implements ReportVisitor {
 	private ReportBuilder builder;
+	private IProductContainer product;
 	
 	public NoticesReportVisitor(ReportBuilder b) {
 		builder = b;
@@ -61,5 +64,4 @@ public class NoticesReportVisitor implements ReportVisitor {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

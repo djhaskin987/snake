@@ -21,7 +21,7 @@ public interface ReportBuilder {
 	 * {@post subheading is built into report}
 	 */
 	public void buildSubHeading(String subHeading);
-	
+
 	/**
 	 * Builds a heading.
 	 * 
@@ -32,6 +32,17 @@ public interface ReportBuilder {
 	 * {@post heading is built into report}
 	 */
 	public void buildHeading(String heading);
+	
+	/**
+	 * Builds a paragraph.
+	 * 
+	 * @param paragraph string representing the paragraph
+	 * 
+	 * {@pre paragraph != null}
+	 * 
+	 * {@post paragraph is built into report}
+	 */
+	public void buildParagraph(String heading);
 	
 	/**
 	 * displays the built report

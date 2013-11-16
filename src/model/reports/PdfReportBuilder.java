@@ -18,7 +18,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class PdfReportBuilder implements ReportBuilder {
 	private Document document;
-	private PdfContentByte cb;
 	private Font heading;
 	private Font subHeading;
 	private Font tableHeader;
@@ -29,7 +28,6 @@ public class PdfReportBuilder implements ReportBuilder {
 		try {
 			writer = PdfWriter.getInstance(document, new FileOutputStream("Report.pdf"));
 			document.open();
-			cb = writer.getDirectContent();
 			/*try {
 				cb.setFontAndSize(BaseFont.createFont(), 1);
 			} catch (IOException e) {
@@ -93,6 +91,18 @@ public class PdfReportBuilder implements ReportBuilder {
 		paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 		try {
 			document.add(paragraph);
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void buildParagraph(String paragraph) {
+		try {
+			Paragraph pdfParagraph = new Paragraph(paragraph);
+			pdfParagraph.setExtraParagraphSpace(6);
+			document.add(pdfParagraph);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
