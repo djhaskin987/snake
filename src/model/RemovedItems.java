@@ -1,5 +1,8 @@
 package model;
 
+import model.reports.ReportVisitor;
+
+
 public class RemovedItems extends StorageUnit {
 
 	/**
@@ -11,4 +14,9 @@ public class RemovedItems extends StorageUnit {
 		productItems.removeProduct(product);
 	}
 
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
+		super.accept_traverse(v);
+	}
 }

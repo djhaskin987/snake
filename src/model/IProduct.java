@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import model.reports.IReportNode;
+
 /**
  * Interface of Product to increase modularity of the Product Object
  * @author Kevin
  *
  */
-public interface IProduct extends Serializable, IModelTagable {
+public interface IProduct extends Serializable, IModelTagable, IReportNode, Comparable<IProduct> {
 
 	/**
 	 * This must be a NonEmptyString
@@ -100,6 +102,8 @@ public interface IProduct extends Serializable, IModelTagable {
 	public void addProductContainer(IProductContainer pc);
 	
 	public void removeProductContainer(IProductContainer productContainer);
+	
+	public void removeItem(IItem item);
 	
 	@SuppressWarnings("serial")
 	public class InvalidIntegerException extends Exception{

@@ -1,13 +1,21 @@
 package model;
 
-import gui.item.ItemData;
-
-import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.reports.ReportsManager;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -15,16 +23,21 @@ import org.apache.commons.lang3.tuple.Pair;
  * When you serialize, this is the only singleton you need to worry about.
  *
  */
-public class Model extends ModelObservable implements Observer {
+public class Model extends ModelObservable implements Observer, Serializable, IPersistance {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3370470433844605140L;
+
 	private static Model instance;
 	
 	private StorageUnits storageUnits;
 	private ProductCollection productCollection;
-	private ItemCollection itemCollection;
-	private RemovedItems removedItems;
+	private ItemCollection itemCollection;	
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
+	private ReportsManager reportsManager;
 	
 	
     /**
@@ -47,13 +60,13 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits = new StorageUnits();
 		productCollection = new ProductCollection();
 		itemCollection = new ItemCollection();
-		removedItems = new RemovedItems();
 		productContainerFactory = new ProductContainerFactory();
 		productFactory = new ProductFactory();
 		itemFactory = new ItemFactory();
 		storageUnits.addObserver(this);
 		productCollection.addObserver(this);
 		itemCollection.addObserver(this);
+		reportsManager = new ReportsManager();
 	}
 	
 	/**
@@ -137,7 +150,9 @@ public class Model extends ModelObservable implements Observer {
 	
 	public void addStorageUnit(IProductContainer s)
 	{
-		storageUnits.addStorageUnit((StorageUnit)s); 
+		storageUnits.addStorageUnit((StorageUnit)s);
+		notifyObservers(ModelActions.INSERT_STORAGE_UNIT,
+				(StorageUnit)s);
 	}
 	
 	public IProductContainer createProductGroup(String name, String supplyValue,
@@ -183,12 +198,8 @@ public class Model extends ModelObservable implements Observer {
 	
 	public IItem createItem(IProduct product, java.util.Date date) throws InvalidHITDateException {
 		ValidDate entryDate = new ValidDate(date);
-		Date expireDate = null;
-		if(product.getShelfLife() != 0) {
-			expireDate = entryDate.plusMonths(product.getShelfLife());
-		}
 		Barcode barcode = new Barcode();
-		return itemFactory.createInstance(product, barcode, null);
+		return itemFactory.createInstance(product, barcode, entryDate, null);
 	}
 
 	public void addItem(IItem item, IProductContainer productContainer) {
@@ -289,7 +300,7 @@ public class Model extends ModelObservable implements Observer {
 		IProductContainer productContainer = item.getProductContainer();
 		if (productContainer != null)
 			item.exit();
-			productContainer.transferItem(item, removedItems);
+			productContainer.transferItem(item, storageUnits.getRemovedItems());
 		Pair<ModelActions, IModelTagable> p = Pair.of(ModelActions.REMOVE_ITEMS, (IModelTagable) item);
 		setChanged();
 		notifyObservers(p);
@@ -408,7 +419,7 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public RemovedItems getRemovedItems() {
-		return removedItems;
+		return storageUnits.getRemovedItems();
 	}
 	
 	public boolean canDeleteProductGroup(IProductContainer pc)
@@ -457,14 +468,64 @@ public class Model extends ModelObservable implements Observer {
 	public int getPosition(IItem item) {
 		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
-	
+
+	@Override
 	public void store() {
-		storageUnits.store();
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			Files.deleteIfExists(p);
+			FileOutputStream fileOut = new FileOutputStream("inventory-tracker.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(this);
+			out.close();
+			fileOut.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	@Override
 	public void load() {
-		storageUnits.load();
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			if (Files.exists(p)) {
+					FileInputStream fileIn = new FileInputStream(p.toFile());
+					ObjectInputStream in = new ObjectInputStream(fileIn);
+					
+					Model m = (Model) in.readObject();
+					itemCollection = m.itemCollection;
+					productCollection = m.productCollection;
+					storageUnits = m.storageUnits;
+					itemFactory = m.itemFactory;
+					productContainerFactory = m.productContainerFactory;
+					reportsManager = m.reportsManager;
+					storageUnits = m.storageUnits;
+					in.close();
+					fileIn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
 		System.out.println("model loaded");
 	}
 
+	public boolean canGetProductStatisticsReport(String months) {
+		return reportsManager.canGetProductStatisticsReport(months);
+	}
+
+
+	public boolean canGetNMonthSupplyReport(String months) {
+		return reportsManager.canGetNMonthSupplyReport(months);
+	}
+
+
+	@Override
+	public void update() {
+		store();
+	}
+
+
+	public ReportsManager getReportsManager() {
+		return reportsManager;
+	}
 }

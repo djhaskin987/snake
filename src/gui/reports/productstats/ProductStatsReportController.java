@@ -1,5 +1,8 @@
 package gui.reports.productstats;
 
+import model.Format;
+import model.Model;
+import model.reports.*;
 import gui.common.*;
 
 /**
@@ -7,7 +10,7 @@ import gui.common.*;
  */
 public class ProductStatsReportController extends Controller implements
 		IProductStatsReportController {
-
+	FileFormat f;
 	/**
 	 * Constructor.
 	 * 
@@ -15,7 +18,6 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	public ProductStatsReportController(IView view) {
 		super(view);
-		
 		construct();
 	}
 
@@ -47,6 +49,10 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableFormat(true);
+		getView().enableMonths(true);
+		boolean enableOk = getModel().canGetProductStatisticsReport(getView().getMonths());
+		getView().enableOK(enableOk);
 	}
 
 	/**
@@ -58,6 +64,10 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setMonths("3");
+		getView().setFormat(FileFormat.HTML);
+		f = FileFormat.HTML;
+		enableComponents();
 	}
 
 	//
@@ -70,6 +80,8 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		f = getView().getFormat();
+		enableComponents();
 	}
 	
 	/**
@@ -78,6 +90,13 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		String monthsStr = getView().getMonths();
+		int months = Integer.parseInt(monthsStr);
+		ReportVisitor rv = 
+				Model.getInstance().getReportsManager().createProductStatisticsReport(
+				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
+				months);
+		rv.display();
 	}
 
 }

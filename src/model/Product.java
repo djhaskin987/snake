@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import model.reports.ReportVisitor;
+
 /**
  * A bar-coded product that can be stored in a Storage Unit.
  * @author Kevin
@@ -193,6 +195,11 @@ public class Product implements IProduct, ITagable, Serializable {
 		containers.remove(pc);
     }
 
+	@Override
+	public void removeItem(IItem i) {
+		
+	}
+	
 	public void setItemSize(Quantity q) {
 		itemSize = q;
 	}
@@ -217,5 +224,33 @@ public class Product implements IProduct, ITagable, Serializable {
 		if (tagable == null)
 			tagable = new Tagable();
 		return tagable.hasTag();
+	}
+	
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
+	}
+
+	@Override
+	public int compareTo(IProduct o) {
+		int out = description.compareTo(o.getDescription());
+		if(out != 0) {
+			return out;
+		}
+		return barcode.getValue().compareTo(o.getBarcode().getValue());
+	}
+	
+	@Override
+	public String toString() {
+		String barcode = this.barcode.getValue();
+		String description = this.description.getValue();
+		String itemSize = this.itemSize.getValueString();
+		String shelfLife = this.shelfLife.toString();
+		String threeMonthSupply = this.threeMonthSupply.toString();
+		String container = this.containers.toString();
+		String tagable = this.tagable.toString();
+		String str = String.format("<model.Product barcode='%s' description='%s' itemSize='%s' shelfLife=%s threeMonthSupply=%s containers=%s tagable=%s>",
+				barcode, description, itemSize, shelfLife, threeMonthSupply, containers, tagable);
+		return str;
 	}
 }

@@ -1,5 +1,8 @@
 package gui.reports.supply;
 
+import model.Format;
+import model.reports.ReportVisitor;
+import model.reports.ReportsManager;
 import gui.common.*;
 
 /**
@@ -8,6 +11,8 @@ import gui.common.*;
 	public class SupplyReportController extends Controller implements
 		ISupplyReportController {
 /*---	STUDENT-INCLUDE-BEGIN
+ */
+		private FileFormat f;
 
 	/**
 	 * Constructor.
@@ -48,6 +53,10 @@ import gui.common.*;
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableFormat(true);
+		getView().enableMonths(true);
+		boolean enableOk = getModel().canGetNMonthSupplyReport(getView().getMonths());
+		getView().enableOK(enableOk);
 	}
 
 	/**
@@ -59,6 +68,10 @@ import gui.common.*;
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setMonths("3");
+		getView().setFormat(FileFormat.HTML);
+		f = FileFormat.HTML;
+		enableComponents();
 	}
 
 	//
@@ -71,6 +84,8 @@ import gui.common.*;
 	 */
 	@Override
 	public void valuesChanged() {
+		f = getView().getFormat();
+		enableComponents();
 	}
 	
 	/**
@@ -79,7 +94,12 @@ import gui.common.*;
 	 */
 	@Override
 	public void display() {
+		String monthsStr = getView().getMonths();
+		int months = Integer.parseInt(monthsStr);
+		ReportVisitor rv = getModel().getReportsManager().createNMonthSupplyReport(
+				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
+				months);
+		rv.display();
 	}
 
 }
-

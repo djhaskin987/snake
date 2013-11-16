@@ -1,7 +1,10 @@
 package model;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import model.reports.ReportVisitor;
 
 import gui.common.*;
 import gui.item.ItemData;
@@ -483,8 +486,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	@Override
 	public Collection<IProduct> getProductsRecursive()
 	{
-		Collection<IProduct> returned =
-				getProducts();
+		Collection<IProduct> returned = new ArrayList<IProduct>(getProducts());
 		for (IProductContainer pc : productContainers)
 		{
 			returned.addAll(pc.getProductsRecursive());
@@ -528,6 +530,20 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		this.productItems.clearAllTags();
 		for (IProductContainer container : productContainers) {
 			((ProductContainer)container).clearAllTags();
+		}
+	}
+	
+	public void accept_traverse(ReportVisitor v) {
+		Collection<IProduct> products = getProducts();
+		for (IProduct p : products) {
+			p.accept(v);
+			Collection<IItem> items = productItems.getItems(p);
+			for (IItem item : items) {
+				item.accept(v);
+			}
+		}
+		for (IProductContainer pc : productContainers) {
+			pc.accept(v);
 		}
 	}
 	

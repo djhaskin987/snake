@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import model.reports.IReportNode;
+import gui.reports.*;
+
 /**
  * Interface for Product Container to increase modularity of ProductContainer
  * @author Daniel Jay Haskin
  *
  */
-public interface IProductContainer extends Serializable, IModelTagable {
+public interface IProductContainer extends Serializable, IModelTagable, IReportNode {
 	
 	/**
 	 * Converts an enum into a string to display

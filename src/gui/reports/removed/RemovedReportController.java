@@ -1,5 +1,10 @@
 package gui.reports.removed;
 
+import java.util.Date;
+
+import model.Format;
+import model.Model;
+import model.reports.ReportsManager;
 import gui.common.*;
 
 /**
@@ -58,6 +63,8 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setSinceLast(true);
+		getView().setSinceLastValue(Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport());
 	}
 
 	//
@@ -78,6 +85,26 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		Format f;
+		switch(getView().getFormat()) {
+		case HTML:
+			f = Format.HTML;
+			break;
+		case PDF:
+			f = Format.PDF;
+			break;
+		default:
+			System.err.println("Error: You missed a format in ExpiredReportController.display()");
+			return;
+		}
+		Date sinceDate;
+		if(getView().getSinceDate()) {
+			sinceDate = getView().getSinceDateValue();
+		} else {
+			sinceDate = Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport();
+		}
+		Model.getInstance().getStorageUnits().setDateSinceLastRemovedItemsReport(new Date());
+		getModel().getReportsManager().displayRemovedItemsReport(f, sinceDate);
 	}
 
 }

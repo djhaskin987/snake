@@ -7,21 +7,52 @@ package model;
  *
  */
 public enum Unit {
-	COUNT ("count"),
-	LBS ("lbs"),
-	OZ ("oz"),
-	G ("grams"),
-	KG ("kilograms"),
-	GAL ("gallons"),
-	QUART ("quart"),
-	PINT ("pint"),
-	FLOZ ("fluid oz"),
-	LITER ("liter");
+	COUNT ("count",		Dimension.COUNT,	1),
+	LBS ("lbs",			Dimension.MASS,		453.592),
+	OZ ("oz",			Dimension.MASS,		28.3495),
+	G ("grams",			Dimension.MASS,		1),
+	KG ("kilograms",	Dimension.MASS,		1000),
+	GAL ("gallons",		Dimension.VOLUME,	3.78541),
+	QUART ("quart",		Dimension.VOLUME,	0.946353),
+	PINT ("pint",		Dimension.VOLUME,	0.473176),
+	FLOZ ("fluid oz",	Dimension.VOLUME,	0.0295735),
+	LITER ("liter",		Dimension.VOLUME,	1);
 	
 	private String statusCode;
+	private Dimension dimension;
+	private double conversionConstant;
 	 
-	private Unit(String s) {
+	private Unit(String s, Dimension d, double c) {
 		statusCode = s;
+		dimension = d;
+		conversionConstant = c;
+	}
+	
+	public Dimension getDimension() {
+		return dimension;
+	}
+	
+	private double getConversionConstant() {
+		return conversionConstant;
+	}
+	
+	public boolean canConvert(Unit u) {
+		return dimension == u.getDimension();
+	}
+	
+	/**
+	 * Convert amount unit to this
+	 * 
+	 * @param amount		amount of unit to convert from
+	 * @param unit			unit to convert from
+	 * @return				amount unit in this unit
+	 * @throws Exception	if this and unit cannot convert
+	 */
+	public double convert(double amount, Unit unit) throws Exception {
+		if(!canConvert(unit)) {
+			throw new Exception("Error: " + statusCode + " cannot be converted to " + unit.getStatusCode());
+		}
+		return amount*unit.getConversionConstant()/conversionConstant;
 	}
 	
 	/**
@@ -67,5 +98,16 @@ public enum Unit {
 					s + "'");
 		}
 		return correspondingUnit;
+	}
+	
+	public enum Dimension {
+		COUNT,
+		MASS,
+		VOLUME,
+	}
+	
+	public String toString() {
+		return statusCode;
+		
 	}
 }

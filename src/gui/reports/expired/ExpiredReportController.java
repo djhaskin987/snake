@@ -1,6 +1,9 @@
 package gui.reports.expired;
 
 
+import model.Format;
+import model.Model;
+import model.reports.ReportsManager;
 import gui.common.*;
 
 
@@ -80,6 +83,19 @@ public class ExpiredReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		Format f;
+		switch(getView().getFormat()) {
+		case HTML:
+			f = Format.HTML;
+			break;
+		case PDF:
+			f = Format.PDF;
+			break;
+		default:
+			System.err.println("Error: You missed a format in ExpiredReportController.display()");
+			return;
+		}
+		Model.getInstance().getReportsManager().displayExpiredItemsReport(f);
 	}
 
 }

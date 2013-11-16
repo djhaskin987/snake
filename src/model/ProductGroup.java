@@ -1,6 +1,9 @@
 package model;
 
+
 import java.io.Serializable;
+
+import model.reports.ReportVisitor;
 
 /**
  * A user-defined group of Products. Product Groups are used by users to aggregate
@@ -118,4 +121,9 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		return threeMonthSupply.getValueString();
 	}
 
+	@Override
+	public void accept(ReportVisitor v) {
+		v.visit(this);
+		super.accept_traverse(v);
+	}
 }
