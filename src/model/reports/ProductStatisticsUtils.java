@@ -29,8 +29,8 @@ public class ProductStatisticsUtils {
 		String supplyMinMax = getSupplyMinMax(allItems, months);
 		String supplyUsedAdded = getSupplyUsedAdded(allItems, exitItems, months);
 		String shelfLife = getShelfLife(p);
-		String usedAgeAvgMax = getUsedAgeAvgMax(allItems, months);
-		String curAgeAvgMax = getCurAgeAvgMax(allItems, months);
+		String usedAgeAvgMax = getUsedAgeAvgMax(exitItems, months);
+		String curAgeAvgMax = getCurAgeAvgMax(currentItems, months);
 		String[] row = new String[] { description, barcode, size, threeMonthSupply, supplyCurAvg, supplyMinMax, supplyUsedAdded, shelfLife, usedAgeAvgMax, curAgeAvgMax };
 		return row;
 	}
@@ -72,7 +72,7 @@ public class ProductStatisticsUtils {
 	public static double getAverageSupply(List<Item> allItems, int months) {
 		long lifespans = 0;
 		for(Item item : allItems) {
-			lifespans += getLifeSpan(item, months);
+			lifespans += getLifeSpan(item, months, true);
 		}
 		int daysFromNow = getDaysFromNow(months);
 		return (double) lifespans / (double)daysFromNow;
@@ -114,13 +114,16 @@ public class ProductStatisticsUtils {
 			return null;
 	}
 	
-	private static long getLifeSpan(Item item, int months) {
+	private static long getLifeSpan(Item item, int months, boolean truncate) {
 		ValidDate mValidDate = item.getEntryDate();
 		Date date = mValidDate.toJavaUtilDate();
 		Calendar entry = Calendar.getInstance();
 		entry.setTime(date);
-		Calendar start = getCal(months);
-		start = getMostRecentDate(start, entry);
+		Calendar start;
+		if (truncate)
+			start = getMostRecentDate(getCal(months), entry);
+		else
+			start = entry;
 		DateTime mExit = item.getExitTime();
 		Calendar exit;
 		if (mExit != null) {
@@ -222,30 +225,47 @@ public class ProductStatisticsUtils {
 	}
 	
 	public static String getUsedAgeAvgMax(List<Item> items, int months) {
-		int avg = getUsedAgeAverage(items, months);
-		int max = getUsedAgeMax(items, months);
-		return String.format("%s days / %s days", avg, max);
+		double avg = getAgeAverage(items);
+		long max = getAgeMax(items);
+		return String.format("%.2f days / %s days", avg, max);
 	}
 	
-	private static int getUsedAgeAverage(List<Item> items, int months) {
-		return -1;
+	private static long[] getLifeSpans(List<Item> items) {
+		if (items == null)
+			return new long[] { 0 };
+		long[] lifeSpans = new long[items.size()];
+		for(int i = 0; i < items.size(); i++) {
+			lifeSpans[i] = getLifeSpan(items.get(i), -1, false);
+		}
+		return lifeSpans;
 	}
 	
-	private static int getUsedAgeMax(List<Item> items, int months) {
-		return -1;
+	private static double getAgeAverage(List<Item> items) {
+		long[] lifeSpans = getLifeSpans(items);
+		double avg = 0;
+		for (long lifeSpan : lifeSpans) {
+			avg += lifeSpan;
+		}
+		avg /= lifeSpans.length;
+		return avg;
 	}
 	
-	public static String getCurAgeAvgMax(List<Item> items, int months) {
-		int avg = getCurrentAgeAverage(items, months);
-		int max = getCurrentAgeMax(items, months);
-		return String.format("%s days / %s days", avg, max);
+	private static long getAgeMax(List<Item> items) {
+		long[] lifeSpans = getLifeSpans(items);
+		long max = Integer.MIN_VALUE;
+		for (long lifeSpan : lifeSpans) {
+			if (max < lifeSpan) {
+				max = lifeSpan;
+			}
+		}
+		return max;
 	}
 	
-	private static int getCurrentAgeAverage(List<Item> items, int months) {
-		return -1;
+	public static String getCurAgeAvgMax(List<Item> currentItems, int months) {
+		double avg = getAgeAverage(currentItems);
+		long max = getAgeMax(currentItems);
+		return String.format("%.3f days / %s days", avg, max);
 	}
 	
-	private static int getCurrentAgeMax(List<Item> items, int months) {
-		return -1;
-	}
+	
 }
