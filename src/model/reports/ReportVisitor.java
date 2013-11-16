@@ -19,6 +19,4 @@ public interface ReportVisitor {
 	public void visit(Product product);
 	
 	public void display();
-
-	public String[][] compileTable();
 }

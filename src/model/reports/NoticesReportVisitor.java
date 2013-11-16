@@ -60,8 +60,7 @@ public class NoticesReportVisitor implements ReportVisitor {
 		builder.display();
 	}
 
-	@Override
-	public String[][] compileTable() {
+	private String[][] compileTable() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -84,8 +84,7 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 		
 	}
 
-	@Override
-	public String[][] compileTable() {
+	private String[][] compileTable() {
 		int size = 0;
 		for(TreeSet<Item> temp : items) {
 			size += temp.size();

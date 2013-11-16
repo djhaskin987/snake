@@ -78,8 +78,7 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 		reportBuilder.display();
 	}
 
-	@Override
-	public String[][] compileTable() {
+	private String[][] compileTable() {
 		String[][] table = new String[products.size()+1][];
 		table[0] = new String[] {"Description", "Size", "Product Barcode", "Removed", "Current Supply"};
 		int i=1;
