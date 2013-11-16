@@ -230,4 +230,13 @@ public class Product implements IProduct, ITagable, Serializable {
 	public void accept(ReportVisitor v) {
 		v.visit(this);
 	}
+
+	@Override
+	public int compareTo(IProduct o) {
+		int out = description.compareTo(o.getDescription());
+		if(out != 0) {
+			return out;
+		}
+		return barcode.getValue().compareTo(o.getBarcode().getValue());
+	}
 }

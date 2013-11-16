@@ -30,7 +30,7 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 	public RemovedItemsReportVisitor(ReportBuilder reportBuilder, Date sinceDate) {
 		this.reportBuilder = reportBuilder;
 		this.sinceDate = sinceDate;
-		products = new TreeMap<IProduct, Integer>(new ProductComparator());
+		products = new TreeMap<IProduct, Integer>();
 	}
 
 	@Override
@@ -93,19 +93,6 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 			++i;
 		}
 		return table;
-	}
-
-	private class ProductComparator implements Comparator<IProduct> {
-
-		@Override
-		public int compare(IProduct o1, IProduct o2) {
-			int out = o1.getDescription().compareTo(o2.getDescription());
-			if(out != 0) {
-				return out;
-			}
-			return o1.getBarcode().getValue().compareTo(o2.getBarcode().getValue());
-		}
-		
 	}
 
 }

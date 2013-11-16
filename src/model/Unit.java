@@ -105,4 +105,9 @@ public enum Unit {
 		MASS,
 		VOLUME,
 	}
+	
+	public String toString() {
+		return statusCode;
+		
+	}
 }

@@ -126,5 +126,4 @@ public class ProductGroup extends ProductContainer implements Serializable {
 		v.visit(this);
 		super.accept_traverse(v);
 	}
-
 }

@@ -1,15 +1,18 @@
 package model.reports;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import model.IProduct;
-import model.IProductContainer;
 import model.Item;
 import model.Product;
 import model.ProductGroup;
+import model.Quantity;
 import model.StorageUnit;
 import model.StorageUnits;
-import model.Unit;
 
 /**
  * Used for the notices report
@@ -19,44 +22,82 @@ import model.Unit;
  */
 public class NoticesReportVisitor implements ReportVisitor {
 	private ReportBuilder builder;
-	private IProductContainer container;
+	private ProductGroup productGroup;
+	private List<Pair<ProductGroup, TreeSet<IProduct>>> products;
 	
 	public NoticesReportVisitor(ReportBuilder b) {
 		builder = b;
-		builder.buildHeading("Notices Report");
+		products = new ArrayList<Pair<ProductGroup, TreeSet<IProduct>>>();
 	}
 	
 	@Override
 	public void visit(StorageUnits storageUnits) {
-		
+		//do nothing
 	}
 
 	@Override
 	public void visit(StorageUnit storageUnit) {
-		// TODO Auto-generated method stub
-		
+		productGroup = null;
 	}
 
 	@Override
 	public void visit(ProductGroup productGroup) {
-		// TODO Auto-generated method stub
-		
+		if(productGroup.getThreeMonthSupplyUnit() == null) {
+			this.productGroup = null;
+		} else {
+			this.productGroup = productGroup;
+			products.add(Pair.of(productGroup, new TreeSet<IProduct>()));
+		}
 	}
 
 	@Override
 	public void visit(Item item) {
-		// TODO Auto-generated method stub
-		
+		//do nothing
 	}
 
 	@Override
 	public void visit(Product product) {
-		// TODO Auto-generated method stub
-		
+		System.out.println();
+		if(productGroup == null) {
+			System.out.println("a");
+			return;
+		}
+		Quantity size = product.getItemSize();
+		if(size == null) {
+			System.out.println("b");
+			return;
+		}
+		if(productGroup.getThreeMonthSupplyUnit().canConvert(size.getUnit())) {
+			System.out.println("c");
+			return;
+		}
+		System.out.println("d");
+		products.get(products.size()-1).getRight().add(product);
 	}
 
 	@Override
 	public void display() {
+		builder.buildHeading("Notices");
+		builder.buildSubHeading("3-Month Supply Warnings");
+		for(Pair<ProductGroup, TreeSet<IProduct>> pair : products) {
+			StringBuilder paragraph = new StringBuilder();
+			paragraph.append("Product group ");
+			paragraph.append(pair.getLeft().getUnitPC().getName().getValue());
+			paragraph.append("::");
+			paragraph.append(pair.getLeft().getName().getValue());
+			paragraph.append(" has a 3-month supply (");
+			paragraph.append(pair.getLeft().getThreeMonthSupply());
+			paragraph.append(") that is inconsistent with the following products:\n");
+			for(IProduct product : pair.getRight()) {
+				paragraph.append(" -");
+				paragraph.append(pair.getLeft().getName());
+				paragraph.append("::");
+				paragraph.append(product.getDescription().getValue());
+				paragraph.append(" (size ");
+				paragraph.append(product.getItemSize().getValueString());
+				paragraph.append(")\n");
+			}
+		}
 		builder.display();
 	}
 

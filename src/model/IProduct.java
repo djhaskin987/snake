@@ -11,7 +11,7 @@ import model.reports.IReportNode;
  * @author Kevin
  *
  */
-public interface IProduct extends Serializable, IModelTagable, IReportNode {
+public interface IProduct extends Serializable, IModelTagable, IReportNode, Comparable<IProduct> {
 
 	/**
 	 * This must be a NonEmptyString
