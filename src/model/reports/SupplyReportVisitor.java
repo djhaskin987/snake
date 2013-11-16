@@ -50,16 +50,17 @@ public class SupplyReportVisitor implements ReportVisitor {
 
 	@Override
 	public void visit(StorageUnits storageUnits) {
-		// do nothing.
+		System.out.println("visited storage unit root " + storageUnits.getName().toString());
 	}
 
 	@Override
 	public void visit(StorageUnit storageUnit) {
-		// do nothing.
+		System.out.println("visited storage unit" + storageUnit.getName().toString());
 	}
 
 	@Override
 	public void visit(ProductGroup pg) {
+		System.out.println("visited storage product group " + pg.getName().toString());
 		StorageUnit s = (StorageUnit)pg.getUnitPC();
 		Pair<ProductGroup, StorageUnit> a;
 		
@@ -68,6 +69,7 @@ public class SupplyReportVisitor implements ReportVisitor {
 
 	@Override
 	public void visit(Item val) {
+		System.out.println("visited item " + val.getBarcode().toString());
 		if (val.getExitTime() != null) {
 			Product key = (Product)val.getProduct();
 			if (!products.containsKey(key))
@@ -76,11 +78,15 @@ public class SupplyReportVisitor implements ReportVisitor {
 			}
 			products.get(key).add(val);
 		}
+		else
+		{
+			System.out.println("Item has been removed");
+		}
 	}
 
 	@Override
 	public void visit(Product product) {
-		// do nothing.
+		System.out.println("Visited product " + product.getDescription().toString());
 	}
 
 	@Override

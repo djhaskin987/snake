@@ -66,6 +66,7 @@ public class ProductStatsReportController extends Controller implements
 	protected void loadValues() {
 		getView().setMonths("3");
 		getView().setFormat(FileFormat.HTML);
+		f = FileFormat.HTML;
 		enableComponents();
 	}
 

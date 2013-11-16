@@ -70,6 +70,7 @@ import gui.common.*;
 	protected void loadValues() {
 		getView().setMonths("3");
 		getView().setFormat(FileFormat.HTML);
+		f = FileFormat.HTML;
 		enableComponents();
 	}
 
@@ -102,4 +103,3 @@ import gui.common.*;
 	}
 
 }
-
