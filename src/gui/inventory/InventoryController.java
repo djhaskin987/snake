@@ -105,11 +105,23 @@ public class InventoryController extends Controller
 				iData.setTag(i);
 			}
 		}
+		List<ProductContainerData> children = new ArrayList<ProductContainerData>();
 		for (IProductContainer p : pc.getChildren()) {
 			ProductContainerData child = loadValues(p);
 			if (child != null)
-				pcd.addChild(child);
+				children.add(child);
 		}
+		java.util.Collections.sort(children, new Comparator<ProductContainerData>() {
+			public int compare(ProductContainerData a, ProductContainerData b)
+			{
+				return a.getName().compareTo(b.getName());
+			}
+		});
+		for (ProductContainerData child : children)
+		{
+			pcd.addChild(child);
+		}
+		
 		return pcd;
 	}
 
