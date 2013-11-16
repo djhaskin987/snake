@@ -3,6 +3,8 @@ package gui.batches;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -32,7 +34,8 @@ public class AddItemBatchController extends Controller implements
 	//private ArrayList<ProductData> products;
 	private ProductItemsData productItems;
 	private Commands commands;
-	
+	private Timer scannerTimer;
+	private TimerTask scannerTimerTask;
 	/**
 	 * Constructor.
 	 * 
@@ -45,6 +48,9 @@ public class AddItemBatchController extends Controller implements
 		productItems = new ProductItemsData();
 		commands = new Commands();
 		//products = new ArrayList<ProductData>();
+		scannerTimerTask = new ScannerTimerTask(this);
+		scannerTimer = new Timer("Scanner Timer");
+		scannerTimer.schedule(scannerTimerTask, 5000);
 		construct();
 	}
 
@@ -177,9 +183,32 @@ public class AddItemBatchController extends Controller implements
 		enableComponents();
 		IAddItemBatchView v = getView();
 		boolean useScannerEnabled = v.getUseScanner();
+		scannerTimer.cancel();
 		if (true == useScannerEnabled) {
-			v.setBarcode("");
+			v.setBarcode("");		
+			scannerTimer.schedule(scannerTimerTask, 5000);
 		}
+	}
+	
+	public Timer getScannerTimer() {
+		return scannerTimer;
+	}
+	
+	class ScannerTimerTask extends TimerTask {
+		private AddItemBatchController controller;
+		
+		public ScannerTimerTask(AddItemBatchController c) {
+			controller = c;
+		}
+		
+		@Override
+		public void run() {
+			String barcode = controller.getView().getBarcode();
+			if (StringOps.isNullOrEmpty(barcode)) {
+				controller.addItem();
+			}
+		}
+		
 	}
 
 	/**
