@@ -68,7 +68,7 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 			size += temp.size();
 		}
 		String[][] table = new String[size+1][];
-		table[0] = new String[] {"Description", "StorageUnit", "ProductGroup", "Entry Date", "Expire Date"};
+		table[0] = new String[] {"Description", "Storage Unit", "Product Group", "Entry Date", "Expire Date"};
 		int i=1;
 		for(TreeSet<Item> temp : items) {
 			for(Item item : temp) {
