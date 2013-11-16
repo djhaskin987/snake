@@ -2,6 +2,7 @@ package gui.reports.expired;
 
 
 import model.Format;
+import model.Model;
 import model.reports.ReportsManager;
 import gui.common.*;
 
@@ -94,7 +95,7 @@ public class ExpiredReportController extends Controller implements
 			System.err.println("Error: You missed a format in ExpiredReportController.display()");
 			return;
 		}
-		ReportsManager.getInstance().displayExpiredItemsReport(f);
+		Model.getInstance().getReportsManager().displayExpiredItemsReport(f);
 	}
 
 }

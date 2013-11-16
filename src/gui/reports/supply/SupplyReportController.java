@@ -96,7 +96,7 @@ import gui.common.*;
 	public void display() {
 		String monthsStr = getView().getMonths();
 		int months = Integer.parseInt(monthsStr);
-		ReportVisitor rv = ReportsManager.getInstance().createNMonthSupplyReport(
+		ReportVisitor rv = getModel().getReportsManager().createNMonthSupplyReport(
 				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
 				months);
 		rv.display();

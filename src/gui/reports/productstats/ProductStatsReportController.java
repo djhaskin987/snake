@@ -1,8 +1,8 @@
 package gui.reports.productstats;
 
 import model.Format;
+import model.Model;
 import model.reports.*;
-
 import gui.common.*;
 
 /**
@@ -92,7 +92,8 @@ public class ProductStatsReportController extends Controller implements
 	public void display() {
 		String monthsStr = getView().getMonths();
 		int months = Integer.parseInt(monthsStr);
-		ReportVisitor rv = ReportsManager.getInstance().createProductStatisticsReport(
+		ReportVisitor rv = 
+				Model.getInstance().getReportsManager().createProductStatisticsReport(
 				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
 				months);
 		rv.display();

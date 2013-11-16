@@ -8,13 +8,27 @@ import model.reports.ReportsManager;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 /**
  * One true singleton.
  * When you serialize, this is the only singleton you need to worry about.
  *
  */
-public class Model extends ModelObservable implements Observer {
+public class Model extends ModelObservable implements Observer, Serializable, IPersistance {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3370470433844605140L;
+
 	private static Model instance;
 	
 	private StorageUnits storageUnits;
@@ -52,7 +66,7 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits.addObserver(this);
 		productCollection.addObserver(this);
 		itemCollection.addObserver(this);
-		reportsManager = ReportsManager.getInstance();
+		reportsManager = new ReportsManager();
 	}
 	
 	/**
@@ -452,16 +466,46 @@ public class Model extends ModelObservable implements Observer {
 	public int getPosition(IItem item) {
 		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
-	
+
+	@Override
 	public void store() {
-		storageUnits.store();
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			Files.deleteIfExists(p);
+			FileOutputStream fileOut = new FileOutputStream("inventory-tracker.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(this);
+			out.close();
+			fileOut.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	@Override
 	public void load() {
-		storageUnits.load();
+		try {
+			Path p = Paths.get("inventory-tracker.ser");
+			if (Files.exists(p)) {
+					FileInputStream fileIn = new FileInputStream(p.toFile());
+					ObjectInputStream in = new ObjectInputStream(fileIn);
+					
+					Model m = (Model) in.readObject();
+					itemCollection = m.itemCollection;
+					productCollection = m.productCollection;
+					storageUnits = m.storageUnits;
+					itemFactory = m.itemFactory;
+					productContainerFactory = m.productContainerFactory;
+					reportsManager = m.reportsManager;
+					storageUnits = m.storageUnits;
+					in.close();
+					fileIn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();	
+		}
 		System.out.println("model loaded");
 	}
-
 
 	public boolean canGetProductStatisticsReport(String months) {
 		return reportsManager.canGetProductStatisticsReport(months);
@@ -472,4 +516,14 @@ public class Model extends ModelObservable implements Observer {
 		return reportsManager.canGetNMonthSupplyReport(months);
 	}
 
+
+	@Override
+	public void update() {
+		store();
+	}
+
+
+	public ReportsManager getReportsManager() {
+		return reportsManager;
+	}
 }

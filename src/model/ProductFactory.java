@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,8 +9,12 @@ import java.util.List;
  * @author Kevin
  *
  */
-public class ProductFactory {
+public class ProductFactory implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1629956836028301774L;
 	private static ProductFactory instance = null;
 	
 	

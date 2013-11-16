@@ -104,7 +104,7 @@ public class RemovedReportController extends Controller implements
 			sinceDate = Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport();
 		}
 		Model.getInstance().getStorageUnits().setDateSinceLastRemovedItemsReport(new Date());
-		ReportsManager.getInstance().displayRemovedItemsReport(f, sinceDate);
+		getModel().getReportsManager().displayRemovedItemsReport(f, sinceDate);
 	}
 
 }

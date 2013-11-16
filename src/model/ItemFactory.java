@@ -1,13 +1,19 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Factory Design Pattern that will allow program to not be dependent on Item
  * constructors if Item changes
  * @author Kevin
  *
  */
-public class ItemFactory {
+public class ItemFactory implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9029684793970365098L;
 	private static ItemFactory instance = null;
 	
 	ItemFactory() {  	

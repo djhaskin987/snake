@@ -1,5 +1,6 @@
 package model.reports;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import common.StringOps;
@@ -14,25 +15,24 @@ import model.StorageUnits;
  *
  */
 
-public class ReportsManager {
-	private static ReportsManager instance;
+public class ReportsManager implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 262325059963893896L;
 	/**
      * Singleton creation for ReportsManager
      * @return instance of ReportsManager
      */
 	public static ReportsManager getInstance()
 	{
-		if (instance == null)
-		{
-			instance = new ReportsManager();
-		}
-		return instance;
+		return Model.getInstance().getReportsManager();
 	}
 	
 	/**
 	 * private constructor for ReportsManager
 	 */
-	private ReportsManager() {
+	public ReportsManager() {
 		
 	}
 	

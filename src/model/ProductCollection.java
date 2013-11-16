@@ -13,7 +13,7 @@ import java.util.TreeMap;
  * @invariant all the Products are added both to StorageUnits and this class.
  *
  */
-public class ProductCollection extends Observable implements Serializable{
+public class ProductCollection extends Observable implements Serializable {
 
     private static final long serialVersionUID = 414358389788920747L;
 
