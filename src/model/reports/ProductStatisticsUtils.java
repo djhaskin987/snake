@@ -27,7 +27,7 @@ public class ProductStatisticsUtils {
 		String threeMonthSupply = getThreeMonthSupply(p);
 		String supplyCurAvg = getCurAvgSupply(allItems, currentItems, months);
 		String supplyMinMax = getSupplyMinMax(allItems, months);
-		String supplyUsedAdded = getSupplyUsedAdded(allItems, months);
+		String supplyUsedAdded = getSupplyUsedAdded(allItems, exitItems, months);
 		String shelfLife = getShelfLife(p);
 		String usedAgeAvgMax = getUsedAgeAvgMax(allItems, months);
 		String curAgeAvgMax = getCurAgeAvgMax(allItems, months);
@@ -61,7 +61,7 @@ public class ProductStatisticsUtils {
 	public static String getCurAvgSupply(List<Item> allItems, List<Item> currentItems, int months) {
 		int cur = getCurrentSupply(currentItems);
 		double avg = getAverageSupply(allItems, months);
-		return String.format("%s days / %.2f days", cur, avg);
+		return String.format("%s / %.2f", cur, avg);
 	}
 	
 	public static int getCurrentSupply(List<Item> currentItems) {
@@ -76,6 +76,42 @@ public class ProductStatisticsUtils {
 		}
 		int daysFromNow = getDaysFromNow(months);
 		return (double) lifespans / (double)daysFromNow;
+	}
+	
+	private static int[] getSupplyDays(List<Item> allItems, int months) {
+		Calendar cal = getCal(months);
+		Calendar now = Calendar.getInstance();
+		now.setTime(new Date());
+		int days = getDaysFromNow(months);
+		int[] supplyDays = new int[days];
+		while (DateUtils.truncatedEquals(now, cal, Calendar.DATE) == false) {
+			days--;
+			supplyDays[days] = 0;
+			for (Item item : allItems) {
+				ValidDate mEntryDate = item.getEntryDate();
+				Calendar entryDate = toCal(mEntryDate);
+				Calendar exitDate = toCal(item.getExitTime());
+				if (cal.compareTo(entryDate) >= 0 && (exitDate == null || cal.compareTo(exitDate) <= 0)) {
+					supplyDays[days] += 1;
+				}
+			}
+			cal.add(Calendar.DATE, 1);
+		}
+		return supplyDays;
+	}
+	
+	private static Calendar toCal(ValidDate mDate) {
+		Date date = mDate.toJavaUtilDate();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal;
+	}
+	
+	private static Calendar toCal(DateTime mDateTime) {
+		if (mDateTime != null)
+			return mDateTime.getCalendar();
+		else
+			return null;
 	}
 	
 	private static long getLifeSpan(Item item, int months) {
@@ -129,25 +165,50 @@ public class ProductStatisticsUtils {
 	}
 	
 	private static int getSupplyMin(List<Item> items, int months) {
-		return -1;
+		int[] supplyDays = getSupplyDays(items, months);
+		int min = Integer.MAX_VALUE;
+		for (int i = 0; i < supplyDays.length; i++) {
+			if (min > supplyDays[i])
+				min = supplyDays[i];
+		}
+		return min;
 	}
 	
 	private static int getSupplyMax(List<Item> items, int months) {
-		return -1;
+		int[] supplyDays = getSupplyDays(items, months);
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < supplyDays.length; i++) {
+			if (max < supplyDays[i])
+				max = supplyDays[i];
+		}
+		return max;
 	}
 	
-	public static String getSupplyUsedAdded(List<Item> items, int months) {
-		int used = getSupplyUsed(items, months);
-		int added = getSupplyAdded(items, months);
+	public static String getSupplyUsedAdded(List<Item> allItems, List<Item> exitItems, int months) {
+		int used = getSupplyUsed(exitItems, months);
+		int added = getSupplyAdded(allItems, months);
 		return String.format("%s / %s", used, added);
 	}
 	
-	private static int getSupplyUsed(List<Item> items, int months) {
-		return -1;
+	private static int getSupplyUsed(List<Item> exitItems, int months) {
+		if (exitItems != null)
+			return exitItems.size();
+		else
+			return 0;
 	}
 	
-	private static int getSupplyAdded(List<Item> items, int months) {
-		return -1;
+	private static int getSupplyAdded(List<Item> allItems, int months) {
+		Calendar begin = getCal(months);
+		int count = 0;
+		for (Item item : allItems) {
+			ValidDate mEntryDate = item.getEntryDate();
+			Date entryDate = mEntryDate.toJavaUtilDate();
+			Calendar iCal = Calendar.getInstance();
+			iCal.setTime(entryDate);
+			if (iCal.compareTo(begin) >= 0)
+				count += 1;
+		}
+		return count;
 	}
 	
 	public static String getShelfLife(Product p) {
