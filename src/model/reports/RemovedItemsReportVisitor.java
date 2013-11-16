@@ -49,4 +49,10 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 		
 	}
 
+	@Override
+	public String[][] compileTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

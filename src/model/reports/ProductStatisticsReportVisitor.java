@@ -68,8 +68,9 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 		builder.buildTable(table);
 		builder.display();
 	}
-	
-	private String[][] compileTable() {
+
+	@Override
+	public String[][] compileTable() {
 		int size = productItems.size() + 1;
 		String[][] table = new String[size][];
 		table[0] = ProductStatisticsUtils.getRowHeader();
