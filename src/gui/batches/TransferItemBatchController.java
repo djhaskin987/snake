@@ -1,7 +1,6 @@
 package gui.batches;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import model.*;
 import gui.common.*;
@@ -14,7 +13,9 @@ import gui.product.*;
  */
 public class TransferItemBatchController extends Controller implements
 		ITransferItemBatchController {
-		private IProductContainer target;
+		private StorageUnit target;
+		private Commands commands;
+		private ProductItemsData productItems;
 	
 	/**
 	 * Constructor.
@@ -24,7 +25,9 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	public TransferItemBatchController(IView view, ProductContainerData target) {
 		super(view);
-		this.target = (IProductContainer) target.getTag();
+		this.target = (StorageUnit) target.getTag();
+		commands = new Commands();
+		productItems = new ProductItemsData();
 		construct();
 	}
 	
@@ -45,18 +48,6 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-		Model m = Model.getInstance();
-		ProductCollection pc = m.getProductCollection();
-		Collection<IProduct> products = pc.getProducts();
-		ProductData[] productDatas = new ProductData[products.size()];
-		int i = 0;
-		for (IProduct product : products) {
-			ProductData pData = (ProductData) product.getTag();
-			productDatas[i] = pData;
-			++i;
-		}
-		ITransferItemBatchView v = getView();
-		v.setProducts(productDatas);
 		enableComponents();
 	}
 
@@ -76,9 +67,8 @@ public class TransferItemBatchController extends Controller implements
 		String barcodeStr = v.getBarcode();
 		boolean enableTransfer = Barcode.isValidBarcode(barcodeStr);
 		v.enableItemAction(enableTransfer);
-		// not implemented
-		v.enableRedo(false);
-		v.enableUndo(false);
+		v.enableRedo(commands.canRedo());
+		v.enableUndo(commands.canUndo());
 	}
 
 	/**
@@ -127,20 +117,9 @@ public class TransferItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 		ITransferItemBatchView v = getView();
 		ProductData pData = v.getSelectedProduct();
-		IProduct product = (IProduct) pData.getTag();
-		Collection<IItem> items = product.getAllItems();
-		ItemData[] itemDatas = new ItemData[items.size()];
-		int i = 0;
-		for (IItem item : items) {
-			ItemData iData = (ItemData) item.getTag();
-			itemDatas[i] = iData;
-			++i;
-		}
+		ItemData[] itemDatas = productItems.getItemArray(pData);
 		v.setItems(itemDatas);
-		if (i > 0)
-			v.selectItem(itemDatas[i - 1]);
 		enableComponents();
-
 	}
 	
 	/**
@@ -156,14 +135,14 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void transferItem() {
-		ITransferItemBatchView v = getView();
-		Model m = Model.getInstance();
-		String barcode = v.getBarcode();
-		IItem item = m.getItem(barcode);
-		m.transferItem(item, target);
-		ProductData pData = v.getSelectedProduct();
-		loadValues();	
-		v.selectProduct(pData);
+		IItem item = Model.getInstance().getItem(getView().getBarcode());
+		if(item == null) {
+			getView().displayErrorMessage("Error: Barcode \"" + getView().getBarcode() + "\" is unrecognized");
+			return;
+		}
+		commands.execute(new TransferItemCommand(target, (ItemData) item.getTag(), productItems, this, getView()));
+		getView().setBarcode("");
+		getView().giveBarcodeFocus();
 	}
 	
 	/**
@@ -172,6 +151,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo() {
+		commands.redo();
 	}
 
 	/**
@@ -180,6 +160,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo() {
+		commands.undo();
 	}
 
 	/**
@@ -189,6 +170,24 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
+	}
+
+	public void refreshProducts() {
+		ProductData selected = getView().getSelectedProduct();
+		productItems.refreshCount();
+		getView().setProducts(productItems.getProductArray());
+		if(productItems.contains(selected)) {
+			getView().selectProduct(selected);
+		}
+	}
+
+	public void refreshItems() {
+		ItemData selected = getView().getSelectedItem();
+		getView().setItems(productItems.getItemArray(getView().getSelectedProduct()));
+		List<ItemData> items = productItems.getItemList(getView().getSelectedProduct());
+		if(items != null && items.contains(selected)) {
+			getView().selectItem(selected);
+		}
 	}
 
 }

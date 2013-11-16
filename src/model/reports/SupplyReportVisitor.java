@@ -14,8 +14,16 @@ import model.StorageUnits;
  *
  */
 public class SupplyReportVisitor implements ReportVisitor {
+	private ReportBuilder rb;
+	private int months;
 
 	public SupplyReportVisitor() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public SupplyReportVisitor(ReportBuilder rb, int months) {
+		this.rb = rb;
+		this.months = months;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -53,6 +61,12 @@ public class SupplyReportVisitor implements ReportVisitor {
 	public void display() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public String [][] compileTable()
+	{
+		return null;
 	}
 
 

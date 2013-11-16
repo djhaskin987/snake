@@ -1,10 +1,9 @@
 package model;
 
-import gui.item.ItemData;
-
-import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
+
+import model.reports.ReportsManager;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -24,6 +23,7 @@ public class Model extends ModelObservable implements Observer {
 	private ItemFactory itemFactory;
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
+	private ReportsManager reportsManager;
 	
 	
     /**
@@ -52,6 +52,7 @@ public class Model extends ModelObservable implements Observer {
 		storageUnits.addObserver(this);
 		productCollection.addObserver(this);
 		itemCollection.addObserver(this);
+		reportsManager = ReportsManager.getInstance();
 	}
 	
 	/**
@@ -181,12 +182,8 @@ public class Model extends ModelObservable implements Observer {
 	
 	public IItem createItem(IProduct product, java.util.Date date) throws InvalidHITDateException {
 		ValidDate entryDate = new ValidDate(date);
-		Date expireDate = null;
-		if(product.getShelfLife() != 0) {
-			expireDate = entryDate.plusMonths(product.getShelfLife());
-		}
 		Barcode barcode = new Barcode();
-		return itemFactory.createInstance(product, barcode, null);
+		return itemFactory.createInstance(product, barcode, entryDate, null);
 	}
 
 	public void addItem(IItem item, IProductContainer productContainer) {
@@ -243,6 +240,12 @@ public class Model extends ModelObservable implements Observer {
 		// TODO Add unit tests and javadocs
 		IProductContainer current = item.getProductContainer();
 		current.transferItem(item, (ProductContainer)target);
+		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
+	}
+
+	public void transferItem(IItem item, StorageUnit target, int position) {
+		IProductContainer current = item.getProductContainer();
+		current.transferItem(item, (ProductContainer)target, position);
 		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
 	}
 
@@ -418,16 +421,12 @@ public class Model extends ModelObservable implements Observer {
 	}
 
 	public void moveItemToContainer(IItem item, IProductContainer target) {
-		if (!moveProduct(item.getProduct(), target))
-		{
-			item.move(target);
-			notifyObservers(ModelActions.MOVE_ITEM, item);
-		}
+		addProductToContainer(item.getProduct(), target);
+		item.move(target);
+		notifyObservers(ModelActions.MOVE_ITEM, item);
 	}
 
-	//Returns true if the product is already in the target storage unit.
-	private boolean moveProduct(IProduct product, IProductContainer target)
-	{
+	public void addProductToContainer(IProduct product, IProductContainer target) {
 		IProductContainer targetUnit = target.getUnitPC();
 		IProductContainer ExistingPC = targetUnit.whoHasProduct(product);
 		if (ExistingPC != null)
@@ -437,32 +436,40 @@ public class Model extends ModelObservable implements Observer {
 			args.add(product);
 			args.add(target);
 			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);
-			return true;
 		}
 		else
 		{
-			return false;
+			target.addProduct(product);
+			notifyObservers(ModelActions.INSERT_PRODUCT,  (IModelTagable) product);
 		}
 	}
-	public void addProductToContainer(IProduct product, IProductContainer target) {
-		if (!moveProduct(product, target))
-		{
-			target.addProduct(product);
-		}
+
+	/**
+	 * @param item
+	 * @return	The position of item in the product container.
+	 * This is necessary to ensure that when undoing a command to remove or transfer an item, it is transferred to the appropriate place.
+	 */
+	public int getPosition(IItem item) {
+		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
 	}
 	
 	public void store() {
 		storageUnits.store();
 	}
-
-
-	public int getPosition(IItem item) {
-		return item.getProductContainer().getItems(item.getProduct()).indexOf(item);
-	}
 	
 	public void load() {
 		storageUnits.load();
 		System.out.println("model loaded");
+	}
+
+
+	public boolean canGetProductStatisticsReport(String months) {
+		return reportsManager.canGetProductStatisticsReport(months);
+	}
+
+
+	public boolean canGetNMonthSupplyReport(String months) {
+		return reportsManager.canGetNMonthSupplyReport(months);
 	}
 
 }

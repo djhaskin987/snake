@@ -1,12 +1,8 @@
 package gui.batches;
 
-import java.util.List;
-
 import model.IItem;
-import model.IProduct;
 import model.IProductContainer;
 import model.Model;
-import gui.common.ICommand;
 import gui.item.ItemData;
 import gui.product.ProductData;
 
@@ -18,6 +14,13 @@ public class RemoveItemCommand implements ICommand {
 	RemoveItemBatchController controller;
 	int position;
 
+	/**
+	 * @param modelItem		IItem to be removed
+	 * @param productItems	ProductItemsData that keeps track of which items have been removed
+	 * @param controller	RemoveItemBatchController that constructed this command
+	 * 
+	 * Constructs a command to remove modelItem
+	 */
 	public RemoveItemCommand(IItem modelItem, ProductItemsData productItems, RemoveItemBatchController controller) {
 		item = (ItemData) modelItem.getTag();
 		product = (ProductData) modelItem.getProduct().getTag();

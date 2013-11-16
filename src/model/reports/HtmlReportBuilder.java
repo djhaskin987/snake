@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
@@ -65,8 +64,10 @@ public class HtmlReportBuilder implements ReportBuilder {
 
 	@Override
 	public void buildSubHeading(String subHeading) {
-		// TODO Auto-generated method stub
-
+		htmlBuilder.append("<h2>");
+		String escapedHeading = StringEscapeUtils.escapeHtml4(subHeading);
+		htmlBuilder.append(escapedHeading);
+		htmlBuilder.append("</h2>\n");
 	}
 
 	@Override
@@ -88,5 +89,13 @@ public class HtmlReportBuilder implements ReportBuilder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void buildParagraph(String heading) {
+		htmlBuilder.append("<p>");
+		String escapedHeading = StringEscapeUtils.escapeHtml4(heading);
+		htmlBuilder.append(escapedHeading);
+		htmlBuilder.append("</p>\n");
 	}
 }

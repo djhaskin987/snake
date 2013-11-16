@@ -3,7 +3,6 @@ package model;
 import java.io.Serializable;
 
 import model.reports.ReportVisitor;
-
 import gui.common.ITagable;
 import gui.common.Tagable;
 
@@ -62,7 +61,7 @@ public class Item implements IItem, ITagable, Serializable {
 	 *			It is also automatically given the current date as an entry date,
 	 *			and null as the exit time.}
 	 */
-	public Item(Product product, Barcode barcode, ValidDate entryDate,
+	public Item(IProduct product, Barcode barcode, ValidDate entryDate,
 			IProductContainer container) {
 		this.product = product;
 		this.barcode = barcode;
@@ -136,6 +135,17 @@ public class Item implements IItem, ITagable, Serializable {
 		}
 	}
 	@Override
+	public StorageUnit getStorageUnit() {
+		IProductContainer current = container;
+		while(!(current instanceof StorageUnit)) {
+			if(current == null) {
+				return null;
+			}
+			current = current.getParent();
+		}
+		return (StorageUnit) current;
+	}
+	@Override
 	public void move(IProductContainer target) {
 		getProductContainer().removeItem(getBarcode());
 		target.add(this);
@@ -166,6 +176,22 @@ public class Item implements IItem, ITagable, Serializable {
 	@Override
 	public void accept(ReportVisitor v) {
 		v.visit(this);
+	}
+	@Override
+	public String getEntryDateString() {
+		if(entryDate == null) {
+			return "";
+		} else {
+			return entryDate.toString();
+		}
+	}
+	@Override
+	public String getExpireDateString() {
+		if(expireDate == null) {
+			return "";
+		} else {
+			return expireDate.toString();
+		}
 	}
 	
 	

@@ -281,7 +281,8 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 		builder.display();
 	}
 	
-	private String[][] compileTable() {
+	@Override
+	public String[][] compileTable() {
 		int size = allProductItems.size() + 1;
 		String[][] table = new String[size][];
 		table[0] = ProductStatisticsUtils.getRowHeader();
@@ -294,6 +295,7 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 			List<Item> currentItems = currentProductItems.get(p);
 			List<Item> exitItems = exitProductItems.get(p);
 			table[i] = ProductStatisticsUtils.getRow(p, allItems, currentItems, exitItems, months);
+			++i;
 		}
 		return table;
 	}

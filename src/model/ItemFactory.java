@@ -70,7 +70,7 @@ public class ItemFactory {
 	 * 
 	 * {@post an Item instance}
 	 */
-	public IItem createInstance(Product product, Barcode barcode,
+	public IItem createInstance(IProduct product, Barcode barcode,
             ValidDate entryDate, IProductContainer container) {
 		return new Item(product, barcode, entryDate, container);
 	}

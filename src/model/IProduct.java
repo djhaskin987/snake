@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import model.reports.IReportNode;
-import gui.reports.*;
 
 /**
  * Interface of Product to increase modularity of the Product Object

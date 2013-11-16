@@ -247,11 +247,37 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 */
 	@Override
 	public void transferItem(IItem item, ProductContainer newProductContainer) {
-		if (getUnitPC() == newProductContainer.getUnitPC())
+		/*if (getUnitPC() == newProductContainer.getUnitPC())
 			throw new IllegalArgumentException(
-					"Item cannot be transferred within the same storage unit.");
+					"Item cannot be transferred within the same storage unit.");*/
+		//Yes they can.
 		productItems.removeItem(item);
 		newProductContainer.add(item);
+	}
+
+
+	/**
+	 * Transfers an item to another product container.
+	 *
+	 * @param item the item to transfer
+	 *
+	 * @param newProductContainer the ProductContainer to transfer the item to
+	 *
+	 * @param position the position to transfer the item to
+	 *
+	 * {@pre item != null && newProductContainer != null && productItems.contains(items)
+	 * 		&& newProductContainer.getItems(item.getProduct()).size() > 0}
+	 *
+	 * {@post item is transferred into the specified position}
+	 */
+	@Override
+	public void transferItem(IItem item, ProductContainer newProductContainer, int position) {
+		/*if (getUnitPC() == newProductContainer.getUnitPC())
+			throw new IllegalArgumentException(
+					"Item cannot be transferred within the same storage unit.");*/
+		//Yes they can.
+		productItems.removeItem(item);
+		newProductContainer.insertItem(item, item.getProduct(), position);
 	}
 
 	/**
@@ -483,6 +509,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		Collection<IItem> pi = productItems.getItems(product);
 		productItems.removeProduct(product);
+		target.addProduct(product);
 		for (IItem i : pi)
 		{
 			target.addItem(i);
@@ -495,6 +522,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	}
 	
 	public void insertItem(IItem item, IProduct product, int position) {
+		item.setProductContainer(this);
 		productItems.insertItem(item, product, position);
 	}
 
