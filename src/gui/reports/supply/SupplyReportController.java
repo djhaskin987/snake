@@ -11,6 +11,8 @@ import gui.common.*;
 	public class SupplyReportController extends Controller implements
 		ISupplyReportController {
 /*---	STUDENT-INCLUDE-BEGIN
+ */
+		private FileFormat f;
 
 	/**
 	 * Constructor.
@@ -67,6 +69,7 @@ import gui.common.*;
 	@Override
 	protected void loadValues() {
 		getView().setMonths("3");
+		getView().setFormat(FileFormat.HTML);
 		enableComponents();
 	}
 
@@ -80,6 +83,7 @@ import gui.common.*;
 	 */
 	@Override
 	public void valuesChanged() {
+		f = getView().getFormat();
 		enableComponents();
 	}
 	
@@ -91,7 +95,9 @@ import gui.common.*;
 	public void display() {
 		String monthsStr = getView().getMonths();
 		int months = Integer.parseInt(monthsStr);
-		ReportVisitor rv = ReportsManager.getInstance().createNMonthSupplyReport(Format.HTML, months);
+		ReportVisitor rv = ReportsManager.getInstance().createNMonthSupplyReport(
+				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
+				months);
 		rv.display();
 	}
 

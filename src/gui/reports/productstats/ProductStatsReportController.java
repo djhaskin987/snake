@@ -10,7 +10,7 @@ import gui.common.*;
  */
 public class ProductStatsReportController extends Controller implements
 		IProductStatsReportController {
-
+	FileFormat f;
 	/**
 	 * Constructor.
 	 * 
@@ -65,6 +65,7 @@ public class ProductStatsReportController extends Controller implements
 	@Override
 	protected void loadValues() {
 		getView().setMonths("3");
+		getView().setFormat(FileFormat.HTML);
 		enableComponents();
 	}
 
@@ -78,6 +79,7 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		f = getView().getFormat();
 		enableComponents();
 	}
 	
@@ -89,7 +91,9 @@ public class ProductStatsReportController extends Controller implements
 	public void display() {
 		String monthsStr = getView().getMonths();
 		int months = Integer.parseInt(monthsStr);
-		ReportVisitor rv = ReportsManager.getInstance().createProductStatisticsReport(Format.HTML, months);
+		ReportVisitor rv = ReportsManager.getInstance().createProductStatisticsReport(
+				(f.equals(FileFormat.HTML) ? Format.HTML : Format.PDF),
+				months);
 		rv.display();
 	}
 
