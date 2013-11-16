@@ -130,7 +130,7 @@ public class QuantityTest {
 			fail("No exceptions should be thrown.");
 		}
 		try {
-			assertEquals(Unit.FLOZ.convert(1.0,  Unit.GAL),0.0078125, 0.0001);
+			assertEquals(Unit.GAL.convert(1.0,  Unit.FLOZ),0.0078125, 0.0001);
 		}
 		catch (Exception e)
 		{

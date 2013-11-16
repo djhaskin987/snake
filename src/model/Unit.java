@@ -44,7 +44,7 @@ public enum Unit {
 		if(!canConvert(unit)) {
 			throw new Exception("Error: " + statusCode + " cannot be converted to " + unit.getStatusCode());
 		}
-		return amount*conversionConstant/unit.getConversionConstant();
+		return amount*unit.getConversionConstant()/conversionConstant;
 	}
 	
 	/**
