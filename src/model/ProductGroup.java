@@ -123,8 +123,8 @@ public class ProductGroup extends ProductContainer implements Serializable {
 
 	@Override
 	public void accept(ReportVisitor v) {
-		// TODO Auto-generated method stub
-		
+		v.visit(this);
+		super.accept_traverse(v);
 	}
 
 }

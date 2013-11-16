@@ -228,6 +228,6 @@ public class Product implements IProduct, ITagable, Serializable {
 	
 	@Override
 	public void accept(ReportVisitor v) {
-		v.visit(this);	
+		v.visit(this);
 	}
 }

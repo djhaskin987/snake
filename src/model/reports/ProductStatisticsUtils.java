@@ -225,9 +225,9 @@ public class ProductStatisticsUtils {
 	}
 	
 	public static String getUsedAgeAvgMax(List<Item> items, int months) {
-		double avg = getAgeAverage(items);
+		long min = getAgeMin(items);
 		long max = getAgeMax(items);
-		return String.format("%.2f days / %s days", avg, max);
+		return String.format("%s days / %s days", min, max);
 	}
 	
 	private static long[] getLifeSpans(List<Item> items) {
@@ -240,14 +240,14 @@ public class ProductStatisticsUtils {
 		return lifeSpans;
 	}
 	
-	private static double getAgeAverage(List<Item> items) {
+	private static long getAgeMin(List<Item> items) {
 		long[] lifeSpans = getLifeSpans(items);
-		double avg = 0;
+		long min = Long.MAX_VALUE;
 		for (long lifeSpan : lifeSpans) {
-			avg += lifeSpan;
+			if (min > lifeSpan)
+				min = lifeSpan;
 		}
-		avg /= lifeSpans.length;
-		return avg;
+		return min;
 	}
 	
 	private static long getAgeMax(List<Item> items) {
@@ -262,9 +262,9 @@ public class ProductStatisticsUtils {
 	}
 	
 	public static String getCurAgeAvgMax(List<Item> currentItems, int months) {
-		double avg = getAgeAverage(currentItems);
+		long min = getAgeMin(currentItems);
 		long max = getAgeMax(currentItems);
-		return String.format("%.3f days / %s days", avg, max);
+		return String.format("%s days / %s days", min, max);
 	}
 	
 	
