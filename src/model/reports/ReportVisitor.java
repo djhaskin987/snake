@@ -1,10 +1,6 @@
 package model.reports;
 
-import model.Item;
-import model.Product;
-import model.ProductGroup;
-import model.StorageUnit;
-import model.StorageUnits;
+import model.*;
 
 public interface ReportVisitor {	
 	
@@ -17,6 +13,8 @@ public interface ReportVisitor {
 	public void visit(Item item);
 	
 	public void visit(Product product);
+	
+	public void visit(RemovedItems removedItems);
 	
 	public void display();
 }

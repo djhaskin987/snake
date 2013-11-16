@@ -16,6 +16,7 @@ public class RemovedItems extends StorageUnit {
 
 	@Override
 	public void accept(ReportVisitor v) {
+		v.visit(this);
 		super.accept_traverse(v);
 	}
 }

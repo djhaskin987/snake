@@ -145,6 +145,13 @@ public class ProductItems extends Observable implements Serializable {
 		//TODO: It says this is an optional operation. I need to make sure it actually exists.
 		map.remove(product);
 		product.removeProductContainer(productContainer);
+		printProducts();
+	}
+	
+	private void printProducts() {
+		for (IProduct product : map.keySet()) {
+			System.out.println(product.toString());
+		}
 	}
 
 	public List<IItem> getItems(IProduct product) {

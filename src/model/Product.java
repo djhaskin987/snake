@@ -230,4 +230,18 @@ public class Product implements IProduct, ITagable, Serializable {
 	public void accept(ReportVisitor v) {
 		v.visit(this);
 	}
+	
+	@Override
+	public String toString() {
+		String barcode = this.barcode.getValue();
+		String description = this.description.getValue();
+		String itemSize = this.itemSize.getValueString();
+		String shelfLife = this.shelfLife.toString();
+		String threeMonthSupply = this.threeMonthSupply.toString();
+		String container = this.containers.toString();
+		String tagable = this.tagable.toString();
+		String str = String.format("<model.Product barcode='%s' description='%s' itemSize='%s' shelfLife=%s threeMonthSupply=%s containers=%s tagable=%s>",
+				barcode, description, itemSize, shelfLife, threeMonthSupply, containers, tagable);
+		return str;
+	}
 }
