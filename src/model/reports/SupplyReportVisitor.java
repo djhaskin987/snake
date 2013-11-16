@@ -43,6 +43,7 @@ public class SupplyReportVisitor implements ReportVisitor {
 	}
 
 	public SupplyReportVisitor(ReportBuilder rb, int months) {
+		init();
 		this.rb = rb;
 		this.months = months;
 	}
@@ -84,61 +85,79 @@ public class SupplyReportVisitor implements ReportVisitor {
 
 	@Override
 	public void display() {
-		// TODO Auto-generated method stub
+		rb.buildHeading("" + months + "-Month Supply Report");
+		rb.buildSubHeading("Products");
+		rb.buildTable(productTable());
+		rb.buildSubHeading("Product Groups");
+		rb.buildTable(productGroupTable());
+		rb.display();
 		
+	}
+	
+	private String[][] productGroupTable() {
+		String [][] returned = new String[1][4];
+		returned[0][0] = "A";
+		returned[0][1] = "B";
+		returned[0][2] = "C";
+		returned[0][3] = "D";
+		return returned;
+	}
+
+	private String [][] productTable()
+	{
+		List<String []> rows = new LinkedList<String []>();
+		String [] heading =
+				{"Description","Barcode","" + months + "-Month Supply", 
+			"Current Supply"};
+		// don't add heading yet, we need to sort
+		
+		for (Product p : products.keySet())
+		{
+			int nMonthSupply = (p.getThreeMonthSupply() * months) / 3;
+			int numItems = products.get(p).size();
+			if (numItems < nMonthSupply)
+			{
+				double isize = p.getItemSize().getValue();
+				String supplyString = "" + (isize * nMonthSupply) + " " +
+						p.getItemSize().getUnit().toString();
+				String currentSupplyString = "" + (isize * numItems) + " " +
+						p.getItemSize().getUnit().toString();
+				String [] row = new String[4];
+				row[0] = p.getDescription().toString();
+				row[1] = p.getBarcode().toString();
+				row[2] = supplyString;
+				row[3] = currentSupplyString;
+				rows.add(row);
+			}
+		}
+			
+		java.util.Collections.sort(rows, new Comparator<String []>() {
+			public int compare(String[] a, String [] b)
+			{
+				return a[0].compareTo(b[0]);
+			}
+		});
+		// OK, NOW add the heading
+		rows.add(0, heading);
+		
+		String [][] returned = new String[rows.size()][4];
+		int i = 0;
+		for (String [] row : rows)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				returned[i][j] = row[j];
+			}
+			i++;
+		}
+		productTableCompiled = true;
+		return returned;
 	}
 	
 	private String [][] compileTable()
 	{
 		if (productTableCompiled)
 		{
-			List<String []> rows = new LinkedList<String []>();
-			String [] heading =
-					{"Description","Barcode","" + months + "-Month Supply", 
-				"Current Supply"};
-			// don't add heading yet, we need to sort
-			
-			for (Product p : products.keySet())
-			{
-				int nMonthSupply = (p.getThreeMonthSupply() * months) / 3;
-				int numItems = products.get(p).size();
-				if (numItems < nMonthSupply)
-				{
-					double isize = p.getItemSize().getValue();
-					String supplyString = "" + (isize * nMonthSupply) + " " +
-							p.getItemSize().getUnit().toString();
-					String currentSupplyString = "" + (isize * numItems) + " " +
-							p.getItemSize().getUnit().toString();
-					String [] row = new String[4];
-					row[0] = p.getDescription().toString();
-					row[1] = p.getBarcode().toString();
-					row[2] = supplyString;
-					row[3] = currentSupplyString;
-					rows.add(row);
-				}
-			}
-			
-			java.util.Collections.sort(rows, new Comparator<String []>() {
-				public int compare(String[] a, String [] b)
-				{
-					return a[0].compareTo(b[0]);
-				}
-			});
-			// OK, NOW add the heading
-			rows.add(0, heading);
-			
-			String [][] returned = new String[rows.size()][4];
-			int i = 0;
-			for (String [] row : rows)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					returned[i][j] = row[j];
-				}
-				i++;
-			}
-			productTableCompiled = true;
-			return returned;
 		}
 		else
 		{

@@ -303,13 +303,12 @@ public class AddItemBatchController extends Controller implements
 	}
 	
 	private IProduct getProduct() {
-		Model m = Model.getInstance();
 		IAddItemBatchView v = getView();
 		String barcode = v.getBarcode();
 		if(barcode.isEmpty()) {
 			return null;
 		}
-		IProduct p = m.getProduct(barcode);
+		IProduct p = getModel().getProduct(barcode);
 		return p;
 	}
 	

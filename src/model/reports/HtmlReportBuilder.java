@@ -24,6 +24,7 @@ public class HtmlReportBuilder implements ReportBuilder {
 		htmlBuilder.append("<table border=\"1\">\n");
 		buildHeader(table);
 		buildBody(table);
+		htmlBuilder.append("</table>");
 	}
 	
 	private void buildHeader(String[][] table) {
