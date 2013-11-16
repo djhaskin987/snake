@@ -117,7 +117,9 @@ public class SupplyReportVisitor implements ReportVisitor {
 		products.addAll(pg.getProducts());
 		for (IProduct p : products) {
 			System.out.println("Getting current supply for " + p.getDescription());
-			Collection<IItem> items = pg.getItemsRecursive(p);
+			Set<IItem> items = new HashSet<IItem>();
+			items.addAll(pg.getItemsRecursive(p));
+			items.addAll(pg.getItems(p));
 			if (pgDimension.equals(Dimension.COUNT))
 			{
 				if (items != null) {
