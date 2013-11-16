@@ -2,7 +2,6 @@ package gui.reports.productstats;
 
 import model.Format;
 import model.reports.*;
-import common.StringOps;
 
 import gui.common.*;
 

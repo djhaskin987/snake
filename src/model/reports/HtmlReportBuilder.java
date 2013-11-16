@@ -21,7 +21,7 @@ public class HtmlReportBuilder implements ReportBuilder {
 
 	@Override
 	public void buildTable(String[][] table) {
-		htmlBuilder.append("<table>\n");
+		htmlBuilder.append("<table border=\"1\">\n");
 		buildHeader(table);
 		buildBody(table);
 	}
