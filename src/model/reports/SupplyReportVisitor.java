@@ -116,11 +116,12 @@ public class SupplyReportVisitor implements ReportVisitor {
 		products.addAll(pg.getProductsRecursive());
 		products.addAll(pg.getProducts());
 		for (IProduct p : products) {
+			System.out.println("Getting current supply for " + p.getDescription());
 			Collection<IItem> items = pg.getItemsRecursive(p);
 			if (pgDimension.equals(Dimension.COUNT))
 			{
 				if (items != null) {
-					currentSupply += items.size();
+					currentSupply += (double)items.size();
 				}
 			}
 			else
@@ -128,6 +129,7 @@ public class SupplyReportVisitor implements ReportVisitor {
 				if (items != null) {
 					for (IItem item : items)
 					{
+						System.out.println("Item: " + item);
 						Unit itemUnit = p.getItemSize().getUnit();
 						Dimension itemDimension = itemUnit.getDimension();
 						if (pgDimension.equals(itemDimension))
