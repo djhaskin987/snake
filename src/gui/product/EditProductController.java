@@ -147,8 +147,14 @@ public class EditProductController extends Controller
 	public boolean isValidInteger(String s) {
 		if (!StringOps.isNullOrEmpty(s)) {
 			if (StringOps.isNumeric(s)) {
-				Integer value = Integer.parseInt(s);
-				return (value >= 0);
+				try {
+					Integer value = Integer.parseInt(s);
+					return (value >= 0);
+				}
+				catch (NumberFormatException e)
+				{
+					return false;
+				}
 			}
 		}
 		return false;

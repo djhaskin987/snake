@@ -663,7 +663,11 @@ public class InventoryController extends Controller
 			if(dExpire != null) {
 				expire = dExpire.toJavaUtilDate();
 			}
-			iData.setExpirationDate(expire);
+			// FIXME
+			if (iData != null)
+			{
+				iData.setExpirationDate(expire);
+			}
 		}
 		
 		ProductData pData = (ProductData) product.getTag();
