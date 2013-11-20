@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import model.reports.ReportVisitor;
 import gui.common.ITagable;
@@ -42,10 +43,10 @@ public class Item implements IItem, ITagable, Serializable {
 	public Item(IProduct product, Barcode barcode, IProductContainer container) {
 		this.product = product;
 		this.barcode = barcode;
-		this.entryDate = new ValidDate();
 		this.exitTime = null;
 		this.container = container;
 		this.tagable = new Tagable();
+		setEntryDate(new ValidDate());
 	}
 	/**
 	 * @param product		The product this item is an instance of
@@ -76,7 +77,8 @@ public class Item implements IItem, ITagable, Serializable {
 	}
 	@Override
 	public void setEntryDate(ValidDate date) {
-		entryDate = date;
+		this.entryDate = date;
+		this.expireDate = entryDate.plusMonths(getProduct().getShelfLife());
 	}
 	@Override
 	public void exit() {
