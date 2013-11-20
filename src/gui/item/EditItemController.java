@@ -59,7 +59,7 @@ public class EditItemController extends Controller
 		eiv.enableBarcode(false);
 		eiv.enableDescription(false);
 		eiv.enableEntryDate(true);
-		if(eiv.getEntryDate() == null || eiv.getEntryDate().after(new Date())) {
+		if(ValidDate.isValid(eiv.getEntryDate())) {
 			eiv.enableOK(false);
 		} else {
 			eiv.enableOK(true);
