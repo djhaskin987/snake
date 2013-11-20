@@ -17,12 +17,13 @@ public class ProductItemsData {
 		productItems = new HashMap<IProduct, List<ItemData>>();
 	}
 	
-	private List<ItemData> getItems(ProductData product) {
+	private List<ItemData> getItems(ProductData productData) {
+		IProduct product = (IProduct) productData.getTag();
 		if(productItems.containsKey(product)) {
-			return productItems.get(product.getTag());
+			return productItems.get(product);
 		} else {
 			List<ItemData> items = new ArrayList<ItemData>();
-			productItems.put((IProduct) product.getTag(), items);
+			productItems.put(product, items);
 			return items;
 		}
 	}
@@ -86,12 +87,8 @@ public class ProductItemsData {
 	}
 
 	private int getCount(IProduct product) {
-		List<ItemData> items = productItems.get(product.getTag());
-		if(items == null) {
-			return 0;
-		} else {
-			return items.size();
-		}
+		List<ItemData> items = productItems.get(product);
+		return items.size();
 	}
 
 	public boolean isEmpty() {

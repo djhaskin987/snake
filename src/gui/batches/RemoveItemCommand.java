@@ -43,6 +43,7 @@ public class RemoveItemCommand implements ICommand {
 			controller.refreshItems();
 		}
 		controller.refreshProducts();
+		controller.enableComponents();
 	}
 
 	@Override
@@ -60,6 +61,7 @@ public class RemoveItemCommand implements ICommand {
 			controller.refreshItems();
 		}
 		controller.refreshProducts();
+		controller.enableComponents();
 	}
 
 }
