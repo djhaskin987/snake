@@ -651,6 +651,7 @@ public class InventoryController extends Controller
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
 		iData.setStorageUnit(item.getStorageUnitName());
+		refreshProducts();
 		refreshItems();
 	}
 
@@ -793,7 +794,7 @@ public class InventoryController extends Controller
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
-		iData.setStorageUnit(item.getStorageUnitName());
+		iData.setStorageUnit(item.getStorageUnitName());	
 		refreshItems();//TODO: Is this necessary?
 	}
 	
@@ -806,6 +807,8 @@ public class InventoryController extends Controller
 			System.out.println("Product group name:\t" + item.getProductGroupName());
 			itemData.setProductGroup(item.getProductGroupName());
 		}
+		refreshProducts();
+		refreshItems();
 	}
 	
 	private void insertStorageUnit(IModelTagable payload) {
