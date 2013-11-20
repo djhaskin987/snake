@@ -170,6 +170,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	public void addProductGroup(IProductContainer p)
 	{
 		storageUnits.addProductGroup((ProductGroup)p);
+		notifyObservers(ModelActions.INSERT_PRODUCT_GROUP, p);
 	}
 	
 	public IProduct createProduct(String barcode, String description,
