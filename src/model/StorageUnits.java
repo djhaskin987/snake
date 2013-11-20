@@ -31,6 +31,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 
 	StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
+		dateSinceLastRemovedItemsReport = null;
 		removedItems = new RemovedItems();
     }
 	
