@@ -79,7 +79,14 @@ public class ProductItemsData {
 	
 	public ProductData[] getProductArray() {
 		Collection<ProductData> products = productItems.keySet();
-		return products.toArray(new ProductData[0]);
+		ProductData[] out = new ProductData[products.size()];
+		int i=0;
+		for(ProductData product : products) {
+			out[i] = new ProductData(product);
+			out[i].setCount(Integer.toString(getCount(product)));
+			++i;
+		}
+		return out;
 	}
 
 	public int getCount(ProductData product) {
@@ -110,12 +117,5 @@ public class ProductItemsData {
 
 	public boolean contains(ProductData product) {
 		return productItems.containsKey(product);
-	}
-
-	public void refreshCount() {
-		for(ProductData product : productItems.keySet()) {
-			int count = productItems.get(product).size();
-			product.setCount(Integer.toString(count));
-		}
 	}
 }

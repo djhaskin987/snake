@@ -176,7 +176,6 @@ public class TransferItemBatchController extends Controller implements
 
 	public void refreshProducts() {
 		ProductData selected = getView().getSelectedProduct();
-		productItems.refreshCount();
 		getView().setProducts(productItems.getProductArray());
 		if(productItems.contains(selected)) {
 			getView().selectProduct(selected);

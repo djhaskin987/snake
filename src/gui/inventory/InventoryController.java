@@ -603,12 +603,9 @@ public class InventoryController extends Controller
 	private void insertItems(IModelTagable payload) {
 		ObservableArgs<IItem> insertedItems = (ObservableArgs<IItem>) payload;
 		ProductData productData = (ProductData) insertedItems.get(0).getProduct().getTag();
+		refreshProducts();
 		if(getView().getSelectedProduct() == productData) {
 			refreshItems();
-		} else {
-			//This might not be necessary, but you clearly already have that product
-			//if it's selected.
-			refreshProducts();
 		}
 	}
 
