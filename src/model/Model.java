@@ -244,6 +244,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		for(IItem item : batch) {
 			unaddItem(item);
 		}
+		productContainer.removeProduct(batch.get(0).getProduct());
 		productCollection.removeProduct(batch.get(0).getProduct());
 		notifyObservers(ModelActions.UNDO_INSERT_NEW_PRODUCT_AND_ITEMS, (IModelTagable) batch);
 	}
