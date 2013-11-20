@@ -52,6 +52,11 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+			Date sinceDate = Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport();
+			getView().enableSinceLast(sinceDate != null);
+			getView().enableOK(true);
+			getView().enableFormat(true);
+			System.out.println("Since date is " + sinceDate);
 	}
 
 	/**
@@ -63,9 +68,18 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-		getView().setSinceLast(true);
-		getView().setSinceLastValue(getModel().getStorageUnits()
-                .getDateSinceLastRemovedItemsReport());
+		Date sinceDate = getModel().getStorageUnits()
+				.getDateSinceLastRemovedItemsReport();
+		if (sinceDate == null)
+		{
+			getView().setSinceLastValue(sinceDate);
+			getView().setSinceLast(false);
+		}
+		else
+		{
+			getView().setSinceLast(true);
+		}
+		enableComponents();
 	}
 
 	//
@@ -78,6 +92,7 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -104,8 +119,8 @@ public class RemovedReportController extends Controller implements
 		} else {
 			sinceDate = Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport();
 		}
-		Model.getInstance().getStorageUnits().setDateSinceLastRemovedItemsReport(new Date());
 		getModel().getReportsManager().displayRemovedItemsReport(f, sinceDate);
+		Model.getInstance().getStorageUnits().setDateSinceLastRemovedItemsReport(new Date());
 	}
 
 }
