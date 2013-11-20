@@ -11,18 +11,18 @@ import java.util.Map;
 import model.IProduct;
 
 public class ProductItemsData {
-	private Map<ProductData, List<ItemData>> productItems;
+	private Map<IProduct, List<ItemData>> productItems;
 	
 	public ProductItemsData() {
-		productItems = new HashMap<ProductData, List<ItemData>>();
+		productItems = new HashMap<IProduct, List<ItemData>>();
 	}
 	
 	private List<ItemData> getItems(ProductData product) {
 		if(productItems.containsKey(product)) {
-			return productItems.get(product);
+			return productItems.get(product.getTag());
 		} else {
 			List<ItemData> items = new ArrayList<ItemData>();
-			productItems.put(product, items);
+			productItems.put((IProduct) product.getTag(), items);
 			return items;
 		}
 	}
@@ -47,16 +47,16 @@ public class ProductItemsData {
 	 * @param items		The items to remove
 	 */
 	public void removeItemDatas(ProductData product, List<ItemData> items) {
-		List<ItemData> allItems = productItems.get(product);
+		List<ItemData> allItems = productItems.get(product.getTag());
 		if(allItems.size() > items.size()) {
-			productItems.put(product, allItems.subList(0, allItems.size()-items.size()));
+			productItems.put((IProduct) product.getTag(), allItems.subList(0, allItems.size()-items.size()));
 		} else {
-			productItems.remove(product);
+			productItems.remove((IProduct) product.getTag());
 		}
 	}
 	
 	public void removeItemData(ProductData product, ItemData item) {
-		List<ItemData> items = productItems.get(product);
+		List<ItemData> items = productItems.get(product.getTag());
 		if(items.size() == 1) {
 			productItems.remove(product);
 		} else {
@@ -65,32 +65,28 @@ public class ProductItemsData {
 	}
 	
 	public List<ItemData> getItemList(ProductData product) {
-		return productItems.get(product);
+		return productItems.get(product.getTag());
 	}
 	
 	public ItemData[] getItemArray(ProductData product) {
-		List<ItemData> items = productItems.get(product);
-		if(items == null) {
-			return new ItemData[0];
-		} else {
-			return items.toArray(new ItemData[0]);
-		}
+		List<ItemData> items = productItems.get(product.getTag());
+		return items.toArray(new ItemData[0]);
 	}
 	
 	public ProductData[] getProductArray() {
-		Collection<ProductData> products = productItems.keySet();
+		Collection<IProduct> products = productItems.keySet();
 		ProductData[] out = new ProductData[products.size()];
 		int i=0;
-		for(ProductData product : products) {
-			out[i] = new ProductData(product);
+		for(IProduct product : products) {
+			out[i] = new ProductData((ProductData) product.getTag());
 			out[i].setCount(Integer.toString(getCount(product)));
 			++i;
 		}
 		return out;
 	}
 
-	public int getCount(ProductData product) {
-		List<ItemData> items = productItems.get(product);
+	private int getCount(IProduct product) {
+		List<ItemData> items = productItems.get(product.getTag());
 		if(items == null) {
 			return 0;
 		} else {
@@ -107,7 +103,7 @@ public class ProductItemsData {
 	}
 
 	public ItemData getLastItem(ProductData product) {
-		List<ItemData> items = productItems.get(product);
+		List<ItemData> items = productItems.get(product.getTag());
 		if(items == null) {
 			return null;
 		} else {
