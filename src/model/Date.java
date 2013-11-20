@@ -42,7 +42,7 @@ public class Date extends AbstractDateTime {
 	 * @return	The month as an int
 	 */
 	public int getMonth() {
-		return calendar.get(Calendar.MONTH);
+		return calendar.get(Calendar.MONTH)+1;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class Date extends AbstractDateTime {
 		default:
 			throw new DateDoesNotExistException();
 		}
-		calendar = new GregorianCalendar(year, month, day);
+		calendar = new GregorianCalendar(year, month-1, day);
 	}
 	
 	public Date(java.util.Date date) {

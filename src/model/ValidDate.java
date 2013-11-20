@@ -18,9 +18,9 @@ public class ValidDate extends Date implements Serializable{
 
 	private void validate() throws InvalidHITDateException {
 		try {
-			if(this.compareTo(new Date(1,1,2000)) == -1) {
+			if(this.compareTo(new Date(1,1,2000)) < 0) {
 				throw new InvalidHITDateException("Error: Date should not be before January" +
-			            "1st, 2000.");
+			            " 1st, 2000.");
 			}
 		} catch (DateDoesNotExistException e) {
 			//This is impossible. Date(1,1,2000) is valid.
@@ -55,6 +55,24 @@ public class ValidDate extends Date implements Serializable{
 	 */
 	public ValidDate() {
 		super();
+	}
+
+	public static boolean isValid(java.util.Date date) {
+		if(date == null) {
+			return false;
+		}
+		try {
+			if(date.after(new Date(1,1,2000).toJavaUtilDate())) {
+				return false;
+			}
+		} catch (DateDoesNotExistException e) {
+			//This is impossible. That date exists.
+			e.printStackTrace();
+		}
+		if(date.before(new java.util.Date())) {
+			return false;
+		}
+		return true;
 	}
 
 }
