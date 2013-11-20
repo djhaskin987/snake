@@ -59,7 +59,7 @@ public class ProductItemsData {
 	public void removeItemData(ProductData product, ItemData item) {
 		List<ItemData> items = productItems.get(product.getTag());
 		if(items.size() == 1) {
-			productItems.remove(product);
+			productItems.remove(product.getTag());
 		} else {
 			items.remove(items.size()-1);
 		}
