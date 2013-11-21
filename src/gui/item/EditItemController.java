@@ -80,7 +80,7 @@ public class EditItemController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
-		getView().setEntryDate(new Date());
+		getView().setEntryDate(target.getEntryDate());
 		getView().setBarcode(target.getBarcode());
 		getView().setDescription(getModelItem().getProduct().getDescription().getValue());
 		enableComponents();
