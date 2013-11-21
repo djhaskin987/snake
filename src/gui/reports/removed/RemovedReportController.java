@@ -73,7 +73,7 @@ public class RemovedReportController extends Controller implements
 		if (sinceDate == null)
 		{
 			getView().setSinceLastValue(sinceDate);
-			getView().setSinceLast(false);
+			getView().setSinceDate(true);
 		}
 		else
 		{
