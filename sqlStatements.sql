@@ -1,21 +1,24 @@
+-----------------------
+-- TEAM 2	     --
+-- DANIEL CARRIER    --
+-- DANIEL HASKIN     --
+-- NATHAN STANDIFORD --
+-- 2013-11-26	     --
+-----------------------
+
 -------------------------
 -- SQL DROP STATEMENTS --
 -------------------------
 
 DROP TABLE "main"."Item"
 
+DROP TABLE "main"."ProductContainerProductRelation"
 
 DROP TABLE "main"."Product"
 
-
-drop table "main"."Model"
-
-
 DROP TABLE "main"."ProductContainer"
 
-
-DROP TABLE "main"."ProductContainerProductRelation"
-
+drop table "main"."Model"
 
 DROP TABLE "main"."UnitEnum"
 
@@ -23,14 +26,6 @@ DROP TABLE "main"."UnitEnum"
 ---------------------------
 -- SQL CREATE STATEMENTS --
 ---------------------------
-
-CREATE TABLE "Item" (
-     "ProductID" INTEGER NOT NULL
-     , "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE
-     , "EntryDate" DATETIME NOT NULL
-     , "ExitTime" DATETIME
-     , "ProductContainerID" INTEGER
-)
 
 CREATE TABLE "Product" (
        "CreationDate" DateTime NOT NULL
@@ -42,22 +37,32 @@ CREATE TABLE "Product" (
        , "3MonthSupply" Integer NOT NULL 
 )
 
-create table "Model" (
-       "name" varchar(50) primary key not null unique
-       , "value" varchar(50) null
-}
-
 CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL 
-       , "ProductContainerID" INTEGER 
+       , "ParentContainerID" INTEGER references "ProductContainer"("ID")
        , "3MonthSupplyValue" DOUBLE NOT NULL
        , "3MonthSupplyUnit" INTEGER
        , "ID" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE
 )
 
+CREATE TABLE "Item" (
+     "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE 
+     , "EntryDate" DATETIME NOT NULL
+     , "ExitTime" DATETIME
+     , "ProductBarcode" text NOT NULL  references "Product"("Barcode")
+     , "ProductContainerID" INTEGER references "ProductContainer"("ID")
+)
+
+
+create table "Model" (
+       "name" varchar(50) primary key not null unique
+       , "value" varchar(50) null
+)
+
+
 CREATE TABLE "ProductContainerProductRelation" (
-     "ProductContainerID" INTEGER NOT NULL
-     , "ProductID" INTEGER NOT NULL 
+     "ProductContainerID" INTEGER NOT NULL references "ProductContainer"("ID") on update cascade
+     , "ProductBarcode" Text NOT NULL references "Product"("Barcode") on update cascade
 )
 
 CREATE TABLE "UnitEnum" (
