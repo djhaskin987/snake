@@ -5,6 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ProductIdentifierFactory {
+	
+	/**
+	 * Constructs a ProductIdentifierFactory
+	 */
+	public ProductIdentifierFactory() {}
 
 	/**
 	 * Creates a chain of responsibility for the product identifier and returns the
@@ -12,7 +17,7 @@ public class ProductIdentifierFactory {
 	 * 
 	 * @return	The first link in the chain of responsibility of IProductIdentifiers
 	 */
-	IProductIdentifier createProductIdentifier() {
+	public IProductIdentifier createProductIdentifier() {
 		File directory = new File("plugins");
 		File confugrationFile = new File(directory, "plugins.txt");
 		Scanner scanner;

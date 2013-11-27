@@ -15,7 +15,7 @@ public abstract class AbstractProductIdentifier implements IProductIdentifier {
 		if(out == null && next != null) {
 			return next.getProduct(barcode);
 		} else {
-			return null;
+			return out;
 		}
 	}
 

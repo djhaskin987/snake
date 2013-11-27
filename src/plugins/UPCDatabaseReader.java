@@ -33,6 +33,6 @@ public class UPCDatabaseReader extends AbstractProductIdentifier {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println(new UPCDatabaseReader()._getProduct("0072009634005"));
+		System.out.println(new UPCDatabaseReader()._getProduct("0028572200215"));
 	}
 }
