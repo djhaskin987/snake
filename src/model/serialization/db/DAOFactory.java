@@ -141,7 +141,6 @@ public class DAOFactory implements IDAOFactory {
 
 	@Override
 	public IRootDAO getRootDAO() {
-		// TODO Auto-generated method stub
 		return new RootDAO(dbConnection);
 	}
 

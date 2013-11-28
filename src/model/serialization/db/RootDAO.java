@@ -14,33 +14,33 @@ public class RootDAO implements IRootDAO {
 	}
 
 	@Override
-	public List<Object> readAll() {
+	public List<StorageUnits> readAll() {
+		
+		return null;
+	}
+
+	@Override
+	public void create(StorageUnits thing) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public StorageUnits read(Object key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void create(Object thing) {
+	public void update(StorageUnits thing) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public Object read(StorageUnits key) {
+	public void delete(StorageUnits thing) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void update(Object thing) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(Object thing) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -52,13 +52,13 @@ public class RootDAO implements IRootDAO {
 	@Override
 	public void addStorageUnit(IProductContainer StU) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void rmStorageUnit(IProductContainer StU) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }
