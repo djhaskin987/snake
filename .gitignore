@@ -1,8 +1,11 @@
 *.class
 build
 dist
-# cobertura
+# cobertura, serialization
 *.ser
+*.db
+*.sqlite
+*.sqlite3
 
 # Package Files #
 *.jar
