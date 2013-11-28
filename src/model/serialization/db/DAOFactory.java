@@ -154,5 +154,4 @@ public class DAOFactory implements IDAOFactory {
 			System.exit(1);
 		}
 	}
-
 }
