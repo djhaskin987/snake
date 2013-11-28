@@ -1,0 +1,64 @@
+package model.serialization.db;
+
+import java.sql.Connection;
+import java.util.List;
+
+import model.IProductContainer;
+import model.StorageUnits;
+
+public class RootDAO implements IRootDAO {
+	private Connection dbConnection;
+
+	public RootDAO(Connection dbConnection) {
+		this.dbConnection = dbConnection;
+	}
+
+	@Override
+	public List<Object> readAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void create(Object thing) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Object read(StorageUnits key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void update(Object thing) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(Object thing) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<IProductContainer> getStorageUnits() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addStorageUnit(IProductContainer StU) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void rmStorageUnit(IProductContainer StU) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
