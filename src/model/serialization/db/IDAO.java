@@ -45,6 +45,8 @@ public interface IDAO<K, T> {
 	 */
 	T read(K key);
 	
+	//TODO: This is a problem in cases where the unique identifier can be changed. For example, if you change the name of a product container,
+	//there's no way to tell what you changed it from, and thus which you were changing.
 	/** Performs an update operation on thing.
 	 * {@pre thing is properly initialized; connection to database is valid}
 	 * {@post data corresponding to thing is updated in the database, with

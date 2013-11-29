@@ -14,4 +14,5 @@ public interface IItemDAO extends IDAO<Barcode, IItem> {
 	 */
 	IProduct getProduct(IItem item);
 	void setProduct(IItem item, IProduct product);
+	IProduct getProduct();
 }

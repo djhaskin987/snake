@@ -1,16 +1,10 @@
-package model.databaseaccess;
+package model.serialization.db;
 
 import java.util.List;
 
-import model.IProduct;
 import model.IProductContainer;
 
-public interface IProductContainerDAO {
-	/**
-	 * @return A list of every product container in the database,
-	 * with all entries that contain other objects left blank
-	 */
-	public List<IProductContainer> getAll();
+public interface IProductContainerDAO extends IDAO<Integer, IProductContainer> {
 	/**
 	 * @param container		The container to get the products in
 	 * @return				A list of barcodes of all the products immediately in
@@ -34,23 +28,15 @@ public interface IProductContainerDAO {
 	 * @return				A list of database IDs of children of the given container
 	 */
 	public List<Integer> getChildren(IProductContainer container);
-
+	
 	/**
-	 * 						Adds the given container to the database
+	 * 						Returns the ID of the last IProductContainer added to the
+	 * 						database. This is necessary in order to make the map<Integer,
+	 * 						IProductContainer>.
 	 * 
-	 * @param container		Container to add to the database
-	 * {@pre				container is not in the database}
-	 * {@post				container is in the database}
+	 * @return				ID of the last IProductContainer added to the database
 	 */
-	public void add(IProductContainer container);
-	/**
-	 * 						Removes the given container from the database
-	 * 
-	 * @param container
-	 * {@pre				container is in the database}
-	 * {@post				container is not in the database}
-	 */
-	public void remove(IProductContainer container);
+	public int getIDofLastAdded();
 	/**
 	 * 						Changes the specified container to have the given values.
 	 * 
@@ -64,5 +50,5 @@ public interface IProductContainerDAO {
 	 * 						just listed is replaced with the parameter container.
 	 * 						The database ID remains the same.}
 	 */
-	public void modify(String name, String storageUnit, IProductContainer container);
+	public void update(String name, String storageUnit, IProductContainer container);
 }

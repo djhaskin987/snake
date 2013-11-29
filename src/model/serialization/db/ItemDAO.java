@@ -50,4 +50,16 @@ public class ItemDAO implements IItemDAO {
 		return null;
 	}
 
+	@Override
+	public IProduct getProduct(IItem item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProduct(IItem item, IProduct product) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
