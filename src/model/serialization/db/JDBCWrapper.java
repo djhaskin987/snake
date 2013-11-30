@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 public class JDBCWrapper {
@@ -57,17 +56,35 @@ public class JDBCWrapper {
 	 * @param columnValues	List of values for those columns
 	 */
 	public void insert(String table, List<String> columnNames, List<Object> columnValues) {
-		//TODO
-	}
-	
-	/**
-	 * @param table			Name of the table to insert a new entry into
-	 * @param columnNames	List of columns in the table
-	 * @param columnValues	List of values for those columns
-	 * @return				Auto-generated ID
-	 */
-	public int insertAndGetID(String table, List<String> columnNames, List<Object> columnValues) {
-		return 0;
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("INSERT INTO ");
+			sql.append(table);
+			sql.append(" (");
+			for(String name : columnNames) {
+				sql.append(name);
+				sql.append(", ");
+			};
+			sql.append(") VALUES (");
+			for(int i=0; i<columnValues.size(); ++i) {
+				sql.append("?, ");
+			};
+			sql.append(");");
+			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			int i=0;
+			for(Object value : columnValues) {
+				set(statement, i, value);
+				++i;
+			};
+			statement.executeUpdate();
+			connection.commit();
+			connection.setAutoCommit(false);
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -136,9 +153,36 @@ public class JDBCWrapper {
 	 * 
 	 * @return				ResultSet corresponding to the result of this search
 	 */
-	public ResultSet query(String table, List<String> ColumnNames, List<Object> ColumnValues) {
-		//TODO
-		return null;
+	public ResultSet query(String table, List<String> columnNames, List<Object> columnValues) {
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM ");
+			sql.append(table);
+			for(int i=0; i<columnNames.size(); ++i) {
+				if(i == 0) {
+					sql.append(" WHERE ");
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(columnNames.get(i));
+				sql.append("=?;");
+			}
+			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			int i = 0;
+			for(Object value : columnValues) {
+				set(statement, i, value);
+				++i;
+			}
+			ResultSet results = statement.executeQuery();
+			connection.commit();
+			connection.setAutoCommit(false);
+			statement.close();
+			return results;	//TODO: Does the result set keep working after everything is closed?
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/*private class ResultIterator implements Iterator<ResultSet>, Iterable<ResultSet> {
