@@ -49,15 +49,16 @@ CREATE TABLE "Model" (
 
 CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL
-       , "ProductContainerID" INTEGER
+       , "SorageUnit" TEXT NOT NULL
+       , "ParentContainer" TEXT
        , "3MonthSupplyValue" DOUBLE NOT NULL
        , "3MonthSupplyUnit" INTEGER
-       , "ID" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE
 );
 
 CREATE TABLE "ProductContainerProductRelation" (
-     "ProductContainerID" INTEGER NOT NULL
-     , "ProductID" INTEGER NOT NULL
+       "SorageUnit" TEXT NOT NULL
+       , "Name" TEXT NOT NULL
+       , "ProductBarcode" TEXT NOT NULL
 );
 
 CREATE TABLE "UnitEnum" (

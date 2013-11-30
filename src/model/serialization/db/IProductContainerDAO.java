@@ -2,9 +2,11 @@ package model.serialization.db;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import model.IProductContainer;
 
-public interface IProductContainerDAO extends IDAO<Integer, IProductContainer> {
+public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProductContainer> {
 	/**
 	 * @param container		The container to get the products in
 	 * @return				A list of barcodes of all the products immediately in
@@ -16,7 +18,7 @@ public interface IProductContainerDAO extends IDAO<Integer, IProductContainer> {
 	 * @return				Database ID of Parent container, or null if container
 	 * 						is a StorageUnit
 	 */
-	public int getParent(IProductContainer container);
+	public Pair<String, String> getParent(IProductContainer container);
 	/**
 	 * @param container		The container to find the items in
 	 * @return				A list of barcodes of all items immediately in this container.
@@ -28,15 +30,7 @@ public interface IProductContainerDAO extends IDAO<Integer, IProductContainer> {
 	 * @return				A list of database IDs of children of the given container
 	 */
 	public List<Integer> getChildren(IProductContainer container);
-	
-	/**
-	 * 						Returns the ID of the last IProductContainer added to the
-	 * 						database. This is necessary in order to make the map<Integer,
-	 * 						IProductContainer>.
-	 * 
-	 * @return				ID of the last IProductContainer added to the database
-	 */
-	public int getIDofLastAdded();
+
 	/**
 	 * 						Changes the specified container to have the given values.
 	 * 
