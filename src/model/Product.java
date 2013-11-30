@@ -46,6 +46,12 @@ public class Product implements IProduct, ITagable, Serializable {
 		this.tagable = new Tagable();
 	}
 	
+	public Product(String aBarcode, String aDescription, Quantity aItemSize, 
+			Integer aShelfLife, Integer aThreeMonthSupply) {
+		this(new NonEmptyString(aBarcode), new NonEmptyString(aDescription),
+				aItemSize, aShelfLife, aThreeMonthSupply);
+	}
+
 	/**
 	 * Gives a detailed textual description of the  product
 	 * {@pre NonEmptyString}

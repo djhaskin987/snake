@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import model.NonEmptyString;
 
 public class JDBCWrapper {
 	private Connection connection;
@@ -125,7 +128,12 @@ public class JDBCWrapper {
 	 * @return				ResultSet corresponding to the result of this search
 	 */
 	public ResultSet query(String table, String columnName, Object columnValue) {
-		try {
+		ArrayList<String> columnNames = new ArrayList<String>();
+		columnNames.add(columnName);
+		ArrayList<Object> columnValues = new ArrayList<Object>();
+		columnValues.add(columnValue);
+		return query(table, columnNames, columnValues);
+		/*try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM ");
 			sql.append(table);
@@ -143,7 +151,7 @@ public class JDBCWrapper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-		}
+		}*/
 	}
 
 	/**
@@ -165,8 +173,9 @@ public class JDBCWrapper {
 					sql.append(" AND ");
 				}
 				sql.append(columnNames.get(i));
-				sql.append("=?;");
+				sql.append("=?");
 			}
+			sql.append(';');
 			PreparedStatement statement = connection.prepareStatement(sql.toString());
 			int i = 0;
 			for(Object value : columnValues) {
@@ -183,6 +192,67 @@ public class JDBCWrapper {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * @param table
+	 * @return			A ResultSet containing the entire table
+	 */
+	public ResultSet queryAll(String table) {
+		return query(table, new ArrayList<String>(), new ArrayList<Object>());
+	}
+
+	/**
+	 * @param table				Table to update
+	 * @param columnNames		List of columns to update
+	 * @param columnValues		List of values for those columns
+	 * @param identifierName	Name of identifier to find the row that needs to be updated
+	 * @param identifierValue	Value in that column
+	 */
+	public void update(String table, List<String> columnNames, List<Object> columnValues,
+			String identifierName, Object identifierValue) {
+		ArrayList<String> identifierNames = new ArrayList<String>();
+		identifierNames.add(identifierName);
+		ArrayList<Object> identifierValues = new ArrayList<Object>();
+		identifierValues.add(identifierValue);
+		update(table, columnNames, columnValues, identifierNames, identifierValues);
+	}
+
+	/**
+	 * @param table				Table to update
+	 * @param columnNames		List of columns to update
+	 * @param columnValues		List of values for those columns
+	 * @param identifierNames	Names of identifiers to find the row that needs to be updated
+	 * @param identifierValues	Values in those column
+	 */
+	public void update(String table, List<String> columnNames, List<Object> columnValues,
+			List<String> identifierNames, List<Object> identifierValues) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @param table				Table to delete an entry from
+	 * @param identifierName	Name of the column used as an identifier
+	 * @param videntifierValue	value of that column
+	 */
+	public void delete(String table, String identifierName, Object identifierValue) {
+		ArrayList<String> identifierNames = new ArrayList<String>();
+		identifierNames.add(identifierName);
+		ArrayList<Object> identifierValues = new ArrayList<Object>();
+		identifierValues.add(identifierValue);
+		delete(table, identifierNames, identifierValues);
+	}
+
+	/**
+	 * @param table				Table to delete an entry from
+	 * @param identifierNames	Name of the columns used as an identifier
+	 * @param videntifierValues	values of those columns
+	 */
+	private void delete(String table, ArrayList<String> identifierNames,
+			ArrayList<Object> identifierValues) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*private class ResultIterator implements Iterator<ResultSet>, Iterable<ResultSet> {

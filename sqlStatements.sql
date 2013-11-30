@@ -17,9 +17,6 @@ DROP TABLE IF EXISTS "main"."ProductContainer";
 DROP TABLE IF EXISTS "main"."ProductContainerProductRelation";
 
 
-DROP TABLE IF EXISTS "main"."UnitEnum";
-
-
 ---------------------------
 -- SQL CREATE STATEMENTS --
 ---------------------------
@@ -34,10 +31,10 @@ CREATE TABLE "Item" (
 
 CREATE TABLE "Product" (
        "CreationDate" DateTime NOT NULL
-       , "Barcode" Text PRIMARY KEY  NOT NULL  UNIQUE
-       , "Description" Text NOT NULL
+       , "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE
+       , "Description" TEXT NOT NULL
        , "SizeValue" DOUBLE NOT NULL
-       , "SizeUnit" INTEGER NOT NULL
+       , "SizeUnit" TEXT NOT NULL
        , "ShelfLife" INTEGER NOT NULL
        , "3MonthSupply" Integer NOT NULL
 );
@@ -51,17 +48,12 @@ CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL
        , "SorageUnit" TEXT NOT NULL
        , "ParentContainer" TEXT
-       , "3MonthSupplyValue" DOUBLE NOT NULL
-       , "3MonthSupplyUnit" INTEGER
+       , "3MonthSupplyValue" DOUBLE
+       , "3MonthSupplyUnit" TEXT
 );
 
 CREATE TABLE "ProductContainerProductRelation" (
-       "SorageUnit" TEXT NOT NULL
-       , "Name" TEXT NOT NULL
+       "ProductContainerName" TEXT NOT NULL
+       , "ProductContainerSorageUnit" TEXT NOT NULL
        , "ProductBarcode" TEXT NOT NULL
-);
-
-CREATE TABLE "UnitEnum" (
-       "ID" INTEGER PRIMARY KEY  NOT NULL  UNIQUE
-       , "Name" TEXT NOT NULL  UNIQUE
 );
