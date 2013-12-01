@@ -27,9 +27,9 @@ public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProduc
 	public List<String> getItems(IProductContainer container);
 	/**
 	 * @param container		The container to find the children of
-	 * @return				A list of database IDs of children of the given container
+	 * @return				A list of names and storage units of children of the given container
 	 */
-	public List<Integer> getChildren(IProductContainer container);
+	public List<Pair<String, String>> getChildren(IProductContainer container);
 
 	/**
 	 * 						Changes the specified container to have the given values.

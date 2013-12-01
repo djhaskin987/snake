@@ -165,7 +165,6 @@ public interface IProductContainer extends Serializable, IModelTagable, IReportN
 	 */
 	public IProductContainer getParent();
 	public Unit getThreeMonthSupplyUnit();
-	
 	public String getThreeMonthSupplyValueString();
 
 	public void setName(String name);
@@ -191,4 +190,11 @@ public interface IProductContainer extends Serializable, IModelTagable, IReportN
 
 	public void insertItem(IItem item, IProduct iProduct, int position);
 	public Collection<IProductContainer> getChildren();
+
+	/**
+	 * @param name		Name of child product container
+	 * @return			Descendant product container with that name, if one exists.
+	 * 					This can be an immediate child, or a child's child, etc.
+	 */
+	public IProductContainer getDescendant(String name);
 }

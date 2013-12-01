@@ -22,11 +22,12 @@ DROP TABLE IF EXISTS "main"."ProductContainerProductRelation";
 ---------------------------
 
 CREATE TABLE "Item" (
-     "ProductID" INTEGER NOT NULL
+     "ProductBarcode" INTEGER NOT NULL
      , "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE
      , "EntryDate" DATETIME NOT NULL
      , "ExitTime" DATETIME
-     , "ProductContainerID" INTEGER
+     , "ProductContainerName" TEXT NOT NULL
+     , "ProductContainerStorageUnit" TEXT NOT NULL
 );
 
 CREATE TABLE "Product" (
@@ -54,6 +55,6 @@ CREATE TABLE "ProductContainer" (
 
 CREATE TABLE "ProductContainerProductRelation" (
        "ProductContainerName" TEXT NOT NULL
-       , "ProductContainerSorageUnit" TEXT NOT NULL
+       , "ProductContainerStorageUnit" TEXT NOT NULL
        , "ProductBarcode" TEXT NOT NULL
 );

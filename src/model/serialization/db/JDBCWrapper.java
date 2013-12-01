@@ -46,8 +46,20 @@ public class JDBCWrapper {
 			statement.setInt(i, (Integer) object);
 		} else if(object instanceof java.util.Date) {
 			statement.setDate(i, new java.sql.Date(((java.util.Date) object).getTime()));
-		} else if(object instanceof model.Date) {
-			statement.setDate(i, new java.sql.Date(((model.Date) object).toJavaUtilDate().getTime()));
+		} else if(object instanceof model.AbstractDateTime) {
+			statement.setDate(i, new java.sql.Date(((model.AbstractDateTime) object).toJavaUtilDate().getTime()));
+		} else if(object instanceof Class) {
+			if(object == String.class) {
+				statement.setNull(i, java.sql.Types.VARCHAR);
+			} else if(object == Double.class) {
+				statement.setNull(i, java.sql.Types.DOUBLE);
+			} else if(object == Integer.class) {
+				statement.setNull(i, java.sql.Types.INTEGER);
+			} else if(object == java.util.Date.class) {
+				statement.setNull(i, java.sql.Types.DATE);
+			} else if(object == model.Date.class) {
+				statement.setNull(i, java.sql.Types.DATE);
+			}
 		} else {
 			System.err.println("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName());
 		}
@@ -92,7 +104,8 @@ public class JDBCWrapper {
 	
 	/**
 	 * @param table		Name of the table to insert a new entry into
-	 * @param columns	List of elements in the entry
+	 * @param columns	List of elements in the entry.
+	 * 					If the value is null, give the class instead.
 	 */
 	public void insert(String table, List<Object> columns) {
 		try {
@@ -123,7 +136,8 @@ public class JDBCWrapper {
 	/**
 	 * @param table			Name of table to search
 	 * @param columnName	Name of column to search
-	 * @param columnValue	Name of the value of that column
+	 * @param columnValue	Name of the value of that column.
+	 * 						If the value is null, give the class instead.
 	 * 
 	 * @return				ResultSet corresponding to the result of this search
 	 */
@@ -157,7 +171,8 @@ public class JDBCWrapper {
 	/**
 	 * @param table			Name of table to search
 	 * @param columnName	Names of columns to search
-	 * @param columnValue	Names of the values of those columns
+	 * @param columnValue	Names of the values of those columns.
+	 * 						If the value is null, give the class instead.
 	 * 
 	 * @return				ResultSet corresponding to the result of this search
 	 */
@@ -205,9 +220,11 @@ public class JDBCWrapper {
 	/**
 	 * @param table				Table to update
 	 * @param columnNames		List of columns to update
-	 * @param columnValues		List of values for those columns
+	 * @param columnValues		List of values for those columns.
+	 * 							If the value is null, give the class instead.
 	 * @param identifierName	Name of identifier to find the row that needs to be updated
-	 * @param identifierValue	Value in that column
+	 * @param identifierValue	Value in that column.
+	 * 							If the value is null, give the class instead.
 	 */
 	public void update(String table, List<String> columnNames, List<Object> columnValues,
 			String identifierName, Object identifierValue) {
@@ -221,20 +238,82 @@ public class JDBCWrapper {
 	/**
 	 * @param table				Table to update
 	 * @param columnNames		List of columns to update
-	 * @param columnValues		List of values for those columns
+	 * @param columnValues		List of values for those columns.
+	 * 							If the value is null, give the class instead.
 	 * @param identifierNames	Names of identifiers to find the row that needs to be updated
-	 * @param identifierValues	Values in those column
+	 * @param identifierValues	Values in those column.
+	 * 							If the value is null, give the class instead.
 	 */
 	public void update(String table, List<String> columnNames, List<Object> columnValues,
 			List<String> identifierNames, List<Object> identifierValues) {
-		// TODO Auto-generated method stub
-		
+
+		PreparedStatement statement = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE ");
+			sql.append(table);
+			int i;
+			for(i=0; i<columnNames.size(); ++i) {
+				if(i == 0) {
+					sql.append(" SET ");
+				} else {
+					sql.append(", ");
+				}
+				sql.append(columnNames.get(i));
+				sql.append("=?");
+			}
+			for(; i<identifierNames.size(); ++i) {
+				if(i == 0) {
+					sql.append(" TO ");
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(identifierNames.get(i));
+				sql.append("=?");
+			}
+			sql.append(';');
+			statement = connection.prepareStatement(sql.toString());
+			i = 0;
+			for(Object value : columnValues) {
+				set(statement, i, value);
+				++i;
+			}
+			for(Object value : identifierValues) {
+				set(statement, i, value);
+				++i;
+			}
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				connection.setAutoCommit(false);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
 	 * @param table				Table to delete an entry from
 	 * @param identifierName	Name of the column used as an identifier
-	 * @param videntifierValue	value of that column
+	 * @param videntifierValue	value of that column.
+	 * 							If the value is null, give the class instead.
 	 */
 	public void delete(String table, String identifierName, Object identifierValue) {
 		ArrayList<String> identifierNames = new ArrayList<String>();
@@ -249,10 +328,54 @@ public class JDBCWrapper {
 	 * @param identifierNames	Name of the columns used as an identifier
 	 * @param videntifierValues	values of those columns
 	 */
-	private void delete(String table, ArrayList<String> identifierNames,
-			ArrayList<Object> identifierValues) {
-		// TODO Auto-generated method stub
-		
+	public void delete(String table, List<String> identifierNames,
+			List<Object> identifierValues) {
+		PreparedStatement statement = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM ");
+			sql.append(table);
+			for(int i=0; i<identifierNames.size(); ++i) {
+				if(i == 0) {
+					sql.append(" WHERE ");
+				} else {
+					sql.append(" AND ");
+				}
+				sql.append(identifierNames.get(i));
+				sql.append("=?");
+			}
+			sql.append(';');
+			statement = connection.prepareStatement(sql.toString());
+			int i = 0;
+			for(Object value : identifierValues) {
+				set(statement, i, value);
+				++i;
+			}
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				connection.setAutoCommit(false);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/*private class ResultIterator implements Iterator<ResultSet>, Iterable<ResultSet> {
