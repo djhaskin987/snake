@@ -216,7 +216,8 @@ public class JDBCWrapper implements Closeable {
 				statement.setNull(i, java.sql.Types.DATE);
 			}
 		} else {
-			System.err.println("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName());
+			new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName()).printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -232,13 +233,24 @@ public class JDBCWrapper implements Closeable {
 			sql.append("INSERT INTO ");
 			sql.append(table);
 			sql.append(" (");
+			boolean first = true;
 			for(String name : columnNames) {
+				if(first) {
+					first = false;
+				} else {
+					sql.append(", ");
+				}
 				sql.append(name);
-				sql.append(", ");
 			};
 			sql.append(") VALUES (");
+			first = true;
 			for(int i=0; i<columnValues.size(); ++i) {
-				sql.append("?, ");
+				if(first) {
+					first = false;
+				} else {
+					sql.append(", ");
+				}
+				sql.append("?");
 			};
 			sql.append(");");
 			PreparedStatement statement = connection.prepareStatement(sql.toString());
@@ -267,7 +279,10 @@ public class JDBCWrapper implements Closeable {
 			sql.append(table);
 			sql.append(" VALUES (");
 			for(int i=0; i<columns.size(); ++i) {
-				sql.append("?, ");
+				if(i != 0) {
+					sql.append(", ");
+				}
+				sql.append("?");
 			};
 			sql.append(");");
 			PreparedStatement statement = connection.prepareStatement(sql.toString());
@@ -349,7 +364,6 @@ public class JDBCWrapper implements Closeable {
 				++i;
 			}
 			ResultSet results = statement.executeQuery();
-			statement.close();
 			return results;	//TODO: Does the result set keep working after everything is closed?
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

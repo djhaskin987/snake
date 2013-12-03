@@ -26,9 +26,9 @@ public class ProductDAO implements IProductDAO {
 			return new Product(
 					rs.getString("Barcode"),
 					rs.getString("Description"),
-					new Quantity(rs.getDouble("SizeValue"), Unit.valueOf(rs.getString("SizeUnit"))),
+					new Quantity(rs.getDouble("SizeValue"), Unit.getInstance(rs.getString("SizeUnit"))),
 					rs.getInt("ShelfLife"),
-					rs.getInt("aThreeMonthSupply"));
+					rs.getInt("ThreeMonthSupply"));
 		} catch(SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -58,14 +58,14 @@ public class ProductDAO implements IProductDAO {
 		columnNames.add("Barcode");
 		columnValues.add(product.getBarcode().getValue());
 		columnNames.add("Description");
-		columnValues.add(product.getDescription());
+		columnValues.add(product.getDescription().getValue());
 		columnNames.add("SizeValue");
 		columnValues.add(product.getItemSize().getValue());
 		columnNames.add("SizeUnit");
 		columnValues.add(product.getItemSize().getUnit().toString());
 		columnNames.add("ShelfLife");
 		columnValues.add(product.getShelfLife());
-		columnNames.add("3MonthSupply");
+		columnNames.add("ThreeMonthSupply");
 		columnValues.add(product.getThreeMonthSupply());
 		return Pair.of((List<String>) columnNames, (List<Object>) columnValues);
 	}

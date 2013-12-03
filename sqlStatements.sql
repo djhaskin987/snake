@@ -28,7 +28,7 @@ CREATE TABLE "Product" (
        , "SizeValue" DOUBLE NOT NULL
        , "SizeUnit" TEXT NOT NULL
        , "ShelfLife" INTEGER NOT NULL
-       , "3MonthSupply" Integer NOT NULL
+       , "ThreeMonthSupply" Integer NOT NULL
 );
 
 CREATE TABLE "Model" (
@@ -40,8 +40,8 @@ CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL
        , "SorageUnit" TEXT NOT NULL
        , "ParentContainer" TEXT
-       , "3MonthSupplyValue" DOUBLE
-       , "3MonthSupplyUnit" TEXT
+       , "ThreeMonthSupplyValue" DOUBLE
+       , "ThreeMonthSupplyUnit" TEXT
 );
 
 CREATE TABLE "ProductContainerProductRelation" (
