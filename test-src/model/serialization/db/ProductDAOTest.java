@@ -37,6 +37,22 @@ public class ProductDAOTest {
 		assertEquals(product0.getItemSize(), quantity);
 		assertTrue(product0.getShelfLife() == 0);
 		assertTrue(product0.getThreeMonthSupply() == 1);
+		
+		quantity = new Quantity(2.0, Unit.KG);
+		product = new Product("barcode", "description2", quantity, 3, 4);
+		productDAO.update(product);
+		products = productDAO.readAll();
+		assertTrue(products.size() == 1);
+		product0 = products.get(0);
+		assertEquals(product0.getBarcode().getValue(), "barcode");
+		assertEquals(product0.getDescription().getValue(), "description2");
+		assertEquals(product0.getItemSize(), quantity);
+		assertTrue(product0.getShelfLife() == 3);
+		assertTrue(product0.getThreeMonthSupply() == 4);
+		
+		productDAO.delete(product);
+		products = productDAO.readAll();
+		assertTrue(products.size() == 0);
 	}
 
 }

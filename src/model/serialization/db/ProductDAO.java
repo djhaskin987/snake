@@ -84,7 +84,7 @@ public class ProductDAO implements IProductDAO {
 	@Override
 	public void update(IProduct thing) {
 		Pair<List<String>, List<Object>> lists = getLists(thing);
-		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), "Barcode", thing.getBarcode());
+		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), "Barcode", thing.getBarcode().getValue());
 	}
 
 	@Override

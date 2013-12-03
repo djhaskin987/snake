@@ -216,7 +216,7 @@ public class JDBCWrapper implements Closeable {
 				statement.setNull(i, java.sql.Types.DATE);
 			}
 		} else {
-			new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName()).printStackTrace();
+			new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName() + " " + i).printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -425,9 +425,9 @@ public class JDBCWrapper implements Closeable {
 				sql.append(columnNames.get(i));
 				sql.append("=?");
 			}
-			for(; i<identifierNames.size(); ++i) {
+			for(i=0; i<identifierNames.size(); ++i) {
 				if(i == 0) {
-					sql.append(" TO ");
+					sql.append(" WHERE ");
 				} else {
 					sql.append(" AND ");
 				}
@@ -435,6 +435,7 @@ public class JDBCWrapper implements Closeable {
 				sql.append("=?");
 			}
 			sql.append(';');
+			System.out.println(sql);
 			statement = connection.prepareStatement(sql.toString());
 			i = 0;
 			for(Object value : columnValues) {

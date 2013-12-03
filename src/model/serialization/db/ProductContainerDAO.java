@@ -3,6 +3,7 @@ package model.serialization.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import model.IProduct;
@@ -227,6 +228,28 @@ public class ProductContainerDAO implements IProductContainerDAO {
 			identifierValues.add(storageUnit);
 		}
 		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), identifierNames, identifierValues);
+	}
+	
+	public void addProductToProductContainer(IProduct product, IProductContainer productContainer) {
+		String[] names = {"ProductContainerName",
+				"ProductContainerStorageUnit",
+				"ProductBarcode"};
+		Object[] values = {productContainer.getName().getValue(),
+				productContainer.getUnitPC().getName().getValue(),
+				product.getBarcode().getValue()};
+		wrapper.insert("ProductContainerProductRelations",
+				Arrays.asList(names), Arrays.asList(values));
+	}
+	
+	public void removeProductFromProductContainer(IProduct product, IProductContainer productContainer) {
+		String[] names = {"ProductContainerName",
+				"ProductContainerStorageUnit",
+				"ProductBarcode"};
+		Object[] values = {productContainer.getName().getValue(),
+				productContainer.getUnitPC().getName().getValue(),
+				product.getBarcode().getValue()};
+		wrapper.delete("ProductContainerProductRelations",
+				Arrays.asList(names), Arrays.asList(values));
 	}
 
 }
