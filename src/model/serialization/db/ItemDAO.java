@@ -8,9 +8,9 @@ import model.IItem;
 import model.IProduct;
 
 public class ItemDAO implements IItemDAO {
-	private Connection dbConnection;
+	private JDBCWrapper dbConnection;
 	
-	public ItemDAO(Connection dbConnection) {
+	public ItemDAO(JDBCWrapper dbConnection) {
 		this.dbConnection = dbConnection;
 	}
 

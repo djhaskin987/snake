@@ -1,9 +1,11 @@
 package model.serialization.db;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Arrays;
 
 import model.IProductContainer;
 import model.RemovedItems;
@@ -18,7 +20,7 @@ public class RootDAO implements IRootDAO {
 
 	@Override
 	public List<StorageUnits> readAll() {
-		List<StorageUnits> returned = new ArrayList<StorageUnits>(1);
+		List<StorageUnits> returned = new ArrayList<StorageUnits>();
 		returned.add(read(null));
 		return returned;
 	}
@@ -32,12 +34,21 @@ public class RootDAO implements IRootDAO {
 	@Override
 	public StorageUnits read(Object key) {
 		
-		String dateFieldName = "dateSinceLastRemovedItemsReport";
 		ResultSet reportDateSet = 
 				dbConnection.executeQuery("select * from Model where 'id' = '1';");
-		reportDateSet.next();
-		RemovedItems removedItems = null;
-		Date dateSinceLastRemovedItemsReport = reportDateSet.getDate("lastRIR");
+		try {
+			reportDateSet.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		Date dateSinceLastRemovedItemsReport = null;
+		try {
+			dateSinceLastRemovedItemsReport = reportDateSet.getDate("lastRIR");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		
 		StorageUnits returned = new StorageUnits();
 		returned
@@ -50,34 +61,23 @@ public class RootDAO implements IRootDAO {
 		return returned;
 	}
 
-	@Override
+	/* Just updates 1-1. */
 	public void update(StorageUnits thing) {
-		// TODO Auto-generated method stub
 		
+		long epoch = thing.getDateSinceLastRemovedItemsReport().getTime();
+		String[] columnNames = {"lastRIR" };
+		Object[] columnValues = { new Long(epoch).toString()};
+		String[] identifierNames = {"id" };
+		Object[] identifierValues = {"1"};
+		dbConnection.update("Model",  Arrays.asList(columnNames), 
+				Arrays.asList(columnValues),
+				Arrays.asList(identifierNames),
+				Arrays.asList(identifierValues));
 	}
 
 	@Override
 	public void delete(StorageUnits thing) {
-		// TODO Auto-generated method stub
-		
+		Object[] identifierValues = {"1"};
+		dbConnection.delete("Model", "id", identifierValues);
 	}
-
-	@Override
-	public List<IProductContainer> getStorageUnits() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addStorageUnit(IProductContainer StU) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rmStorageUnit(IProductContainer StU) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

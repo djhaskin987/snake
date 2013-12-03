@@ -37,15 +37,6 @@ public class DAOFactory implements IDAOFactory, Closeable {
 	}
 
 	@Override
-	public void terminate() {
-		try {
-			dbConnection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
-	@Override
 	public IProductDAO getProductDAO() {
 		return new ProductDAO(dbConnection);
 	}
@@ -53,6 +44,7 @@ public class DAOFactory implements IDAOFactory, Closeable {
 	public IProductContainerDAO getProductContainerDAO() {
 		return new ProductContainerDAO(dbConnection);
 	}
+
 	@Override
 	public void close() throws IOException {
 		dbConnection.close();
