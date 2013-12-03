@@ -12,7 +12,7 @@ public interface IItemDAO extends IDAO<Barcode, IItem> {
 	 *     Only data which has a one-to-one correspondence with the IProduct
 	 *     will be loaded.
 	 */
-	IProduct getProduct(IItem item);
+	Barcode getProductBarcode(IItem item);
 	void setProduct(IItem item, IProduct product);
 	IProduct getProduct();
 }
