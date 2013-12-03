@@ -1,7 +1,3 @@
--------------------------
--- SQL DROP STATEMENTS --
--------------------------
-
 DROP TABLE IF EXISTS "main"."Item";
 
 
@@ -15,11 +11,6 @@ DROP TABLE IF EXISTS "main"."ProductContainer";
 
 
 DROP TABLE IF EXISTS "main"."ProductContainerProductRelation";
-
-
----------------------------
--- SQL CREATE STATEMENTS --
----------------------------
 
 CREATE TABLE "Item" (
      "ProductBarcode" INTEGER NOT NULL

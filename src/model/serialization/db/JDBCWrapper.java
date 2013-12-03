@@ -1,5 +1,6 @@
 package model.serialization.db;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,10 +19,10 @@ import java.util.List;
 
 import model.NonEmptyString;
 
-public class JDBCWrapper {
+public class JDBCWrapper implements Closeable {
 	private Connection connection;
 	private String path;
-	
+
 	public JDBCWrapper(String path) {
 		this.path = path;
 		try {
@@ -34,28 +35,24 @@ public class JDBCWrapper {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public JDBCWrapper() {
 		this("./InventoryTracker.sqlite");
 	}
 
-	public void setPath(String path) {
-		this.path = path;
-	}
-	
 	private Connection createValidConnection() throws SQLException, IOException
 	{
-        File sqliteFile = new File(path);
-        if (!sqliteFile.exists())
-        {
-        	return resetSQLFile(sqliteFile);
-        }
-        String MIMEType = Files.probeContentType(sqliteFile.toPath());
-        if (!MIMEType.matches("^.*sqlite3.*$"))
-        {
-        	return resetSQLFile(sqliteFile);
-        }
-        Connection returned = createConnection(sqliteFile);
+		File sqliteFile = new File(path);
+		if (!sqliteFile.exists())
+		{
+			return resetSQLFile(sqliteFile);
+		}
+		String MIMEType = Files.probeContentType(sqliteFile.toPath());
+		if (!MIMEType.matches("^.*sqlite3.*$"))
+		{
+			return resetSQLFile(sqliteFile);
+		}
+		Connection returned = createConnection(sqliteFile);
 		HashSet<String> neededTables = new HashSet<String>();
 		HashSet<String> foundTables = new HashSet<String>();
 		neededTables.add("Item");
@@ -63,41 +60,41 @@ public class JDBCWrapper {
 		neededTables.add("Model");
 		neededTables.add("ProductContainer");
 		neededTables.add("ProductContainerProductRelation");
-		neededTables.add("UnitEnum");
-		
-        Statement statement = returned.createStatement();
-        ResultSet rows = statement.executeQuery("SELECT name FROM sqlite_master where type='table';");
-        ResultSetMetaData meta = rows.getMetaData();
-        while (rows.next())
-        {
-        	String name;
+		//neededTables.add("UnitEnum");
+
+		Statement statement = returned.createStatement();
+		ResultSet rows = statement.executeQuery("SELECT name FROM sqlite_master where type='table';");
+		ResultSetMetaData meta = rows.getMetaData();
+		while (rows.next())
+		{
+			String name;
 			name = rows.getString("name");
-            if (!name.matches(".*sqlite.*") &&
-            		neededTables.contains(name))
-            {
-            	foundTables.add(name);
-            }
-            else
-            {
-            	System.err.println("Found extraneous table '" + name + "'.");
-            	System.err.println("Resetting database.");
+			if (!name.matches(".*sqlite.*") &&
+					neededTables.contains(name))
+			{
+				foundTables.add(name);
+			}
+			else
+			{
+				System.err.println("Found extraneous table '" + name + "'.");
+				System.err.println("Resetting database.");
 				returned.close();
-	        	return resetSQLFile(sqliteFile);
-            }
-        }
-        if (foundTables.size() != neededTables.size())
-        {
-        	System.err.println("Didn't find all the tables needed.");
-        	System.err.println("Found tables: " + foundTables);
-        	System.err.println("Needed tables: " + neededTables);
-        	System.err.println("Resetting tables.");
-        	returned.close();
-        	return resetSQLFile(sqliteFile);
-        }
-        return returned;
+				return resetSQLFile(sqliteFile);
+			}
+		}
+		if (foundTables.size() != neededTables.size())
+		{
+			System.err.println("Didn't find all the tables needed.");
+			System.err.println("Found tables: " + foundTables);
+			System.err.println("Needed tables: " + neededTables);
+			System.err.println("Resetting tables.");
+			returned.close();
+			return resetSQLFile(sqliteFile);
+		}
+		return returned;
 	}
-        
-	
+
+
 	private Connection createConnection(File sqliteFile) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -130,7 +127,8 @@ public class JDBCWrapper {
 		}
 		Connection returned = createConnection(sqliteFile);
 		File sqlFile = new File("./sqlStatements.sql");
-		
+		System.out.println(sqlFile.exists());
+
 		FileReader reader = null;
 		try {
 			reader = new FileReader(sqlFile);
@@ -140,37 +138,49 @@ public class JDBCWrapper {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		System.out.println(sqliteFile.getAbsolutePath());
 		char [] fileChars = new char[(int) sqlFile.length()];
 		reader.read(fileChars);
 		String sql = new String(fileChars);
+		String sqls[] = sql.split("[;]");
 		reader.close();
-		Statement resetDatabase = returned.createStatement();
-		resetDatabase.execute(sql);
+		for(String s : sqls) {
+			try {
+			Statement resetDatabase = returned.createStatement();
+			resetDatabase.executeUpdate(s+";");
+			resetDatabase.close();
+			} catch(SQLException e) {
+				if(!e.getMessage().equals("not an error")) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+		}
+		Statement test = returned.createStatement();
+		//System.out.println(sql);
+		ResultSet rows = test.executeQuery("SELECT name FROM sqlite_master where type='table';");
+		System.out.println(rows.next());
 		return returned;
 	}
-	
+
 	public void executeUpdate(String sql) {
 		PreparedStatement statement;
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.executeUpdate(sql);
-			connection.commit();
-			connection.setAutoCommit(false);
 			statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public ResultSet executeQuery(String sql) {
 		PreparedStatement statement;
 		try {
 			statement = connection.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
-			connection.commit();
-			connection.setAutoCommit(false);
 			statement.close();
 			return rs;
 		} catch (SQLException e) {
@@ -178,9 +188,9 @@ public class JDBCWrapper {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	private void set(PreparedStatement statement, int i, Object object) throws SQLException {
 		++i;
 		if(object instanceof String) {
@@ -209,7 +219,7 @@ public class JDBCWrapper {
 			System.err.println("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName());
 		}
 	}
-	
+
 	/**
 	 * @param table			Name of the table to insert a new entry into
 	 * @param columnNames	List of columns in the table
@@ -238,15 +248,13 @@ public class JDBCWrapper {
 				++i;
 			};
 			statement.executeUpdate();
-			connection.commit();
-			connection.setAutoCommit(false);
 			statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @param table		Name of the table to insert a new entry into
 	 * @param columns	List of elements in the entry.
@@ -269,15 +277,13 @@ public class JDBCWrapper {
 				++i;
 			};
 			statement.executeUpdate();
-			connection.commit();
-			connection.setAutoCommit(false);
 			statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @param table			Name of table to search
 	 * @param columnName	Name of column to search
@@ -302,7 +308,7 @@ public class JDBCWrapper {
 			PreparedStatement statement = connection.prepareStatement(sql.toString());
 			set(statement, 0, columnValue);
 			ResultSet results = statement.executeQuery();
-			connection.commit();
+			connection.();
 			connection.setAutoCommit(false);
 			statement.close();
 			return results;	//TODO: Does the result set keep working after everything is closed?
@@ -343,8 +349,6 @@ public class JDBCWrapper {
 				++i;
 			}
 			ResultSet results = statement.executeQuery();
-			connection.commit();
-			connection.setAutoCommit(false);
 			statement.close();
 			return results;	//TODO: Does the result set keep working after everything is closed?
 		} catch (SQLException e) {
@@ -353,7 +357,7 @@ public class JDBCWrapper {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @param table
 	 * @return			A ResultSet containing the entire table
@@ -428,16 +432,10 @@ public class JDBCWrapper {
 				++i;
 			}
 			statement.executeUpdate();
-			connection.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			System.exit(1);
 		} finally {
 			try {
 				connection.setAutoCommit(false);
@@ -497,7 +495,6 @@ public class JDBCWrapper {
 				++i;
 			}
 			statement.executeUpdate();
-			connection.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -522,10 +519,21 @@ public class JDBCWrapper {
 			}
 		}
 	}
-	
+
+	@Override
+	public void close() throws IOException {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
 	/*private class ResultIterator implements Iterator<ResultSet>, Iterable<ResultSet> {
 		private ResultSet resultSet;
-		
+
 		public ResultIterator(ResultSet resultSet) {
 			this.resultSet = resultSet;
 		}
@@ -554,7 +562,7 @@ public class JDBCWrapper {
 		public Iterator<ResultSet> iterator() {
 			return this;
 		}
-		
+
 	}*/
 
 }
