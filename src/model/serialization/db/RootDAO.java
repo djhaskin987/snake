@@ -1,9 +1,6 @@
 package model.serialization.db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,18 +10,10 @@ import model.RemovedItems;
 import model.StorageUnits;
 
 public class RootDAO implements IRootDAO {
-	private Connection dbConnection;
-	private Statement dbStatement;
+	private JDBCWrapper dbConnection;
 
-	public RootDAO(Connection dbConnection) {
+	public RootDAO(JDBCWrapper dbConnection) {
 		this.dbConnection = dbConnection;
-		try {
-			dbStatement = dbConnection.createStatement();
-		} catch (SQLException e) {
-			System.err.println("Failed to create mechanism allowing the program" +
-					" to talk to the database");
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -42,15 +31,13 @@ public class RootDAO implements IRootDAO {
 
 	@Override
 	public StorageUnits read(Object key) {
-		String dateName =
-				"dateSinceLastRemovedItemsReport";
-		ResultSet reportDateSet =
-				dbStatement.executeQuery("select * from Model where 'name' = '"
-						+ dateName + "';");
 		
+		String dateFieldName = "dateSinceLastRemovedItemsReport";
+		ResultSet reportDateSet = 
+				dbConnection.executeQuery("select * from Model where 'id' = '1';");
 		reportDateSet.next();
 		RemovedItems removedItems = null;
-		Date dateSinceLastRemovedItemsReport = reportDateSet.getDate("value");
+		Date dateSinceLastRemovedItemsReport = reportDateSet.getDate("lastRIR");
 		
 		StorageUnits returned = new StorageUnits();
 		returned

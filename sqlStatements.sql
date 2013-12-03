@@ -32,8 +32,8 @@ CREATE TABLE "Product" (
 );
 
 CREATE TABLE "Model" (
-       "name" varchar(50) PRIMARY KEY NOT NULL UNIQUE
-       , "value" varchar(50) NULL
+       "id" INTEGER PRIMARY KEY NOT NULL
+    , "lastRIR" INTEGER NOT NULL
 );
 
 CREATE TABLE "ProductContainer" (
