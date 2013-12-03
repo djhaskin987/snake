@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +45,8 @@ public class RootDAO implements IRootDAO {
 		String dateName =
 				"dateSinceLastRemovedItemsReport";
 		ResultSet reportDateSet =
-				dbStatement.executeQuery("select * from Model where " +
-						+ "'name' = '" + dateName +
-						"';");
+				dbStatement.executeQuery("select * from Model where 'name' = '"
+						+ dateName + "';");
 		
 		reportDateSet.next();
 		RemovedItems removedItems = null;
