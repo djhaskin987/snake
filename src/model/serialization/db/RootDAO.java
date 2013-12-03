@@ -59,7 +59,8 @@ public class RootDAO implements IRootDAO {
 		returned
 			.setTag(null);
 		returned
-			.setName(name);
+			.setName("root");
+		return returned;
 	}
 
 	@Override
