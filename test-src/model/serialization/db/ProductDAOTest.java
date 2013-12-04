@@ -5,11 +5,15 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import model.IProduct;
+import model.IProductContainer;
+import model.Model;
 import model.NonEmptyString;
 import model.Product;
+import model.ProductContainerFactory;
 import model.Quantity;
 import model.Unit;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +58,17 @@ public class ProductDAOTest {
 		assertTrue(product0.getShelfLife() == 3);
 		assertTrue(product0.getThreeMonthSupply() == 4);
 		
-		//assertTrue(productDAO.getContainers(product1).size() == 0);
+		assertTrue(productDAO.getContainers(product).size() == 0);
+		
+		IProductContainer storageUnit = Model.getInstance().createStorageUnit("unit");
+		Model.getInstance().addStorageUnit(storageUnit);
+		IProductContainer productGroup = ProductContainerFactory.getInstance().createProductGroup("group", storageUnit, quantity);
+		IProductContainerDAO productContainerDAO = new ProductContainerDAO(fixture.getWrapper());
+		productContainerDAO.create(storageUnit);
+		productContainerDAO.create(productGroup);
+		productContainerDAO.addProductToProductContainer(product, productGroup);
+		assertTrue(productDAO.getContainers(product).size() == 1);
+		assertEquals(productDAO.getContainers(product).get(0),Pair.of("group", "unit"));
 		
 		productDAO.delete(product);
 		products = productDAO.readAll();

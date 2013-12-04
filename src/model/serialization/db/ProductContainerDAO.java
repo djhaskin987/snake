@@ -18,6 +18,8 @@ import model.Unit;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 public class ProductContainerDAO implements IProductContainerDAO {
 	private JDBCWrapper wrapper;
 	private final String TABLE = "ProductContainer";
@@ -32,7 +34,10 @@ public class ProductContainerDAO implements IProductContainerDAO {
 				return Model.getInstance().createStorageUnit(rs.getString("Name"));
 			} else {
 				IProductContainer unit = Model.getInstance().getStorageUnits().getStorageUnit(rs.getString("StorageUnit"));
+				//System.out.println(rs.getString("StorageUnit"));
+				//System.out.println(Model.getInstance().getStorageUnits().getStorageUnitNames().size());
 				if(unit == null) {
+					System.err.println("Error: No storage unit found with name " + rs.getString("StorageUnit"));
 					return null;
 				}
 				IProductContainer parent = unit.getDescendant(rs.getString("ParentContainer"));
@@ -69,12 +74,13 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		ArrayList<Object> columnValues = new ArrayList<Object>();
 		columnNames.add("Name");
 		columnValues.add(productContainer.getName().getValue());
-		IProductContainer parent = productContainer.getUnitPC();
-		if(parent != productContainer) {
+		if(productContainer instanceof ProductGroup) {
+			IProductContainer parent = productContainer.getUnitPC();
+		//if(parent != productContainer) {
 			columnNames.add("StorageUnit");
-			columnValues.add(parent.getName().getValue());
+			columnValues.add(parent.getName());
 			columnNames.add("ParentContainer");
-			columnValues.add(productContainer.getParent().getName().getValue());
+			columnValues.add(productContainer.getParent().getName());
 			Quantity quantity = ((ProductGroup) productContainer).getThreeMonthSupplyQuantity();
 			columnNames.add("ThreeMonthSupplyValue");
 			columnValues.add(quantity.getValue());
@@ -128,7 +134,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierNames.add("ProductContainerStorageUnit");
 		IProductContainer storageUnit = container.getUnitPC();
 		identifierValues.add(storageUnit.getName());
-		ResultSet rs = wrapper.query("ProductContainerProductRelations", identifierNames, identifierValues);
+		ResultSet rs = wrapper.query("ProductContainerProductRelation", identifierNames, identifierValues);
 		List<String> products = new ArrayList<String>();
 		try {
 			while(rs.next()) {
@@ -165,7 +171,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierNames.add("ProductContainerStorageUnit");
 		IProductContainer storageUnit = container.getUnitPC();
 		identifierValues.add(storageUnit.getName());
-		ResultSet rs = wrapper.query("ProductContainerProductRelations", identifierNames, identifierValues);
+		ResultSet rs = wrapper.query("ProductContainerProductRelation", identifierNames, identifierValues);
 		List<String> items = new ArrayList<String>();
 		try {
 			while(rs.next()) {
@@ -194,7 +200,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 			identifierValues.add(storageUnit.getName());
 			unitName = storageUnit.getName().toString();
 		}
-		ResultSet rs = wrapper.query("ProductContainerProductRelations", identifierNames, identifierValues);
+		ResultSet rs = wrapper.query("ProductContainerProductRelation", identifierNames, identifierValues);
 		List<Pair<String, String>> children = new ArrayList<Pair<String, String>>();
 		try {
 			while(rs.next()) {
@@ -228,7 +234,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		Object[] values = {productContainer.getName().getValue(),
 				productContainer.getUnitPC().getName().getValue(),
 				product.getBarcode().getValue()};
-		wrapper.insert("ProductContainerProductRelations",
+		wrapper.insert("ProductContainerProductRelation",
 				Arrays.asList(names), Arrays.asList(values));
 	}
 	
@@ -240,7 +246,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		Object[] values = {productContainer.getName().getValue(),
 				productContainer.getUnitPC().getName().getValue(),
 				product.getBarcode().getValue()};
-		wrapper.delete("ProductContainerProductRelations",
+		wrapper.delete("ProductContainerProductRelation",
 				Arrays.asList(names), Arrays.asList(values));
 	}
 

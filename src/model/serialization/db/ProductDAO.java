@@ -94,11 +94,11 @@ public class ProductDAO implements IProductDAO {
 
 	@Override
 	public List<Pair<String, String>> getContainers(IProduct product) {
-		ResultSet rs = wrapper.query("ProductContainerProductRelations", "ProductBarcode", product.getBarcode().getValue());
+		ResultSet rs = wrapper.query("ProductContainerProductRelation", "ProductBarcode", product.getBarcode().getValue());
 		List<Pair<String, String>> out = new ArrayList<Pair<String, String>>();
 		try {
 			while(rs.next()) {
-				out.add(Pair.of(rs.getString("ProductContainerName"), rs.getString("ProductContainerSorageUnit")));
+				out.add(Pair.of(rs.getString("ProductContainerName"), rs.getString("ProductContainerStorageUnit")));
 			}
 			return out;
 		} catch (SQLException e) {
