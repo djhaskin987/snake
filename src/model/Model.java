@@ -209,7 +209,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 	public void addProduct(IProduct product) {
 		productCollection.add(product);
-		notifyObservers(ModelActions.INSERT_PRODUCT, (IModelTagable) product);
+		notifyObservers(ModelActions.NEW_PRODUCT, (IModelTagable) product);
 	}
 	
 	public void addItem(IItem item) {
@@ -284,13 +284,13 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		// TODO Add unit tests and javadocs
 		IProductContainer current = item.getProductContainer();
 		current.transferItem(item, (ProductContainer)target);
-		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
+		notifyObservers(ModelActions.TRANSFER_ITEM, item);
 	}
 
 	public void transferItem(IItem item, StorageUnit target, int position) {
 		IProductContainer current = item.getProductContainer();
 		current.transferItem(item, (ProductContainer)target, position);
-		notifyObservers(ModelActions.TRANSFER_ITEMS, item);
+		notifyObservers(ModelActions.TRANSFER_ITEM, item);
 	}
 
 	public boolean canTransferItems() {
@@ -472,19 +472,23 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 	public void addProductToContainer(IProduct product, IProductContainer target) {
 		IProductContainer targetUnit = target.getUnitPC();
-		IProductContainer ExistingPC = targetUnit.whoHasProduct(product);
-		if (ExistingPC != null)
+		IProductContainer existingPC = targetUnit.whoHasProduct(product);
+		if (existingPC != null)
 		{
-			ExistingPC.moveProduct(product, target);
+			existingPC.moveProduct(product, target);
 			ObservableArgs<IModelTagable> args = new ObservableArgs<IModelTagable>();
 			args.add(product);
 			args.add(target);
+			args.add(existingPC);
 			notifyObservers(ModelActions.TRANSFER_PRODUCT, args);
 		}
 		else
 		{
 			target.addProduct(product);
-			notifyObservers(ModelActions.INSERT_PRODUCT,  (IModelTagable) product);
+			ObservableArgs<IModelTagable> args = new ObservableArgs<IModelTagable>();
+			args.add(product);
+			args.add(target);
+			notifyObservers(ModelActions.INSERT_PRODUCT, args);
 		}
 	}
 
