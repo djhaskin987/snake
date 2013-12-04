@@ -57,18 +57,15 @@ public class SqlSerializer implements ISerializer {
 		List<String> itemsStr = pcDao.getItems(pc);
 		List<String> productsStr = pcDao.getProducts(pc);
 		loadProductItems(pc, itemsStr, productsStr);
+		for (IProductContainer child : pc.getChildren()) {
+			loadProductContainer(child);
+		}
 	}
 	
 	private void loadProductContainerChildren(IProductContainer pc, List<Pair<String, String>> children) {
 		for (Pair<String, String> child : children) {
-			String name = child.getLeft();
-			String storageUnit = child.getRight();
-			IProductContainer pcChild;
-			if (pc.getClass() == StorageUnits.class) {
-				pcChild = ProductContainerFactory.getInstance().createStorageUnit(name);
-			} else {
-				pcChild = ProductContainerFactory.getInstance().createProductGroup(name);
-			}
+			ProductContainerDAO pcDao = new ProductContainerDAO(conn);
+			IProductContainer pcChild = pcDao.read(child);
 			pc.addProductContainer(pcChild);
 		}
 	}
@@ -90,24 +87,27 @@ public class SqlSerializer implements ISerializer {
 	}
 	
 	private IItem createItem(IItem i, String pBarcode, IProductContainer pc) {
-		Model m = Model.getInstance();
-		IProduct product = m.getProduct(pBarcode);
-		ItemFactory factory = ItemFactory.getInstance();
+		IProduct product = getProduct(pBarcode);
 		IItem item = new Item(product, i.getBarcode(), i.getEntryDate(), i.getExitTime(), pc);
 		return item;
 	}
 	
 	private void loadProducts(IProductContainer pc, List<String> productsStr) {
 		for (String productStr : productsStr) {
-			ProductDAO pDao = new ProductDAO(conn);
-			NonEmptyString neProductStr = new NonEmptyString(productStr);
-			IProduct p = pDao.read(neProductStr);
-			
+			IProduct product = getProduct(productStr);
+			pc.addProduct(product);
 		}
 	}
 	
-	private IProduct getProduct(String product) {
-		
+	private IProduct getProduct(String barcode) {
+		Model m = Model.getInstance();
+		IProduct product = m.getProduct(barcode);
+		if (product == null) {
+			ProductDAO pDao = new ProductDAO(conn);
+			NonEmptyString neProductStr = new NonEmptyString(barcode);
+			product = pDao.read(neProductStr);	
+		}
+		return product;	
 	}
 
 	/* (non-Javadoc)

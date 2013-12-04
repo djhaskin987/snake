@@ -4,8 +4,10 @@ package gui.main;
 import javax.swing.*;
 
 import model.Model;
+import model.serialization.ISerializer;
 import model.serialization.ISerializerFactory;
 import model.serialization.JavaSerializerFactory;
+import model.serialization.SqlSerializerFactory;
 
 import java.awt.event.*;
 
@@ -49,15 +51,20 @@ public final class GUI extends JFrame implements IMainView {
 	}
 
 	private void processArgs(String [] args) {
-		ISerializerFactory factory;
+		ISerializerFactory factory = null;
 		if (args.length > 0) {
 			if (args[0].contentEquals("ser")) {
 				factory = JavaSerializerFactory.createInstance();
 			} else if (args[0].contentEquals("db")) {
-				
+				factory = SqlSerializerFactory.createInstance();
 			}
+		} else {
+			factory = SqlSerializerFactory.createInstance();
 		}
-		else
+		ISerializer ser = factory.createSerializer();
+		Model m = Model.getInstance();
+		m.setSerializer(ser);
+	
 	}
 	
 	private void createMenus() {

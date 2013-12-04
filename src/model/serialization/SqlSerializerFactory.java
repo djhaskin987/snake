@@ -37,4 +37,9 @@ public class SqlSerializerFactory implements ISerializerFactory {
 		return new SqlSerializer();
 	}
 
+	public static ISerializerFactory createInstance() {
+		// TODO Auto-generated method stub
+		return new SqlSerializerFactory();
+	}
+
 }
