@@ -19,12 +19,4 @@ public interface ISerializer {
 	 * @param model a Model singleton object
 	 */
 	public void save(Model model);
-	
-	/**
-	 * Updates the persistent Model data to match current Model singleton
-	 * stored in memory.
-	 * 
-	 * @param model a Model singleton object
-	 */
-	public void update(Model model);
 }

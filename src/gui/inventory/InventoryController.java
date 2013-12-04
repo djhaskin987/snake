@@ -528,8 +528,8 @@ public class InventoryController extends Controller
 			case UNDO_REMOVE_ITEMS:
 				undoRemoveItems(payload);
 				break;
-			case TRANSFER_ITEMS:
-				transferItems(payload);
+			case TRANSFER_ITEM:
+				transferItem(payload);
 				break;
 			case EDIT_ITEM:
 				editItem(payload);
@@ -546,9 +546,15 @@ public class InventoryController extends Controller
 			case TRANSFER_PRODUCT:
 				transferProduct(payload);
 				break;
+			case NEW_PRODUCT:
+				newProduct(payload);
+				break;
 			default:
 				throw new IllegalStateException("Could not detect what changed");
 		}
+	}
+
+	private void newProduct(IModelTagable payload) {
 	}
 
 	@SuppressWarnings("unchecked")
@@ -649,7 +655,7 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 
-	private void transferItems(IModelTagable payload) {
+	private void transferItem(IModelTagable payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
@@ -807,7 +813,7 @@ public class InventoryController extends Controller
 		IProductContainer productContainer = (IProductContainer) args.get(1);
 		for(IItem item : productContainer.getItems(product)) {
 			ItemData itemData = (ItemData) item.getTag();
-			System.out.println("Product group name:\t" + item.getProductGroupName());
+			//System.out.println("Product group name:\t" + item.getProductGroupName());
 			itemData.setProductGroup(item.getProductGroupName());
 		}
 		refreshProducts();
