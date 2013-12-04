@@ -6,6 +6,7 @@ import java.util.Observer;
 import model.productidentifier.IProductIdentifier;
 import model.productidentifier.ProductIdentifierFactory;
 import model.reports.ReportsManager;
+import model.serialization.ISerializer;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -40,6 +41,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
 	private ReportsManager reportsManager;
+	private transient ISerializer serializer;
 	private transient IProductIdentifier productIdentifier;
 	
 	
@@ -57,6 +59,16 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		return instance;
 	}
 
+	public void setInstance(Model m) {
+		itemCollection = m.itemCollection;
+		productCollection = m.productCollection;
+		storageUnits = m.storageUnits;
+		itemFactory = m.itemFactory;
+		productContainerFactory = m.productContainerFactory;
+		reportsManager = m.reportsManager;
+		storageUnits = m.storageUnits;
+		loadProductIdentifier();
+	}
 	
 	Model()
 	{
@@ -71,6 +83,10 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		itemCollection.addObserver(this);
 		reportsManager = new ReportsManager();
 		loadProductIdentifier();
+	}
+	
+	public void setSerializer(ISerializer serializer) {
+		this.serializer = serializer;
 	}
 	
 	public IProductIdentifier getProductIdentifier() {

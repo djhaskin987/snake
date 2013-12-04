@@ -49,14 +49,15 @@ public final class GUI extends JFrame implements IMainView {
 	}
 
 	private void processArgs(String [] args) {
+		ISerializerFactory factory;
 		if (args.length > 0) {
 			if (args[0].contentEquals("ser")) {
-				Model m = Model.getInstance();
-				ISerializerFactory factory = JavaSerializerFactory.getInstance();
+				factory = JavaSerializerFactory.createInstance();
 			} else if (args[0].contentEquals("db")) {
 				
 			}
 		}
+		else
 	}
 	
 	private void createMenus() {
