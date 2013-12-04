@@ -170,7 +170,7 @@ public class ItemDAO implements IItemDAO {
 		public ItemRecord(ResultSet set)
 		{
 			try {
-				productBarcode = new Barcode(set.getString("Barcode"));
+				productBarcode = new Barcode(set.getString("ProductBarcode"));
 				barcode = new Barcode(set.getString("Barcode"));
 				entryDate = new ValidDate(set.getDate("EntryDate"));
 				exitTime = new DateTime(set.getDate("ExitTime"));
