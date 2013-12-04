@@ -1,8 +1,8 @@
 package model.serialization;
 
-import gui.inventory.InventoryController;
-import gui.item.ItemData;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -15,13 +15,12 @@ import model.IModelTagable;
 import model.IProduct;
 import model.IProductContainer;
 import model.Item;
-import model.ItemFactory;
 import model.Model;
 import model.ModelActions;
 import model.NonEmptyString;
 import model.ObservableArgs;
-import model.ProductContainer;
 import model.ProductContainerFactory;
+import model.StorageUnit;
 import model.StorageUnits;
 import model.serialization.db.*;
 
@@ -43,35 +42,75 @@ public class SqlSerializer implements ISerializer, Observer {
 	 * {@post an SqlSerializer object}
 	 */
 	public SqlSerializer() {
+		init();
+
+	}
+	
+	// region initializers
+	
+	private void init() {
+		initConn();
+		initDAOs();
+	}
+	
+	private void initConn() {
 		conn = new JDBCWrapper();
 	}
+	
+	private void initDAOs() {
+		rdao = new RootDAO(conn);
+		productContainerDAO = new ProductContainerDAO(conn);
+		productDAO = new ProductDAO(conn);
+		itemDAO = new ItemDAO(conn);
+	}
+	
+	// end region
 
 	/* (non-Javadoc)
 	 * @see model.serialization.ISerializer#load(model.Model)
 	 */
 	@Override
 	public void load(Model model) {
-		rdao = new RootDAO(conn);
-		productContainerDAO = new ProductContainerDAO(conn);
-		productDAO = new ProductDAO(conn);
-		itemDAO = new ItemDAO(conn);
-		List<StorageUnits> l = rdao.readAll();
-		if (l.size() > 0) {
-			StorageUnits su = l.get(0);
-			Model m = Model.getInstance();
-			m.setStorageUnits(su);
-			loadProductContainer(su);
-			Model.getInstance().addObserver(this);
-		}
+		StorageUnits su = getRoot(model);
+		model.setStorageUnits(su);
+		model.addObserver(this);
 	}
 	
+	private StorageUnits getRoot(Model model) {
+		StorageUnits su = null;
+		List<StorageUnits> l = rdao.readAll();
+		if (l.size() > 0) {
+			su = l.get(0);
+			
+		} else {
+			su = model.getStorageUnits();
+			rdao.create(su);
+		}
+		List<IProductContainer> liSu = getStorageUnits();
+		for (IProductContainer s : liSu) {
+			StorageUnit storageUnit = (StorageUnit) ProductContainerFactory.getInstance().createStorageUnit(s.getName().getValue());
+			su.addStorageUnit(storageUnit);
+		}
+		return su;
+	}
+	
+	private List<IProductContainer> getStorageUnits() {
+		List<Pair<String, String>> suPairs = rdao.getStorageUnits();
+		List<IProductContainer> out = new ArrayList<IProductContainer>();
+		for (Pair<String, String> suPair : suPairs) {
+			IProductContainer su = productContainerDAO.read(suPair);
+			loadProductContainer(su);
+			out.add(su);
+		}
+		return out;
+	}
+	
+	
 	private void loadProductContainer(IProductContainer pc) {
-		IProductContainerDAO pcDao = new ProductContainerDAO(conn);
-		pcDao.getChildren(pc);
-		List<Pair<String, String>> children = pcDao.getChildren(pc);
+		List<Pair<String, String>> children = productContainerDAO.getChildren(pc);
 		loadProductContainerChildren(pc, children);
-		List<String> itemsStr = pcDao.getItems(pc);
-		List<String> productsStr = pcDao.getProducts(pc);
+		List<String> itemsStr = productContainerDAO.getItems(pc);
+		List<String> productsStr = productContainerDAO.getProducts(pc);
 		loadProductItems(pc, itemsStr, productsStr);
 		for (IProductContainer child : pc.getChildren()) {
 			loadProductContainer(child);
@@ -80,8 +119,7 @@ public class SqlSerializer implements ISerializer, Observer {
 	
 	private void loadProductContainerChildren(IProductContainer pc, List<Pair<String, String>> children) {
 		for (Pair<String, String> child : children) {
-			ProductContainerDAO pcDao = new ProductContainerDAO(conn);
-			IProductContainer pcChild = pcDao.read(child);
+			IProductContainer pcChild = productContainerDAO.read(child);
 			pc.addProductContainer(pcChild);
 		}
 	}
@@ -92,11 +130,10 @@ public class SqlSerializer implements ISerializer, Observer {
 	}
 	
 	private void loadItems(IProductContainer pc, List<String> itemsStr) {
-		ItemDAO iDao = new ItemDAO(conn);
 		for (String itemStr : itemsStr) {
 			Barcode iBarcode = new Barcode(itemStr);
-			String pBarcode = iDao.getProductBarcode(iBarcode);
-			IItem i = iDao.read(iBarcode);
+			String pBarcode = itemDAO.getProductBarcode(iBarcode).getBarcode();
+			IItem i = itemDAO.read(iBarcode);
 			IItem item = createItem(i, pBarcode, pc);
 			pc.addItem(item);
 		}
@@ -119,9 +156,8 @@ public class SqlSerializer implements ISerializer, Observer {
 		Model m = Model.getInstance();
 		IProduct product = m.getProduct(barcode);
 		if (product == null) {
-			ProductDAO pDao = new ProductDAO(conn);
 			NonEmptyString neProductStr = new NonEmptyString(barcode);
-			product = pDao.read(neProductStr);	
+			product = productDAO.read(neProductStr);	
 		}
 		return product;	
 	}
@@ -133,13 +169,10 @@ public class SqlSerializer implements ISerializer, Observer {
 	public void save(Model model) {
 		Model m = Model.getInstance();
 		StorageUnits su = m.getStorageUnits();
-		RootDAO rdao = new RootDAO(conn);
 		rdao.update(su);
 	}
 
-	/* (non-Javadoc)
-	 * @see model.serialization.ISerializer#save(model.Model)
-	 */
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is

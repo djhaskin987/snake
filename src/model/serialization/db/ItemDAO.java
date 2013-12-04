@@ -147,7 +147,7 @@ public class ItemDAO implements IItemDAO {
 			}
 		}
 		
-		public String getProductBarcode() {
+		public Barcode getProductBarcode() {
 			return productBarcode;
 		}
 
@@ -308,7 +308,7 @@ public class ItemDAO implements IItemDAO {
 	}
 
 	@Override
-	public String getProductBarcode(Barcode itemBarcode) {
+	public Barcode getProductBarcode(Barcode itemBarcode) {
 		String [] columnNames = {"Barcode"};
 		Object [] columnValues = {itemBarcode.toString()};
 		fj.data.List<ItemRecord> results =

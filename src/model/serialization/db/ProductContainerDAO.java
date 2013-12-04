@@ -78,9 +78,9 @@ public class ProductContainerDAO implements IProductContainerDAO {
 			IProductContainer parent = productContainer.getUnitPC();
 		//if(parent != productContainer) {
 			columnNames.add("StorageUnit");
-			columnValues.add(parent.getName());
+			columnValues.add(parent.getName().getValue());
 			columnNames.add("ParentContainer");
-			columnValues.add(productContainer.getParent().getName());
+			columnValues.add(productContainer.getParent().getName().getValue());
 			Quantity quantity = ((ProductGroup) productContainer).getThreeMonthSupplyQuantity();
 			columnNames.add("ThreeMonthSupplyValue");
 			columnValues.add(quantity.getValue());
@@ -200,7 +200,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 			identifierValues.add(storageUnit.getName());
 			unitName = storageUnit.getName().toString();
 		}
-		ResultSet rs = wrapper.query("ProductContainerProductRelation", identifierNames, identifierValues);
+		ResultSet rs = wrapper.query("ProductContainer", identifierNames, identifierValues);
 		List<Pair<String, String>> children = new ArrayList<Pair<String, String>>();
 		try {
 			while(rs.next()) {

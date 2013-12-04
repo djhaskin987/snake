@@ -14,6 +14,12 @@ public class RemovedItems extends StorageUnit {
 		productItems.removeProduct(product);
 	}
 
+	public RemovedItems()
+	{
+		// FIXME What are we supposed to do here?
+		super();
+	}
+	
 	@Override
 	public void accept(ReportVisitor v) {
 		v.visit(this);

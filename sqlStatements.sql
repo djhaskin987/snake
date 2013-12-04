@@ -49,4 +49,3 @@ CREATE TABLE "ProductContainerProductRelation" (
        , "ProductContainerStorageUnit" TEXT NOT NULL
        , "ProductBarcode" TEXT NOT NULL
 );
-

@@ -503,42 +503,12 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 	@Override
 	public void store() {
-		try {
-			Path p = Paths.get("inventory-tracker.ser");
-			Files.deleteIfExists(p);
-			FileOutputStream fileOut = new FileOutputStream("inventory-tracker.ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(this);
-			out.close();
-			fileOut.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		serializer.save(this);
 	}
 	
 	@Override
 	public void load() {
-		try {
-			Path p = Paths.get("inventory-tracker.ser");
-			if (Files.exists(p)) {
-					FileInputStream fileIn = new FileInputStream(p.toFile());
-					ObjectInputStream in = new ObjectInputStream(fileIn);
-					
-					Model m = (Model) in.readObject();
-					itemCollection = m.itemCollection;
-					productCollection = m.productCollection;
-					storageUnits = m.storageUnits;
-					itemFactory = m.itemFactory;
-					productContainerFactory = m.productContainerFactory;
-					reportsManager = m.reportsManager;
-					storageUnits = m.storageUnits;
-					loadProductIdentifier();
-					in.close();
-					fileIn.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();	
-		}
+		serializer.load(this);
 		System.out.println("model loaded");
 	}
 
@@ -549,12 +519,6 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 	public boolean canGetNMonthSupplyReport(String months) {
 		return reportsManager.canGetNMonthSupplyReport(months);
-	}
-
-
-	@Override
-	public void update() {
-		store();
 	}
 
 

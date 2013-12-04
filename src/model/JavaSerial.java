@@ -41,13 +41,6 @@ public class JavaSerial implements IPersistance{
 	}
 	
 	/**
-	 * This function does nothing
-	 */
-	@Override
-	public void update() {
-		
-	}
-	/**
 	 * {@pre There is no need for anything to be in the data model}
 	 * {@post All data stored in the .ser files are now loaded back into the data model}
 	 */

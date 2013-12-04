@@ -65,13 +65,4 @@ public class JavaSerializer implements ISerializer {
 		}
 
 	}
-
-	/**
-	 * @see model.serialization.ISerializer#update(model.Model)
-	 */
-	@Override
-	public void update(Model model) {
-		save(model);
-	}
-
 }
