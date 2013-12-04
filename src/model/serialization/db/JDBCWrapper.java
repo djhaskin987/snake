@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import model.Barcode;
 import model.NonEmptyString;
+import model.Unit;
 
 public class JDBCWrapper implements Closeable {
 	private Connection connection;
 	private String path;
+	private PreparedStatement statement;
 
 	public JDBCWrapper(String path) {
 		this.path = path;
@@ -31,6 +34,12 @@ public class JDBCWrapper implements Closeable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			statement = connection.prepareStatement("");
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -156,19 +165,17 @@ public class JDBCWrapper implements Closeable {
 				}
 			}
 		}
-		Statement test = returned.createStatement();
-		//System.out.println(sql);
-		ResultSet rows = test.executeQuery("SELECT name FROM sqlite_master where type='table';");
-		System.out.println(rows.next());
 		return returned;
 	}
 
 	public void executeUpdate(String sql) {
-		PreparedStatement statement;
 		try {
-			statement = connection.prepareStatement(sql);
-			statement.executeUpdate(sql);
 			statement.close();
+			Statement statement2 = connection.createStatement();
+			//statement = connection.prepareStatement(sql);
+			statement2.executeUpdate(sql);
+			statement2.close();
+			//statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,11 +184,10 @@ public class JDBCWrapper implements Closeable {
 	}
 
 	public ResultSet executeQuery(String sql) {
-		PreparedStatement statement;
 		try {
+			//statement.close();
 			statement = connection.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
-			statement.close();
 			return rs;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -203,21 +209,19 @@ public class JDBCWrapper implements Closeable {
 			statement.setDate(i, new java.sql.Date(((java.util.Date) object).getTime()));
 		} else if(object instanceof model.AbstractDateTime) {
 			statement.setDate(i, new java.sql.Date(((model.AbstractDateTime) object).toJavaUtilDate().getTime()));
-		} else if(object instanceof Class) {
-			if(object == String.class) {
-				statement.setNull(i, java.sql.Types.VARCHAR);
-			} else if(object == Double.class) {
-				statement.setNull(i, java.sql.Types.DOUBLE);
-			} else if(object == Integer.class) {
-				statement.setNull(i, java.sql.Types.INTEGER);
-			} else if(object == java.util.Date.class) {
-				statement.setNull(i, java.sql.Types.DATE);
-			} else if(object == model.Date.class) {
-				statement.setNull(i, java.sql.Types.DATE);
-			}
+		} else if(object instanceof Unit) {
+			statement.setString(i, ((Unit) object).toString());
+		} else if(object instanceof Barcode) {
+			statement.setString(i, ((Barcode) object).getBarcode());
+		} else if(object instanceof NonEmptyString) {
+			statement.setString(i, ((NonEmptyString) object).getValue());
 		} else {
-			new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName() + " " + i).printStackTrace();
-			System.exit(1);
+			if(object == null) {
+				new Exception("Error: JDBCWrapper got a null somehow.").printStackTrace();
+			} else {
+				new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName() + " " + i).printStackTrace();
+			}
+				System.exit(1);
 		}
 	}
 
@@ -250,17 +254,24 @@ public class JDBCWrapper implements Closeable {
 				} else {
 					sql.append(", ");
 				}
-				sql.append("?");
+				if(columnValues.get(i) == null) {
+					sql.append("null");
+				} else {
+					sql.append("?");
+				}
 			};
 			sql.append(");");
-			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			//statement.close();
+			statement = connection.prepareStatement(sql.toString());
 			int i=0;
 			for(Object value : columnValues) {
-				set(statement, i, value);
-				++i;
+				if(value != null) {
+					set(statement, i, value);
+					++i;
+				}
 			};
 			statement.executeUpdate();
-			statement.close();
+			//statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -282,17 +293,23 @@ public class JDBCWrapper implements Closeable {
 				if(i != 0) {
 					sql.append(", ");
 				}
-				sql.append("?");
+				if(columns.get(i) == null) {
+					sql.append("null");
+				} else {
+					sql.append("?");
+				}
 			};
 			sql.append(");");
-			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			//statement.close();
+			statement = connection.prepareStatement(sql.toString());
 			int i=0;
 			for(Object column : columns) {
+				if(column != null)
 				set(statement, i, column);
 				++i;
 			};
 			statement.executeUpdate();
-			statement.close();
+			//statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -313,25 +330,6 @@ public class JDBCWrapper implements Closeable {
 		ArrayList<Object> columnValues = new ArrayList<Object>();
 		columnValues.add(columnValue);
 		return query(table, columnNames, columnValues);
-		/*try {
-			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM ");
-			sql.append(table);
-			sql.append(" WHERE ");
-			sql.append(columnName);
-			sql.append("=?;");
-			PreparedStatement statement = connection.prepareStatement(sql.toString());
-			set(statement, 0, columnValue);
-			ResultSet results = statement.executeQuery();
-			connection.();
-			connection.setAutoCommit(false);
-			statement.close();
-			return results;	//TODO: Does the result set keep working after everything is closed?
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}*/
 	}
 
 	/**
@@ -354,17 +352,27 @@ public class JDBCWrapper implements Closeable {
 					sql.append(" AND ");
 				}
 				sql.append(columnNames.get(i));
-				sql.append("=?");
+				if(columnValues.get(i) == null) {
+					sql.append(" is null");
+				} else {
+					sql.append("=?");
+				}
 			}
 			sql.append(';');
-			PreparedStatement statement = connection.prepareStatement(sql.toString());
+			//statement.close();
+			statement = connection.prepareStatement(sql.toString());
 			int i = 0;
 			for(Object value : columnValues) {
-				set(statement, i, value);
-				++i;
+				if(value != null) {
+					set(statement, i, value);
+					++i;
+				}
 			}
 			ResultSet results = statement.executeQuery();
-			return results;	//TODO: Does the result set keep working after everything is closed?
+			System.out.println(sql);
+			//System.out.println("Statement closed: " + statement.isClosed());
+			System.out.println("ResultSet closed: " + results.isClosed());
+			return results;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -410,7 +418,6 @@ public class JDBCWrapper implements Closeable {
 	public void update(String table, List<String> columnNames, List<Object> columnValues,
 			List<String> identifierNames, List<Object> identifierValues) {
 
-		PreparedStatement statement = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE ");
@@ -423,7 +430,11 @@ public class JDBCWrapper implements Closeable {
 					sql.append(", ");
 				}
 				sql.append(columnNames.get(i));
-				sql.append("=?");
+				if(columnValues.get(i) == null) {
+					sql.append("=null");
+				} else {
+					sql.append("=?");
+				}
 			}
 			for(i=0; i<identifierNames.size(); ++i) {
 				if(i == 0) {
@@ -432,19 +443,28 @@ public class JDBCWrapper implements Closeable {
 					sql.append(" AND ");
 				}
 				sql.append(identifierNames.get(i));
-				sql.append("=?");
+				if(columnValues.get(i) == null) {
+					sql.append(" is null");
+				} else {
+					sql.append("=?");
+				}
 			}
 			sql.append(';');
 			System.out.println(sql);
+			//statement.close();
 			statement = connection.prepareStatement(sql.toString());
 			i = 0;
 			for(Object value : columnValues) {
-				set(statement, i, value);
-				++i;
+				if(value != null) {
+					set(statement, i, value);
+					++i;
+				}
 			}
 			for(Object value : identifierValues) {
-				set(statement, i, value);
-				++i;
+				if(value != null) {
+					set(statement, i, value);
+					++i;
+				}
 			}
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -458,12 +478,12 @@ public class JDBCWrapper implements Closeable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			try {
-				statement.close();
+			/*try {
+				//statement.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 
@@ -488,8 +508,8 @@ public class JDBCWrapper implements Closeable {
 	 */
 	public void delete(String table, List<String> identifierNames,
 			List<Object> identifierValues) {
-		PreparedStatement statement = null;
 		try {
+			//statement.close();
 			StringBuilder sql = new StringBuilder();
 			sql.append("DELETE FROM ");
 			sql.append(table);
@@ -500,14 +520,20 @@ public class JDBCWrapper implements Closeable {
 					sql.append(" AND ");
 				}
 				sql.append(identifierNames.get(i));
-				sql.append("=?");
+				if(identifierValues.get(i) == null) {
+					sql.append(" is null");
+				} else {
+					sql.append("=?");
+				}
 			}
 			sql.append(';');
 			statement = connection.prepareStatement(sql.toString());
 			int i = 0;
 			for(Object value : identifierValues) {
-				set(statement, i, value);
-				++i;
+				if(value != null) {
+					set(statement, i, value);
+					++i;
+				}
 			}
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -526,12 +552,12 @@ public class JDBCWrapper implements Closeable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			try {
-				statement.close();
+			/*try {
+				//statement.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 

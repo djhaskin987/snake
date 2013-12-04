@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import model.IProduct;
 import model.IProductContainer;
 
 public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProductContainer> {
@@ -45,4 +46,8 @@ public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProduc
 	 * 						The database ID remains the same.}
 	 */
 	public void update(String name, String storageUnit, IProductContainer container);
+	void addProductToProductContainer(IProduct product,
+			IProductContainer productContainer);
+	void removeProductFromProductContainer(IProduct product,
+			IProductContainer productContainer);
 }

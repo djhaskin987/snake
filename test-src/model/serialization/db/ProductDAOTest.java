@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import model.IProduct;
+import model.NonEmptyString;
 import model.Product;
 import model.Quantity;
 import model.Unit;
@@ -25,8 +26,9 @@ public class ProductDAOTest {
 
 	@Test
 	public void test() {
-		Quantity quantity = new Quantity(1.0, Unit.COUNT);
 		assertTrue(productDAO.readAll().size() == 0);
+		
+		Quantity quantity = new Quantity(1.0, Unit.COUNT);
 		IProduct product = new Product("barcode", "description", quantity, 0, 1);
 		productDAO.create(product);
 		List<IProduct> products = productDAO.readAll();
@@ -37,6 +39,8 @@ public class ProductDAOTest {
 		assertEquals(product0.getItemSize(), quantity);
 		assertTrue(product0.getShelfLife() == 0);
 		assertTrue(product0.getThreeMonthSupply() == 1);
+		IProduct product1 = productDAO.read(new NonEmptyString("barcode"));
+		assertTrue(product1 != null);
 		
 		quantity = new Quantity(2.0, Unit.KG);
 		product = new Product("barcode", "description2", quantity, 3, 4);
@@ -49,6 +53,8 @@ public class ProductDAOTest {
 		assertEquals(product0.getItemSize(), quantity);
 		assertTrue(product0.getShelfLife() == 3);
 		assertTrue(product0.getThreeMonthSupply() == 4);
+		
+		//assertTrue(productDAO.getContainers(product1).size() == 0);
 		
 		productDAO.delete(product);
 		products = productDAO.readAll();

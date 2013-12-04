@@ -1,24 +1,16 @@
 DROP TABLE IF EXISTS "main"."Item";
 
+
 DROP TABLE IF EXISTS "main"."Product";
+
 
 DROP TABLE IF EXISTS "main"."Model";
 
-drop table "main"."Model"
+
+DROP TABLE IF EXISTS "main"."ProductContainer";
 
 
-DROP TABLE IF EXISTS "main"."ProductContainer"
-
-
-DROP TABLE IF EXISTS "main"."ProductContainerProductRelation"
-
-
-DROP TABLE IF EXISTS "main"."UnitEnum"
-
-
----------------------------
--- SQL CREATE STATEMENTS --
----------------------------
+DROP TABLE IF EXISTS "main"."ProductContainerProductRelation";
 
 CREATE TABLE "Item" (
      "ProductBarcode" TEXT NOT NULL
@@ -31,12 +23,12 @@ CREATE TABLE "Item" (
 
 CREATE TABLE "Product" (
        "CreationDate" DateTime NOT NULL
-       , "Barcode" Text PRIMARY KEY  NOT NULL  UNIQUE
-       , "Description" Text NOT NULL
+       , "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE
+       , "Description" TEXT NOT NULL
        , "SizeValue" DOUBLE NOT NULL
        , "SizeUnit" TEXT NOT NULL
        , "ShelfLife" INTEGER NOT NULL
-       , "3MonthSupply" Integer NOT NULL 
+       , "ThreeMonthSupply" Integer NOT NULL
 );
 
 CREATE TABLE "Model" (
@@ -45,15 +37,16 @@ CREATE TABLE "Model" (
 );
 
 CREATE TABLE "ProductContainer" (
-       "Name" TEXT NOT NULL 
-       , "StorageUnit" TEXT NOT NULL 
+       "Name" TEXT NOT NULL
+       , "StorageUnit" TEXT
+       , "ParentContainer" TEXT
        , "ThreeMonthSupplyValue" DOUBLE
-       , "ThreeMonthSupplyUnit" INTEGER
-)
+       , "ThreeMonthSupplyUnit" TEXT
+);
 
 CREATE TABLE "ProductContainerProductRelation" (
        "ProductContainerName" TEXT NOT NULL
-      http://pip.verisignlabs.com/login.do
+       , "ProductContainerStorageUnit" TEXT NOT NULL
        , "ProductBarcode" TEXT NOT NULL
 );
 
