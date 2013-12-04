@@ -38,7 +38,7 @@ CREATE TABLE "Model" (
 
 CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL
-       , "SorageUnit" TEXT NOT NULL
+       , "StorageUnit" TEXT
        , "ParentContainer" TEXT
        , "ThreeMonthSupplyValue" DOUBLE
        , "ThreeMonthSupplyUnit" TEXT

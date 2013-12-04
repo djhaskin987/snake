@@ -28,14 +28,18 @@ public class ProductContainerDAO implements IProductContainerDAO {
 
 	private IProductContainer read(ResultSet rs) {
 		try {
-			if(rs.getString("SorageUnit") == null) {
+			if(rs.getString("StorageUnit") == null) {
 				return Model.getInstance().createStorageUnit(rs.getString("Name"));
 			} else {
-				IProductContainer parent = Model.getInstance().getStorageUnits().getStorageUnit(rs.getString("StorageUnit")).getDescendant(rs.getString("ParentContainer"));
+				IProductContainer unit = Model.getInstance().getStorageUnits().getStorageUnit(rs.getString("StorageUnit"));
+				if(unit == null) {
+					return null;
+				}
+				IProductContainer parent = unit.getDescendant(rs.getString("ParentContainer"));
 				return Model.getInstance().createProductGroup(
 						rs.getString("Name"),
-						Double.toString(rs.getDouble("3MonthSupplyValue")),
-						rs.getString("3MonthSupplyUnit"),
+						Double.toString(rs.getDouble("ThreeMonthSupplyValue")),
+						rs.getString("ThreeMonthSupplyUnit"),
 						parent);
 			}
 		} catch(SQLException e) {
@@ -64,17 +68,17 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		ArrayList<String> columnNames = new ArrayList<String>();
 		ArrayList<Object> columnValues = new ArrayList<Object>();
 		columnNames.add("Name");
-		columnValues.add(productContainer.getName());
+		columnValues.add(productContainer.getName().getValue());
 		IProductContainer parent = productContainer.getUnitPC();
-		if(parent != null) {
+		if(parent != productContainer) {
 			columnNames.add("StorageUnit");
-			columnValues.add(parent.getName());
+			columnValues.add(parent.getName().getValue());
 			columnNames.add("ParentContainer");
-			columnValues.add(productContainer.getParent().getName());
+			columnValues.add(productContainer.getParent().getName().getValue());
 			Quantity quantity = ((ProductGroup) productContainer).getThreeMonthSupplyQuantity();
-			columnNames.add("3MonthSupplyValue");
+			columnNames.add("ThreeMonthSupplyValue");
 			columnValues.add(quantity.getValue());
-			columnNames.add("3MonthSupplyUnit");
+			columnNames.add("ThreeMonthSupplyUnit");
 			columnValues.add(quantity.getUnit());
 		}
 		return Pair.of((List<String>) columnNames, (List<Object>) columnValues);
@@ -88,7 +92,9 @@ public class ProductContainerDAO implements IProductContainerDAO {
 
 	@Override
 	public IProductContainer read(Pair<String, String> key) {
-		return read(wrapper.query(TABLE, "Barcode", key.getValue()));
+		String[] names = {"Name", "StorageUnit"};
+		Object[] values = {key.getLeft(), key.getRight()};
+		return read(wrapper.query(TABLE, Arrays.asList(names), Arrays.asList(values)));
 	}
 
 	private Pair<List<String>, List<Object>> getIdentifiers(IProductContainer productContainer) {
@@ -98,11 +104,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierValues.add(productContainer.getName());
 		identifierNames.add("StorageUnit");
 		IProductContainer storageUnit = productContainer.getUnitPC();
-		if(storageUnit == productContainer) {
-			identifierValues.add(String.class);
-		} else {
-			identifierValues.add(storageUnit.getName());
-		}
+		identifierValues.add(storageUnit.getName());
 		return Pair.of(identifierNames, identifierValues);
 	}
 
@@ -125,11 +127,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierValues.add(container.getName());
 		identifierNames.add("ProductContainerStorageUnit");
 		IProductContainer storageUnit = container.getUnitPC();
-		if(storageUnit == container) {
-			identifierValues.add(String.class);
-		} else {
-			identifierValues.add(storageUnit.getName());
-		}
+		identifierValues.add(storageUnit.getName());
 		ResultSet rs = wrapper.query("ProductContainerProductRelations", identifierNames, identifierValues);
 		List<String> products = new ArrayList<String>();
 		try {
@@ -166,11 +164,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierValues.add(container.getName());
 		identifierNames.add("ProductContainerStorageUnit");
 		IProductContainer storageUnit = container.getUnitPC();
-		if(storageUnit == container) {
-			identifierValues.add(String.class);
-		} else {
-			identifierValues.add(storageUnit.getName());
-		}
+		identifierValues.add(storageUnit.getName());
 		ResultSet rs = wrapper.query("ProductContainerProductRelations", identifierNames, identifierValues);
 		List<String> items = new ArrayList<String>();
 		try {
@@ -194,7 +188,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		IProductContainer storageUnit = container.getUnitPC();
 		String unitName;
 		if(storageUnit == container) {
-			identifierValues.add(String.class);
+			identifierValues.add(null);
 			unitName = null;
 		} else {
 			identifierValues.add(storageUnit.getName());
@@ -222,14 +216,11 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierNames.add("Name");
 		identifierValues.add(name);
 		identifierNames.add("StorageUnit");
-		if(storageUnit == null) {
-			identifierValues.add(String.class);
-		} else {
-			identifierValues.add(storageUnit);
-		}
+		identifierValues.add(storageUnit);
 		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), identifierNames, identifierValues);
 	}
-	
+
+	@Override
 	public void addProductToProductContainer(IProduct product, IProductContainer productContainer) {
 		String[] names = {"ProductContainerName",
 				"ProductContainerStorageUnit",
@@ -241,6 +232,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 				Arrays.asList(names), Arrays.asList(values));
 	}
 	
+	@Override
 	public void removeProductFromProductContainer(IProduct product, IProductContainer productContainer) {
 		String[] names = {"ProductContainerName",
 				"ProductContainerStorageUnit",
