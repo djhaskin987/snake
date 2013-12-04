@@ -3,6 +3,8 @@ package model;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.productidentifier.IProductIdentifier;
+import model.productidentifier.ProductIdentifierFactory;
 import model.reports.ReportsManager;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -38,6 +40,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	private ProductFactory productFactory;
 	private ProductContainerFactory productContainerFactory;
 	private ReportsManager reportsManager;
+	private transient IProductIdentifier productIdentifier;
 	
 	
     /**
@@ -67,6 +70,15 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 		productCollection.addObserver(this);
 		itemCollection.addObserver(this);
 		reportsManager = new ReportsManager();
+		loadProductIdentifier();
+	}
+	
+	public IProductIdentifier getProductIdentifier() {
+		return productIdentifier;
+	}
+	
+	private void loadProductIdentifier() {
+		productIdentifier = new ProductIdentifierFactory().createProductIdentifier();
 	}
 	
 	/**
@@ -500,6 +512,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 					productContainerFactory = m.productContainerFactory;
 					reportsManager = m.reportsManager;
 					storageUnits = m.storageUnits;
+					loadProductIdentifier();
 					in.close();
 					fileIn.close();
 			}

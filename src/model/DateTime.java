@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -27,6 +28,12 @@ public class DateTime extends AbstractDateTime {
 	 */
 	public DateTime() {
 		calendar = new GregorianCalendar();
+	}
+	
+	public DateTime(Date date)
+	{
+		this();
+		calendar.setTime(date);
 	}
 	
 	/**

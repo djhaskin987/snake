@@ -7,7 +7,7 @@ import model.Model;
  * We use the JDBC driver to implement this. 
  */
 public class SqlSerializer implements ISerializer {
-
+	private SqlConn conn;
 	/**
 	 * Creates a new SqlSerializer object
 	 * 
@@ -16,7 +16,7 @@ public class SqlSerializer implements ISerializer {
 	 * {@post an SqlSerializer object}
 	 */
 	public SqlSerializer() {
-		// TODO Auto-generated constructor stub
+		conn = new SqLiteConn("jdbc:sqlite:inventory-tracker.db");
 	}
 
 	/* (non-Javadoc)

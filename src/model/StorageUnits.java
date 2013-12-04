@@ -29,7 +29,7 @@ public class StorageUnits extends ProductContainer implements Serializable {
 		this.dateSinceLastRemovedItemsReport = dateSinceLastRemovedItemsReport;
 	}
 
-	StorageUnits() {
+	public StorageUnits() {
 		super(new NonEmptyString("Storage Units"));
 		removedItems = new RemovedItems();
     }

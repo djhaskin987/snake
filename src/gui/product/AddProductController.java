@@ -13,7 +13,7 @@ import gui.common.*;
  * Controller class for the add item view.
  */
 public class AddProductController extends Controller implements
-		IAddProductController {
+		IAddProductController, Runnable {
 	
 	String barcode;
 	
@@ -96,19 +96,26 @@ public class AddProductController extends Controller implements
 		getView().enableOK(false);
 		getView().setBarcode(barcode);
 		getView().setDescription("Identifying Product – Please Wait");
+		new Thread(this).start();	//Identifies the product in another thread to allow the gui to update.
+		//TODO: Is the barcode ever enabled?
 		
-		//Until I can figure out how to make the view visible, this next part will just be annoying.
+	}
+
+	/**
+	 * Identifies the product. This has its own method because
+	 * it must be done in a seperate thread. This should only be called from Thread.
+	 */
+	@Override
+	public void run() {
+		String description = Model.getInstance().getProductIdentifier().getProduct(barcode);
 		/*try {
-			Thread.sleep(3000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		
-		getView().setDescription("");
+		getView().setDescription(description);
 		getView().enableDescription(true);
-		//TODO: Is the barcode ever enabled?
-		
 	}
 
 	//

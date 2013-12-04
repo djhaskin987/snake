@@ -4,7 +4,7 @@ package model.serialization;
  * The JavaSerializerFactory instance creates a new JavaSerializer object.
  */
 public class JavaSerializerFactory implements ISerializerFactory {
-
+	
 	private JavaSerializerFactory() {
 		// no instantiation
 	}
@@ -17,9 +17,8 @@ public class JavaSerializerFactory implements ISerializerFactory {
 	 * {@pre none}
 	 * {@post an ISerializerFactory instance}
 	 */
-	private ISerializerFactory getInstance() {
-		// TODO method stub
-		return null;
+	public ISerializerFactory getInstance() {
+		return new JavaSerializerFactory();
 	}
 
 	/**
@@ -34,7 +33,7 @@ public class JavaSerializerFactory implements ISerializerFactory {
 	@Override
 	public ISerializer createSerializer() {
 		// TODO Auto-generated method stub
-		return null;
+		return new JavaSerializer();
 	}
 
 }

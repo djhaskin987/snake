@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import model.reports.ReportVisitor;
-
 import gui.common.*;
 import gui.item.ItemData;
 
@@ -65,7 +64,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	}
 
 
-	 /** retrieve a list of items based on the product name.
+	/** retrieve a list of items based on the product name.
 	 *
 	 * @param productName the name of the product
 	 *
@@ -75,7 +74,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 	 *
 	 * {@post a list of items}
 	 */
-    @Override
+	@Override
 	public List<IItem> getItems(IProduct p) {
 		return productItems.getItems(p);
 	}
@@ -478,7 +477,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			items.addAll(productContainer.getItemsRecursive(product));
 			Collection<IItem> c = productContainer.getItems(product);
 			if (c != null)
-					items.addAll(c);
+				items.addAll(c);
 		}
 		return items;
 	}
@@ -493,7 +492,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 		}
 		return returned;
 	}
-	
+
 	@Override
 	public void moveProduct(IProduct product, IProductContainer target)
 	{
@@ -514,12 +513,12 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			target.addItem(i);
 		}
 	}
-	
+
 	public void addProduct(IProduct product)
 	{
 		productItems.addProduct(product);
 	}
-	
+
 	public void insertItem(IItem item, IProduct product, int position) {
 		item.setProductContainer(this);
 		productItems.insertItem(item, product, position);
@@ -532,7 +531,7 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			((ProductContainer)container).clearAllTags();
 		}
 	}
-	
+
 	public void accept_traverse(ReportVisitor v) {
 		Collection<IProduct> products = getProducts();
 		for (IProduct p : products) {
@@ -546,10 +545,25 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 			pc.accept(v);
 		}
 	}
-	
+
 	@Override
 	public Collection<IProductContainer> getChildren() {
 		Collection<IProductContainer> pcs = productContainers.getProductContainers().values();
 		return pcs;
+	}
+
+	@Override
+	public IProductContainer getDescendant(String name) {
+		IProductContainer descendant = productContainers.getProductContainers().get(new NonEmptyString(name));
+		if(descendant != null) {
+			return descendant;
+		}
+		for(IProductContainer child : getChildren()) {
+			descendant = child.getDescendant(name);
+			if(descendant != null) {
+				return descendant;
+			}
+		}
+		return null;
 	}
 }

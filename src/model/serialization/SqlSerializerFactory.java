@@ -19,7 +19,7 @@ public class SqlSerializerFactory implements ISerializerFactory {
 	 * {@post an ISerializerFactory instance}
 	 */
 	public ISerializerFactory getInstance() {
-		return null;
+		return new SqlSerializerFactory();
 	}
 	
 	/**
@@ -34,8 +34,7 @@ public class SqlSerializerFactory implements ISerializerFactory {
 	 */
 	@Override
 	public ISerializer createSerializer() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SqlSerializer();
 	}
 
 }

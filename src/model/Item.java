@@ -40,12 +40,7 @@ public class Item implements IItem, ITagable, Serializable {
 	 *			and null as the exit time.}
 	 */
 	public Item(IProduct product, Barcode barcode, IProductContainer container) {
-		this.product = product;
-		this.barcode = barcode;
-		this.entryDate = new ValidDate();
-		this.exitTime = null;
-		this.container = container;
-		this.tagable = new Tagable();
+		this(product, barcode, new ValidDate(), null, container);
 	}
 	/**
 	 * @param product		The product this item is an instance of
@@ -63,13 +58,20 @@ public class Item implements IItem, ITagable, Serializable {
 	 */
 	public Item(IProduct product, Barcode barcode, ValidDate entryDate,
 			IProductContainer container) {
+		this(product, barcode, entryDate, null, container);
+	}
+
+	public Item(IProduct product, Barcode barcode,
+			ValidDate entryDate, DateTime exitTime, IProductContainer container)
+	{
 		this.product = product;
 		this.barcode = barcode;
 		this.entryDate = entryDate;
-		this.exitTime = null;
+		this.exitTime = exitTime;
 		this.container = container;
 		this.tagable = new Tagable();
 	}
+		
 	@Override
 	public void setProductContainer(IProductContainer container) {
 		this.container = container;

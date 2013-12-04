@@ -14,7 +14,7 @@ public class JavaSerializer implements ISerializer {
 	 * Creates a new JavaSerializer object
 	 */
 	public JavaSerializer() {
-		// TODO Auto-generated constructor stub
+		// does nothing
 	}
 
 	/** (non-Javadoc)
@@ -22,7 +22,7 @@ public class JavaSerializer implements ISerializer {
 	 */
 	@Override
 	public void load(Model model) {
-		// TODO Auto-generated method stub
+		model.load();
 	}
 	
 	/**
@@ -30,7 +30,7 @@ public class JavaSerializer implements ISerializer {
 	 */
 	@Override
 	public void save(Model model) {
-		// TODO Auto-generated method stub
+		model.store();
 
 	}
 
@@ -39,8 +39,7 @@ public class JavaSerializer implements ISerializer {
 	 */
 	@Override
 	public void update(Model model) {
-		// TODO Auto-generated method stub
-
+		model.store();
 	}
 
 }

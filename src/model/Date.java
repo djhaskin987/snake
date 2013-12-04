@@ -137,10 +137,6 @@ public class Date extends AbstractDateTime {
 		return date;
 	}
 	
-	public java.util.Date toJavaUtilDate() {
-		return calendar.getTime();
-	}
-	
 	/**
 	 * Gives the date in mm/dd/yyyy format.
 	 */

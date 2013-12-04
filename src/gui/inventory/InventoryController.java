@@ -315,6 +315,9 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProduct() {
+		if(getView().getSelectedProduct() == null) {
+			return false;
+		}
 		return getModel().canDeleteProduct(
 				(IProductContainer) getView().getSelectedProductContainer().getTag(),
 				(IProduct) getView().getSelectedProduct().getTag()

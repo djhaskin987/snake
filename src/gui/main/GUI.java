@@ -3,6 +3,10 @@ package gui.main;
 
 import javax.swing.*;
 
+import model.Model;
+import model.serialization.ISerializerFactory;
+import model.serialization.JavaSerializerFactory;
+
 import java.awt.event.*;
 
 import gui.common.*;
@@ -25,7 +29,7 @@ public final class GUI extends JFrame implements IMainView {
 
 	private GUI(String[] args) {
 		super("Home Inventory Tracker");		
-		
+		processArgs(args);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
@@ -44,6 +48,17 @@ public final class GUI extends JFrame implements IMainView {
 		display();
 	}
 
+	private void processArgs(String [] args) {
+		if (args.length > 0) {
+			if (args[0].contentEquals("ser")) {
+				Model m = Model.getInstance();
+				ISerializerFactory factory = JavaSerializerFactory.getInstance();
+			} else if (args[0].contentEquals("db")) {
+				
+			}
+		}
+	}
+	
 	private void createMenus() {
 		_sessionMenu = new SessionMenu(this);
 		_sessionMenu.setFont(View.createFont(_sessionMenu.getFont(), View.MenuFontSize));
