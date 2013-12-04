@@ -1,6 +1,5 @@
 package model.serialization.db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -11,43 +10,93 @@ import fj.F;
 import model.Barcode;
 import model.DateTime;
 import model.IItem;
-import model.IProduct;
 import model.InvalidHITDateException;
 import model.Item;
-import model.NonEmptyString;
 import model.ValidDate;
 
 public class ItemDAO implements IItemDAO {
 	private JDBCWrapper dbConnection;
 	
-	private class ItemRecord {
+	private static class ItemRecord {
+		public static String TABLE = "Item";
 		private Barcode productBarcode;
 		private Barcode barcode;
 		private ValidDate entryDate;
 		private DateTime exitTime;
 		private String productContainerName;
 		private String productContainerStorageUnit;
+		public static List<String> getColumnNames()
+		{
+			return Arrays.asList(COLUMN_NAMES);
+			
+		}
+		public static final String [] COLUMN_NAMES = {"ProductBarcode",
+			
+									"Barcode",
+									"EntryDate",
+									"ExitTime",
+									"ProductContainerName",
+									"ProductContainerStorageUnit"};
+		public static final String [] IDENTIFIER_NAMES = {"Barcode"};
+		public static List<String> getIdentifierNames()
+		{
+			return Arrays.asList(IDENTIFIER_NAMES);
+		}
+		public List<Object> getIdentifierValues()
+		{
+			Object [] result = {
+					barcode
+			};
+			return Arrays.asList(result);
+		}
+		
+		public List<Object> getColumnValues()
+		{
+			Object [] result = {
+					productBarcode,
+					barcode,
+					entryDate,
+					exitTime,
+					productContainerName,
+					productContainerStorageUnit
+			};
+			return Arrays.asList(result);
+		}
+		
 		public ItemRecord(Barcode barcode,
+				Barcode productBarcode,
+				ValidDate entryDate)
+		{
+			this(barcode, productBarcode, entryDate, null, null, null);
+		}
+		
+		public ItemRecord(Barcode barcode,
+				Barcode productBarcode,
 				ValidDate entryDate,
-				DateTime exitTime)
+				DateTime exitTime,
+				String productContainerName,
+				String productContainerStorageUnit)
 		{
 			this.barcode = barcode;
 			this.exitTime = exitTime;
 			this.entryDate = entryDate;
-			this.productBarcode = null;
-			this.productContainerName = null;
-			this.productContainerStorageUnit = null;
+			this.productBarcode = productBarcode;
+			this.productContainerName = productContainerName;
+			this.productContainerStorageUnit = productContainerStorageUnit;
 		}
 		
-		public boolean isComplete()
+		public boolean isValid()
 		{
 			return barcode != null &&
-					exitTime != null &&
-					entryDate != null &&
-					productContainerName != null &&
-					productContainerStorageUnit != null;
+					productBarcode != null &&
+					entryDate != null;
 		}
-
+		
+		public boolean isRemoved()
+		{
+			return productContainerName == null;
+		}
+		
 		public Barcode getBarcode()
 		{
 			return barcode;
@@ -144,7 +193,7 @@ public class ItemDAO implements IItemDAO {
 	private fj.data.List<ItemRecord> getResults(String [] columnNames,
 			Object [] columnValues)
 	{
-		ResultSet itemSet = dbConnection.query("Item",
+		ResultSet itemSet = dbConnection.query(ItemRecord.TABLE,
 				Arrays.asList(columnNames),
 				Arrays.asList(columnValues));
 		fj.data.List<ItemRecord> returned = 
@@ -172,8 +221,30 @@ public class ItemDAO implements IItemDAO {
 	
 	private static ItemRecord ItemToItemRecord(final IItem item)
 	{
-		return new ItemRec
-		
+		ItemRecord result = new ItemDAO.ItemRecord(item.getBarcode(),
+				new Barcode(item.getProduct().getBarcode()),
+				item.getEntryDate());
+		if (item.getProductContainer() != null)
+		{
+			result.addProductContainerName(
+					item.getProductContainer().getName().toString()
+					);
+			result.addProductContainerStorageUnit(
+					item.getProductContainer().getUnit());
+		}
+		else
+		{
+			if (item.getExitTime() == null)
+			{
+				throw new IllegalStateException("Item '" + item.getBarcode().toString() +
+						"' has no exit time, yet has no product container either.");
+			}
+		}
+		if (item.getExitTime() != null)
+		{
+			result.addExitTime(item.getExitTime());
+		}
+		return result;
 	}
 	
 	private fj.data.List<IItem> readAllBy(String [] columnNames,
@@ -199,8 +270,8 @@ public class ItemDAO implements IItemDAO {
 
 	@Override
 	public void create(IItem thing) {
-		// TODO Auto-generated method stub
-
+		ItemRecord record = ItemToItemRecord(thing);
+		dbConnection.insert(ItemRecord.TABLE, ItemRecord.getColumnNames(), record.getColumnValues());
 	}
 
 	@Override
@@ -220,20 +291,26 @@ public class ItemDAO implements IItemDAO {
 
 	@Override
 	public void update(IItem thing) {
-		// TODO Auto-generated method stub
-
+		ItemRecord record = ItemToItemRecord(thing);
+		
+		dbConnection.update(ItemRecord.TABLE, ItemRecord.getColumnNames(),
+				record.getColumnValues(),
+				ItemRecord.getIdentifierNames(),
+				record.getIdentifierValues());
 	}
 
 	@Override
 	public void delete(IItem thing) {
-		// TODO Auto-generated method stub
-
+		ItemRecord record = ItemToItemRecord(thing);
+		dbConnection.delete(ItemRecord.TABLE,
+				ItemRecord.getIdentifierNames(),
+				record.getIdentifierValues());
 	}
 
 	@Override
-	public Barcode getProductBarcode(IItem item) {
+	public Barcode getProductBarcode(Barcode itemBarcode) {
 		String [] columnNames = {"Barcode"};
-		Object [] columnValues = {item.getBarcode().toString()};
+		Object [] columnValues = {itemBarcode.toString()};
 		fj.data.List<ItemRecord> results =
 				getResults(columnNames, columnValues);
 		if (results.isEmpty())
@@ -242,22 +319,28 @@ public class ItemDAO implements IItemDAO {
 		}
 		return results.head().getProductBarcode();
 	}
-	
 	@Override
-	public void setProduct(IItem item, IProduct product) {
-		ItemRecord record = new ItemRecord(item.getBarcode(),
-				item.getEntryDate(),
-				item.getExitTime());
-		record.addProductBarcode(new Barcode(product.getBarcode()));
-		
+	public String getProductContainerName(Barcode itemBarcode) {
+		String [] columnNames = {"Barcode"};
+		Object [] columnValues = {itemBarcode.toString()};
+		fj.data.List<ItemRecord> results =
+				getResults(columnNames, columnValues);
+		if (results.isEmpty())
+		{
+			return null;
+		}
+		return results.head().getProductContainerName();
 	}
-
-
-
 	@Override
-	public IProduct getProduct() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getStorageUnitName(Barcode itemBarcode) {
+		String [] columnNames = {"Barcode"};
+		Object [] columnValues = {itemBarcode.toString()};
+		fj.data.List<ItemRecord> results =
+				getResults(columnNames, columnValues);
+		if (results.isEmpty())
+		{
+			return null;
+		}
+		return results.head().getProductContainerStorageUnit();
 	}
-
 }
