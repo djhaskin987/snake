@@ -28,7 +28,7 @@ public class DAOFactory implements IDAOFactory, Closeable {
 
 	@Override
 	public IItemDAO getItemDAO() {
-		return new ItemDAO(dbConnection);
+		return new ItemDAO(dbConnection); 
 	}
 
 	@Override

@@ -17,8 +17,8 @@ CREATE TABLE "Item" (
      , "Barcode" TEXT PRIMARY KEY  NOT NULL  UNIQUE
      , "EntryDate" DATETIME NOT NULL
      , "ExitTime" DATETIME
-     , "ProductContainerName" TEXT NOT NULL
-     , "ProductContainerStorageUnit" TEXT NOT NULL
+     , "ProductContainerName" TEXT
+     , "ProductContainerStorageUnit" TEXT
 );
 
 CREATE TABLE "Product" (
