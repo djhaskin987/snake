@@ -369,9 +369,6 @@ public class JDBCWrapper implements Closeable {
 				}
 			}
 			ResultSet results = statement.executeQuery();
-			System.out.println(sql);
-			//System.out.println("Statement closed: " + statement.isClosed());
-			System.out.println("ResultSet closed: " + results.isClosed());
 			return results;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -450,7 +447,6 @@ public class JDBCWrapper implements Closeable {
 				}
 			}
 			sql.append(';');
-			System.out.println(sql);
 			//statement.close();
 			statement = connection.prepareStatement(sql.toString());
 			i = 0;
