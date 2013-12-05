@@ -27,7 +27,7 @@
 	<property name="test-reports" location="test-reports"/>
 
 	<property name="checkstyle-home" location="${lib}/checkstyle-5.3"/>
-	<property name="factual-home" location="${lib}/factual-java-1.7.5"/>
+	<property name="factual-home" location="${lib}/factual-java-1.8.3"/>
 	<property name="apache-commons-lang-home" location="${lib}/commons-lang3-3.1"/>
 	<property name="functionaljava-home" location="${lib}/functionaljava"/>
 	<property name="style-reports" location="style-reports"/>
@@ -61,7 +61,7 @@
     </path>
     <path id="factual-classpath">
         <fileset dir="${factual-home}">
-            <include name="factual-java-driver-1.7.5.jar" />
+            <include name="**/*.jar" />
         </fileset>
     </path>
 
@@ -155,8 +155,8 @@
 	<property name="itext.jar" value="lib/itext-5.1.0/itextpdf-5.1.0.jar"/>
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar" />
-    <property name="functionaljava.jar" value="lib/functionaljava/functionaljava/functionaljava.jar" />
-    <property name="factual.jar" value="lib/factual-java-1.7.5/factual-java-driver-1.7.5.jar" />
+    <property name="functionaljava.jar" value="lib/functionaljava/functionaljava.jar" />
+    <property name="factual.jar" value="lib/factual-java-1.8.3/factual-java-driver-app.jar" />
 
 	<target name="package" depends="compile"
         description="package the jar file" >
