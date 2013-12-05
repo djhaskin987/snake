@@ -27,6 +27,7 @@
 	<property name="test-reports" location="test-reports"/>
 
 	<property name="checkstyle-home" location="${lib}/checkstyle-5.3"/>
+	<property name="factual-home" location="${lib}/factual-java-1.7.5"/>
 	<property name="apache-commons-lang-home" location="${lib}/commons-lang3-3.1"/>
 	<property name="functionaljava-home" location="${lib}/functionaljava"/>
 	<property name="style-reports" location="style-reports"/>
@@ -57,7 +58,13 @@
 		<fileset dir="${checkstyle-home}">
 			<include name="checkstyle-5.3-all.jar" />
 		</fileset>
-	</path>
+    </path>
+    <path id="factual-classpath">
+        <fileset dir="${factual-home}">
+            <include name="factual-java-driver-1.7.5.jar" />
+        </fileset>
+    </path>
+
 
 	<path id="cobertura-classpath">
 		<fileset dir="${cobertura-home}">
@@ -85,7 +92,7 @@
 			<include name="itextpdf-5.1.0.jar" />
 		</fileset>
 	</path>
-	
+
 	<path id="apache-commons-lang-classpath">
 		<fileset dir="${apache-commons-lang-home}">
 			<include name="commons-lang3-3.1.jar" />
@@ -140,7 +147,8 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="apache-commons-lang-classpath" />
-			<classpath refid="functionaljava-classpath" />
+            <classpath refid="functionaljava-classpath" />
+            <classpath refid="factual-classpath" />
 		</javac>
 	</target>
 
@@ -148,6 +156,7 @@
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar" />
     <property name="functionaljava.jar" value="lib/functionaljava/functionaljava/functionaljava.jar" />
+    <property name="factual.jar" value="lib/factual-java-1.7.5/factual-java-driver-1.7.5.jar" />
 
 	<target name="package" depends="compile"
         description="package the jar file" >
