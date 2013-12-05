@@ -1,5 +1,7 @@
 package plugins;
 
+import java.util.Map;
+
 import com.factual.driver.Factual;
 import com.factual.driver.Query;
 import com.factual.driver.ReadResponse;
@@ -21,8 +23,17 @@ public class DanHaskinProductIdentifier extends AbstractProductIdentifier {
 			ReadResponse read = factualConnection.fetch("products-cpg",
 					new Query().field("upc")
 						       .isEqual(barcode));
-			return read.first().get("product_name").toString();
-
+			Map<String, Object> record = read.first();
+			if (record == null)
+			{
+				return null;
+			}
+			Object result =  record.get("product_name");
+			if (result == null)
+			{
+				return null;
+			}
+			return result.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -33,7 +44,9 @@ public class DanHaskinProductIdentifier extends AbstractProductIdentifier {
 		DanHaskinProductIdentifier ident = new DanHaskinProductIdentifier();
 		String product = ident._getProduct("049000006582");
 		String otherProduct = ident._getProduct("052000131512");
+		String poppycock = ident._getProduct("whodj");
 		System.out.println("049000006582" + " = " + product);
 		System.out.println("052000131512" + " = " + otherProduct);
+		System.out.println("Bogus: " + poppycock);
 	}
 }
