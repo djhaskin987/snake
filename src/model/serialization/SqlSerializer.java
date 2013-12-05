@@ -1,9 +1,8 @@
 package model.serialization;
 
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,12 +13,12 @@ import model.IItem;
 import model.IModelTagable;
 import model.IProduct;
 import model.IProductContainer;
-import model.Item;
+import model.ItemCollection;
 import model.Model;
 import model.ModelActions;
 import model.NonEmptyString;
 import model.ObservableArgs;
-import model.ProductContainerFactory;
+import model.ProductCollection;
 import model.StorageUnit;
 import model.StorageUnits;
 import model.serialization.db.*;
@@ -34,6 +33,11 @@ public class SqlSerializer implements ISerializer, Observer {
 	private IProductContainerDAO productContainerDAO;
 	private IProductDAO productDAO;
 	private IItemDAO itemDAO;
+	
+	private StorageUnits storageUnits;
+	private Map<Pair<String, String>, IProductContainer> productContainers;
+	private ProductCollection products;
+	private ItemCollection items;
 	/**
 	 * Creates a new SqlSerializer object
 	 * 
@@ -71,9 +75,55 @@ public class SqlSerializer implements ISerializer, Observer {
 	 */
 	@Override
 	public void load(Model model) {
-		StorageUnits su = getRoot(model);
-		model.setStorageUnits(su);
+		storageUnits = getRoot(model);
+		createObjects();
+		linkObjects();
+		model.setStorageUnits(storageUnits);
+		model.setProductCollection(products);
+		model.setItemCollection(items);
 		model.addObserver(this);
+	}
+	
+	private void createObjects() {
+		productContainers = productContainerDAO.getMap();
+		for(IProduct product : productDAO.readAll()) {
+			products.add(product);
+		}
+		for(IItem item : itemDAO.readAll()) {
+			items.add(item);
+		}
+	}
+	
+	private void linkObjects() {
+		for(Pair<String, String> key : productContainers.keySet()) {
+			IProductContainer container = productContainers.get(key);
+			if(container instanceof StorageUnit) {
+				storageUnits.addStorageUnit((StorageUnit) container);
+			} else {
+				IProductContainer parent = productContainers.get(productContainerDAO.getParent(key));
+				parent.addProductContainer(container);
+				container.setParent(parent);
+				for(String barcode : productContainerDAO.getProducts(container)) {
+					IProduct product = products.getProduct(new NonEmptyString(barcode));
+					container.addProduct(product);
+					product.addProductContainer(container);
+				}
+			}
+		}
+		for(String itemBarcode : items.getBarcodes()) {
+			IItem item = items.getItem(itemBarcode);
+			String productBarcode = itemDAO.getProductBarcode(new Barcode(itemBarcode)).getBarcode();
+			IProduct product = products.getProduct(new NonEmptyString(productBarcode));
+			item.setProduct(product);
+			
+			if(item.getExitTime() != null) {
+				String containerName = itemDAO.getProductContainerName(new Barcode(itemBarcode));
+				String unitName = itemDAO.getStorageUnitName(new Barcode(itemBarcode));
+				IProductContainer container = productContainers.get(Pair.of(containerName, unitName));
+				container.add(item);
+				item.setProductContainer(container);
+			}
+		}
 	}
 	
 	private StorageUnits getRoot(Model model) {
@@ -81,85 +131,11 @@ public class SqlSerializer implements ISerializer, Observer {
 		List<StorageUnits> l = rdao.readAll();
 		if (l.size() > 0) {
 			su = l.get(0);
-			
 		} else {
 			su = model.getStorageUnits();
 			rdao.create(su);
 		}
-		List<IProductContainer> liSu = getStorageUnits();
-		for (IProductContainer s : liSu) {
-			StorageUnit storageUnit = (StorageUnit) ProductContainerFactory.getInstance().createStorageUnit(s.getName().getValue());
-			su.addStorageUnit(storageUnit);
-		}
 		return su;
-	}
-	
-	private List<IProductContainer> getStorageUnits() {
-		List<Pair<String, String>> suPairs = rdao.getStorageUnits();
-		List<IProductContainer> out = new ArrayList<IProductContainer>();
-		for (Pair<String, String> suPair : suPairs) {
-			IProductContainer su = productContainerDAO.read(suPair);
-			loadProductContainer(su);
-			out.add(su);
-		}
-		return out;
-	}
-	
-	
-	private void loadProductContainer(IProductContainer pc) {
-		List<Pair<String, String>> children = productContainerDAO.getChildren(pc);
-		loadProductContainerChildren(pc, children);
-		List<String> itemsStr = productContainerDAO.getItems(pc);
-		List<String> productsStr = productContainerDAO.getProducts(pc);
-		loadProductItems(pc, itemsStr, productsStr);
-		for (IProductContainer child : pc.getChildren()) {
-			loadProductContainer(child);
-		}
-	}
-	
-	private void loadProductContainerChildren(IProductContainer pc, List<Pair<String, String>> children) {
-		for (Pair<String, String> child : children) {
-			IProductContainer pcChild = productContainerDAO.read(child);
-			pc.addProductContainer(pcChild);
-		}
-	}
-	
-	private void loadProductItems(IProductContainer pc, List<String> itemsStr, List<String> productsStr) {
-		loadProducts(pc, itemsStr);
-		loadItems(pc, itemsStr);
-	}
-	
-	private void loadItems(IProductContainer pc, List<String> itemsStr) {
-		for (String itemStr : itemsStr) {
-			Barcode iBarcode = new Barcode(itemStr);
-			String pBarcode = itemDAO.getProductBarcode(iBarcode).getBarcode();
-			IItem i = itemDAO.read(iBarcode);
-			IItem item = createItem(i, pBarcode, pc);
-			pc.addItem(item);
-		}
-	}
-	
-	private IItem createItem(IItem i, String pBarcode, IProductContainer pc) {
-		IProduct product = getProduct(pBarcode);
-		IItem item = new Item(product, i.getBarcode(), i.getEntryDate(), i.getExitTime(), pc);
-		return item;
-	}
-	
-	private void loadProducts(IProductContainer pc, List<String> productsStr) {
-		for (String productStr : productsStr) {
-			IProduct product = getProduct(productStr);
-			pc.addProduct(product);
-		}
-	}
-	
-	private IProduct getProduct(String barcode) {
-		Model m = Model.getInstance();
-		IProduct product = m.getProduct(barcode);
-		if (product == null) {
-			NonEmptyString neProductStr = new NonEmptyString(barcode);
-			product = productDAO.read(neProductStr);	
-		}
-		return product;	
 	}
 
 	/* (non-Javadoc)

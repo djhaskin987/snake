@@ -78,5 +78,9 @@ public class ProductCollection extends Observable implements Serializable {
 	public void removeProduct(IProduct product) {
 		products.remove(product.getBarcode().getValue());
 	}
+
+	public Collection<String> getBarcodes() {
+		return products.keySet();
+	}
 }
 

@@ -52,12 +52,8 @@ public final class GUI extends JFrame implements IMainView {
 
 	private void processArgs(String [] args) {
 		ISerializerFactory factory = null;
-		if (args.length > 0) {
-			if (args[0].contentEquals("ser")) {
+		if (args.length > 0 && args[0].contentEquals("ser")) {
 				factory = JavaSerializerFactory.createInstance();
-			} else if (args[0].contentEquals("db")) {
-				factory = SqlSerializerFactory.createInstance();
-			}
 		} else {
 			factory = SqlSerializerFactory.createInstance();
 		}

@@ -106,6 +106,16 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		return Pair.of(identifierNames, identifierValues);
 	}
 
+	private Pair<List<String>, List<Object>> getIdentifiers(Pair<String, String> identifier) {
+		List<String> identifierNames = new ArrayList<String>();
+		List<Object> identifierValues = new ArrayList<Object>();
+		identifierNames.add("Name");
+		identifierValues.add(identifier.getLeft());
+		identifierNames.add("StorageUnit");
+		identifierValues.add(identifier.getRight());
+		return Pair.of(identifierNames, identifierValues);
+	}
+
 	@Override
 	public void update(IProductContainer thing) {
 		System.err.println("Error: ProductContainerDAO does not support update(IProductContainer).");
@@ -140,7 +150,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 	}
 
 	@Override
-	public Pair<String, String> getParent(IProductContainer container) {
+	public Pair<String, String> getParent(Pair<String, String> container) {
 		Pair<List<String>, List<Object>> identifiers = getIdentifiers(container);
 		ResultSet rs = wrapper.query(TABLE, identifiers.getLeft(), identifiers.getRight());
 		try {

@@ -195,6 +195,10 @@ public class Item implements IItem, ITagable, Serializable {
 			return expireDate.toString();
 		}
 	}
+	@Override
+	public void setProduct(IProduct product) {
+		this.product = product;
+	}
 	
 	
 }

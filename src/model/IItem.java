@@ -84,4 +84,6 @@ public interface IItem extends IModelTagable, Serializable, IReportNode {
 
 	String getExpireDateString();
 
+	public void setProduct(IProduct product);
+
 }

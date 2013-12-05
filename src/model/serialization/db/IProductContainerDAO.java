@@ -19,7 +19,7 @@ public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProduc
 	 * @return				Database ID of Parent container, or null if container
 	 * 						is a StorageUnit
 	 */
-	public Pair<String, String> getParent(IProductContainer container);
+	//public Pair<String, String> getParent(IProductContainer container);
 	/**
 	 * @param container		The container to find the items in
 	 * @return				A list of barcodes of all items immediately in this container.
@@ -59,4 +59,5 @@ public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProduc
 	 * {@post a map}
 	 */
 	public java.util.Map<Pair<String,String>, IProductContainer> getMap();
+	Pair<String, String> getParent(Pair<String, String> identifier);
 }
