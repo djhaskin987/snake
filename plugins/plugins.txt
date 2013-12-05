@@ -1,1 +1,3 @@
+plugins.UPCDatabaseReader
 plugins.BasedProductIdentifier
+plugins.DanHaskinProductIdentifier
