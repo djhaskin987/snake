@@ -50,4 +50,13 @@ public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProduc
 			IProductContainer productContainer);
 	void removeProductFromProductContainer(IProduct product,
 			IProductContainer productContainer);
+	/**
+	 * gets all Product Containers in a map.
+	 * 
+	 * @return a map
+	 * 
+	 * {@pre none}
+	 * {@post a map}
+	 */
+	public java.util.Map<Pair<String,String>, IProductContainer> getMap();
 }
