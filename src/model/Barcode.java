@@ -54,7 +54,7 @@ public class Barcode implements Serializable {
 	 */
 	public Barcode(NonEmptyString barcode) {
 		String strBarcode = barcode.toString();
-		checkBarcode(strBarcode);
+		// checkBarcode(strBarcode);
 		this.barcode = strBarcode;
 	}
 	
