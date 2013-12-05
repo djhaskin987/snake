@@ -18,7 +18,7 @@
 	<property name="images" location="images"/>
 	<property name="build" location="build"/>
 	<property name="dist" location="dist"/>
-	<property name="lib" location="lib"/>
+    <property name="lib" location="lib"/>
 	<property name="doc" location="doc"/>
 
 	<property name="test-src" location="test-src"/>
@@ -30,6 +30,7 @@
 	<property name="factual-home" location="${lib}/factual-java-1.8.3"/>
 	<property name="apache-commons-lang-home" location="${lib}/commons-lang3-3.1"/>
 	<property name="functionaljava-home" location="${lib}/functionaljava"/>
+    <property name="plugins-home" location="plugins"/>
 	<property name="style-reports" location="style-reports"/>
 	<property name="style-report-file" location="${style-reports}/checkstyle.txt"/>
 
@@ -103,6 +104,11 @@
 			<include name="functionaljava.jar" />
 		</fileset>
 	</path>
+	<path id="plugins-classpath">
+		<fileset dir="${plugins-home}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
 	<!-- ***************** -->
 	<!-- task definintions -->
@@ -148,6 +154,7 @@
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="apache-commons-lang-classpath" />
             <classpath refid="functionaljava-classpath" />
+            <classpath refid="plugins-classpath" />
             <classpath refid="factual-classpath" />
 		</javac>
 	</target>
@@ -156,6 +163,7 @@
 	<property name="sqlite.jar" value="lib/sqlitejdbc-v056/sqlitejdbc-v056.jar"/>
 	<property name="commons-lang.jar" value="lib/commons-lang3-3.1/commons-lang3-3.1.jar" />
     <property name="functionaljava.jar" value="lib/functionaljava/functionaljava.jar" />
+    <property name="plugins" value="plugins/CarrierPlugin.jar plugins/DanHaskinPlugin.jar plugins/splugin.jar" />
     <property name="factual.jar" value="lib/factual-java-1.8.3/factual-java-driver-app.jar" />
 
 	<target name="package" depends="compile"
@@ -175,7 +183,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="gui.main.GUI"/>
 				<attribute name="Class-Path"
-                    value="${sqlite.jar} ${itext.jar} ${commons-lang.jar} ${functionaljava.jar}" />
+                    value="${sqlite.jar} ${itext.jar} ${plugins} ${commons-lang.jar} ${functionaljava.jar} " />
 			</manifest>
 		</jar>
 	</target>
