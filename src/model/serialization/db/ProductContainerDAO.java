@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.IProduct;
 import model.IProductContainer;
@@ -53,19 +55,9 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		}
 	}
 
-	//TODO: Duplicate code. Same as ProductDAO.
 	@Override
 	public List<IProductContainer> readAll() {
-		try {
-			ResultSet rs = wrapper.queryAll(TABLE);
-			ArrayList<IProductContainer> productContainers = new ArrayList<IProductContainer>();
-			while(rs.next()) {
-				productContainers.add(read(rs));
-			}
-			return productContainers;
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+		//RefusedBequest
 		return null;
 	}
 
@@ -76,7 +68,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		columnValues.add(productContainer.getName().getValue());
 		if(productContainer instanceof ProductGroup) {
 			IProductContainer parent = productContainer.getUnitPC();
-		//if(parent != productContainer) {
+			//if(parent != productContainer) {
 			columnNames.add("StorageUnit");
 			columnValues.add(parent.getName().getValue());
 			columnNames.add("ParentContainer");
@@ -230,24 +222,50 @@ public class ProductContainerDAO implements IProductContainerDAO {
 	public void addProductToProductContainer(IProduct product, IProductContainer productContainer) {
 		String[] names = {"ProductContainerName",
 				"ProductContainerStorageUnit",
-				"ProductBarcode"};
+		"ProductBarcode"};
 		Object[] values = {productContainer.getName().getValue(),
 				productContainer.getUnitPC().getName().getValue(),
 				product.getBarcode().getValue()};
 		wrapper.insert("ProductContainerProductRelation",
 				Arrays.asList(names), Arrays.asList(values));
 	}
-	
+
 	@Override
 	public void removeProductFromProductContainer(IProduct product, IProductContainer productContainer) {
 		String[] names = {"ProductContainerName",
 				"ProductContainerStorageUnit",
-				"ProductBarcode"};
+		"ProductBarcode"};
 		Object[] values = {productContainer.getName().getValue(),
 				productContainer.getUnitPC().getName().getValue(),
 				product.getBarcode().getValue()};
 		wrapper.delete("ProductContainerProductRelation",
 				Arrays.asList(names), Arrays.asList(values));
+	}
+
+	@Override
+	public Map<Pair<String, String>, IProductContainer> getMap() {
+		Map<Pair<String, String>, IProductContainer> map = new HashMap<Pair<String, String>, IProductContainer>();
+		ResultSet rs = wrapper.queryAll(TABLE);
+		try {
+			while(rs.next()) {
+				String name = rs.getString("Name");
+				String unit = rs.getString("StorageUnit");
+				if(unit == null) {
+					map.put(Pair.of(name, (String) null), Model.getInstance().createStorageUnit(name));
+				} else {
+					IProductContainer productGroup = Model.getInstance().createProductGroup(
+							name,
+							Double.toString(rs.getDouble("ThreeMonthSupplyValue")),
+							rs.getString("ThreeMonthSupplyUnit"),
+							null);
+					map.put(Pair.of(name, unit), productGroup);
+				}
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
 	}
 
 }
