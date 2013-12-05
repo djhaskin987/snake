@@ -39,7 +39,7 @@ public class Barcode implements Serializable {
 	 * {@post barcode != null}
 	 */
 	public Barcode(String barcode) {
-		checkBarcode(barcode);
+		//checkBarcode(barcode);
 		this.barcode = barcode;
 	}
 	
@@ -54,7 +54,7 @@ public class Barcode implements Serializable {
 	 */
 	public Barcode(NonEmptyString barcode) {
 		String strBarcode = barcode.toString();
-		// checkBarcode(strBarcode);
+		//checkBarcode(strBarcode);
 		this.barcode = strBarcode;
 	}
 	
@@ -216,7 +216,7 @@ public class Barcode implements Serializable {
 	@Override
 	public boolean equals(Object other) {
 		if (other.getClass() == Barcode.class) {
-			return (this.barcode == ((Barcode)other).barcode);
+			return (this.barcode.equals(((Barcode)other).barcode));
 		}
 		else return false;
 	}
