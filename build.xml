@@ -169,6 +169,7 @@
 	<target name="package" depends="compile"
         description="package the jar file" >
 		<mkdir dir="${dist}/lib"/>
+		<mkdir dir="${dist}/plugins"/>
 		<copy file="${door-icon-file}" todir="${build}/images"/>
 		<copy todir="${dist}/lib">
 			<fileset dir=".">
@@ -177,7 +178,12 @@
 				<exclude name="**/_svn"/>
 				<exclude name="**/_svn/**"/>
 			</fileset>
-		</copy>
+        </copy>
+        <copy todir="${dist}/plugins">
+            <fileset dir=".">
+                <include name="plugins/**"/>
+            </fileset>
+        </copy>
 		<jar jarfile="${dist}/lib/inventory-tracker.jar" basedir="${build}"
 				excludes="**/*Taglet*.class **/*StudentVersion*.class **/*WGet*.class">
 			<manifest>
@@ -196,7 +202,7 @@
 				<enable/>
 			</assertions>
 			<classpath>
-				<pathelement location="${dist}/lib/inventory-tracker.jar"/>
+                <pathelement location="${dist}/lib/inventory-tracker.jar"/>
 			</classpath>
 		</java>
 	</target>
