@@ -265,7 +265,7 @@ public class ProductContainerDAO implements IProductContainerDAO {
 			e.printStackTrace();
 			return null;
 		}
-		return null;
+		return map;
 	}
 
 }

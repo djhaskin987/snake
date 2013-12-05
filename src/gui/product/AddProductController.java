@@ -116,6 +116,7 @@ public class AddProductController extends Controller implements
 		}*/
 		getView().setDescription(description);
 		getView().enableDescription(true);
+		this.enableComponents();
 	}
 
 	//
