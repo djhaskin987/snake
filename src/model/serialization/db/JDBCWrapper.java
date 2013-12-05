@@ -72,7 +72,8 @@ public class JDBCWrapper implements Closeable {
 		//neededTables.add("UnitEnum");
 
 		Statement statement = returned.createStatement();
-		ResultSet rows = statement.executeQuery("SELECT name FROM sqlite_master where type='table';");
+		ResultSet rows = statement.executeQuery(
+				"SELECT name FROM sqlite_master where type='table';");
 		ResultSetMetaData meta = rows.getMetaData();
 		while (rows.next())
 		{
@@ -208,7 +209,8 @@ public class JDBCWrapper implements Closeable {
 		} else if(object instanceof java.util.Date) {
 			statement.setDate(i, new java.sql.Date(((java.util.Date) object).getTime()));
 		} else if(object instanceof model.AbstractDateTime) {
-			statement.setDate(i, new java.sql.Date(((model.AbstractDateTime) object).toJavaUtilDate().getTime()));
+			statement.setDate(i, new java.sql.Date(
+					((model.AbstractDateTime) object).toJavaUtilDate().getTime()));
 		} else if(object instanceof Unit) {
 			statement.setString(i, ((Unit) object).toString());
 		} else if(object instanceof Barcode) {
@@ -219,7 +221,8 @@ public class JDBCWrapper implements Closeable {
 			if(object == null) {
 				new Exception("Error: JDBCWrapper got a null somehow.").printStackTrace();
 			} else {
-				new Exception("Error: JDBCWrapper does not accept class " + object.getClass().getCanonicalName() + " " + i).printStackTrace();
+				new Exception("Error: JDBCWrapper does not accept class "
+			+ object.getClass().getCanonicalName() + " " + i).printStackTrace();
 			}
 				System.exit(1);
 		}

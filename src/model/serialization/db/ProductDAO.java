@@ -26,7 +26,8 @@ public class ProductDAO implements IProductDAO {
 			return new Product(
 					rs.getString("Barcode"),
 					rs.getString("Description"),
-					new Quantity(rs.getDouble("SizeValue"), Unit.getInstance(rs.getString("SizeUnit"))),
+					new Quantity(rs.getDouble("SizeValue"),
+							Unit.getInstance(rs.getString("SizeUnit"))),
 					rs.getInt("ShelfLife"),
 					rs.getInt("ThreeMonthSupply"));
 		} catch(SQLException e) {
@@ -84,7 +85,8 @@ public class ProductDAO implements IProductDAO {
 	@Override
 	public void update(IProduct thing) {
 		Pair<List<String>, List<Object>> lists = getLists(thing);
-		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), "Barcode", thing.getBarcode().getValue());
+		wrapper.update(TABLE, lists.getLeft(), lists.getRight(), "Barcode",
+				thing.getBarcode().getValue());
 	}
 
 	@Override
@@ -94,11 +96,13 @@ public class ProductDAO implements IProductDAO {
 
 	@Override
 	public List<Pair<String, String>> getContainers(IProduct product) {
-		ResultSet rs = wrapper.query("ProductContainerProductRelation", "ProductBarcode", product.getBarcode().getValue());
+		ResultSet rs = wrapper.query("ProductContainerProductRelation",
+				"ProductBarcode", product.getBarcode().getValue());
 		List<Pair<String, String>> out = new ArrayList<Pair<String, String>>();
 		try {
 			while(rs.next()) {
-				out.add(Pair.of(rs.getString("ProductContainerName"), rs.getString("ProductContainerStorageUnit")));
+				out.add(Pair.of(rs.getString("ProductContainerName"),
+						rs.getString("ProductContainerStorageUnit")));
 			}
 			return out;
 		} catch (SQLException e) {

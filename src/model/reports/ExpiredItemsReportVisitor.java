@@ -77,7 +77,8 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 
 		@Override
 		public int compare(Item o1, Item o2) {
-			int out = o1.getProduct().getDescription().getValue().compareTo(o2.getProduct().getDescription().getValue());
+			int out = o1.getProduct().getDescription().getValue().compareTo(
+					o2.getProduct().getDescription().getValue());
 			if(out != 0) {
 				return out;
 			}
@@ -85,7 +86,8 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 			if(out != 0) {
 				return out;
 			}
-			return Model.getInstance().getPosition(o1) - Model.getInstance().getPosition(o2);
+			return Model.getInstance().getPosition(o1)
+					- Model.getInstance().getPosition(o2);
 		}
 		
 	}
@@ -96,7 +98,8 @@ public class ExpiredItemsReportVisitor implements ReportVisitor {
 			size += temp.size();
 		}
 		String[][] table = new String[size+1][];
-		table[0] = new String[] {"Description", "Storage Unit", "Product Group", "Entry Date", "Expire Date"};
+		table[0] = new String[] {"Description", "Storage Unit", "Product Group",
+				"Entry Date", "Expire Date"};
 		int i=1;
 		for(TreeSet<Item> temp : items) {
 			for(Item item : temp) {

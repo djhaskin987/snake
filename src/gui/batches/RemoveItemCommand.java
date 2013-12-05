@@ -21,7 +21,8 @@ public class RemoveItemCommand implements ICommand {
 	 * 
 	 * Constructs a command to remove modelItem
 	 */
-	public RemoveItemCommand(IItem modelItem, ProductItemsData productItems, RemoveItemBatchController controller) {
+	public RemoveItemCommand(IItem modelItem, ProductItemsData productItems,
+			RemoveItemBatchController controller) {
 		item = (ItemData) modelItem.getTag();
 		product = (ProductData) modelItem.getProduct().getTag();
 		this.productItems = productItems;

@@ -255,8 +255,11 @@ public class Product implements IProduct, ITagable, Serializable {
 		String threeMonthSupply = this.threeMonthSupply.toString();
 		String container = this.containers.toString();
 		String tagable = this.tagable.toString();
-		String str = String.format("<model.Product barcode='%s' description='%s' itemSize='%s' shelfLife=%s threeMonthSupply=%s containers=%s tagable=%s>",
-				barcode, description, itemSize, shelfLife, threeMonthSupply, containers, tagable);
+		String str = String.format(
+				"<model.Product barcode='%s' description='%s' itemSize='%s'"
+				+ " shelfLife=%s threeMonthSupply=%s containers=%s tagable=%s>",
+				barcode, description, itemSize, shelfLife, threeMonthSupply,
+				containers, tagable);
 		return str;
 	}
 }

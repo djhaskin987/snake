@@ -64,7 +64,8 @@ public class RemovedReportController extends Controller implements
 	@Override
 	protected void loadValues() {
 		getView().setSinceLast(true);
-		getView().setSinceLastValue(Model.getInstance().getStorageUnits().getDateSinceLastRemovedItemsReport());
+		getView().setSinceLastValue(Model.getInstance().getStorageUnits()
+				.getDateSinceLastRemovedItemsReport());
 	}
 
 	//

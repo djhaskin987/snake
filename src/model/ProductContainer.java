@@ -554,7 +554,8 @@ public abstract class ProductContainer extends ModelObservable implements IProdu
 
 	@Override
 	public IProductContainer getDescendant(String name) {
-		IProductContainer descendant = productContainers.getProductContainers().get(new NonEmptyString(name));
+		IProductContainer descendant = productContainers.getProductContainers()
+				.get(new NonEmptyString(name));
 		if(descendant != null) {
 			return descendant;
 		}

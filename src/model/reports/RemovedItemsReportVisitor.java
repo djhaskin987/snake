@@ -86,7 +86,8 @@ public class RemovedItemsReportVisitor implements ReportVisitor {
 
 	private String[][] compileTable() {
 		String[][] table = new String[products.size()+1][];
-		table[0] = new String[] {"Description", "Size", "Product Barcode", "Removed", "Current Supply"};
+		table[0] = new String[] {"Description", "Size", "Product Barcode",
+				"Removed", "Current Supply"};
 		int i=1;
 		for(IProduct product : products.keySet()) {
 			table[i] = new String[] {

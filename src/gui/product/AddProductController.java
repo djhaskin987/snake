@@ -96,7 +96,8 @@ public class AddProductController extends Controller implements
 		getView().enableOK(false);
 		getView().setBarcode(barcode);
 		getView().setDescription("Identifying Product – Please Wait");
-		new Thread(this).start();	//Identifies the product in another thread to allow the gui to update.
+		new Thread(this).start();
+		//Identifies the product in another thread to allow the gui to update.
 		//TODO: Is the barcode ever enabled?
 		
 	}

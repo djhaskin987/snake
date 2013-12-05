@@ -98,7 +98,8 @@ public class RootDAO implements IRootDAO {
 	@Override
 	public List<Pair<String, String>> getStorageUnits() {
 		List<Pair<String, String>> storageUnits = new ArrayList<Pair<String,String>>();
-		ResultSet rs = dbConnection.executeQuery("select name from ProductContainer where StorageUnit is null");
+		ResultSet rs = dbConnection.executeQuery(
+				"select name from ProductContainer where StorageUnit is null");
 		try {
 			while (rs.next()) {
 				String name = rs.getString(1);

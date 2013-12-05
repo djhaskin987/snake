@@ -100,7 +100,8 @@ public class SqlSerializer implements ISerializer, Observer {
 			if(container instanceof StorageUnit) {
 				storageUnits.addStorageUnit((StorageUnit) container);
 			} else {
-				IProductContainer parent = productContainers.get(productContainerDAO.getParent(key));
+				IProductContainer parent = productContainers.get(
+						productContainerDAO.getParent(key));
 				parent.addProductContainer(container);
 				container.setParent(parent);
 				for(String barcode : productContainerDAO.getProducts(container)) {
@@ -112,14 +113,18 @@ public class SqlSerializer implements ISerializer, Observer {
 		}
 		for(String itemBarcode : items.getBarcodes()) {
 			IItem item = items.getItem(itemBarcode);
-			String productBarcode = itemDAO.getProductBarcode(new Barcode(itemBarcode)).getBarcode();
+			String productBarcode = itemDAO.getProductBarcode(new Barcode(
+					itemBarcode)).getBarcode();
 			IProduct product = products.getProduct(new NonEmptyString(productBarcode));
 			item.setProduct(product);
 			
 			if(item.getExitTime() != null) {
-				String containerName = itemDAO.getProductContainerName(new Barcode(itemBarcode));
-				String unitName = itemDAO.getStorageUnitName(new Barcode(itemBarcode));
-				IProductContainer container = productContainers.get(Pair.of(containerName, unitName));
+				String containerName = itemDAO.getProductContainerName(
+						new Barcode(itemBarcode));
+				String unitName = itemDAO.getStorageUnitName(new Barcode(
+						itemBarcode));
+				IProductContainer container = productContainers.get(
+						Pair.of(containerName, unitName));
 				container.add(item);
 				item.setProductContainer(container);
 			}

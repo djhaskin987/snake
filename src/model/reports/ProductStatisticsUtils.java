@@ -15,12 +15,15 @@ import model.ValidDate;
 
 public class ProductStatisticsUtils {
 	public static String[] getRowHeader() {
-		String[] rowHeader = new String[] { "Description", "Barcode", "Size", "3-Month Supply", "Supply:\nCur/Avg" , 
-				"Supply:\nMin/Max", "Supply:\nUsed/Added", "Shelf Life", "Used Age:\nMin/Max", "Cur Age:Min/Max" };
+		String[] rowHeader = new String[] { "Description", "Barcode", "Size",
+				"3-Month Supply", "Supply:\nCur/Avg" ,"Supply:\nMin/Max",
+				"Supply:\nUsed/Added", "Shelf Life", "Used Age:\nMin/Max",
+				"Cur Age:Min/Max" };
 		return rowHeader;
 	}
 	
-	public static String[] getRow(Product p, List<Item> allItems, List<Item> currentItems, List<Item> exitItems, int months) {
+	public static String[] getRow(Product p, List<Item> allItems,
+			List<Item> currentItems, List<Item> exitItems, int months) {
 		String description = getDescription(p);
 		String barcode = getBarcode(p);
 		String size = getSize(p);
@@ -31,7 +34,9 @@ public class ProductStatisticsUtils {
 		String shelfLife = getShelfLife(p);
 		String usedAgeAvgMax = getUsedAgeAvgMax(exitItems, months);
 		String curAgeAvgMax = getCurAgeAvgMax(currentItems, months);
-		String[] row = new String[] { description, barcode, size, threeMonthSupply, supplyCurAvg, supplyMinMax, supplyUsedAdded, shelfLife, usedAgeAvgMax, curAgeAvgMax };
+		String[] row = new String[] { description, barcode, size,
+				threeMonthSupply, supplyCurAvg, supplyMinMax, supplyUsedAdded,
+				shelfLife, usedAgeAvgMax, curAgeAvgMax };
 		return row;
 	}
 	
@@ -91,7 +96,8 @@ public class ProductStatisticsUtils {
 				ValidDate mEntryDate = item.getEntryDate();
 				Calendar entryDate = toCal(mEntryDate);
 				Calendar exitDate = toCal(item.getExitTime());
-				if (cal.compareTo(entryDate) >= 0 && (exitDate == null || cal.compareTo(exitDate) <= 0)) {
+				if (cal.compareTo(entryDate) >= 0 && (exitDate == null
+						|| cal.compareTo(exitDate) <= 0)) {
 					supplyDays[days] += 1;
 				}
 			}

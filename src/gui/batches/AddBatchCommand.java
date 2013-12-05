@@ -28,9 +28,14 @@ public class AddBatchCommand implements ICommand {
 	 * @param productContainerData
 	 * @param controller
 	 * 
-	 * Constructs a command to add items of product to productContainerData, with controller being the AddItemBatchController creating the command and productItems being its list of products and items.
+	 * Constructs a command to add items of product to productContainerData,
+	 * with controller being the AddItemBatchController creating the command
+	 * and productItems being its list of products and items.
 	 */
-	public AddBatchCommand(ProductData product, List<ItemData> items, ProductItemsData productItems, ProductContainerData productContainerData, AddItemBatchController controller) {
+	public AddBatchCommand(ProductData product, List<ItemData> items,
+			ProductItemsData productItems,
+			ProductContainerData productContainerData,
+			AddItemBatchController controller) {
 		this.product = product;
 		this.items = items;
 		this.productItems = productItems;

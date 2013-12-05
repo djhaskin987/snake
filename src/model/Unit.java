@@ -50,7 +50,8 @@ public enum Unit {
 	 */
 	public double convert(double amount, Unit unit) throws Exception {
 		if(!canConvert(unit)) {
-			throw new Exception("Error: " + statusCode + " cannot be converted to " + unit.getStatusCode());
+			throw new Exception("Error: " + statusCode
+					+ " cannot be converted to " + unit.getStatusCode());
 		}
 		return amount*unit.getConversionConstant()/conversionConstant;
 	}

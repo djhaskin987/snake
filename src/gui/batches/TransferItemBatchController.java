@@ -137,10 +137,12 @@ public class TransferItemBatchController extends Controller implements
 	public void transferItem() {
 		IItem item = Model.getInstance().getItem(getView().getBarcode());
 		if(item == null) {
-			getView().displayErrorMessage("Error: Barcode \"" + getView().getBarcode() + "\" is unrecognized");
+			getView().displayErrorMessage("Error: Barcode \""
+					+ getView().getBarcode() + "\" is unrecognized");
 			return;
 		}
-		commands.execute(new TransferItemCommand(target, (ItemData) item.getTag(), productItems, this, getView()));
+		commands.execute(new TransferItemCommand(target, (ItemData) item.getTag(),
+				productItems, this, getView()));
 		getView().setBarcode("");
 		getView().giveBarcodeFocus();
 	}
