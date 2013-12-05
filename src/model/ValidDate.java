@@ -56,10 +56,5 @@ public class ValidDate extends Date implements Serializable{
 	public ValidDate() {
 		super();
 	}
-	
-	public boolean equals(Object other)
-	{
-		super(other);
-	}
 
 }

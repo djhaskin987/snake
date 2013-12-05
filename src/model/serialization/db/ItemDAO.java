@@ -173,7 +173,9 @@ public class ItemDAO implements IItemDAO {
 				productBarcode = new Barcode(set.getString("ProductBarcode"));
 				barcode = new Barcode(set.getString("Barcode"));
 				entryDate = new ValidDate(set.getDate("EntryDate"));
-				exitTime = new DateTime(set.getDate("ExitTime"));
+				if(set.getDate("ExitTime") != null) {
+					exitTime = new DateTime(set.getDate("ExitTime"));
+				}
 				productContainerName = set.getString("ProductContainerName");
 				productContainerStorageUnit =
 						set.getString("ProductContainerStorageUnit");
@@ -211,7 +213,7 @@ public class ItemDAO implements IItemDAO {
 		return returned;
 	}
 	
-	private static IItem ItemRecordToItem(final ItemRecord record)
+	private static IItem itemRecordToItem(final ItemRecord record)
 	{
 		return new Item(null, record.getBarcode(),
 				record.getEntryDate(),
@@ -219,7 +221,7 @@ public class ItemDAO implements IItemDAO {
 				null);
 	}
 	
-	private static ItemRecord ItemToItemRecord(final IItem item)
+	private static ItemRecord itemToItemRecord(final IItem item)
 	{
 		ItemRecord result = new ItemDAO.ItemRecord(item.getBarcode(),
 				new Barcode(item.getProduct().getBarcode()),
@@ -254,7 +256,7 @@ public class ItemDAO implements IItemDAO {
 		fj.data.List<IItem> items = results.map(new F<ItemRecord, IItem>() {
 			public IItem f(final ItemRecord record)
 			{
-				return ItemRecordToItem(record);
+				return itemRecordToItem(record);
 			}
 		});
 		return items;
@@ -270,7 +272,7 @@ public class ItemDAO implements IItemDAO {
 
 	@Override
 	public void create(IItem thing) {
-		ItemRecord record = ItemToItemRecord(thing);
+		ItemRecord record = itemToItemRecord(thing);
 		dbConnection.insert(ItemRecord.TABLE, ItemRecord.getColumnNames(), record.getColumnValues());
 	}
 
@@ -291,7 +293,7 @@ public class ItemDAO implements IItemDAO {
 
 	@Override
 	public void update(IItem thing) {
-		ItemRecord record = ItemToItemRecord(thing);
+		ItemRecord record = itemToItemRecord(thing);
 		
 		dbConnection.update(ItemRecord.TABLE, ItemRecord.getColumnNames(),
 				record.getColumnValues(),
@@ -301,7 +303,7 @@ public class ItemDAO implements IItemDAO {
 
 	@Override
 	public void delete(IItem thing) {
-		ItemRecord record = ItemToItemRecord(thing);
+		ItemRecord record = itemToItemRecord(thing);
 		dbConnection.delete(ItemRecord.TABLE,
 				ItemRecord.getIdentifierNames(),
 				record.getIdentifierValues());
@@ -310,7 +312,7 @@ public class ItemDAO implements IItemDAO {
 	@Override
 	public Barcode getProductBarcode(Barcode itemBarcode) {
 		String [] columnNames = {"Barcode"};
-		Object [] columnValues = {itemBarcode.toString()};
+		Object [] columnValues = {itemBarcode.getBarcode()};
 		fj.data.List<ItemRecord> results =
 				getResults(columnNames, columnValues);
 		if (results.isEmpty())

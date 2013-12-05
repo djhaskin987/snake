@@ -7,8 +7,11 @@ import java.util.List;
 import model.Barcode;
 import model.DateTime;
 import model.IItem;
+import model.IProductContainer;
+import model.InvalidHITDateException;
 import model.Item;
 import model.IProduct;
+import model.Model;
 import model.NonEmptyString;
 import model.Product;
 import model.Quantity;
@@ -49,7 +52,27 @@ public class ItemDAOTest {
 		assertEquals(returnedItem.getEntryDate().getCalendar(), entryDate.getCalendar());
 		assertEquals(returnedItem.getExitTime().getCalendar(), exitTime.getCalendar());
 		assertEquals(itemDAO.getProductBarcode(itemBarcode),new Barcode(product.getBarcode()));
-		
+
+		IProductContainer unit = Model.getInstance().createStorageUnit("unit");
+		try {
+			entryDate = new ValidDate(entryDate.plusMonths(-1).toJavaUtilDate());
+		} catch (InvalidHITDateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		item = new Item(product, itemBarcode, entryDate, null, unit);
+		itemDAO.update(item);
+		itemList = itemDAO.readAll();
+		assertTrue(itemList.size() == 1);
+		returnedItem = itemDAO.read(item.getBarcode());
+		assertTrue(returnedItem != null);
+		assertTrue(returnedItem.getExitTime() == null);
+		assertEquals(returnedItem.getEntryDate(), entryDate);
+
+		itemDAO.delete(item);
+		itemList = itemDAO.readAll();
+		assertTrue(itemList.isEmpty());
 		
 	/*	it
 		productDAO.create(product);

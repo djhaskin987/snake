@@ -33,4 +33,9 @@ public abstract class AbstractDateTime implements Comparable<Object>, Serializab
 	public java.util.Date toJavaUtilDate() {
 		return getCalendar().getTime();
 	}
+	
+	@Override
+	public boolean equals(Object arg0) {
+		return this.compareTo(arg0) == 0;
+	}
 }
