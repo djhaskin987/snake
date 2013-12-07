@@ -156,9 +156,9 @@ public class JDBCWrapper implements Closeable {
 		reader.close();
 		for(String s : sqls) {
 			try {
-			Statement resetDatabase = returned.createStatement();
-			resetDatabase.executeUpdate(s+";");
-			resetDatabase.close();
+				Statement resetDatabase = returned.createStatement();
+				resetDatabase.executeUpdate(s+";");
+				resetDatabase.close();
 			} catch(SQLException e) {
 				if(!e.getMessage().equals("not an error")) {
 					e.printStackTrace();
@@ -224,10 +224,43 @@ public class JDBCWrapper implements Closeable {
 				new Exception("Error: JDBCWrapper got a null somehow.").printStackTrace();
 			} else {
 				new Exception("Error: JDBCWrapper does not accept class "
-			+ object.getClass().getCanonicalName() + " " + i).printStackTrace();
+						+ object.getClass().getCanonicalName() + " " + i).printStackTrace();
 			}
-				System.exit(1);
+			System.exit(1);
 		}
+	}
+
+	private String toString(Object object) {
+		if(object instanceof String) {
+			return "\"" + object + "\"";
+		} else if(object == null) {
+			return "null";
+		} else if(object instanceof Double) {
+			return object.toString();
+		} else if(object instanceof Integer) {
+			return object.toString();
+		} else if(object instanceof java.util.Date) {
+			return Long.toString(((java.util.Date) object).getTime());
+		} else if(object instanceof model.AbstractDateTime) {
+			return Long.toString(((model.AbstractDateTime) object).toJavaUtilDate().getTime());
+		} else if(object instanceof Unit) {
+			return "\"" + ((Unit) object).toString() + "\"";
+		} else if(object instanceof Barcode) {
+			return "\"" + ((Barcode) object).getBarcode() + "\"";
+		} else if(object instanceof NonEmptyString) {
+			return "\"" + ((NonEmptyString) object).getValue() + "\"";
+		} else if(object instanceof Boolean) {
+			if((Boolean) object) {
+				return "1";
+			} else {
+				return "0";
+			}
+		} else {
+			new Exception("Error: JDBCWrapper does not accept class "
+					+ object.getClass().getCanonicalName()).printStackTrace();
+			System.exit(1);
+		}
+		return null;
 	}
 
 	/**
@@ -259,23 +292,15 @@ public class JDBCWrapper implements Closeable {
 				} else {
 					sql.append(", ");
 				}
-				if(columnValues.get(i) == null) {
-					sql.append("null");
-				} else {
-					sql.append("?");
-				}
+				sql.append(toString(columnValues.get(i)));
 			};
 			sql.append(");");
+			//System.out.println(sql);
 			//statement.close();
-			statement = connection.prepareStatement(sql.toString());
-			int i=0;
-			for(Object value : columnValues) {
-				if(value != null) {
-					set(statement, i, value);
-					++i;
-				}
-			};
-			statement.executeUpdate();
+			statement.close();
+			Statement rawStatement = connection.createStatement();
+			rawStatement.executeUpdate(sql.toString());
+			rawStatement.close();
 			//statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
