@@ -1,6 +1,7 @@
 package model.serialization;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -76,6 +77,9 @@ public class SqlSerializer implements ISerializer, Observer {
 	@Override
 	public void load(Model model) {
 		storageUnits = getRoot(model);
+		products = new ProductCollection();
+		items = new ItemCollection();
+		productContainers = new HashMap<Pair<String, String>, IProductContainer>();
 		createObjects();
 		linkObjects();
 		model.setStorageUnits(storageUnits);

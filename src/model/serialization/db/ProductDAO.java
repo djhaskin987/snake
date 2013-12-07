@@ -47,8 +47,8 @@ public class ProductDAO implements IProductDAO {
 			return products;
 		} catch(SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	private Pair<List<String>, List<Object>> getLists(IProduct product) {
