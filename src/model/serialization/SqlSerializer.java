@@ -90,6 +90,9 @@ public class SqlSerializer implements ISerializer, Observer {
 	
 	private void createObjects() {
 		productContainers = productContainerDAO.getMap();
+		/*for(Pair<String, String> key : productContainers.keySet()) {
+			System.out.println(key.getLeft() + ", " + key.getRight());
+		}*/
 		for(IProduct product : productDAO.readAll()) {
 			products.add(product);
 		}
@@ -122,11 +125,12 @@ public class SqlSerializer implements ISerializer, Observer {
 			IProduct product = products.getProduct(new NonEmptyString(productBarcode));
 			item.setProduct(product);
 			
-			if(item.getExitTime() != null) {
+			if(item.getExitTime() == null) {
 				String containerName = itemDAO.getProductContainerName(
 						new Barcode(itemBarcode));
 				String unitName = itemDAO.getStorageUnitName(new Barcode(
 						itemBarcode));
+				System.out.println(containerName + ", " + unitName);
 				IProductContainer container = productContainers.get(
 						Pair.of(containerName, unitName));
 				container.add(item);
