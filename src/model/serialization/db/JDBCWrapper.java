@@ -217,6 +217,8 @@ public class JDBCWrapper implements Closeable {
 			statement.setString(i, ((Barcode) object).getBarcode());
 		} else if(object instanceof NonEmptyString) {
 			statement.setString(i, ((NonEmptyString) object).getValue());
+		} else if(object instanceof Boolean) {
+			statement.setBoolean(i, (boolean) object);
 		} else {
 			if(object == null) {
 				new Exception("Error: JDBCWrapper got a null somehow.").printStackTrace();

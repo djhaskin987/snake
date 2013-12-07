@@ -67,12 +67,14 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		columnNames.add("Name");
 		columnValues.add(productContainer.getName().getValue());
 		if(productContainer instanceof ProductGroup) {
-			IProductContainer parent = productContainer.getUnitPC();
+			IProductContainer parent = productContainer.getParent();
 			//if(parent != productContainer) {
 			columnNames.add("StorageUnit");
-			columnValues.add(parent.getName().getValue());
+			columnValues.add(productContainer.getUnitPC().getName());
 			columnNames.add("ParentContainer");
-			columnValues.add(productContainer.getParent().getName().getValue());
+			columnValues.add(parent.getName());
+			columnNames.add("IsParentStorageUnit");
+			columnValues.add(parent instanceof StorageUnit);
 			Quantity quantity = ((ProductGroup) productContainer).getThreeMonthSupplyQuantity();
 			columnNames.add("ThreeMonthSupplyValue");
 			columnValues.add(quantity.getValue());
@@ -129,14 +131,13 @@ public class ProductContainerDAO implements IProductContainerDAO {
 	}
 
 	@Override
-	public List<String> getProducts(IProductContainer container) {
+	public List<String> getProducts(Pair<String, String> key) {
 		List<String> identifierNames = new ArrayList<String>();
 		List<Object> identifierValues = new ArrayList<Object>();
 		identifierNames.add("ProductContainerName");
-		identifierValues.add(container.getName());
+		identifierValues.add(key.getLeft());
 		identifierNames.add("ProductContainerStorageUnit");
-		IProductContainer storageUnit = container.getUnitPC();
-		identifierValues.add(storageUnit.getName());
+		identifierValues.add(key.getRight());
 		ResultSet rs = wrapper.query("ProductContainerProductRelation",
 				identifierNames, identifierValues);
 		List<String> products = new ArrayList<String>();
@@ -157,7 +158,11 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		ResultSet rs = wrapper.query(TABLE, identifiers.getLeft(), identifiers.getRight());
 		try {
 			if(rs.next()) {
-				return Pair.of(rs.getString("Name"), rs.getString("StorageUnit"));
+				if(rs.getBoolean("IsParentStorageUnit")) {
+					return Pair.of(rs.getString("ParentContainer"), null);
+				} else {
+					return Pair.of(rs.getString("ParentContainer"), container.getRight());
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

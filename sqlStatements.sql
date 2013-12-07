@@ -40,6 +40,7 @@ CREATE TABLE "ProductContainer" (
        "Name" TEXT NOT NULL
        , "StorageUnit" TEXT
        , "ParentContainer" TEXT
+       , "IsParentStorageUnit" BIT
        , "ThreeMonthSupplyValue" DOUBLE
        , "ThreeMonthSupplyUnit" TEXT
 );

@@ -9,11 +9,11 @@ import model.IProductContainer;
 
 public interface IProductContainerDAO extends IDAO<Pair<String, String>, IProductContainer> {
 	/**
-	 * @param container		The container to get the products in
+	 * @param key			The key for the container to get the products in
 	 * @return				A list of barcodes of all the products immediately in
 	 * 						container. That is, not the ones in subcontainers.
 	 */
-	public List<String> getProducts(IProductContainer container);
+	public List<String> getProducts(Pair<String, String> key);
 	/**
 	 * @param container		The container to find the parent of
 	 * @return				Database ID of Parent container, or null if container
