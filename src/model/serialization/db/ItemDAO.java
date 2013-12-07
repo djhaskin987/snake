@@ -12,6 +12,7 @@ import model.DateTime;
 import model.IItem;
 import model.InvalidHITDateException;
 import model.Item;
+import model.StorageUnit;
 import model.ValidDate;
 
 public class ItemDAO implements IItemDAO {
@@ -231,8 +232,12 @@ public class ItemDAO implements IItemDAO {
 			result.addProductContainerName(
 					item.getProductContainer().getName().toString()
 					);
-			result.addProductContainerStorageUnit(
-					item.getProductContainer().getUnit());
+			if(item.getProductContainer() instanceof StorageUnit) {
+				result.addProductContainerStorageUnit(null);
+			} else {
+				result.addProductContainerStorageUnit(
+						item.getProductContainer().getUnitPC().getName().getValue());
+			}
 		}
 		else
 		{

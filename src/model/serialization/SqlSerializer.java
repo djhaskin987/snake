@@ -243,6 +243,7 @@ public class SqlSerializer implements ISerializer, Observer {
 		ObservableArgs<IItem> batch = (ObservableArgs<IItem>) payload;
 		for(IItem item : batch) {
 			itemDAO.create(item);
+			//System.out.println(item.getBarcode().getBarcode() + " inserted.");
 		}
 	}
 

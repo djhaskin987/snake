@@ -57,9 +57,9 @@ public class ProductDAO implements IProductDAO {
 		columnNames.add("CreationDate");
 		columnValues.add(product.getCreateDate());
 		columnNames.add("Barcode");
-		columnValues.add(product.getBarcode().getValue());
+		columnValues.add(product.getBarcode());
 		columnNames.add("Description");
-		columnValues.add(product.getDescription().getValue());
+		columnValues.add(product.getDescription());
 		columnNames.add("SizeValue");
 		columnValues.add(product.getItemSize().getValue());
 		columnNames.add("SizeUnit");

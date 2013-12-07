@@ -236,7 +236,7 @@ public class JDBCWrapper implements Closeable {
 	 * @param columnValues	List of values for those columns
 	 */
 	public void insert(String table, List<String> columnNames, List<Object> columnValues) {
-
+		System.out.println(columnValues);
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO ");
@@ -309,9 +309,10 @@ public class JDBCWrapper implements Closeable {
 			statement = connection.prepareStatement(sql.toString());
 			int i=0;
 			for(Object column : columns) {
-				if(column != null)
-				set(statement, i, column);
-				++i;
+				if(column != null) {
+					set(statement, i, column);
+					++i;
+				}
 			};
 			statement.executeUpdate();
 			//statement.close();

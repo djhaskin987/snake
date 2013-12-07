@@ -8,8 +8,8 @@ import com.factual.driver.ReadResponse;
 
 import model.productidentifier.AbstractProductIdentifier;
 
-public class DanHaskinProductIdentifier extends AbstractProductIdentifier {
-	private Factual factualConnection;
+public abstract class DanHaskinProductIdentifier extends AbstractProductIdentifier {
+	/*private Factual factualConnection;
 
 	public DanHaskinProductIdentifier() {
 		factualConnection = new Factual(
@@ -48,5 +48,5 @@ public class DanHaskinProductIdentifier extends AbstractProductIdentifier {
 		System.out.println("049000006582" + " = " + product);
 		System.out.println("052000131512" + " = " + otherProduct);
 		System.out.println("Bogus: " + poppycock);
-	}
+	}*/
 }
