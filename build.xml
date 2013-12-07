@@ -168,28 +168,38 @@
 
 	<target name="package" depends="compile"
         description="package the jar file" >
-		<mkdir dir="${dist}/lib"/>
-		<mkdir dir="${dist}/plugins"/>
+		<mkdir dir="${dist}/images"/>
+        <mkdir dir="${dist}/plugins"/>
 		<copy file="${door-icon-file}" todir="${build}/images"/>
-		<copy todir="${dist}/lib">
-			<fileset dir=".">
-				<include name="lib/**"/>
-				<exclude name="lib/proguard-4.8/**"/>
+		<copy todir="${dist}/">
+            <fileset dir=".">
+                <include name="lib/**"/>
+                <exclude name="lib/proguard-4.8/**"/>
 				<exclude name="**/_svn"/>
 				<exclude name="**/_svn/**"/>
 			</fileset>
         </copy>
-        <copy todir="${dist}/plugins">
+        <copy todir="${dist}/">
             <fileset dir=".">
                 <include name="plugins/**"/>
             </fileset>
         </copy>
-		<jar jarfile="${dist}/lib/inventory-tracker.jar" basedir="${build}"
+        <copy todir="${dist}/">
+            <fileset dir=".">
+                <include name="sqlStatements.sql"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist}/images">
+            <fileset dir="./images">
+                <include name="./**"/>
+            </fileset>
+        </copy>
+		<jar jarfile="${dist}/inventory-tracker.jar" basedir="${build}"
 				excludes="**/*Taglet*.class **/*StudentVersion*.class **/*WGet*.class">
 			<manifest>
 				<attribute name="Main-Class" value="gui.main.GUI"/>
 				<attribute name="Class-Path"
-                    value="${sqlite.jar} ${itext.jar} ${plugins} ${commons-lang.jar} ${functionaljava.jar} " />
+                    value="${sqlite.jar} ${itext.jar} ${plugins} ${commons-lang.jar} ${functionaljava.jar} ${factual.jar}" />
 			</manifest>
 		</jar>
 	</target>

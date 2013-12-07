@@ -12,8 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-
 public class ProductIdentifierFactory {
 	
 	/**
@@ -30,19 +28,12 @@ public class ProductIdentifierFactory {
 	public IProductIdentifier createProductIdentifier() {
 		File directory = new File("./plugins");
 		System.out.println("Looking for plugins in " + directory.getAbsolutePath());
-		
-		FileFilter fileFilter = new WildcardFileFilter("*.jar");
-		
-		File [] afiles = directory.listFiles();
-		for (File f : afiles)
-		{
-			System.out.println("  File found in the plugins directory: " +
-					f.getAbsolutePath());
-		}
-		File[] files = directory.listFiles(fileFilter);
+		File[] files = directory.listFiles();
 		List<URL> fileURLs = new LinkedList<URL>();
 		for (int fi = 0; fi < files.length; fi++) {
-			if (!files[fi].isDirectory())
+			System.out.println("  File found in the plugins directory: " +
+					files[fi].getAbsolutePath());
+			if (!files[fi].isDirectory() && files[fi].getName().matches("[.]jar$"))
 			{
 				String MIMEType = "";
 				try {
