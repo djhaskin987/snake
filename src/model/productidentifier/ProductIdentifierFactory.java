@@ -1,7 +1,15 @@
 package model.productidentifier;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ProductIdentifierFactory {
@@ -18,7 +26,50 @@ public class ProductIdentifierFactory {
 	 * @return	The first link in the chain of responsibility of IProductIdentifiers
 	 */
 	public IProductIdentifier createProductIdentifier() {
-		File directory = new File("plugins");
+		File directory = new File("./plugins");
+		System.out.println("Looking for plugins in " + directory.getAbsolutePath());
+		File[] files = directory.listFiles();
+		List<URL> fileURLs = new LinkedList<URL>();
+		for (int fi = 0; fi < files.length; fi++) {
+			System.out.println("  File found in the plugins directory: " +
+					files[fi].getAbsolutePath());
+			if (!files[fi].isDirectory() && files[fi].getName().matches("[.]jar$"))
+			{
+				String MIMEType = "";
+				try {
+					MIMEType = Files.probeContentType(files[fi].toPath());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				if (MIMEType.equals("application/x-java-archive"))
+				{
+					System.out.println("  File " + files[fi].getName() +
+							" verified as a valid JAR file.");
+				}
+				else if (MIMEType.equals(""))
+				{
+					System.err.println("  File " + files[fi].getName() +
+							" NOT verified as a valid JAR file.");
+					System.err.println("  Hoping it is and carrying on.");
+				}
+				else
+				{
+					System.err.println("  File " + files[fi].getName() +
+							" does NOT look like a valid JAR file.");
+					System.err.println("  Refusing to load it.");
+					continue;
+				}
+				
+				URL fileURL = null;
+				try {
+					fileURL = files[fi].toURI().toURL();
+					fileURLs.add(fileURL);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+		}
 		File confugrationFile = new File(directory, "plugins.txt");
 		Scanner scanner;
 		IProductIdentifier first = null;
@@ -28,7 +79,11 @@ public class ProductIdentifierFactory {
 			while(scanner.hasNext()) {
 				String className = scanner.next();
 				try {
-					IProductIdentifier current = (IProductIdentifier) Class.forName(className).newInstance();
+					URL [] URLs = new URL[0];
+					URLClassLoader urlClassLoader = 
+							new URLClassLoader(fileURLs.toArray(URLs));
+					IProductIdentifier current = (IProductIdentifier) 
+							urlClassLoader.loadClass(className).newInstance();
 					if(last != null) {
 						last.setNext(current);
 					} else {
