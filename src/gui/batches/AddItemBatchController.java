@@ -150,7 +150,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void barcodeChanged() {
 		enableComponents();
-		if(getView().getUseScanner() && Barcode.isValidBarcode(getView().getBarcode())) {
+		if(getView().getUseScanner()) {
 			String count = getView().getCount();
 			if(StringOps.isNumeric(count)
 					&& Integer.parseInt(count) > 0) {
