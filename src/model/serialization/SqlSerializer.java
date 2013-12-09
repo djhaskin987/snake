@@ -162,9 +162,9 @@ public class SqlSerializer implements ISerializer, Observer {
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is
 		// observing is the StorageUnits instance
-		Pair<ModelActions, IModelTagable> pair = pairExtract(arg1);
+		Pair<ModelActions, Object> pair = pairExtract(arg1);
 		ModelActions action = pair.getLeft();
-		IModelTagable payload = pair.getRight();
+		Object payload = pair.getRight();
 		switch (action)
 		{
 			case INSERT_STORAGE_UNIT:
@@ -223,23 +223,27 @@ public class SqlSerializer implements ISerializer, Observer {
 		}
 	}
 
-	private void insertStorageUnit(IModelTagable payload) {
+	private void insertStorageUnit(Object payload) {
 		productContainerDAO.create((IProductContainer) payload);
 	}
 
-	private void editStorageUnit(IModelTagable payload) {
-		productContainerDAO.update((IProductContainer) payload);
+	private void editStorageUnit(Object payload) {
+		Pair<String, IProductContainer> unpack =
+				((Pair<String,IProductContainer>)payload);
+		productContainerDAO.update(unpack.getLeft(),
+				unpack.getLeft(),
+				(IProductContainer) unpack.getRight());
 	}
 
-	private void insertProductGroup(IModelTagable payload) {
+	private void insertProductGroup(Object payload) {
 		productContainerDAO.create((IProductContainer) payload);
 	}
 
-	private void editProductGroup(IModelTagable payload) {
+	private void editProductGroup(Object payload) {
 		productContainerDAO.update((IProductContainer) payload);
 	}
 
-	private void insertItems(IModelTagable payload) {
+	private void insertItems(Object payload) {
 		ObservableArgs<IItem> batch = (ObservableArgs<IItem>) payload;
 		for(IItem item : batch) {
 			itemDAO.create(item);
@@ -247,7 +251,7 @@ public class SqlSerializer implements ISerializer, Observer {
 		}
 	}
 
-	private void undoInsertItems(IModelTagable payload) {
+	private void undoInsertItems(Object payload) {
 		ObservableArgs<IItem> batch = (ObservableArgs<IItem>) payload;
 		for(IItem item : batch) {
 			itemDAO.delete(item);
@@ -255,7 +259,7 @@ public class SqlSerializer implements ISerializer, Observer {
 	}
 
 	//TODO: This could be improved by modifying the payload.
-	private void undoInsertProductAndItems(IModelTagable payload) {
+	private void undoInsertProductAndItems(Object payload) {
 		ObservableArgs<IItem> batch = (ObservableArgs<IItem>) payload;
 		IProductContainer target = batch.get(0).getProductContainer();
 		IProductContainer storageUnit = target.getUnitPC();
@@ -273,7 +277,7 @@ public class SqlSerializer implements ISerializer, Observer {
 		productContainerDAO.addProductToProductContainer(product, target);
 	}
 
-	private void undoInsertNewProductAndItems(IModelTagable payload) {
+	private void undoInsertNewProductAndItems(Object payload) {
 		ObservableArgs<IItem> batch = (ObservableArgs<IItem>) payload;
 		productDAO.delete(batch.get(0).getProduct());
 		for(IItem item : batch) {
@@ -281,43 +285,43 @@ public class SqlSerializer implements ISerializer, Observer {
 		}
 	}
 
-	private void removeItems(IModelTagable payload) {
+	private void removeItems(Object payload) {
 		editItem(payload);
 	}
 
-	private void undoRemoveItems(IModelTagable payload) {
+	private void undoRemoveItems(Object payload) {
 		editItem(payload);
 	}
 
-	private void transferItem(IModelTagable payload) {
+	private void transferItem(Object payload) {
 		editItem(payload);
 	}
 
-	private void editItem(IModelTagable payload) {
+	private void editItem(Object payload) {
 		IItem item = (IItem) payload;
 		itemDAO.update(item);
 	}
 
-	private void moveItem(IModelTagable payload) {
+	private void moveItem(Object payload) {
 		editItem(payload);
 	}
 
-	private void newProduct(IModelTagable payload) {
+	private void newProduct(Object payload) {
 		productDAO.create((IProduct) payload);
 	}
 
-	private void insertProduct(IModelTagable payload) {
+	private void insertProduct(Object payload) {
 		ObservableArgs<IModelTagable> args = (ObservableArgs<IModelTagable>) payload;
 		IProduct product = (IProduct) args.get(0);
 		IProductContainer target = (IProductContainer) args.get(1);
 		productContainerDAO.addProductToProductContainer(product, target);
 	}
 
-	private void editProduct(IModelTagable payload) {
+	private void editProduct(Object payload) {
 		productDAO.update((IProduct) payload);
 	}
 
-	private void transferProduct(IModelTagable payload) {
+	private void transferProduct(Object payload) {
 		ObservableArgs<IModelTagable> args = (ObservableArgs<IModelTagable>) payload;
 		IProduct product = (IProduct) args.get(0);
 		IProductContainer target = (IProductContainer) args.get(1);
@@ -331,8 +335,8 @@ public class SqlSerializer implements ISerializer, Observer {
 
 	//TODO: Code duplication
 	@SuppressWarnings("unchecked")
-	private Pair<ModelActions, IModelTagable> pairExtract(Object arg1) {
-		return (Pair<ModelActions, IModelTagable>) arg1;
+	private Pair<ModelActions, Object> pairExtract(Object arg1) {
+		return (Pair<ModelActions, Object>) arg1;
 	}
 
 }

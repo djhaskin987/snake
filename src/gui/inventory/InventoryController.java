@@ -493,9 +493,9 @@ public class InventoryController extends Controller
 	public void update(Observable arg0, Object arg1) {
 		// This method assumes that the only thing that InventoryController is
 		// observing is the StorageUnits instance
-		Pair<ModelActions, IModelTagable> pair = pairExtract(arg1);
+		Pair<ModelActions, Object> pair = pairExtract(arg1);
 		ModelActions action = pair.getLeft();
-		IModelTagable payload = pair.getRight();
+		Object payload = pair.getRight();
 		switch (action)
 		{
 			case INSERT_STORAGE_UNIT:
@@ -554,12 +554,12 @@ public class InventoryController extends Controller
 		}
 	}
 
-	private void newProduct(IModelTagable payload) {
+	private void newProduct(Object payload) {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Pair<ModelActions, IModelTagable> pairExtract(Object arg1) {
-		return (Pair<ModelActions, IModelTagable>) arg1;
+	private Pair<ModelActions, Object> pairExtract(Object arg1) {
+		return (Pair<ModelActions, Object>) arg1;
 	}
 
 	private void refreshProducts() {
@@ -609,7 +609,7 @@ public class InventoryController extends Controller
 		}
 	}
 	
-	private void insertItems(IModelTagable payload) {
+	private void insertItems(Object payload) {
 		ObservableArgs<IItem> insertedItems = (ObservableArgs<IItem>) payload;
 		ProductData productData = (ProductData) insertedItems.get(0).getProduct().getTag();
 		if(getView().getSelectedProduct() == productData) {
@@ -621,21 +621,21 @@ public class InventoryController extends Controller
 		}
 	}
 
-	private void undoInsertItems(IModelTagable payload) {
+	private void undoInsertItems(Object payload) {
 		refreshItems();
 	}
 
-	private void undoInsertProductAndItems(IModelTagable payload) {
+	private void undoInsertProductAndItems(Object payload) {
 		refreshProducts();
 		getView().setItems(new ItemData[0]);
 	}
 
-	private void undoInsertNewProductAndItems(IModelTagable payload) {
+	private void undoInsertNewProductAndItems(Object payload) {
 		refreshProducts();
 		getView().setItems(new ItemData[0]);
 	}
 
-	private void removeItems(IModelTagable payload) {
+	private void removeItems(Object payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		// remove item from storage unit and product group
@@ -645,7 +645,7 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 
-	private void undoRemoveItems(IModelTagable payload) {
+	private void undoRemoveItems(Object payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		// unremove item from storage unit and product group
@@ -655,7 +655,7 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 
-	private void transferItem(IModelTagable payload) {
+	private void transferItem(Object payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
@@ -665,7 +665,7 @@ public class InventoryController extends Controller
 	}
 
 
-	private void editProduct(IModelTagable payload) {
+	private void editProduct(Object payload) {
 		IProduct product = (IProduct) payload;
 		
 		Collection<IItem> items = product.getAllItems();
@@ -698,10 +698,10 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 
-	private void editStorageUnit(IModelTagable payload) {
-		IProductContainer StU = (IProductContainer) payload;
-		ProductContainerData pcd = (ProductContainerData)
-				payload.getTag();
+	private void editStorageUnit(Object payload) {
+		Pair<String, IProductContainer> unpack = ((Pair<String,IProductContainer>)payload);
+		IProductContainer StU = (IProductContainer) unpack.getRight();
+		ProductContainerData pcd = (ProductContainerData) StU.getTag();
 		renameProductContainerSorted(getRoot(), pcd, StU.getName().getValue());
 	}
 
@@ -709,8 +709,8 @@ public class InventoryController extends Controller
 		return (ProductContainerData) getStorageUnitsManager().getTag();
 	}
 	
-	private void insertProductGroup(IModelTagable payload) {
-		ProductContainerData pcd = (ProductContainerData) payload.getTag();
+	private void insertProductGroup(Object payload) {
+		ProductContainerData pcd = (ProductContainerData) ((IModelTagable)payload).getTag();
 		ProductContainerData parent = (ProductContainerData)
 				((IProductContainer) payload).getParent().getTag();
 		IInventoryView v = getView();
@@ -773,19 +773,19 @@ public class InventoryController extends Controller
 		productContainerSelectionChanged();
 	}
 
-	private void editProductGroup(IModelTagable payload) {
+	private void editProductGroup(Object payload) {
 		IProductContainer pg = (IProductContainer) payload;
 		ProductContainerData pcd = (ProductContainerData)
-				payload.getTag();
+				((IModelTagable)payload).getTag();
 		renameProductContainerSorted(
 				(ProductContainerData)pg.getParent().getTag(),
 				pcd, pg.getName().getValue());
 	}
 
-	private void insertProduct(IModelTagable payload) {
+	private void insertProduct(Object payload) {
 	}
 
-	private void editItem(IModelTagable payload) {
+	private void editItem(Object payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		model.ValidDate vDate = item.getEntryDate();
@@ -799,7 +799,7 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 	
-	private void moveItem(IModelTagable payload) {
+	private void moveItem(Object payload) {
 		IItem item = (IItem) payload;
 		ItemData iData = (ItemData) item.getTag();
 		iData.setProductGroup(item.getProductGroupName());
@@ -807,7 +807,7 @@ public class InventoryController extends Controller
 		refreshItems();//TODO: Is this necessary?
 	}
 	
-	private void transferProduct(IModelTagable payload) {
+	private void transferProduct(Object payload) {
 		ObservableArgs<IModelTagable> args = (ObservableArgs<IModelTagable>) payload;
 		IProduct product = (IProduct) args.get(0);
 		IProductContainer productContainer = (IProductContainer) args.get(1);
@@ -820,8 +820,9 @@ public class InventoryController extends Controller
 		refreshItems();
 	}
 	
-	private void insertStorageUnit(IModelTagable payload) {
-		ProductContainerData pcd = (ProductContainerData) payload.getTag();
+	private void insertStorageUnit(Object payload) {
+		ProductContainerData pcd = (ProductContainerData) 
+				((IModelTagable)payload).getTag();
 		StorageUnits su = getStorageUnitsManager();
 		// get the root ProductContainerData object
 		ProductContainerData root = (ProductContainerData) su.getTag();

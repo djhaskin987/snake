@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import model.reports.ReportVisitor;
 
 
@@ -191,11 +193,12 @@ public class StorageUnits extends ProductContainer implements Serializable {
 	}
 	
 	public void changeStorageUnitName(IProductContainer stU, String name) {
+		String oldName = stU.getName().toString();
 		productContainers.remove(stU.getName());
 		stU.setName(name);
 		productContainers.add(stU);
 		notifyObservers(ModelActions.EDIT_STORAGE_UNIT,
-				stU);
+				Pair.of(oldName, stU));
 	}
 	
 	@Override
