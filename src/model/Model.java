@@ -261,7 +261,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	public void unaddProductAndBatch(ObservableArgs<IItem> batch,
 			IProductContainer productContainer) {
 		for(IItem item : batch) {
-			unaddItem(item);
+			itemCollection.remove(item);
 		}
 		productContainer.removeProduct(batch.get(0).getProduct());
 		notifyObservers(ModelActions.UNDO_INSERT_PRODUCT_AND_ITEMS, (IModelTagable) batch);
@@ -270,9 +270,12 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	public void unaddNewProductAndBatch(ObservableArgs<IItem> batch,
 			IProductContainer productContainer) {
 		for(IItem item : batch) {
-			unaddItem(item);
+			itemCollection.remove(item);
 		}
-		productCollection.removeProduct(batch.get(0).getProduct());
+		IItem item = batch.get(0);
+		IProduct product = item.getProduct();
+		item.getProductContainer().removeProduct(product);
+		productCollection.removeProduct(product);
 		notifyObservers(ModelActions.UNDO_INSERT_NEW_PRODUCT_AND_ITEMS, (IModelTagable) batch);
 	}
 

@@ -309,9 +309,21 @@ public class ItemDAO implements IItemDAO {
 	@Override
 	public void delete(IItem thing) {
 		ItemRecord record = itemToItemRecord(thing);
+		System.err.println("Delete attempted.");
+		try {
+			if(!dbConnection.query(ItemRecord.TABLE, ItemRecord.getIdentifierNames(), record.getIdentifierValues()).next()) {
+				System.err.println("Delete unnecessary.");
+			}
 		dbConnection.delete(ItemRecord.TABLE,
 				ItemRecord.getIdentifierNames(),
 				record.getIdentifierValues());
+			if(dbConnection.query(ItemRecord.TABLE, ItemRecord.getIdentifierNames(), record.getIdentifierValues()).next()) {
+				System.err.println("Delete failed.");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -50,6 +50,7 @@ public class AddBatchCommand implements ICommand {
 		} else {
 			addBatchCase = AddBatchCase.ADD_PRODUCT_TO_STORAGE_UNIT;
 		}
+		//System.out.println(addBatchCase);
 		for(ItemData item : items) {
 			batch.add((IItem) item.getTag());
 		}
