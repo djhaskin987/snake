@@ -471,7 +471,7 @@ public class JDBCWrapper implements Closeable {
 					sql.append(" AND ");
 				}
 				sql.append(identifierNames.get(i));
-				if(columnValues.get(i) == null) {
+				if(identifierValues.get(i) == null) {
 					sql.append(" is null");
 				} else {
 					sql.append("=?");
@@ -500,7 +500,7 @@ public class JDBCWrapper implements Closeable {
 			System.exit(1);
 		} finally {
 			try {
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -574,7 +574,7 @@ public class JDBCWrapper implements Closeable {
 			}
 		} finally {
 			try {
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

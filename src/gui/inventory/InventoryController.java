@@ -774,9 +774,9 @@ public class InventoryController extends Controller
 	}
 
 	private void editProductGroup(Object payload) {
-		IProductContainer pg = (IProductContainer) payload;
+		IProductContainer pg = ((Pair<String, IProductContainer>) payload).getRight();
 		ProductContainerData pcd = (ProductContainerData)
-				((IModelTagable)payload).getTag();
+				pg.getTag();
 		renameProductContainerSorted(
 				(ProductContainerData)pg.getParent().getTag(),
 				pcd, pg.getName().getValue());

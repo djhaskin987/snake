@@ -231,7 +231,7 @@ public class SqlSerializer implements ISerializer, Observer {
 		Pair<String, IProductContainer> unpack =
 				((Pair<String,IProductContainer>)payload);
 		productContainerDAO.update(unpack.getLeft(),
-				unpack.getLeft(),
+				null,
 				(IProductContainer) unpack.getRight());
 	}
 
@@ -240,7 +240,11 @@ public class SqlSerializer implements ISerializer, Observer {
 	}
 
 	private void editProductGroup(Object payload) {
-		productContainerDAO.update((IProductContainer) payload);
+		Pair<String, IProductContainer> unpack =
+				((Pair<String,IProductContainer>)payload);
+		productContainerDAO.update(unpack.getLeft(),
+				((IProductContainer) unpack.getRight()).getUnitPC().getName().getValue(),
+				(IProductContainer) unpack.getRight());
 	}
 
 	private void insertItems(Object payload) {

@@ -365,6 +365,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 	public void changeProductGroup(IProductContainer productContainer,
 			String productGroupName, String supplyValue, String supplyUnit) {
+		String oldName = productContainer.getName().getValue();
 		Unit newUnit = Unit.getInstance(supplyUnit);
 		Quantity newQuantity = new Quantity(
 				Double.parseDouble(supplyValue), newUnit);
@@ -379,7 +380,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 			pg.setThreeMonthSupply(newQuantity);
 		}
 		pg.getParent().addProductContainer(pg);
-		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, pg);
+		notifyObservers(ModelActions.EDIT_PRODUCT_GROUP, Pair.of(oldName, pg));
 	}
 
 	private boolean areValidProductGroupSpecifiers(
