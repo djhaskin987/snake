@@ -313,7 +313,9 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	}
 
 	public void deleteStorageUnit(String name) {
+		StorageUnit unit = storageUnits.getStorageUnit(name);
 		storageUnits.deleteStorageUnit(name);
+		notifyObservers(ModelActions.REMOVE_STORAGE_UNIT, unit);
 	}
 
 

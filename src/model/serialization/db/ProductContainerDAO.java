@@ -103,8 +103,12 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		identifierNames.add("Name");
 		identifierValues.add(productContainer.getName());
 		identifierNames.add("StorageUnit");
-		IProductContainer storageUnit = productContainer.getUnitPC();
-		identifierValues.add(storageUnit.getName());
+		if(productContainer instanceof StorageUnit) {
+			identifierValues.add(null);
+		} else {
+			IProductContainer storageUnit = productContainer.getUnitPC();
+			identifierValues.add(storageUnit.getName());
+		}
 		return Pair.of(identifierNames, identifierValues);
 	}
 

@@ -504,6 +504,9 @@ public class InventoryController extends Controller
 			case EDIT_STORAGE_UNIT:
 				editStorageUnit(payload);
 				break;
+			case REMOVE_STORAGE_UNIT:
+				removeStorageUnit(payload);
+				break;
 			case INSERT_PRODUCT_GROUP:
 				insertProductGroup(payload);
 				break;
@@ -552,6 +555,11 @@ public class InventoryController extends Controller
 			default:
 				throw new IllegalStateException("Could not detect what changed");
 		}
+	}
+
+	private void removeStorageUnit(IModelTagable payload) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void newProduct(IModelTagable payload) {
