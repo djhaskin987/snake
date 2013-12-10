@@ -241,11 +241,17 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		String[] names = {"ProductContainerName",
 				"ProductContainerStorageUnit",
 		"ProductBarcode"};
-		Object[] values = {productContainer.getName().getValue(),
-				productContainer.getUnitPC().getName().getValue(),
-				product.getBarcode().getValue()};
+		System.out.println("Product added to product container.");
+		List<Object> values = new ArrayList<Object>();
+		values.add(productContainer.getName().getValue());
+		if(productContainer instanceof StorageUnit) {
+			values.add(null);
+		} else {
+			values.add(productContainer.getUnitPC().getName().getValue());
+		}
+		values.add(product.getBarcode().getValue());
 		wrapper.insert("ProductContainerProductRelation",
-				Arrays.asList(names), Arrays.asList(values));
+				Arrays.asList(names), values);
 	}
 
 	@Override

@@ -238,8 +238,16 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 
 
 	public void addBatch(ObservableArgs<IItem> batch, IProductContainer productContainer) {
+		IProduct product = batch.get(0).getProduct();
+		boolean alreadyThere = productContainer.contains(product);
 		for(IItem item : batch) {
 			addItem(item, productContainer);
+		}
+		if(!alreadyThere) {
+			ObservableArgs<IModelTagable> args = new ObservableArgs<IModelTagable>();
+			args.add(product);
+			args.add(productContainer);
+			notifyObservers(ModelActions.INSERT_PRODUCT, args);
 		}
 		//productContainer.addBatch(batch);
 		notifyObservers(ModelActions.INSERT_ITEMS, (IModelTagable)batch);

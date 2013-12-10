@@ -47,6 +47,6 @@ CREATE TABLE "ProductContainer" (
 
 CREATE TABLE "ProductContainerProductRelation" (
        "ProductContainerName" TEXT NOT NULL
-       , "ProductContainerStorageUnit" TEXT NOT NULL
+       , "ProductContainerStorageUnit" TEXT
        , "ProductBarcode" TEXT NOT NULL
 );
