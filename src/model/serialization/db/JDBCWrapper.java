@@ -499,12 +499,6 @@ public class JDBCWrapper implements Closeable {
 			e.printStackTrace();
 			System.exit(1);
 		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			/*try {
 				//statement.close();
 			} catch (SQLException e) {
@@ -573,12 +567,6 @@ public class JDBCWrapper implements Closeable {
 				e1.printStackTrace();
 			}
 		} finally {
-			try {
-				connection.setAutoCommit(true);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			/*try {
 				//statement.close();
 			} catch (SQLException e) {
