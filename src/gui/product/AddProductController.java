@@ -108,7 +108,12 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void run() {
-		String description = Model.getInstance().getProductIdentifier().getProduct(barcode);
+		String description;
+		if(Barcode.isValidBarcode(getView().getBarcode())) {
+			description = Model.getInstance().getProductIdentifier().getProduct(barcode);
+		} else {
+			description = "";
+		}
 		/*try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
