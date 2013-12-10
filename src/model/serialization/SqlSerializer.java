@@ -108,11 +108,11 @@ public class SqlSerializer implements ISerializer, Observer {
 						productContainerDAO.getParent(key));
 				parent.addProductContainer(container);
 				container.setParent(parent);
-				for(String barcode : productContainerDAO.getProducts(key)) {
-					IProduct product = products.getProduct(new NonEmptyString(barcode));
-					container.addProduct(product);
-					product.addProductContainer(container);
-				}
+			}
+			for(String barcode : productContainerDAO.getProducts(key)) {
+				IProduct product = products.getProduct(new NonEmptyString(barcode));
+				container.addProduct(product);
+				product.addProductContainer(container);
 			}
 		}
 		for(String itemBarcode : items.getBarcodes()) {
