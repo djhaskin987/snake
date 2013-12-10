@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -472,7 +471,7 @@ public class JDBCWrapper implements Closeable {
 					sql.append(" AND ");
 				}
 				sql.append(identifierNames.get(i));
-				if(columnValues.get(i) == null) {
+				if(identifierValues.get(i) == null) {
 					sql.append(" is null");
 				} else {
 					sql.append("=?");
@@ -501,7 +500,7 @@ public class JDBCWrapper implements Closeable {
 			System.exit(1);
 		} finally {
 			try {
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -551,31 +550,19 @@ public class JDBCWrapper implements Closeable {
 				if(identifierValues.get(i) == null) {
 					sql.append(" is null");
 				} else {
-					sql.append("=");
-					sql.append(toString(identifierValues.get(i)));
+					sql.append("=?");
 				}
 			}
 			sql.append(';');
-			System.out.println(sql);
-			System.out.println(identifierValues);
-			statement.close();
-			Statement rawStatement = connection.createStatement();
-			rawStatement.executeUpdate(sql.toString());
-			SQLWarning warning = rawStatement.getWarnings();
-			while(warning != null) {
-				System.err.println(warning.getMessage());
-				warning = warning.getNextWarning();
-			}
-			rawStatement.close();
-			//statement = connection.prepareStatement(sql.toString());
-			/*int i = 0;
+			statement = connection.prepareStatement(sql.toString());
+			int i = 0;
 			for(Object value : identifierValues) {
 				if(value != null) {
 					set(statement, i, value);
 					++i;
 				}
-			}*/
-			//statement.executeUpdate();
+			}
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -587,7 +574,7 @@ public class JDBCWrapper implements Closeable {
 			}
 		} finally {
 			try {
-				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
