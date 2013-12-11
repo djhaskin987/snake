@@ -353,7 +353,7 @@ public class ItemDAO implements IItemDAO {
 	@Override
 	public String getStorageUnitName(Barcode itemBarcode) {
 		String [] columnNames = {"Barcode"};
-		Object [] columnValues = {itemBarcode.toString()};
+		Object [] columnValues = {itemBarcode.getBarcode()};
 		fj.data.List<ItemRecord> results =
 				getResults(columnNames, columnValues);
 		if (results.isEmpty())

@@ -265,8 +265,11 @@ public class ProductContainerDAO implements IProductContainerDAO {
 				"ProductContainerStorageUnit",
 		"ProductBarcode"};
 		Object[] values = {productContainer.getName().getValue(),
-				productContainer.getUnitPC().getName().getValue(),
+				null,
 				product.getBarcode().getValue()};
+		if(!(productContainer instanceof StorageUnit)) {
+			values[1] = productContainer.getUnitPC().getName().getValue();
+		}
 		wrapper.delete("ProductContainerProductRelation",
 				Arrays.asList(names), Arrays.asList(values));
 	}

@@ -129,6 +129,8 @@ public class SqlSerializer implements ISerializer, Observer {
 						itemBarcode));
 				IProductContainer container = productContainers.get(
 						Pair.of(containerName, unitName));
+				System.out.println(containerName);
+				System.out.println(unitName);
 				container.add(item);
 				item.setProductContainer(container);
 			}
