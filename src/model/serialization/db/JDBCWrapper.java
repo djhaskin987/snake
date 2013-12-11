@@ -295,12 +295,10 @@ public class JDBCWrapper implements Closeable {
 				sql.append(toString(columnValues.get(i)));
 			};
 			sql.append(");");
-			//statement.close();
 			statement.close();
 			Statement rawStatement = connection.createStatement();
 			rawStatement.executeUpdate(sql.toString());
 			rawStatement.close();
-			//statement.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

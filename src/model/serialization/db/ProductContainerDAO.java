@@ -101,13 +101,13 @@ public class ProductContainerDAO implements IProductContainerDAO {
 		List<String> identifierNames = new ArrayList<String>();
 		List<Object> identifierValues = new ArrayList<Object>();
 		identifierNames.add("Name");
-		identifierValues.add(productContainer.getName());
+		identifierValues.add(productContainer.getName().getValue());
 		identifierNames.add("StorageUnit");
 		if(productContainer instanceof StorageUnit) {
 			identifierValues.add(null);
 		} else {
 			IProductContainer storageUnit = productContainer.getUnitPC();
-			identifierValues.add(storageUnit.getName());
+			identifierValues.add(storageUnit.getName().getValue());
 		}
 		return Pair.of(identifierNames, identifierValues);
 	}

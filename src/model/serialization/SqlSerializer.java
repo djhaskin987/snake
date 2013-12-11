@@ -182,6 +182,9 @@ public class SqlSerializer implements ISerializer, Observer {
 			case EDIT_PRODUCT_GROUP:
 				editProductGroup(payload);
 				break;
+			case REMOVE_PRODUCT_GROUP:
+				removeProductGroup(payload);
+				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
 				break;
@@ -233,13 +236,17 @@ public class SqlSerializer implements ISerializer, Observer {
 	private void editStorageUnit(IModelTagable payload) {
 		productContainerDAO.update((IProductContainer) payload);
 	}
-
-	private void removeStorageUnit(IModelTagable payload) {
+	
+	private void removeProductContainer(IModelTagable payload) {
 		IProductContainer unit = (IProductContainer) payload;
 		for(IProduct product : unit.getProducts()) {
 			productContainerDAO.removeProductFromProductContainer(product, unit);
 		}
 		productContainerDAO.delete(unit);
+	}
+
+	private void removeStorageUnit(IModelTagable payload) {
+		removeProductContainer(payload);
 	}
 
 	private void insertProductGroup(IModelTagable payload) {
@@ -248,6 +255,11 @@ public class SqlSerializer implements ISerializer, Observer {
 
 	private void editProductGroup(IModelTagable payload) {
 		productContainerDAO.update((IProductContainer) payload);
+	}
+
+	private void removeProductGroup(IModelTagable payload) {
+		removeProductContainer(payload);
+		
 	}
 
 	private void insertItems(IModelTagable payload) {

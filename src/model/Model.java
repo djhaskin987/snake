@@ -477,6 +477,7 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	public void deleteProductGroup(IProductContainer pc) {
 		pc.getParent().deleteProductContainer(
 				pc.getName().toString());
+		notifyObservers(ModelActions.REMOVE_PRODUCT_GROUP, pc);
 	}
 
 	public void moveItemToContainer(IItem item, IProductContainer target) {

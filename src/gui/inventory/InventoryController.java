@@ -513,6 +513,9 @@ public class InventoryController extends Controller
 			case EDIT_PRODUCT_GROUP:
 				editProductGroup(payload);
 				break;
+			case REMOVE_PRODUCT_GROUP:
+				removeProductGroup(payload);
+				break;
 			case INSERT_ITEMS:
 				insertItems(payload);
 				break;
@@ -557,9 +560,12 @@ public class InventoryController extends Controller
 		}
 	}
 
+	private void removeProductGroup(IModelTagable payload) {
+		// TODO How was this thing figuring out to remove storage units before?		
+	}
+
 	private void removeStorageUnit(IModelTagable payload) {
-		// TODO Auto-generated method stub
-		
+		// TODO How was this thing figuring out to remove storage units before?		
 	}
 
 	private void newProduct(IModelTagable payload) {
