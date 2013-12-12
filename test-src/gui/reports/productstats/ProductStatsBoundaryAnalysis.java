@@ -35,11 +35,6 @@ public class ProductStatsBoundaryAnalysis {
 	}
 	
 	@Test
-	public void test() {
-		
-	}
-	
-	@Test
 	public void testOneInput() {
 		try {
 			report = new ProductStatisticsReportVisitor(builder, 1);
@@ -120,7 +115,4 @@ public class ProductStatsBoundaryAnalysis {
 		report = new ProductStatisticsReportVisitor(builder, 101);
 		report.visit(storageUnits);
 	}
-	
-	
-
 }
