@@ -26,13 +26,13 @@ import gui.product.*;
  * Controller class for the add item batch view.
  */
 public class AddItemBatchController extends Controller implements
-		IAddItemBatchController {
+IAddItemBatchController {
 
 	private ProductContainerData productContainerData;
 	//private ArrayList<ProductData> products;
 	private ProductItemsData productItems;
 	private Commands commands;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -90,14 +90,20 @@ public class AddItemBatchController extends Controller implements
 				&& NumberUtils.isDigits(getView().getCount())
 				&& Integer.parseInt(getView().getCount()) > 0
 				) {
-			getView().enableItemAction(true);
+			try {
+				Date d = getView().getEntryDate();
+				new ValidDate(d);
+				getView().enableItemAction(true);
+			} catch (Exception e) {
+				getView().enableItemAction(false);
+			}
 		} else {
 			getView().enableItemAction(false);
 		}
 		getView().enableUndo(commands.canUndo());
 		getView().enableRedo(commands.canRedo());
 	}
-	
+
 	/**
 	 * This method is called when the "Entry Date" field in the
 	 * add item batch view is changed by the user.
@@ -111,13 +117,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void entryDateChanged() {
-		Date d = getView().getEntryDate();
-		try {
-			new ValidDate(d);
-			getView().enableItemAction(true);
-		} catch (Exception e) {
-			getView().enableItemAction(false);
-		}
+		enableComponents();
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void addItem() {
-		
+
 		// Get the Product
 		IProduct product = getProduct();
 		if (product == null) {
@@ -225,7 +225,7 @@ public class AddItemBatchController extends Controller implements
 		}
 		ProductData pData = (ProductData) product.getTag();
 		List<ItemData> iDatas = new ArrayList<ItemData>();
-		
+
 		int count = getItemCount();
 		// create a list of items
 		ObservableArgs<IItem> items = new ObservableArgs<IItem>();
@@ -237,14 +237,14 @@ public class AddItemBatchController extends Controller implements
 		commands.execute((ICommand) new AddBatchCommand(pData, iDatas,
 				productItems, productContainerData, this));
 	}
-	
+
 	public void resetControls() {
 		IAddItemBatchView v = getView();
 		v.setBarcode("");
 		v.setCount("1");
 		v.setEntryDate(new java.util.Date());
 	}
-	
+
 	private ItemData createItemData(IItem item) {
 		ItemData iData = new ItemData();
 		Barcode barcode = item.getBarcode();
@@ -269,7 +269,7 @@ public class AddItemBatchController extends Controller implements
 		item.setTag(iData);
 		return iData;
 	}
-	
+
 	private String getStorageUnitName() {
 		IProductContainer pc = (IProductContainer) productContainerData.getTag();
 		while (pc.getClass() != StorageUnit.class) {
@@ -279,7 +279,7 @@ public class AddItemBatchController extends Controller implements
 		String name = neName.getValue();
 		return name;
 	}
-	
+
 	private String getProductGroupName() {
 		IProductContainer pc = (IProductContainer) productContainerData.getTag();
 		if (pc.getClass() != StorageUnit.class) {
@@ -289,7 +289,7 @@ public class AddItemBatchController extends Controller implements
 		} else
 			return "";
 	}
-	
+
 	private IItem createItem(IProduct p) {
 		Model m = Model.getInstance();
 		Date entryDate = getEntryDate();
@@ -302,7 +302,7 @@ public class AddItemBatchController extends Controller implements
 			return null;
 		}
 	}
-	
+
 	private IProduct getProduct() {
 		IAddItemBatchView v = getView();
 		String barcode = v.getBarcode();
@@ -310,23 +310,23 @@ public class AddItemBatchController extends Controller implements
 			return null;
 		}
 		IProduct p = getModel().getProduct(barcode);
-		
+
 		return p;
 	}
-	
+
 	private int getItemCount() {
 		IAddItemBatchView v = getView();
 		String countStr = v.getCount();
 		int count = Integer.parseInt(countStr);
 		return count;
 	}
-	
+
 	private Date getEntryDate() {
 		IAddItemBatchView v = getView();
 		Date entryDate = v.getEntryDate();
 		return entryDate;
 	}
-	
+
 	/**
 	 * This method is called when the user clicks the "Redo" button
 	 * in the add item batch view.
@@ -388,6 +388,6 @@ public class AddItemBatchController extends Controller implements
 			getView().selectItem(selected);
 		}
 	}
-	
+
 }
 
