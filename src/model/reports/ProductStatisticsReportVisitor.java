@@ -30,6 +30,13 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 	Map<Product, List<Item>> exitProductItems;
 	
 	public ProductStatisticsReportVisitor(ReportBuilder rb, int months) {
+		if (months <= 0 || months > 100)
+			// page 30 of the specs
+		{
+			throw new IllegalArgumentException("Months must be greater than 0 and " +
+						"less than or equal to 100. " + 
+						"It was given as '" + months + "'.");
+		}
 		builder = rb;
 		this.months = months;
 		allProductItems = new HashMap<Product, List<Item>>();

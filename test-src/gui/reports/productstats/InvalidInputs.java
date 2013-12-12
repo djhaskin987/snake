@@ -1,6 +1,9 @@
 package gui.reports.productstats;
 
 import static org.junit.Assert.*;
+
+import java.io.File;
+
 import model.Barcode;
 import model.IItem;
 import model.IProduct;
@@ -35,7 +38,7 @@ public class InvalidInputs {
 		StorageUnits storageUnits = m.getStorageUnits();
 		storageUnit = (StorageUnit) storageUnits.getStorageUnit("test");
 		product = ProductFactory.getInstance().createInstance("1", "1", new Quantity(1.0, Unit.COUNT), 1, 1);
-		m.addProduct(product);
+        m.addProduct(product);
 		item = ItemFactory.getInstance().createInstance(product, new Barcode("555555555555"), storageUnit);
 		m.addItem(item, storageUnit);
 	}
@@ -106,7 +109,6 @@ Artificially inject data indicating a report should be made for a report startin
 Ask for a three-month report when all the products are in different storage units to ensure correct behavior
 Ask for a three-month report when all products are in the same storage units to ensure correct behavior
 Ask for a three-month report when some products are in the same and some are in different storage units to ensure correct behavior
-
 	 */
 
 }

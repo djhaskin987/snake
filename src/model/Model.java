@@ -208,6 +208,10 @@ public class Model extends ModelObservable implements Observer, Serializable, IP
 	}
 
 	public void addProduct(IProduct product) {
+		if (getProduct(product.getBarcode().toString()) != null)
+		{
+			throw new IllegalArgumentException("Product barcode is already inserted");
+		}
 		productCollection.add(product);
 		notifyObservers(ModelActions.NEW_PRODUCT, (IModelTagable) product);
 	}
