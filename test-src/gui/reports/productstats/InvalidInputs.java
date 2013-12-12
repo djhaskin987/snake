@@ -16,6 +16,7 @@ import model.StorageUnit;
 import model.StorageUnits;
 import model.Unit;
 import model.reports.ProductStatisticsReportVisitor;
+import model.reports.ReportsManager;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,22 +26,35 @@ import org.junit.Test;
 
 public class InvalidInputs {
 
+	private Model model;
+	private StorageUnits units;
+	private IProduct product;
+	private StorageUnit storageUnit;
+	private IItem item;	
+	private ReportsManager rm;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@Before
+	public void setUp()
+	{
 		// build data
-		IProduct product;
-		StorageUnit storageUnit;
-		IItem item;	
-		Model m = Model.getInstance();
-		StorageUnit stU = (StorageUnit) m.createStorageUnit("test");
-		m.addStorageUnit(stU);
-		StorageUnits storageUnits = m.getStorageUnits();
+		model = Model.getInstance();
+		units = model.getStorageUnits();
+		storageUnit = (StorageUnit) model.createStorageUnit("test");
+		rm = model.getReportsManager();
+		model.addStorageUnit(storageUnit);
+		StorageUnits storageUnits = model.getStorageUnits();
 		storageUnit = (StorageUnit) storageUnits.getStorageUnit("test");
 		product = ProductFactory.getInstance().createInstance("1", "1", new Quantity(1.0, Unit.COUNT), 1, 1);
-        m.addProduct(product);
+        if (model.getProduct(product.getBarcode().toString()) == null)
+        {
+        	model.addProduct(product);
+        }
 		item = ItemFactory.getInstance().createInstance(product, new Barcode("555555555555"), storageUnit);
-		m.addItem(item, storageUnit);
+		model.addItem(item, storageUnit);
 	}
 
 	@AfterClass
@@ -54,8 +68,18 @@ public class InvalidInputs {
 	@Test
 	public void invalidMonths()
 	{
+		// test some invalid inputs
+		assertFalse(rm.canGetProductStatisticsReport("-100000000000000000000000000000"));
+		assertFalse(rm.canGetProductStatisticsReport("100000000000000000000000000000"));
+		assertFalse(rm.canGetProductStatisticsReport("0"));
+		assertTrue(rm.canGetProductStatisticsReport("0000000000000000000000000000001"));
+		assertFalse(rm.canGetProductStatisticsReport("10.6"));
+		assertTrue(rm.canGetProductStatisticsReport("98"));
+		// no punctuation allowed
+		assertFalse(rm.canGetProductStatisticsReport("+1"));
+		assertFalse(rm.canGetProductStatisticsReport("This is a non-numeric string."));
+		assertFalse(rm.canGetProductStatisticsReport("10a"));
 		MockReportBuilder builder = new MockReportBuilder();
-		
 		try {
 
 			ProductStatisticsReportVisitor report = new ProductStatisticsReportVisitor(builder, -3);
@@ -103,12 +127,4 @@ public class InvalidInputs {
 		{
 		}
 	}
-	/* Also: 
-	 * Artificially inject a report asking for a time span ending on the 31st of all months of the year
-Artificially inject data indicating a report should be made for a report starting the 29th of February, for the years 2013, 2012, 2100, and 2400 (not-a-leap-year, leap-year, special-leap-year, and extra-special-leap-year -- checking gregorian adding of the 29th).
-Ask for a three-month report when all the products are in different storage units to ensure correct behavior
-Ask for a three-month report when all products are in the same storage units to ensure correct behavior
-Ask for a three-month report when some products are in the same and some are in different storage units to ensure correct behavior
-	 */
-
 }

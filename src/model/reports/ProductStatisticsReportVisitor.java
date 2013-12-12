@@ -25,11 +25,15 @@ import model.reports.ReportVisitor;
 public class ProductStatisticsReportVisitor implements ReportVisitor {
 	private ReportBuilder builder;
 	private int months;
+	private Calendar when;
 	Map<Product, List<Item>> allProductItems;
 	Map<Product, List<Item>> currentProductItems;
 	Map<Product, List<Item>> exitProductItems;
 	
-	public ProductStatisticsReportVisitor(ReportBuilder rb, int months) {
+	public ProductStatisticsReportVisitor(ReportBuilder rb, int months,
+			Calendar when) {
+		this.when = when;
+		when.add(Calendar.MONTH, -1 * months);
 		if (months <= 0 || months > 100)
 			// page 30 of the specs
 		{
@@ -42,6 +46,10 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 		allProductItems = new HashMap<Product, List<Item>>();
 		currentProductItems = new HashMap<Product, List<Item>>();
 		exitProductItems = new HashMap<Product, List<Item>>();
+	}
+	
+	public ProductStatisticsReportVisitor(ReportBuilder rb, int months) {
+		this(rb,months,Calendar.getInstance());
 	}
 
 	@Override
@@ -85,13 +93,10 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 	}
 
 	private boolean isValid(Item item) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.add(Calendar.MONTH, -1 * months);
 		DateTime mExitTime = item.getExitTime();
 		if (mExitTime != null) {
 			Calendar exitTime = mExitTime.getCalendar();
-			return cal.compareTo(exitTime) > 0;
+			return when.compareTo(exitTime) > 0;
 		}
 		else return true;
 	}

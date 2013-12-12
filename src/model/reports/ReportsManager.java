@@ -132,7 +132,7 @@ public class ReportsManager implements Serializable {
 	{
 		String monthsStr = months;
 		boolean returned = !StringOps.isNullOrEmpty(monthsStr);
-		returned = returned && monthsStr.matches("^\\d{1,3}$");
+		returned = returned && monthsStr.matches("^0*\\d{1,3}$");
 		System.out.println("Mathches? " + (returned ? "yes" : "no"));
 		if (returned)
 		{
