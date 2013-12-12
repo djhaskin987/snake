@@ -1,8 +1,11 @@
 package gui.reports.productstats;
 
 import static org.junit.Assert.*;
+
 import java.util.*;
+
 import org.junit.*;
+
 import model.*;
 import model.reports.*;
 
@@ -17,11 +20,15 @@ public class ProductStatsBoundaryAnalysis {
 	public static void setUpBeforeClass() throws Exception {
 		// build data
 		Model m = Model.getInstance();
-		m.createStorageUnit("test");
+		storageUnit = (StorageUnit) m.createStorageUnit("test");
+		m.addStorageUnit(storageUnit);
 		StorageUnits storageUnits = m.getStorageUnits();
 		storageUnit = (StorageUnit) storageUnits.getStorageUnit("test");
 		product = ProductFactory.getInstance().createInstance("1", "1", new Quantity(1.0, Unit.COUNT), 1, 1);
-		m.addProduct(product);
+        if (m.getProduct(product.getBarcode().toString()) == null)
+        {
+        	m.addProduct(product);
+        }
 		item = ItemFactory.getInstance().createInstance(product, new Barcode("555555555555"), storageUnit);
 		m.addItem(item, storageUnit);
 	}
@@ -57,18 +64,18 @@ public class ProductStatsBoundaryAnalysis {
 		// Artificially inject data indicating a report should be given for a period of time ending Jan. 1, 2001
 		Calendar cal = Calendar.getInstance();
 		cal.set(2001, Calendar.JANUARY, 1);
-		report = new ProductStatisticsReportVisitor(builder, 1, cal.getTime());
+		report = new ProductStatisticsReportVisitor(builder, 1, cal);
 		report.visit(storageUnits);
 		report.display();
 		
 		// for a one-month period ending Feb. 1, 2001;
 		cal.set(2001, Calendar.FEBRUARY, 1);
-		report = new ProductStatisticsReportVisitor(builder, 1, cal.getTime());
+		report = new ProductStatisticsReportVisitor(builder, 1, cal);
 		report.visit(storageUnits);
 		report.display();
 		
 		// for a three-month period ending Feb. 1, 2001 (where nothing goes back that far) to ensure correct behavior
-		report = new ProductStatisticsReportVisitor(builder, 3, cal.getTime());
+		report = new ProductStatisticsReportVisitor(builder, 3, cal);
 		report.visit(storageUnits);
 		report.display();
 		
