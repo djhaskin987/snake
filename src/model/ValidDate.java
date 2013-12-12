@@ -57,4 +57,14 @@ public class ValidDate extends Date implements Serializable{
 		super();
 	}
 
+	/**
+	 * Returns a valid date equal to the given date.
+	 * 
+	 * @param date
+	 * @throws InvalidHITDateException 
+	 */
+	public ValidDate(Date date) throws InvalidHITDateException {
+		this(date.toJavaUtilDate());
+	}
+
 }
