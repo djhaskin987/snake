@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import com.itextpdf.text.pdf.AcroFields.Item;
 
-public class EquivClasses1To5 {
+public class Check31st {
 	private Model model;
 	private StorageUnits units;
 	private IProduct product;
@@ -69,13 +69,6 @@ public class EquivClasses1To5 {
 	public void tearDown() throws Exception {
 	}
 	
-	/* Also: 
-	 * Artificially inject a report asking for a time span ending on the 31st of all months of the year
-Artificially inject data indicating a report should be made for a report starting the 29th of February, for the years 2013, 2012, 2100, and 2400 (not-a-leap-year, leap-year, special-leap-year, and extra-special-leap-year -- checking gregorian adding of the 29th).
-Ask for a three-month report when all the products are in different storage units to ensure correct behavior
-Ask for a three-month report when all products are in the same storage units to ensure correct behavior
-Ask for a three-month report when some products are in the same and some are in different storage units to ensure correct behavior
-	 */
 	@Test
 	public void test31st() throws InvalidHITDateException, DateDoesNotExistException {
         IItem item;	
@@ -94,7 +87,11 @@ Ask for a three-month report when some products are in the same and some are in 
         visitor = new ProductStatisticsReportVisitor(builder, 1, when);
         units.accept(visitor);
         visitor.display();
-        assertTrue(builder.getTables().get(0)[1][6].matches("0 */ *0"));
+        System.out.println(builder.toString());
+        // We currently have 0 items in the system, make sure the report reflects that.
+        assertTrue(builder.getTables().get(0)[1][9].matches("0 *days */ *0 *days"));
+        
+        assertTrue(builder.getTables().get(0)[1][6].matches("1 */ *0"));
         // now test 31st to 31st
         builder = new MockReportBuilder();
         till = Calendar.getInstance();
@@ -108,13 +105,7 @@ Ask for a three-month report when some products are in the same and some are in 
         visitor.display();
         System.out.println(builder.toString());
         assertTrue(builder.getTables().get(0)[1][6].matches("1 */ *0"));
+        // clean up after myself
         model.unaddItem(item);
 	}
-	/*
-	 * Artificially inject data indicating a report should be made for a report starting the 29th of February, for the years 2013, 2012, 2100, and 2400 (not-a-leap-year, leap-year, special-leap-year, and extra-special-leap-year -- checking gregorian adding of the 29th).
-Ask for a three-month report when all the products are in different storage units to ensure correct behavior
-Ask for a three-month report when all products are in the same storage units to ensure correct behavior
-Ask for a three-month report when some products are in the same and some are in different storage units to ensure correct behavior
-	 */
-
 }

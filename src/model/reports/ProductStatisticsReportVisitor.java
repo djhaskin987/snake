@@ -87,10 +87,22 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 			items = productItems.get(p);
 		} else {
 			items = new ArrayList<Item>();
+		}
+		items.add(item);
+        productItems.put(p, items);
+	}
+	
+/*	public void putItem(Item item, Map<Product, List<Item>> productItems) {
+		Product p = (Product) item.getProduct();
+		List<Item> items = null;
+		if (productItems.containsKey(p)) {
+			items = productItems.get(p);
+		} else {
+			items = new ArrayList<Item>();
 			productItems.put(p, items);
 		}
 		items.add(item);
-	}
+	} */
 
 	private boolean isValid(Item item) {
 		DateTime mExitTime = item.getExitTime();

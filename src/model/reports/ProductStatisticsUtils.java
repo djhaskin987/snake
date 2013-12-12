@@ -268,10 +268,13 @@ public class ProductStatisticsUtils {
 	}
 	
 	public static String getCurAgeAvgMax(List<Item> currentItems, int months) {
-		long min = getAgeMin(currentItems);
-		long max = getAgeMax(currentItems);
+		long min = 0;
+		long max = 0;
+		if (currentItems != null && currentItems.size() > 0)
+		{
+			min = getAgeMin(currentItems);
+			max = getAgeMax(currentItems);
+		}
 		return String.format("%s days / %s days", min, max);
 	}
-	
-	
 }
