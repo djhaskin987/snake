@@ -19,7 +19,6 @@ public class MockReportBuilder implements model.reports.ReportBuilder {
 	@Override
 	public void buildTable(String[][] table) {
 		tables.add(table);
-		allOfIt.append("-\n");
         for (int i = 0; i < table.length; i++)
         {
         		allOfIt.append("-\n");
@@ -63,39 +62,10 @@ public class MockReportBuilder implements model.reports.ReportBuilder {
 	
 	@Override
 	public void display() {
-		System.out.println("Headings: ");
-		for (String heading : headings)
-		{
-			System.out.println("  " + heading);
-		}
-		System.out.println("Subheadings: ");
-		for (String subHeading : subHeadings)
-		{
-			System.out.println("  " + subHeading);
-		}
-		System.out.println("Paragraphs: ");
-		for (String paragraph : paragraphs)
-		{
-			System.out.println(paragraph);
-		}
-		System.out.println("Tables: ");
-		for (String [][]table : tables)
-		{
-			for (int i = 0; i < table.length; i++)
-			{
-                System.out.println("-");
-				System.out.print("|");
-				for (int j = 0; j < table[0].length; j++)
-				{
-					System.out.print(table[i][j] + "|");
-				}
-				System.out.println();
-			}
-			System.out.println("-");
-		}
-		System.out.println("Empty lines: " + emptyLines);
-		System.out.println();
-		System.out.println("All of it: ");
-		System.out.println(allOfIt.toString());
+	}
+	
+	public String toString()
+	{
+		return allOfIt.toString();
 	}
 }

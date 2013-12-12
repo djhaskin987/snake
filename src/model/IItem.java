@@ -86,4 +86,6 @@ public interface IItem extends IModelTagable, Serializable, IReportNode {
 
 	public void setProduct(IProduct product);
 
+	void setExit(DateTime d);
+
 }

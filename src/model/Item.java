@@ -84,6 +84,12 @@ public class Item implements IItem, ITagable, Serializable {
 	public void exit() {
 		exitTime = new DateTime();
 	}
+	
+	@Override
+	public void setExit(DateTime d)
+	{
+		exitTime = d;
+	}
 	@Override
 	public IProduct getProduct() {
 		return product;

@@ -126,6 +126,10 @@ public class ProductStatisticsReportVisitor implements ReportVisitor {
 			Product p = itr.next();
 			List<Item> allItems = allProductItems.get(p);
 			List<Item> currentItems = currentProductItems.get(p);
+			if (currentItems == null)
+			{
+				currentItems = new ArrayList<Item>();
+			}
 			List<Item> exitItems = exitProductItems.get(p);
 			table[i] = ProductStatisticsUtils.getRow(p, allItems, currentItems, exitItems, months);
 			++i;

@@ -58,7 +58,7 @@ public class JDBCWrapper implements Closeable {
 			return resetSQLFile(sqliteFile);
 		}
 		String MIMEType = Files.probeContentType(sqliteFile.toPath());
-		if (!MIMEType.matches("^.*sqlite3.*$"))
+		if (MIMEType != null && !MIMEType.matches("^.*sqlite3.*$"))
 		{
 			return resetSQLFile(sqliteFile);
 		}

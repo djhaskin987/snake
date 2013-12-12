@@ -13,3 +13,5 @@ dist
 *.ear
 test-reports/TEST*
 style-reports/*.txt
+*.pdf
+*.html

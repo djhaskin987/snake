@@ -310,6 +310,7 @@ public class AddItemBatchController extends Controller implements
 			return null;
 		}
 		IProduct p = getModel().getProduct(barcode);
+		
 		return p;
 	}
 	
